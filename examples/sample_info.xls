@@ -1,6 +1,20 @@
-#SampleID	SampleName	Group	DataPath	DataType	Description
-				FastQ	
-				FastQ	
-				FastQ	
-				FastQ	
-				FastQ	
+#SampleID	SampleName	GroupName	DataPath	DataType	Description
+V1	V1	ylbh	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V1_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V1_2.fq"	FastQ	
+V2	V2	ylbh	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V2_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V2_2.fq"	FastQ	
+V3	V3	ylbh	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V3_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V3_2.fq"	FastQ	
+V4	V4	ylbh	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V4_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V4_2.fq"	FastQ	
+VR1	VR1	ylbh	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/VR1_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/VR1_2.fq"	FastQ	
+VR2	VR2	ylbh	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/VR2_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/VR2_2.fq"	FastQ	
+VR3	VR3	ylbh	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/VR3_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/VR3_2.fq"	FastQ	
+CB148MP1_CB	CB148MP1_CB	cariaco	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/CB148MP1_CB_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/CB148MP1_CB_2.fq"	FastQ	
+CB148MP2_CB	CB148MP2_CB	cariaco	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/CB148MP2_CB_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/CB148MP2_CB_2.fq"	FastQ	
+CB200MS1_CB	CB200MS1_CB	cariaco	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/CB200MS1_CB_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/CB200MS1_CB_2.fq"	FastQ	
+CB237MS1_CB	CB237MS1_CB	cariaco	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/CB237MS1_CB_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/CB237MS1_CB_2.fq"	FastQ	
+CB247MS1_CB	CB247MS1_CB	cariaco	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/CB247MS1_CB_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/CB247MS1_CB_2.fq"	FastQ	
+CB267MS1_CB	CB267MS1_CB	cariaco	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/CB267MS1_CB_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/CB267MS1_CB_2.fq"	FastQ	
+CB267MS2_CB	CB267MS2_CB	cariaco	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/CB267MS2_CB_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/CB267MS2_CB_2.fq"	FastQ	
+CB900MS1_CB	CB900MS1_CB	cariaco	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/CB900MS1_CB_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/CB900MS1_CB_2.fq"	FastQ	
+BH0560M_AH	BH0560M_AH	amberjack	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/BH0560M_AH_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/BH0560M_AH_2.fq"	FastQ	
+BH0960M_AH	BH0960M_AH	amberjack	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/BH0960M_AH_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/BH0960M_AH_2.fq"	FastQ	
+BH0995M_AH	BH0995M_AH	amberjack	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/BH0995M_AH_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/BH0995M_AH_2.fq"	FastQ	
+BH05106M_AH	BH05106M_AH	amberjack	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/BH05106M_AH_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/BH05106M_AH_2.fq"	FastQ	
