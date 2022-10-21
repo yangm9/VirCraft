@@ -1,0 +1,1 @@
+vircraft.py --config vircraft.cfg --outdir result
