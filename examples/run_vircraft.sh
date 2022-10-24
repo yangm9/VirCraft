@@ -1,1 +1,1 @@
-vircraft.py --config vircraft.cfg --outdir result
+../virCraft.py assembly -c vircraft.cfg -o result
