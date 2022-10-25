@@ -30,7 +30,7 @@ if sys.argv[1]=='assembly':
     exit(0)
 elif sys.argv[1]=='identify':
     print('Viral contig identification')
-    viridsop.findVir(opts.config,opts.output_dir)
+    viridsop.Identify(opts.config,opts.output_dir)
     exit(0)
 elif sys.argv[1]=='classify':
     print('Viral contig classification')

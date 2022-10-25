@@ -8,6 +8,7 @@ def execute(command: list, silent=False):
     '''
     
     cmd_txt=' '.join(command).replace('\n ','\n')
+    cmd_txt=cmd_txt.replace(' \n ','\n')
     print(f'Running command: {cmd_txt}')
     '''
     if silent:
