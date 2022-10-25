@@ -19,8 +19,11 @@ def readConfig(config: str):
     return confDict
 
 def readSampInfo(samp_info: str):
-    ''' 
     '''
+    Extract the groups list and the Sample information from "samp_info.xls" file. 
+    Note: the format of sample information is "Sample ID : [SampleName,GroupName,DataPath]".
+    '''
+    groups=[]
     sampDict={}
     insamp=open(samp_info)
     header=insamp.readline()
@@ -32,10 +35,13 @@ def readSampInfo(samp_info: str):
     for line in insamp:
         items=line.strip().split('\t')
         sampDict[items[id_idx]]=[items[name_idx],items[group_idx],items[path_idx]]
-    return sampDict
+        groups.append(items[group_idx])
+    groups=list(set(groups))
+    insamp.close()
+    return groups,sampDict
 
 def prepInfo(config: str):
     confDict=readConfig(config)
-    sampDict=readSampInfo(confDict['SampInfo'])
-    return confDict,sampDict
-    
+    groups,sampDict=readSampInfo(confDict['SampInfo'])
+    return groups,confDict,sampDict
+ 
