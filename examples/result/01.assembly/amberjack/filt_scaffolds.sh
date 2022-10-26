@@ -1,1 +1,0 @@
-SeqLenCutoff.pl /home/yangming/VirCraft/examples/result/01.assembly/amberjack/scaffolds.fasta /home/yangming/VirCraft/examples/result/01.assembly/amberjack/scaffolds.filt 10000

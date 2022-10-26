@@ -1,1 +1,0 @@
-assemb_stat.pl /home/yangming/VirCraft/examples/result/01.assembly/cariaco/scaffolds.fasta /home/yangming/VirCraft/examples/result/01.assembly/cariaco/scaffolds.fasta >/home/yangming/VirCraft/examples/result/01.assembly/cariaco/stat.tab
