@@ -84,11 +84,13 @@ def findVir(grp: str, outdir: str):
     find_vir_cmd.extend(
         ['extrSeqByName.pl', contig_id_list, combined_modi_fna, virus_posi_fna, '\n']
     )
+    find_vir_sh
+    general.printSH(find_vir_sh, find_vir_cmd)
     results = cmdExec.execute(find_vir_cmd)
     return results
 
 def Identify(config: str, outdir: str):
-    global groups, confDict, sampDict
+    global confDict, sampDict
     groups, confDict, sampDict = conf.prepInfo(config)
     results=''
     for grp in groups:
