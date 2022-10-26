@@ -1,0 +1,1 @@
+assemb_stat.pl /home/yangming/VirCraft/examples/result/01.assembly/ylbh/scaffolds.fasta /home/yangming/VirCraft/examples/result/01.assembly/ylbh/scaffolds.fasta >/home/yangming/VirCraft/examples/result/01.assembly/ylbh/stat.tab

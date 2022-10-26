@@ -1,0 +1,1 @@
+SeqLenCutoff.pl /home/yangming/VirCraft/examples/result/01.assembly/ylbh/scaffolds.fasta /home/yangming/VirCraft/examples/result/01.assembly/ylbh/scaffolds.filt 10000

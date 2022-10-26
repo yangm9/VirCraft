@@ -1,7 +1,7 @@
-import os
+from os import path
 
 def description(name,version):
-    basename=os.path.basename(name)
+    basename=path.basename(name)
     readme=f'''
 Name: {basename}
 Discription:
