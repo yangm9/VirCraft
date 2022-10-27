@@ -23,3 +23,11 @@ conda install -c bioconda hmmer
 conda install -c bioconda muscle
 conda install -y drep
 conda install -c bioconda aragorn
+## Install usearch
+cd ~/VirCraft/bin
+wget https://www.drive5.com/downloads/usearch11.0.667_i86linux32.gz
+gunzip usearch11.0.667_i86linux32.gz
+ln -s usearch11.0.667_i86linux32 usearch
+## Install Demovir
+git clone https://github.com/feargalr/Demovir.git
+

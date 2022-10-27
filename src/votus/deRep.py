@@ -9,7 +9,7 @@ def seqCluster(fasta: str, group: str, outdir: str):
     Cluster the sequence and remove redundancy for FastA file.
     '''
     envs = setVari.selectENV('VirCraft')
-    cdhit_cmd = [env]
+    cdhit_cmd = [envs]
     fa_prefix=path.splitext(path.basename(fasta))[0]
     nodup_fa = f'{outdir}/{group}_{fa_prefix}_nodup.fa'
     cdhit_cmd.extend(
@@ -26,18 +26,18 @@ def RmDup(config: str, outdir: str):
     results = ''
     wkdir = f'{outdir}/03.vOTUs'
     general.mkdir(wkdir)
-    merged_cdhit_cmd = ['cat']
+    merge_fa_cmd = ['cat']
     for grp in groups:
         fasta = f'{outdir}/02.identify/{grp}/curation/viruses_positive.fna'
-        merged_cdhit_cmd.append(fasta)
-        outdir = f'{wkdir}/{grp}'
+        merge_fa_cmd.append(fasta)
+        grpdir = f'{wkdir}/{grp}'
+        general.mkdir(grpdir)
         results += f'{grp}: \n'
-        results += seqCluster(fasta, grp, outdir)
+        results += seqCluster(fasta, grp, wkdir)
     merged_fasta = f'{wkdir}/merged_virus_positive_nodup.fa'
     merge_fa_cmd.append(f'>{merged_fasta}\n')
     merge_fa_sh = f'{wkdir}/merge_fa.sh'
     general.printSH(merge_fa_sh,merge_fa_cmd)
     results += cmdExec.execute(merge_fa_cmd)
-    results += seqCluster(merged_fasta,'merged',wkdir)
+    results += seqCluster(merged_fasta, 'merged', wkdir)
     return results
-

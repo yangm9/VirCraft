@@ -7,6 +7,7 @@ from src.assemble import assembly
 from src.identify import viridsop
 from src.process import general
 from src.votus import deRep
+from src.classify import taxAnnot
 
 VERSION = 'v0.0.1'
 usage = readme.description(sys.argv[0], VERSION)
@@ -50,6 +51,7 @@ elif sys.argv[1] == 'votus':
     exit(0)
 elif sys.argv[1] == 'classify':
     print('Viral contig classification')
+    taxAnnot.demovir(opts.config, outdir)
     exit(0)
 elif sys.argv[1] == 'abundance':
     print('Viral abundance and diversity')
