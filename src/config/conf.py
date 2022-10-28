@@ -28,7 +28,7 @@ def readSampInfo(samp_info: str):
     insamp=open(samp_info)
     header=insamp.readline()
     header=header.strip().split('\t')
-    id_idx=header.index('#SampleID')
+    id_idx=header.index('SampleID')
     name_idx=header.index('SampleName')
     group_idx=header.index('GroupName')
     path_idx=header.index('DataPath')

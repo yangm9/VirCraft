@@ -1,4 +1,4 @@
-#SampleID	SampleName	GroupName	DataPath	DataType	Description
+SampleID	SampleName	GroupName	DataPath	DataType	Description
 V1	V1	ylbh	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V1_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V1_2.fq"	FastQ	
 V2	V2	ylbh	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V2_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V2_2.fq"	FastQ	
 V3	V3	ylbh	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V3_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V3_2.fq"	FastQ	
