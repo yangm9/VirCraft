@@ -9,7 +9,7 @@ def grpReads(config: str):
     groupFq2Dict = {}
     for samp in sampDict.keys():
         group = sampDict[samp][1]
-        fastq1,fastq2 = sampDict[samp][2].split(',')
+        fastq1, fastq2 = sampDict[samp][2].split(',')
         groupFq1Dict.setdefault(group, [])
         groupFq2Dict.setdefault(group, [])
         groupFq1Dict[group].append(fastq1)
@@ -24,7 +24,7 @@ def catFastqCMD(fastqs: list, grp: str, n: int, outdir: str):
     merge_fq_cmd.append(f'>{merge_dir}/{grp}_{n}.fq\n')
     return merge_fq_cmd
 
-def MergeFastqByGroup(config: str,outdir: str):
+def MergeFastqByGroup(config: str, outdir: str):
     groupFq1Dict, groupFq2Dict = grpReads(config)
     results1,results2 = '',''
     for grp in groups:
