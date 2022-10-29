@@ -36,7 +36,12 @@ def TPMBySamp(config: str, outdir: str):
          'tpmAddSource.py', merged_anno_tpm, merged_anno_modi_tpm, '\n',
          'pheatmap_for_tpm.R', merged_anno_modi_tpm, confDict['SampInfo'], wkdir, '\n']
     )
+    quality_summary = f'{outdir}/03.vOTUs/merged/2.checkv/quality_summary.tsv'
+    len_sum_tpm_qual_xls = f'{wkdir}/contig_quality_summary.xls'
+    merge_tpm_cmd.extend(
+         ['sumAbundance.py', merged_anno_modi_tpm, quality_summary, wkdir, '\n', 'fa_length_abundance_scatter.R', len_sum_tpm_qual_xls, wkdir, '\n']
+    )
     merged_tpm_sh = f'{wkdir}/merged_anno_tpm.sh'
-    general.printSH(bwa_idx_sh, merge_tpm_cmd)
+    general.printSH(merged_tpm_sh, merge_tpm_cmd)
     results = cmdExec.execute(merge_tpm_cmd)
     return results

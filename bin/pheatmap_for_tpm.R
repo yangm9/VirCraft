@@ -53,6 +53,7 @@ plot <- pheatmap(
 pdf(paste(argv[3], '/tpm_heatmap.pdf', sep=''), width=10,height=8)
 plot
 dev.off()
+#Sys.setenv("DISPLAY"=":0")
 #png(paste(argv[3], '/tpm_heatmap.png', sep=''), width=1000,height=800)
 #plot
 #dev.off()
