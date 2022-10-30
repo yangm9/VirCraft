@@ -19,7 +19,7 @@ def seqCluster(fasta: str, group: str, wkdir: str):
     checkv_dir = f'{wkdir}/2.checkv'
     general.mkdir(checkv_dir)
     cdhit_cmd.extend(
-        ['checkv end_to_end', nodup_fa, checkv_dir, '-d', confdict["CheckVDB"], '-t 40\n']
+        ['checkv end_to_end', nodup_fa, checkv_dir, '-d', confDict["CheckVDB"], '-t 40\n']
     )
     cdhit_sh = f'{wkdir}/{group}_cdhit.sh'
     general.printSH(cdhit_sh, cdhit_cmd)

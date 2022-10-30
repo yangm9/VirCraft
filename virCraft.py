@@ -8,6 +8,7 @@ from src.identify import viridsop
 from src.process import general
 from src.votus import deRep
 from src.classify import taxAnnot
+from src.quantify import 
 
 VERSION = 'v0.0.1'
 usage = readme.description(sys.argv[0], VERSION)
@@ -53,8 +54,9 @@ elif sys.argv[1] == 'classify':
     print('Viral contig classification')
     taxAnnot.demovir(opts.config, outdir)
     exit(0)
-elif sys.argv[1] == 'abundance':
+elif sys.argv[1] == 'quantify':
     print('Viral abundance and diversity')
+    quantify.quantVir(opts.config, outdir)
     exit(0)
 elif sys.argv[1] == 'function':
     print('Function annotation')
