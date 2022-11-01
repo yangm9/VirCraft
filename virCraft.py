@@ -2,15 +2,16 @@
 import sys
 from os import path
 from optparse import OptionParser #该模块已经不在开发维护，改为argparse
-from src.docs import readme
-from src.assemble import assembly
-from src.identify import viridsop
-from src.process import general
-from src.votus import deRep
-from src.classify import taxAnnot
-from src.quantify import quantVir 
-from src.func_annot import geneAnnot
-from src.compare import vCont
+sys.path.append(sys.path[0]+'/src')
+from docs import readme
+from assemble import assembly
+from identify import viridsop
+from process import general
+from votus import deRep
+from classify import taxAnnot
+from quantify import quantVir 
+from func_annot import geneAnnot
+from compare import vCont
 
 VERSION = 'v0.0.1'
 usage = readme.description(sys.argv[0], VERSION)
