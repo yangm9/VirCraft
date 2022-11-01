@@ -10,6 +10,7 @@ def funcAnno(config: str, outdir: str):
     1) Predict genes from fasta file;
     2) Annotate the function of these genes.
     '''
+    groups, confDict, sampDict = conf.prepInfo(config)
     envs = setVari.selectENV('VirCraft')
     func_anno_cmd = [envs]
     func_anno_dir = f'{outdir}/06.func_annot'
