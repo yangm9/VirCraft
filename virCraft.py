@@ -8,7 +8,9 @@ from src.identify import viridsop
 from src.process import general
 from src.votus import deRep
 from src.classify import taxAnnot
-from src.quantify import 
+from src.quantify import quantVir 
+from src.func_annot import geneAnnot
+from src.compare import vCont
 
 VERSION = 'v0.0.1'
 usage = readme.description(sys.argv[0], VERSION)
@@ -58,13 +60,17 @@ elif sys.argv[1] == 'quantify':
     print('Viral abundance and diversity')
     quantify.quantVir(opts.config, outdir)
     exit(0)
-elif sys.argv[1] == 'function':
+elif sys.argv[1] == 'func_annot':
     print('Function annotation')
+    geneAnnot.funcAnno(opts.config, outdir)
     exit(0)
 elif sys.argv[1] == 'comparison':
-    print('Viral ')
+    print('Viral comparison')
+    vCont.compSeq(opts.config, outdir)
     exit(0)
-elif sys.argv[1] == 'hosts':
+elif sys.argv[1] == 'host_prid':
+    print('Host prediction')
+
     exit(0)
 else:
     parser.error(f'{sys.argv[1]} is not a module of VirCraft!')

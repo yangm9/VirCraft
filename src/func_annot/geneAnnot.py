@@ -55,6 +55,6 @@ def funcAnno(config: str, outdir: str):
         '-o', exec_anno_detail, orfs_faa, '\n']
     )
     func_anno_sh = f'{func_anno_dir}/func_anno.sh'
-    general.printSH(spades_sh, spades_cmd)
-    results = cmdExec.execute(spades_cmd)
+    general.printSH(func_anno_sh, func_anno_cmd)
+    results = cmdExec.execute(func_anno_cmd)
     return results
