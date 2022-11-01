@@ -45,5 +45,5 @@ plot <- ggplot(dat_c, aes(fill= Type, y= Relative_Abundance, x= SampleID))+
         axis.text.x = element_text(angle = 90, hjust = 0.5, vjust = 0.5),
         axis.title = element_text(size = 10),
         axis.text = element_text(size = 10))
-pdf(paste(argv[2],"taxa_relative_abundance_baplot.pdf", width=10, height=8)
+pdf(paste(argv[2],"/taxa_relative_abundance_baplot.pdf", width=10, height=8)
 plot

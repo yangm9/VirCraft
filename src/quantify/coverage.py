@@ -39,7 +39,12 @@ def TPMBySamp(config: str, outdir: str):
     quality_summary = f'{outdir}/03.vOTUs/merged/2.checkv/quality_summary.tsv'
     len_sum_tpm_qual_xls = f'{wkdir}/contig_quality_summary.xls'
     merge_tpm_cmd.extend(
-         ['sumAbundance.py', merged_anno_modi_tpm, quality_summary, wkdir, '\n', 'fa_length_abundance_scatter.R', len_sum_tpm_qual_xls, wkdir, '\n']
+         ['sumAbundance.py', merged_anno_modi_tpm, quality_summary, wkdir, '\n', 'fa_length_tpm_scatter.R', len_sum_tpm_qual_xls, wkdir, '\n']
+    )
+    tax_tpm = f'{wkdir}/tax_tpm.xls'
+    merge_tpm_cmd.extend(
+        ['abundByTax.py', merged_anno_modi_tpm, wkdir, '\n',
+         'barplot_for_taxa_tpm.R', tax_tpm, wkdir, '\n']
     )
     merged_tpm_sh = f'{wkdir}/merged_anno_tpm.sh'
     general.printSH(merged_tpm_sh, merge_tpm_cmd)
