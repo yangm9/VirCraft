@@ -12,4 +12,8 @@ def printSH(sh_path: str, command: list):
     SHPATH.write(scripts)
     SHPATH.close()
     return 0
-    
+
+def insLable(file_name: str, label: str):
+    "Insert a label before the extension for a file name."
+    prefix, extension = os.path.splitext(file_name)
+    return f'{prefix}.{label}{extension}

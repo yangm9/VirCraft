@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-import sys,os
+import os
+import sys
 from ..config import setVari
 from ..process import cmdExec, general
 from ..fastqc.reads import Reads
@@ -8,17 +9,16 @@ from ..fastqc.reads import Reads
 class Assembly(Reads):
     '''
     '''
+    envs = setVari.selectENV('VirCraft')
     def __init__(self, config, outdir):
         Reads.__init__(self, config, outdir)
-        self.envs = setVari.selectENV('VirCraft')
-        self.spades_dir = f'{self.wkdir}/1.spades'
-        general.mkdir(self.spades_dir)
+        self.wkdir = f'{self.outdir}/01.assembly'
     def spades(self, fastqs: list, group: str):
         '''
         Assemble metagenome by SPAdes for single group.
         '''
         spades_cmd = [self.envs]
-        wkdir = f'{self.spades_dir}/{group}'
+        wkdir = f'{self.wkdir}/{group}'
         general.mkdir(wkdir)
         spades_cmd.extend(
             ['spades.py', '--pe1-1', fastqs[0], '--pe1-2', fastqs[1],
@@ -41,8 +41,8 @@ class Assembly(Reads):
         general.printSH(filt_sh, filt_cmd)
         results = cmdExec.execute(filt_cmd)
         return results
-    def statFastA(grp: str, outdir: str):
-        wkdir = f'{outdir}/01.assembly/{grp}'
+    def statFastA(self, grp: str):
+        wkdir = f'{self.wkdir}/{grp}'
         contigs = f'{wkdir}/scaffolds.fasta'
         scaffolds = f'{wkdir}/scaffolds.fasta'
         stat_tab = f'{wkdir}/stat.tab'
@@ -51,14 +51,14 @@ class Assembly(Reads):
         general.printSH(stat_sh, stat_cmd)
         results = cmdExec.execute(stat_cmd)
         return results
-    
-    def Assemble(config: str, outdir: str):
+    @property
+    def Assemble(self):
         results=''
         for grp in self.groups:
             fastq_1 = f'{self.fq_dir}/{grp}_1.fq'
             fastq_2 = f'{self.fq_dir}/{grp}_2.fq'
             fastqs = [fastq_1, fastq_2]
-            results += spades(fastqs, grp, outdir)
+            results += self.spades(fastqs, grp, outdir)
             results += filtFastA(grp, outdir, '2000')
             results += filtFastA(grp, outdir, '5000')
             results += filtFastA(grp, outdir, '10000')

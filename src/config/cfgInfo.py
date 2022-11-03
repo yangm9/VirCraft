@@ -48,4 +48,4 @@ class VirCfg:
             groups.append(items[group_idx])
         groups=list(set(groups))
         insamp.close()
-        return groups,sampDict
+        return groups, sampDict

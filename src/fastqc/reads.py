@@ -9,9 +9,9 @@ class Reads(VirCfg):
     def __init__(self, config, outdir):
         VirCfg.__init__(self, config)
         self.outdir = os.path.abspath(outdir)
-        self.wkdir = f'{self.outdir}/01.assembly'
+        self.wkdir = f'{self.outdir}/00.data'
         general.mkdir(self.wkdir)
-        self.fq_dir = f'{self.wkdir}/0.fastq'
+        self.fq_dir = f'{self.wkdir}/merged_fq'
         general.mkdir(fq_dir)
         self.grpFq1Dict, self.grpFq2Dict = self.grpReads
     @property
