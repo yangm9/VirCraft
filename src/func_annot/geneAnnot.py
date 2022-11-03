@@ -3,58 +3,74 @@
 import sys,os
 from ..config import setVari,conf
 from ..process import cmdExec, general
-from ..fastqc import mergeRead
+from ..votus.deRep import VirRef 
 
-def funcAnno(config: str, outdir: str):
+class GeneFunc(VirRef):
     '''
-    1) Predict genes from fasta file;
-    2) Annotate the function of these genes.
     '''
-    groups, confDict, sampDict = conf.prepInfo(config)
-    envs = setVari.selectENV('VirCraft')
-    func_anno_cmd = [envs]
-    func_anno_dir = f'{outdir}/06.func_annot'
-    general.mkdir(func_anno_dir)
-    fasta = f'{outdir}/03.vOTUs/merged_virus_positive_nodup.fa'
-    prodigal_dir = f'{func_anno_dir}/0.prodigal'
-    temp_orfs_faa = f'{prodigal_dir}/temp.orfs.faa'
-    orfs_faa = f'{prodigal_dir}/merged_virus_positive_nodup.faa'
-    orfs_ffn = f'{prodigal_dir}/merged_virus_positive_nodup.ffn'
-    temp_orfs_ffn = f'{prodigal_dir}/temp.orfs.ffn'
-    temp_txt = f'{prodigal_dir}/temp.txt'
-    general.mkdir(prodigal_dir)
-    func_anno_cmd.extend(
-        ['prodigal', '-i', fasta, '-a', temp_orfs_faa, '-d', temp_orfs_ffn, '-m', '-o', temp_txt, '-p meta -q\n', 
-        'cut -f 1 -d \" \" ', temp_orfs_faa, '>', orfs_faa, '\n',
-        'cut -f 1 -d \" \" ', temp_orfs_ffn, '>', orfs_ffn, '\n',
-        f'rm -f {prodigal_dir}/temp.*\n']
-    )
-    eggnog_dir = f'{func_anno_dir}/1.eggnog'
-    general.mkdir(eggnog_dir)
-    eggnog_anno_prefix = f'{eggnog_dir}/merged_virus_positive_nodup'
-    seed_orth = f'{eggnog_dir}/merged_virus_positive_nodup.emapper.seed_orthologs'
-    eggout = f'{eggnog_dir}/eggout'
-    func_anno_cmd.extend(
-        ['emapper.py -m diamond --no_annot --no_file_comments --cpu 40',
-        '-i', orfs_faa, '-o', eggnog_anno_prefix,
-        '--data_dir', confDict['EggNOGDB'], '\n',
-        'emapper.py', '--annotate_hits_table', seed_orth,
-        '--no_file_comments', '-o', eggout, '--cpu 40', 
-        '--data_dir', confDict['EggNOGDB'], '--override\n']        ]
-    )
-    kegg_dir = f'{func_anno_dir}/2.kegg'
-    general.mkdir(kegg_dir)
-    ko_prof = f'{confDict['kofamscanDB']}/profiles'
-    ko_list = f'{confDict['kofamscanDB']}/ko_list'
-    exec_anno = f'{kegg_dir}/merged_virus_positive_nodup.exec_annotation.txt'
-    exec_anno_detail = f'{exec_anno}.xls'
-    func_anno_cmd.extend(
-        ['exec_annotation -f mapper --cpu 16', '-p', ko_prof, '-k', ko_list,
-        '-o', exec_anno, orfs_faa, '\n', 
-        'exec_annotation -f detail --cpu 32', '-p', ko_prof, '-k', ko_list,
-        '-o', exec_anno_detail, orfs_faa, '\n']
-    )
-    func_anno_sh = f'{func_anno_dir}/func_anno.sh'
-    general.printSH(func_anno_sh, func_anno_cmd)
-    results = cmdExec.execute(func_anno_cmd)
-    return results
+    def __init__(self, config, outdir):
+        VirRef.__init__(self, config, outdir)
+        self.datadir = self.wkdir
+        self.wkdir = f'{self.outdir}/06.func_annot'
+        general.mkdir(self.wkdir)
+    def genePred(self):
+        '''
+        Predict genes from fasta file;
+        2) Annotate the function of these genes.
+        '''
+        cmd = [self.envs]
+        wkdir = f'{self.wkdir}/0.prodigal'
+        general.mkdir(wkdir)
+        temp_orfs_faa = f'{wkdir}/temp.orfs.faa'
+        orfs_faa = f'{wkdir)/all_votus.faa'
+        orfs_ffn = f'{wkdir}/all_votus.ffn'
+        temp_orfs_ffn = f'{wkdir}/temp.orfs.ffn'
+        temp_txt = f'{wkdir}/temp.txt'
+        cmd.extend(
+            ['prodigal', '-i', self.votus, '-a', temp_orfs_faa, '-d', temp_orfs_ffn, '-m', '-o', temp_txt, '-p meta -q\n', 
+            'cut -f 1 -d \" \" ', temp_orfs_faa, '>', orfs_faa, '\n',
+            'cut -f 1 -d \" \" ', temp_orfs_ffn, '>', orfs_ffn, '\n',
+            f'rm -f {wkdir}/temp.*\n']
+        )
+        shell = f'{self.wkdir}/0.gene_predict.sh'
+        general.printSH(shell, cmd)
+        results = cmdExec.execute(cmd)
+        return results
+    def eggnogAnno(self):
+        wkdir = f'{self.wkdir}/1.eggnog'
+        general.mkdir(wkdir)
+        cmd = [self.envs]
+        anno_prefix = f'{wkdir}/all_votus'
+        seed_orth = f'{anno_prefix}.emapper.seed_orthologs'
+        eggout = f'{wkdir}/eggout'
+        eggnog_db = self.confDict['EggNOGDB']
+        cmd.extend(
+            ['emapper.py -m diamond --no_annot --no_file_comments --cpu 40',
+            '-i', orfs_faa, '-o', anno_prefix,
+            '--data_dir', eggnog_db, '\n',
+            'emapper.py', '--annotate_hits_table', seed_orth,
+            '--no_file_comments', '-o', eggout, '--cpu 40', 
+            '--data_dir', eggnog_db, '--override\n']        ]
+        )
+        shell = f'{wkdir}/eggnog_anno.sh'
+        general.printSH(shell, cmd)
+        results = cmdExec.execute(cmd)
+        return results
+    def keggAnno(self):
+        wkdir = f'{func_anno_dir}/2.kegg'
+        general.mkdir(wkdir)
+        cmd = [self.envs]
+        ko_prof = f'{self.confDict["kofamscanDB"]}/profiles'
+        ko_list = f'{self.confDict["kofamscanDB"]}/ko_list'
+        exec_anno = f'{wkdir}/all_votus.exec_annotation.txt'
+        exec_anno_detail = f'{exec_anno}.xls'
+        cmd.extend(
+            ['exec_annotation -f mapper --cpu 16', '-p', ko_prof, '-k', ko_list,
+            '-o', exec_anno, orfs_faa, '\n', 
+            'exec_annotation -f detail --cpu 32', '-p', ko_prof, '-k', ko_list,
+            '-o', exec_anno_detail, orfs_faa, '\n']
+        )
+        shell = f'{wkdir}/kegg_anno.sh'
+        general.printSH(shell, cmd)
+        results = cmdExec.execute(cmd)
+        return results
