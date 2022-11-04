@@ -1,6 +1,6 @@
 import os
-from ..config.cfgInfo import VirCfg
 from ..process import cmdExec, general
+from ..config.cfgInfo import VirCfg
 
 class Reads(VirCfg):
     '''

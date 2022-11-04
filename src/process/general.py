@@ -16,4 +16,18 @@ def printSH(sh_path: str, command: list):
 def insLable(file_name: str, label: str):
     "Insert a label before the extension for a file name."
     prefix, extension = os.path.splitext(file_name)
-    return f'{prefix}.{label}{extension}
+    return f'{prefix}.{label}{extension}'
+
+def selectENV(env: str):
+    conda_path=isInstalled('conda')
+    if conda_path:        
+        return f'export PATH="{conda_path}:$PATH"\nconda activate {env}\n'
+    else:
+        return 'Error!!!'
+
+def isInstalled(name: str):
+    """
+    Check whether `name` is on PATH and marked as executable.
+    """
+    from shutil import which
+    return which(name)

@@ -13,6 +13,7 @@ class GeneFunc(VirRef):
         self.datadir = self.wkdir
         self.wkdir = f'{self.outdir}/06.func_annot'
         general.mkdir(self.wkdir)
+        self.orfs_faa = f'{self.wkdir}/0.prodigal/all_votus.faa'
     def genePred(self):
         '''
         Predict genes from fasta file;
