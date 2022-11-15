@@ -1,32 +1,43 @@
 import sys
-from ..process import cmdExec, general
+from ..process import cmdExec,general
 from ..votus.deRep import VirRef
 
-class VirHost():
+class VirHost(VirRef):
     '''
     
     '''
-    def __init__(self, config, outdir):
-        VirRef.__init__(self, config, outdir)
-        self.datadir = self.wkdir
-        self.wkdir = f'{self.outdir}/08.hosts'
+    def __init__(self,config,outdir):
+        VirRef.__init__(self,config,outdir)
+        self.datadir=self.wkdir
+        self.wkdir=f'{self.outdir}/08.hosts'
+        self.tredir=f'{self.wkdir}/classify_wf'
+        self.host_mags=self.confDict['HostMAGs']
         general.mkdir(self.wkdir)
-    def magsClassify(self):
+    def magsTree(self):
         '''
         Classify the host MAGs by GTDBTK tools.
         '''
-        host_mags = self.confDict['HostMAGs']
-        cmd = [self.envs]
-        cmd.extend(['ln -s', TrEMBL_viral_taxa, TrEMBL_viral_taxa_lnk, '\n'])
-        uniprot_trembl_viral = f'{demovir_db}/uniprot_trembl.viral.udb'
-        uniprot_trembl_viral_lnk = f'{self.wkdir}/uniprot_trembl.viral.udb'
-        demovir_cmd.extend(['ln -s', uniprot_trembl_viral, uniprot_trembl_viral_lnk, '\n'])
-        demovir = f'{sys.path[0]}/bin/demovir.*'
-        demovir_cmd.extend(['cp', demovir, self.wkdir, '\n'])
-        votus = f'{self.outdir}/03.vOTUs/merged_virus_positive_nodup.fa'
-        demovir = f'{self.wkdir}/demovir.sh'
-        demovir_cmd.extend([demovir, votus, '32'])
-        demovir_sh = f'{self.wkdir}/classify_by_demovir.sh'
-        general.printSH(demovir_sh, demovir_cmd)
-        results = cmdExec.execute(demovir_cmd)
+        cmd=[self.envs]
+        cmd.extend(
+            ['gtdbtk classify_wf','--genome_dir',self.host_mags,
+            '--out_dir',self.tredir,'--extension fasta --pplacer_cpus 32\n']
+        )
+        shell=f'{self.wkdir}/classify_mags.sh'
+        general.printSH(shell,cmd)
+        results=cmdExec.execute(cmd)
+        return results
+    def VirMatch(self):
+        '''
+        Predict the hosts for viral contigs using VirMatcher.
+        '''
+        wkdir=f'{self.wkdir}/virmatcher'
+        cmd=[self.envs]
+        cmd.extend(
+            ['VirMatcher --preparer','--gtdbtk-out-dir',self.tredir,
+            '--gtdbtk-in-dir',self.host_mags,'-v',self.votus,
+            '-o',wkdir,'--threads 32 --python-aggregator']
+        )
+        shell=f'{self.wkdir}/virmatcher.sh'
+        general.printSH(shell,cmd)
+        results=cmdExec.execute(cmd)
         return results
