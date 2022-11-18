@@ -2,14 +2,13 @@
 
 import os
 import sys
-from ..config import setVari
-from ..process import cmdExec,general
+from ..general import cmdExec,general
 from ..fastqc.reads import Reads
 
 class Assembly(Reads):
     '''
     '''
-    envs=setVari.selectENV('VirCraft')
+    envs=general.selectENV('VirCraft')
     def __init__(self,*args,config,outdir,**kwargs):
         Reads.__init__(self,config,outdir)
         self.wkdir=f'{self.outdir}/01.assembly'
