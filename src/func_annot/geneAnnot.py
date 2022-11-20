@@ -1,8 +1,5 @@
-#!/usr/bin/env python3
-
 import sys,os
-from ..config import setVari,conf
-from ..process import cmdExec,general
+from ..general import cmdExec,general
 from ..votus.deRep import VirRef 
 
 class GeneFunc(VirRef):
@@ -23,7 +20,7 @@ class GeneFunc(VirRef):
         wkdir=f'{self.wkdir}/0.prodigal'
         general.mkdir(wkdir)
         temp_orfs_faa=f'{wkdir}/temp.orfs.faa'
-        orfs_faa=f'{wkdir)/all_votus.faa'
+        orfs_faa=f'{wkdir}/all_votus.faa'
         orfs_ffn=f'{wkdir}/all_votus.ffn'
         temp_orfs_ffn=f'{wkdir}/temp.orfs.ffn'
         temp_txt=f'{wkdir}/temp.txt'
@@ -51,7 +48,7 @@ class GeneFunc(VirRef):
             '--data_dir',eggnog_db,'\n',
             'emapper.py','--annotate_hits_table',seed_orth,
             '--no_file_comments','-o',eggout,'--cpu 40',
-            '--data_dir',eggnog_db,'--override\n']        ]
+            '--data_dir',eggnog_db,'--override\n']
         )
         shell=f'{wkdir}/eggnog_anno.sh'
         general.printSH(shell,cmd)

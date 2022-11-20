@@ -1,5 +1,5 @@
 from os import path
-from ..process import cmdExec,general
+from ..general import cmdExec,general
 from ..identify.viridsop import VirSurvey
 
 class VirRef(VirSurvey):

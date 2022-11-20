@@ -1,16 +1,16 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #coding=utf-8
 import sys
 from os import path
 from optparse import OptionParser #该模块已经不在开发维护，改为argparse
-#sys.path.append(sys.path[0]+'/src')
+sys.path.append(sys.path[0]+'/src')
 from src.docs import readme
 from src.assemble import assembly
 from src.identify import viridsop
 from src.general import general
 from src.votus import deRep
 from src.classify import taxAnnot
-from src.quantify import quantVir 
+from src.quantify import align,coverage 
 from src.func_annot import geneAnnot
 from src.compare import vCont
 
@@ -44,7 +44,7 @@ if len(sys.argv) < 2:
 
 if sys.argv[1]=='assemble':
     print('VirCraft assembly')
-    assembly.Assemble(opts.config,outdir)
+    assembly.Assembly(opts.config,outdir)
     exit(0)
 elif sys.argv[1]=='identify':
     print('Viral contig identification')
@@ -74,5 +74,6 @@ elif sys.argv[1]=='host_prid':
     print('Host prediction')
     exit(0)
 else:
-    parser.error(f'{sys.argv[1]} is not a module of VirCraft!')
+    ERROR=f'{sys.argv[1]} is not a module of VirCraft'
+    parser.error(ERROR)
     exit(0)
