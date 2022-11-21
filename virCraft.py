@@ -44,7 +44,8 @@ if len(sys.argv) < 2:
 
 if sys.argv[1]=='assemble':
     print('VirCraft assembly')
-    assembly.Assembly(opts.config,outdir)
+    Draft=assembly.Assembly(opts.config,outdir)
+
     exit(0)
 elif sys.argv[1]=='identify':
     print('Viral contig identification')

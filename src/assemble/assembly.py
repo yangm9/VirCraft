@@ -50,7 +50,6 @@ class Assembly(Reads):
         general.printSH(stat_sh,stat_cmd)
         results=cmdExec.execute(stat_cmd)
         return results
-    @property
     def Assemble(self):
         results=''
         for grp in self.groups:
@@ -63,3 +62,6 @@ class Assembly(Reads):
             results += filtFastA(grp,outdir,'10000')
             results += statFastA(grp,outdir)
         return results
+    def AlnRef(self):
+
+        
