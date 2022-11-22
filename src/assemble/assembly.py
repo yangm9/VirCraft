@@ -91,17 +91,19 @@ class Assembly(Reads):
         shell=f'{wkdir}/.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
-        return results
+        return unused_fq
     def Assemble(self):
         results=''
         for grp in self.groups:
             fastq_1=f'{self.fq_dir}/{grp}_1.fq'
             fastq_2=f'{self.fq_dir}/{grp}_2.fq'
             fastqs=[fastq_1,fastq_2]
-            results+=self.spades(fastqs,grp,outdir)
+            results+=self.spades(fastqs,grp)
+            results+=self.unmapReads(fastqs,grp)
+            unused_fq=f'{wkdir}/unused_by_spades.fq'
+            results+=self.megahit([fastqs],grp)
             results+=filtFastA(grp,outdir,'2000')
             results+=filtFastA(grp,outdir,'5000')
             results+=filtFastA(grp,outdir,'10000')
             results+=statFastA(grp,outdir)
-            results+=self.unmapReads(fastqs,grp)
         return results
