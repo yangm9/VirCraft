@@ -24,11 +24,13 @@ class Assembly(Reads):
             '--careful','-t 30 -m 1300 -k 21,33,55,77,99,127',
             '-o',wkdir]
         )
-        spades_sh=f'{self.wkdir}/{group}_spades.sh'
-        general.printSH(spades_sh,spades_cmd)
-        results=cmdExec.execute(spades_cmd)
+        shell=f'{self.wkdir}/{group}_spades.sh'
+        general.printSH(shell,cmd)
+        results=cmdExec.execute(cmd)
         return results
-    def filtFastA(self,grp: str,cutoff: int):
+    def megahit(self,fastqs:list,group:str):
+        
+    def filtFastA(self,grp:str,cutoff:int):
         '''
         Filter the fasta sequence by length (cutoff).
         '''
@@ -40,15 +42,35 @@ class Assembly(Reads):
         general.printSH(filt_sh,filt_cmd)
         results=cmdExec.execute(filt_cmd)
         return results
-    def statFastA(self,grp: str):
+    def statFastA(self,grp:str):
         wkdir=f'{self.wkdir}/{grp}'
         contigs=f'{wkdir}/scaffolds.fasta'
         scaffolds=f'{wkdir}/scaffolds.fasta'
         stat_tab=f'{wkdir}/stat.tab'
-        stat_cmd=['assemb_stat.pl',contigs,scaffolds,f'>{stat_tab}\n']
-        stat_sh=f'{wkdir}/stat_fasta.sh'
-        general.printSH(stat_sh,stat_cmd)
-        results=cmdExec.execute(stat_cmd)
+        cmd=['assemb_stat.pl',contigs,scaffolds,f'>{stat_tab}\n']
+        shell=f'{wkdir}/stat_fasta.sh'
+        general.printSH(shell,cmd)
+        results=cmdExec.execute(cmd)
+        return results
+    def unmapReads(self,FQs:list,grp:str):
+        '''
+        Align the FastQs back to Assembled Contigs.
+        '''
+        cmd=[self.envs]
+        wkdir=f'{self.wkdir}/{grp}'
+        scaffolds=f'{wkdir}/scaffolds.fasta'
+        bwa_idx=f'{wkdir}/scaffoldsIDX'
+        unused_sam=f'{wkdir}/unused_by_spades.sam'
+        unused_fq=f'{wkdir}/unused_by_spades.fq'
+        cmd.extend(
+            ['bwa index -a bwtsw',scaffolds,'-p',bwa_idx,'\n',
+             'bwa mem','-t 28',bwa_idx,FQs[0],FQs[1],
+             '|grep -v NM:i: >',unused_sam,'\n',
+             'sam_to_fastq.py',unused_sam,'>',unused_fq,'\n']
+        )
+        shell=f'{wkdir}/.sh'
+        general.printSH(shell,cmd)
+        results=cmdExec.execute(cmd)
         return results
     def Assemble(self):
         results=''
@@ -56,12 +78,11 @@ class Assembly(Reads):
             fastq_1=f'{self.fq_dir}/{grp}_1.fq'
             fastq_2=f'{self.fq_dir}/{grp}_2.fq'
             fastqs=[fastq_1,fastq_2]
-            results += self.spades(fastqs,grp,outdir)
-            results += filtFastA(grp,outdir,'2000')
-            results += filtFastA(grp,outdir,'5000')
-            results += filtFastA(grp,outdir,'10000')
-            results += statFastA(grp,outdir)
+            results+=self.spades(fastqs,grp,outdir)
+            results+=filtFastA(grp,outdir,'2000')
+            results+=filtFastA(grp,outdir,'5000')
+            results+=filtFastA(grp,outdir,'10000')
+            results+=statFastA(grp,outdir)
+            results+=self.unmapReads(fastqs,grp)
         return results
-    def AlnRef(self):
-
         
