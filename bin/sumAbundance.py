@@ -4,9 +4,6 @@ import sys
 import pandas as pd
 import linkTab
 
-if not len(sys.argv)==3:
-    
-
 df=pd.read_csv(sys.argv[1],sep='\t')
 samp_num=df.columns.size-4
 df['Total_Abundance']=df.iloc[:,1:samp_num].sum(axis=1)
