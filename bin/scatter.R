@@ -19,7 +19,7 @@ plot<-ggplot(df,
   geom_point()+
   ggtitle("The size of viral contigs (x axis) and their total abundance")+
   scale_shape_manual(values=c(1,3,5))+theme_classic()
-pdf(paste(argv[2],"/length_abundance_scatter.pdf",width=10,height=8)
+pdf(paste(argv[2],"/length_abundance_scatter.pdf",sep=''),width=10,height=8)
 plot
   #scale_color_manual(values=c('#E00303','#03E0B6','#E0BF03',"#EE9A00","#006400"))+
   #geom_point(

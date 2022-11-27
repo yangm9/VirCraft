@@ -10,23 +10,21 @@ library(RColorBrewer)
 
 argv<-commandArgs(T)
 
-dat<-read.table(
+df<-read.table(
     argv[1],header=TRUE,sep="\t",
     row.names=1,check.names=F,quote=""
 )
 
-dat_a<-dat[seq(1:18),]
-dat_b<-as.data.frame(t(dat_a))
-dat_b<-cbind("SampleID"=(rownames(dat_b)),dat_b)
-rownames(dat_b)<-NULL
-dat_c<-melt(dat_b,id.vars="SampleID",variable.name="Type",value.name="Relative_Abundance")
-dat_c$SampleID<-factor(
-    dat_c$SampleID,
-    levels=c("V1","V2","V3",
-           "CB148MP1_CB","CB148MP2_CB","CB200MS1_CB","CB237MS1_CB",
-           "CB247MS1_CB","CB267MS1_CB","CB267MS2_CB","CB900MS1_CB",
-           "BH0560M_AH","BH0960M_AH","BH0995M_AH","BH05106M_AH"
-    )
+df_t<-as.data.frame(t(df))
+df_t<-cbind("SampleID"=(rownames(df_t)),df_t)
+rownames(df_t)<-NULL
+df_p<-melt(
+    df_t,id.vars="SampleID",variable.name="Type",
+    value.name="Relative_Abundance"
+)
+df_p$SampleID<-factor(
+    df_p$SampleID,
+    levels=df_t$SampleID
 )
 #"#556B2F","#556B2F","#CD950C","#00688B","#8B795E","#458B74",
 color<-c(
@@ -36,7 +34,7 @@ color<-c(
            "#FF0000","#EE9A00","#006400"
 )
 
-plot<-ggplot(dat_c,aes(fill=Type,y=Relative_Abundance,x=SampleID))+
+plot<-ggplot(df_p,aes(fill=Type,y=Relative_Abundance,x=SampleID))+
   geom_bar(stat="identity",position="fill",width =.8,color="black") +
   scale_fill_manual(values =color)+
   theme_bw()+
@@ -45,5 +43,5 @@ plot<-ggplot(dat_c,aes(fill=Type,y=Relative_Abundance,x=SampleID))+
         axis.text.x =element_text(angle=90,hjust=0.5,vjust=0.5),
         axis.title =element_text(size=10),
         axis.text =element_text(size=10))
-pdf(paste(argv[2],"/taxa_relative_abundance_baplot.pdf",width=10,height=8)
+pdf(paste(argv[2],"/taxa_relative_abundance_baplot.pdf",sep=""),width=10,height=8)
 plot
