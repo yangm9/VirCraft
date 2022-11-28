@@ -5,12 +5,13 @@
 
 use strict;
 unless(@ARGV==4){
-    print STDERR "Usage: $0 <ntw> <ntw_anno_file> <Seq_Name_Token> <Currnet Environment>\n"
+    print STDERR "Usage: $0 <c1.ntw> <output_dir> <Seq_Name_Token> <Currnet Environment>\n";
 }
 
 open NTW,$ARGV[0] or die $!;
-open ANNO,">$ARGV[1]" or die $!;
-print ANNO "Name\tTaget\tRelationship\tEnvironment\n";
+open FILT,">$ARGV[1]/c1_filt.ntw" or die $!;
+print FILT "Name\tTaget\tRelationship\tEnvironment\n";
+my %stat=();
 while(<NTW>){
     chomp;
     next unless(/^$ARGV[2]/);
@@ -26,9 +27,17 @@ while(<NTW>){
     }else{
         $env=(split /_/,$items[1])[0];
     }
+    $stat{$env}++;
     push @items,$env;
     my $line=join "\t",@items;
-    print ANNO "$line\n";
+    print FILT "$line\n";
+}
+open STAT,">$ARGV[1]/c1_ntw.stat" or die $!;
+print STAT "Environments\tGene_Number\n";
+foreach my $env(keys %stat){
+    print STAT "$env\t$stat{$env}\n";
 }
 close NTW;
-close ANNO;
+close FILT;
+close STAT;
+__END__
