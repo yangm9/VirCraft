@@ -4,7 +4,7 @@
 #本程序的功能：过滤掉NTW中与研究无关的行并添加环境信息。
 
 use strict;
-unless(@ARGV==3){
+unless(@ARGV==4){
     print STDERR "Usage: $0 <ntw> <ntw_anno_file> <Seq_Name_Token> <Currnet Environment>\n"
 }
 
@@ -14,12 +14,15 @@ print ANNO "Name\tTaget\tRelationship\tEnvironment\n";
 while(<NTW>){
     chomp;
     next unless(/^$ARGV[2]/);
-    my @items=split /\t/,$_;
+    next if(/nanopore/); #该行需要注释掉
+    my @items=split /\s+/,$_;
     my $env="";
     if($items[1]=~/~/){
         $env="vContact2 Reference";
     }elsif($items[1]=~/^$ARGV[2]/){
         $env=$ARGV[3];
+    }elsif($items[1]=~/^TS/){
+        $env="Deep Sea (Depth>5000m)";
     }else{
         $env=(split /_/,$items[1])[0];
     }
