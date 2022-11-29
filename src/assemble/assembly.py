@@ -12,7 +12,7 @@ class Assembly(Reads):
     def __init__(self,*args,config,outdir,**kwargs):
         Reads.__init__(self,config,outdir)
         self.wkdir=f'{self.outdir}/01.assembly'
-    def spades(self,fastqs: list,group: str):
+    def spades(self,fastqs:list,group:str):
         '''
         Assemble metagenome by SPAdes for single group.
         '''
@@ -85,7 +85,7 @@ class Assembly(Reads):
         cmd.extend(
             ['bwa index -a bwtsw',scaffolds,'-p',bwa_idx,'\n',
              'bwa mem','-t 28',bwa_idx,fastqs[0],fastqs[1],
-             '|grep -v NM:i: >',unused_sam,'\n',
+             '|grep -v NM:i:>',unused_sam,'\n',
              'sam_to_fastq.py',unused_sam,'>',unused_fq,'\n']
         )
         shell=f'{wkdir}/.sh'
