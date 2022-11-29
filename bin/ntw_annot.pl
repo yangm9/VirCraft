@@ -1,7 +1,9 @@
 #!/usr/bin/env perl
 
+=head1
 #NTW为vContact2生成的蛋白质相互关系的结果。
 #本程序的功能：过滤掉NTW中与研究无关的行并添加环境信息。
+=cut
 
 use strict;
 unless(@ARGV==4){
@@ -32,11 +34,13 @@ while(<NTW>){
     my $line=join "\t",@items;
     print FILT "$line\n";
 }
+
 open STAT,">$ARGV[1]/c1_ntw.stat" or die $!;
 print STAT "Environments\tGene_Number\n";
 foreach my $env(keys %stat){
     print STAT "$env\t$stat{$env}\n";
 }
+
 close NTW;
 close FILT;
 close STAT;
