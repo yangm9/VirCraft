@@ -6,7 +6,10 @@ def description(name,version):
 Discription:
     A flexible pipeline for metaviromic data analysis.
 Usage:
-    {name} <module> [opts] -o <output_file>
+    {name} <module> [opts] -o <outdir>
+        module: a optional functional module, including assembly, identify, votus, classify, quantify, func_annot and host_prid.
+        opts: options described below in the section of Options.
+        outdir: output directory.
 Author:
     yangming, yangm@idsse.ac.cn
 Version:
