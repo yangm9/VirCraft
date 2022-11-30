@@ -60,7 +60,7 @@ class Assembly(Reads):
         scaffolds=f'{wkdir}/scaffolds.fasta'
         filt_fa_prifix=f'{wkdir}/scaffolds.filt'
         filt_cmd=['SeqLenCutoff.pl',scaffolds,filt_fa_prifix,cutoff]
-        filt_sh=f'{wkdir}/filt_scaffolds.sh'
+        filt_sh=f'{self.wkdir}/{grp}_filt_scaffolds.sh'
         general.printSH(filt_sh,filt_cmd)
         results=cmdExec.execute(filt_cmd)
         return results
@@ -70,7 +70,7 @@ class Assembly(Reads):
         scaffolds=f'{wkdir}/scaffolds.fasta'
         stat_tab=f'{wkdir}/stat.tab'
         cmd=['assemb_stat.pl',contigs,scaffolds,f'>{stat_tab}\n']
-        shell=f'{wkdir}/stat_fasta.sh'
+        shell=f'{self.wkdir}/{grp}_fasta_stat.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
         return results
@@ -82,15 +82,15 @@ class Assembly(Reads):
         wkdir=f'{self.wkdir}/{grp}'
         scaffolds=f'{wkdir}/scaffolds.fasta'
         bwa_idx=f'{wkdir}/scaffoldsIDX'
-        unused_sam=f'{wkdir}/unused_by_spades.sam'
-        unused_fq=f'{wkdir}/unused_by_spades.fq'
+        unused_sam=f'{wkdir}/unused_by_spades_{grp}.sam'
+        unused_fq=f'{wkdir}/unused_by_spades_{grp}.fq'
         cmd.extend(
             ['bwa index -a bwtsw',scaffolds,'-p',bwa_idx,'\n',
              'bwa mem','-t 28',bwa_idx,fastqs[0],fastqs[1],
              '|grep -v NM:i:>',unused_sam,'\n',
              'sam_to_fastq.py',unused_sam,'>',unused_fq,'\n']
         )
-        shell=f'{wkdir}/unmapped_reads.sh'
+        shell=f'{self.wkdir}/{grp}_unmapped_reads.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
         return unused_fq
@@ -102,9 +102,9 @@ class Assembly(Reads):
             fastqs=[fastq_1,fastq_2]
             results+=self.spades(fastqs,grp)
             results+=self.unmapReads(fastqs,grp)
-            results+=self.megahit([fastqs],grp)
-            results+=filtFastA(grp,outdir,'2000')
-            results+=filtFastA(grp,outdir,'5000')
-            results+=filtFastA(grp,outdir,'10000')
-            results+=statFastA(grp,outdir)
+            results+=self.megahit(fastqs,grp)
+            results+=self.filtFastA(grp,'2000')
+            results+=self.filtFastA(grp,'5000')
+            results+=self.filtFastA(grp,'10000')
+            results+=self.statFastA(grp)
         return results
