@@ -10,10 +10,10 @@ class Assembly(Reads):
     Assembly the clean reads combined spades and megahit.
     '''
     envs=general.selectENV('VirCraft')
-    def __init__(self,*args,config,outdir,**kwargs):
-        Reads.__init__(self,config,outdir)
+    def __init__(self,*args,config=None,outdir=None,**kwargs):
+        super().__init__(self,config,outdir)
         self.wkdir=f'{self.outdir}/01.assembly'
-    def spades(self,fastqs:list,group:str):
+    def spades(self,fastqs:list,group=''):
         '''
         Assemble metagenome by SPAdes for single group.
         '''
@@ -29,7 +29,7 @@ class Assembly(Reads):
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
         return results
-    def megahit(self,fastqs:list,group:str):
+    def megahit(self,fastqs:list,group=''):
         '''
         Assemble metagenome by SPAdes for single group.
         '''
@@ -52,59 +52,59 @@ class Assembly(Reads):
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
         return results
-    def filtFastA(self,grp:str,cutoff:int):
+    def filtFastA(self,group='',cutoff=100):
         '''
         Filter the fasta sequence by length (cutoff).
         '''
-        wkdir=f'{self.wkdir}/{grp}'
+        wkdir=f'{self.wkdir}/{group}'
         scaffolds=f'{wkdir}/scaffolds.fasta'
         filt_fa_prifix=f'{wkdir}/scaffolds.filt'
         filt_cmd=['SeqLenCutoff.pl',scaffolds,filt_fa_prifix,cutoff]
-        filt_sh=f'{self.wkdir}/{grp}_filt_scaffolds.sh'
+        filt_sh=f'{self.wkdir}/{group}_filt_scaffolds.sh'
         general.printSH(filt_sh,filt_cmd)
         results=cmdExec.execute(filt_cmd)
         return results
-    def statFastA(self,grp:str):
-        wkdir=f'{self.wkdir}/{grp}'
+    def statFastA(self,group=''):
+        wkdir=f'{self.wkdir}/{group}'
         contigs=f'{wkdir}/scaffolds.fasta'
         scaffolds=f'{wkdir}/scaffolds.fasta'
         stat_tab=f'{wkdir}/stat.tab'
         cmd=['assemb_stat.pl',contigs,scaffolds,f'>{stat_tab}\n']
-        shell=f'{self.wkdir}/{grp}_fasta_stat.sh'
+        shell=f'{self.wkdir}/{group}_fasta_stat.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
         return results
-    def unmapReads(self,fastqs:list,grp:str):
+    def unmapReads(self,fastqs:list,group=''):
         '''
         Align the FastQs back to Assembled Contigs.
         '''
         cmd=[self.envs]
-        wkdir=f'{self.wkdir}/{grp}'
+        wkdir=f'{self.wkdir}/{group}'
         scaffolds=f'{wkdir}/scaffolds.fasta'
         bwa_idx=f'{wkdir}/scaffoldsIDX'
-        unused_sam=f'{wkdir}/unused_by_spades_{grp}.sam'
-        unused_fq=f'{wkdir}/unused_by_spades_{grp}.fq'
+        unused_sam=f'{wkdir}/unused_by_spades_{group}.sam'
+        unused_fq=f'{wkdir}/unused_by_spades_{group}.fq'
         cmd.extend(
             ['bwa index -a bwtsw',scaffolds,'-p',bwa_idx,'\n',
              'bwa mem','-t 28',bwa_idx,fastqs[0],fastqs[1],
              '|grep -v NM:i:>',unused_sam,'\n',
              'sam_to_fastq.py',unused_sam,'>',unused_fq,'\n']
         )
-        shell=f'{self.wkdir}/{grp}_unmapped_reads.sh'
+        shell=f'{self.wkdir}/{group}_unmapped_reads.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
         return unused_fq
     def Assemble(self):
         results=''
-        for grp in self.groups:
-            fastq_1=f'{self.fq_dir}/{grp}_1.fq'
-            fastq_2=f'{self.fq_dir}/{grp}_2.fq'
+        for group in self.groups:
+            fastq_1=f'{self.fq_dir}/{group}_1.fq'
+            fastq_2=f'{self.fq_dir}/{group}_2.fq'
             fastqs=[fastq_1,fastq_2]
-            results+=self.spades(fastqs,grp)
-            results+=self.unmapReads(fastqs,grp)
-            results+=self.megahit(fastqs,grp)
-            results+=self.filtFastA(grp,'2000')
-            results+=self.filtFastA(grp,'5000')
-            results+=self.filtFastA(grp,'10000')
-            results+=self.statFastA(grp)
+            results+=self.spades(fastqs,group)
+            results+=self.unmapReads(fastqs,group)
+            results+=self.megahit(fastqs,group)
+            results+=self.filtFastA(group,'2000')
+            results+=self.filtFastA(group,'5000')
+            results+=self.filtFastA(group,'10000')
+            results+=self.statFastA(group)
         return results
