@@ -42,10 +42,10 @@ if len(sys.argv) < 2:
     parser.print_help()
     exit(0)
 
-if sys.argv[1]=='assemble':
+if sys.argv[1]=='assembly':
     print('VirCraft assembly')
-    Draft=assembly.Assembly(opts.config,outdir)
-
+    Draft=assembly.Assembly(config=opts.config,outdir=outdir)
+    Draft.Assemble()
     exit(0)
 elif sys.argv[1]=='identify':
     print('Viral contig identification')

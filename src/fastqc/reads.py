@@ -12,7 +12,7 @@ class Reads(VirCfg):
         self.wkdir=f'{self.outdir}/00.data'
         general.mkdir(self.wkdir)
         self.fq_dir=f'{self.wkdir}/merged_fq'
-        general.mkdir(fq_dir)
+        general.mkdir(self.fq_dir)
         self.grpFq1Dict,self.grpFq2Dict=self.grpReads
     @property
     def grpReads(self):
@@ -26,7 +26,7 @@ class Reads(VirCfg):
             groupFq1Dict[group].append(fastq1)
             groupFq2Dict[group].append(fastq2)
         return groupFq1Dict,groupFq2Dict
-    def catFqCMD(self,fastqs: list,grp: str,n: int):
+    def catFqCMD(self,fastqs:list,grp:str,n:int):
         merge_fq_cmd=['cat']
         merge_fq_cmd.extend(fastqs)
         merge_fq_cmd.append(f'>{self.fq_dir}/{grp}_{n}.fq\n')

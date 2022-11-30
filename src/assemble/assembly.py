@@ -7,6 +7,7 @@ from ..fastqc.reads import Reads
 
 class Assembly(Reads):
     '''
+    Assembly the clean reads combined spades and megahit.
     '''
     envs=general.selectENV('VirCraft')
     def __init__(self,*args,config,outdir,**kwargs):
@@ -45,7 +46,8 @@ class Assembly(Reads):
             other_paras='--continue'
         cmd.extend(
             ['megahit',input_para,'-o',outdir,
-             '-t',32,'-m',80000000000,'--tmp-dir',tmpdir,other_paras]
+             '-t','32','-m','80000000000','--tmp-dir',tmpdir,other_paras]
+        )
         shell=f'{self.wkdir}/{group}_megahit.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
@@ -88,7 +90,7 @@ class Assembly(Reads):
              '|grep -v NM:i:>',unused_sam,'\n',
              'sam_to_fastq.py',unused_sam,'>',unused_fq,'\n']
         )
-        shell=f'{wkdir}/.sh'
+        shell=f'{wkdir}/unmapped_reads.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
         return unused_fq
@@ -100,7 +102,6 @@ class Assembly(Reads):
             fastqs=[fastq_1,fastq_2]
             results+=self.spades(fastqs,grp)
             results+=self.unmapReads(fastqs,grp)
-            unused_fq=f'{wkdir}/unused_by_spades.fq'
             results+=self.megahit([fastqs],grp)
             results+=filtFastA(grp,outdir,'2000')
             results+=filtFastA(grp,outdir,'5000')
