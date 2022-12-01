@@ -4,10 +4,9 @@
 import os
 import sys
 sys.path.append(sys.path[0]+'/src')
-from src.docs import getOpts 
 from src.assemble import assembly
 from src.identify import viridsop
-from src.general import general
+from src.config import arg_parser
 from src.votus import deRep
 from src.classify import taxAnnot
 from src.quantify import align,coverage 
@@ -15,13 +14,7 @@ from src.func_annot import geneAnnot
 from src.compare import vCont
 
 version='0.0.3'
-OptSets=getOpts.Options(sys.argv[1],version)
-OptSets.checkOpts()
-opts=OptSets.opts
-
-if len(sys.argv) < 2:
-    OptSets.parser.print_help()
-    exit(0)
+args=argParser.setOpts(sys.argv[0],version)
 
 if sys.argv[1]=='assembly':
     print('VirCraft assembly')
