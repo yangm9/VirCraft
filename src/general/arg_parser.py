@@ -1,38 +1,78 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Dec 18 18:17:58 2020
-
+'''
+Created on Fri Dec 18 18:17:58 2022
 @author: yangming
-"""
+'''
 
 import argparse
-import pyrpipe.version
-
-ver=pyrpipe.version.__version__
-parser = argparse.ArgumentParser(description='pyrpipe: A lightweight python package for RNA-Seq workflows (version {})'.format(ver),
-usage="""
-pyrpipe [<pyrpipe options>] --in <script.py> [<script options>]
-OR
-python <script.py> [<pyrpipe options>] [<script options>]
-
-use pyrpipe_diagnostic command for reports, and tests and installation of RNA-Seq tools
-""")
+#import src.version
 
 
-parser.add_argument("--threads", help="Num processes/threads to use\nDefault:mp.cpu_count()")
-parser.add_argument('--max-memory', help='Max memory to use (in GB)\ndefault: None',action="store",dest='mem')
-parser.add_argument("--verbose", help="Print pyrpipe_engine's stdout and stderr\nDefault: False",default=False,dest='verbose', action='store_true')
-parser.add_argument("--dry-run", help="Only print pyrpipe's commands and not execute anything through pyrpipe_engine module\nDefault: False",default=False,dest='dryrun', action='store_true')
-parser.add_argument("--force", help="Force execution of commands if their target files already exist\nDefault: False",default=False,dest='force', action='store_true')
-parser.add_argument("--safe-mode", help="Disable file deletions through pyrpipe_engine module\nDefault: False",default=False,dest='safemode', action='store_true')
-parser.add_argument("--no-logs", help="Disable pyrpipe logs\nDefault: False",default=False,dest='nologs', action='store_true')
-parser.add_argument("--param-dir", help="Directory containing parameter yaml files\nDefault: ./params",dest='paramdir',default='params')
-parser.add_argument("--logs-dir", help="Directory for saving log files\nDefault: ./pyrpipe_logs",dest='logsdir',default='pyrpipe_logs')
-parser.add_argument("--multiqc", help="Autorun MultiQC after execution\nDefault: False",default=False,dest='multiqc', action='store_true')
+def addFqArg(parser):
+    parser.add_argument(
+        '-1','--fastq1',action='store',type=str,
+        dest='fq1',metavar='STR',default=False,
+        required=True,help='FastQ file for read 1'
+    )
+    parser.add_argument(
+        '-2','--fastq2',action='store',type=str,
+        dest='fq2',metavar='STR',default=False,
+        help='FastQ file for read 1'
+    )
+    return parser
+def addSampFqArg(parser):
+    parser.add_argument(
+        '-q','--fastqs',action='store',type=str,
+        dest='fqs',metavar='STR',default=False,
+        help='Directory stored all FastQs'
+    )
+def addGlbArg(parser): #Add global arguments
+    subparser.add_argument(
+        '-t','--threads',action='store',type=str,
+        dest='threads',metavar='INT',default=False,
+        help='Num processes/threads to use\n'
+    )
+    subparser.add_argument(
+        '-o','--outdir',action='store',type=str,
+        dest='outdir',metavar='STR',default=False,
+        required=True,help='Output direcortory\n'
+    )
+    return parser
+#ver=src.version.__version__
+parser=argparse.ArgumentParser(
+    prog='VirCraft',
+    description='VirCraft is an flexible pipeline for metaviromic data analysis.',
+    usage=f'''
+    virCraft.py <subcommands> [<options>] -o <outdir>
+    subcommands: an optional functional module, including assembly, identify, votus, classify, quantify, func_annot and host_prid.
+    options: options described below in the section of Options.
+    outdir: output directory.
+''',
+    epilog = 'Text at the bottom of help'
+)
 
-parser.add_argument("--version", help="Print version information and exit",default=False,dest='versioninfo', action='store_true')
-
-#parser.add_argument('infile', help='The input python script',action="store",nargs="?")
-required_input = parser.add_argument_group('Required input file if invoking via pyrpipe command')
-required_input.add_argument('--in', help='The input python script', required=False,dest='infile')
+subparsers=parser.add_subparsers(
+    title='subcommands',
+    description='valid subcommands',
+    help=''
+)
+subparser=subparsers.add_parser('reads_qc',help='sub-command help')
+subparser=addGlbArg(subparser)
+subparser=subparsers.add_parser('assembly',help='An assembly module could assemble the reads to contigs or scaffolds using MegaHit or SPAdes.')
+subparser=addFqArg(subparser)
+subparser=addGlbArg(subparser)
+subparser=subparsers.add_parser('identify',help='sub-command help')
+subparser=addGlbArg(subparser)
+subparser=subparsers.add_parser('votus',help='sub-command help')
+subparser=addGlbArg(subparser)
+subparser=subparsers.add_parser('classify',help='sub-command help')
+subparser=addGlbArg(subparser)
+subparser=subparsers.add_parser('quantify',help='sub-command help')
+subparser=addGlbArg(subparser)
+subparser=subparsers.add_parser('func_annot',help='sub-command help')
+subparser=addGlbArg(subparser)
+subparser=subparsers.add_parser('host_prid',help='sub-command help')
+subparser=addGlbArg(subparser)
+args=parser.parse_args()
+#args.func(args)

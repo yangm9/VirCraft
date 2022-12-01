@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 #coding=utf-8
-
-import os
 import sys
+from os import path
+from optparse import OptionParser #该模块已经不在开发维护，改为argparse
 sys.path.append(sys.path[0]+'/src')
-from src.docs import getOpts 
+from src.docs import readme
 from src.assemble import assembly
 from src.identify import viridsop
 from src.general import general
@@ -14,18 +14,37 @@ from src.quantify import align,coverage
 from src.func_annot import geneAnnot
 from src.compare import vCont
 
-version='0.0.3'
-OptSets=getOpts.Options(sys.argv[1],version)
-OptSets.checkOpts()
-opts=OptSets.opts
+VERSION='v0.0.1'
+usage=readme.description(sys.argv[0],VERSION)
+parser=OptionParser(usage,version='%prog {VERSION}')
+parser.add_option(
+    '-c','--configs', action='store', type='str',
+    dest='config',metavar='STR', default=False,
+    help='Cogfiguration file.'
+)
+parser.add_option(
+    '-t','--data_type', action='store', type='str',
+    dest='data_type',metavar='STR', default='FastQ',
+    help='Input data type fastq orfasta.'
+)
+parser.add_option(
+    '-o','--outdir', action='store', type='str',
+    dest='outdir',metavar='STR', default=False,
+    help='Output direcortory.'
+)
+opts,args=parser.parse_args()
+
+if opts.outdir:
+    outdir=path.abspath(opts.outdir)
+    general.mkdir(opts.outdir)
 
 if len(sys.argv) < 2:
-    OptSets.parser.print_help()
+    parser.print_help()
     exit(0)
 
 if sys.argv[1]=='assembly':
     print('VirCraft assembly')
-    Draft=assembly.Assembly(opts.fq1,opts.fq2,opts.outdir)
+    Draft=assembly.Assembly(config=opts.config,outdir=outdir)
     Draft.Assemble()
     exit(0)
 elif sys.argv[1]=='identify':
