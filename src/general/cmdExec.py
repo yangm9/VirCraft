@@ -9,7 +9,7 @@ def execute(command: list, silent=False):
     
     cmd_txt=' '.join(command).replace('\n ','\n')
     cmd_txt=cmd_txt.replace(' \n ','\n')
-    print(f'Running command: {cmd_txt}')
+    print(f'Running command:\n{cmd_txt}')
     '''
     if silent:
         results = subprocess.run(command, shell=False, encoding='utf-8', check=True, stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)

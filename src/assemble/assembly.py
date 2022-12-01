@@ -2,27 +2,23 @@
 
 import os
 import sys
+from ..fastqc.readsQC import Reads 
 from ..general import cmdExec,general
 
-class Assembly:
+class Assembly(Reads):
     '''
     Assembly the clean reads combined spades and megahit.
     '''
-    envs=general.selectENV('VirCraft')
     def __init__(self,fq1='',fq2='',outdir=''):
-        self.fastqs=[fq1,fq2]
-        self.outdir=os.path.abspath(outdir)
-        general.mkdir(self.outdir)
+        super().__init__(fq1,fq2,outdir)
     def spades(self):
         '''
         Assemble metagenome by SPAdes.
         '''
         wkdir=f'{self.outdir}/spades'
         general.mkdir(wkdir)
-        cmd.extend(
-            ['spades.py','--pe1-1',self.fastqs[0],'--pe1-2',self.fastqs[1],
-             '--careful','-t 30 -m 1300 -k 21,33,55,77,99,127','-o',wkdir]
-        )
+        cmd=['spades.py','--pe1-1',self.fastqs[0],'--pe1-2',self.fastqs[1],
+            '--careful','-t 32 -m 1300 -k 21,33,55,77,99,127','-o',wkdir,'\n']
         return cmd
     def megahit(self,fastqs:list):
         '''
@@ -39,10 +35,9 @@ class Assembly:
         else:
             input_para=f'-1 {fastqs[0]} -2 {fastqs[1]}'
             other_paras='--continue'
-        cmd.extend(
-            ['megahit',input_para,'-o',outdir,
-             '-t','32','-m','80000000000','--tmp-dir',tmpdir,other_paras]
-        )
+        cmd=['megahit',input_para,'-o',self.outdir,
+            '-t','32','-m','80000000000','--tmp-dir',
+            tmpdir,other_paras]
         return cmd
     def unmapReads(self):
         '''
@@ -54,23 +49,18 @@ class Assembly:
         bwa_idx=f'{wkdir}/scaffoldsIDX'
         unused_sam=f'{wkdir}/unused_reads.sam'
         unused_fq=f'{wkdir}/unused_reads.fq'
-        cmd.extend(
-            ['bwa index -a bwtsw',scaffolds,'-p',bwa_idx,'\n',
-             'bwa mem','-t 28',bwa_idx,fastqs[0],fastqs[1],
-             '|grep -v NM:i:>',unused_sam,'\n',
-             'sam_to_fastq.py',unused_sam,'>',unused_fq,'\n']
-        )
+        cmd=['bwa index -a bwtsw',scaffolds,'-p',bwa_idx,'\n',
+            'bwa mem','-t 28',bwa_idx,self.fastqs[0],self.fastqs[1],
+            '|grep -v NM:i:>',unused_sam,'\n',
+            'sam_to_fastq.py',unused_sam,'>',unused_fq,'\n']
         return cmd,unused_fq
     def mergeFastA(self):
         scaffolds1=f'{self.outdir}/spades/scaffolds.fasta'
         scaffolds2=f'{self.outdir}/megahit/final.contigs.fa'
-        contigs=f'{wkdir}/final_assembly.fasta'
-        scaffolds=f'{wkdir}/final_assembly.fasta'
-        stat_tab=f'{wkdir}/stat.tab'
-        cmd=[
-             'cat',scaffolds1,scaffolds2,'>',scaffolds,'\n',
-             'assemb_stat.pl',contigs,scaffolds,f'>{stat_tab}\n'
-        ]
+        scaffolds=f'{self.outdir}/final_assembly.fasta'
+        stat_tab=f'{self.outdir}/stat.tab'
+        cmd=['cat',scaffolds1,scaffolds2,'>',scaffolds,'\n',
+             'assemb_stat.pl',scaffolds,scaffolds,f'>{stat_tab}\n']
         return cmd
     def filtFastA(self,cutoff=2000):
         '''
@@ -79,7 +69,7 @@ class Assembly:
         wkdir=f'{self.outdir}/filter'
         scaffolds=f'{self.outdir}/final_assembly.fasta'
         filt_fa_prifix=f'{wkdir}/scaffolds.filt'
-        cmd=['SeqLenCutoff.pl',scaffolds,filt_fa_prifix,cutoff,'\n']
+        cmd=['SeqLenCutoff.pl',scaffolds,filt_fa_prifix,str(cutoff),'\n']
         return cmd
     def Assemble(self):
         cmd=[self.envs]

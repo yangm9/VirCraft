@@ -29,7 +29,7 @@ def addMergedFqArg(psr):
     psr.add_argument(
         '-2','--fastq2',action='store',type=str,
         dest='fq2',metavar='STR',default=False,
-        help='FastQ file for read 1'
+        help='FastQ file for read 2'
     )
     return psr
 def addSampFqArg(psr):
