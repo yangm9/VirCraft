@@ -20,7 +20,7 @@ def addGlbArg(psr): #Add global arguments
         required=True,help='Output direcortory\n'
     )
     return psr
-def addMergedFqArg(psr):
+def addPairFqArg(psr):
     psr.add_argument(
         '-1','--fastq1',action='store',type=str,
         dest='fq1',metavar='STR',default=False,
@@ -32,7 +32,7 @@ def addMergedFqArg(psr):
         help='FastQ file for read 2'
     )
     return psr
-def addSampFqArg(psr):
+def addAllFqArg(psr):
     psr.add_argument(
         '-q','--fastqs',action='store',type=str,
         dest='fqs',metavar='STR',default=False,
@@ -67,14 +67,18 @@ def setOpts(name:str,version:str):
         help=''
     )
     
-    subpsr=subparsers.add_parser('reads_qc',help='sub-command help')
+    subpsr=subparsers.add_parser(
+        'reads_qc',
+        help='sub-command help'
+    )
+    subpsr=addPairFqArg(subpsr)
     subpsr=addGlbArg(subpsr)
     
     subpsr=subparsers.add_parser(
         'assembly',
         help='Assemble the reads to contigs or scaffolds using MegaHit or SPAdes'
     )
-    subpsr=addMergedFqArg(subpsr)
+    subpsr=addPairFqArg(subpsr)
     subpsr=addGlbArg(subpsr)
     
     subpsr=subparsers.add_parser(
@@ -101,7 +105,7 @@ def setOpts(name:str,version:str):
         'quantify',
         help='sub-command help'
     )
-    subpsr=addSampFqArg(subpsr)
+    subpsr=addAllFqArg(subpsr)
     subpsr=addGlbArg(subpsr)
     
     subpsr=subparsers.add_parser(
