@@ -4,6 +4,7 @@
 import os
 import sys
 sys.path.append(sys.path[0]+'/src')
+from src.fastqc import readsQC
 from src.assemble import assembly
 from src.identify import viridsop
 from src.config import argParser
@@ -17,10 +18,12 @@ version='0.0.3'
 args=argParser.setOpts(sys.argv[0],version)
 
 if sys.argv[1]=='reads_qc':
-    pass
+    print('VirCraft data QC...\n')
+    Reads=readsQC.QualCtrl(fq1=args.fq1,fq2=args.fq2,outdir=args.outdir)
+    Reads.readqc()
+    print('Reads quality control completed!!!')
 elif sys.argv[1]=='assembly':
     print('VirCraft assembly...\n')
-    print(args.outdir)
     Draft=assembly.Assembly(args.fq1,args.fq2,args.outdir)
     Draft.Assemble()
     print('Reads assembly completed!!!')
