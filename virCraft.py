@@ -19,7 +19,11 @@ args=argParser.setOpts(sys.argv[0],version)
 
 if sys.argv[1]=='reads_qc':
     print('VirCraft data QC...\n')
-    Reads=readsQC.QualCtrl(fq1=args.fq1,fq2=args.fq2,outdir=args.outdir)
+    Reads=readsQC.QualCtrl(
+        fq1=args.fq1,fq2=args.fq2,
+        outdir=args.outdir,
+        process=args.process
+    )
     Reads.readqc()
     print('Reads quality control completed!!!')
 elif sys.argv[1]=='assembly':

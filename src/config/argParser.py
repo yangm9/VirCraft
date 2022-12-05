@@ -20,6 +20,15 @@ def addGlbArg(psr): #Add global arguments
         required=True,help='Output direcortory\n'
     )
     return psr
+
+def addProcArg(psr,dflt:str):
+    psr.add_argument(
+        '-p','--process',action='store',type=str,
+        dest='process',metavar='STR',default=dflt,
+        help='Select the analysis process for module\n'
+    )
+    return psr
+
 def addPairFqArg(psr):
     psr.add_argument(
         '-1','--fastq1',action='store',type=str,
@@ -73,6 +82,7 @@ def setOpts(name:str,version:str):
     )
     subpsr=addPairFqArg(subpsr)
     subpsr=addGlbArg(subpsr)
+    subpsr=addProcArg(subpsr,'fuc')
     
     subpsr=subparsers.add_parser(
         'assembly',

@@ -20,8 +20,9 @@ def insLable(file_name:str,label:str):
 
 def selectENV(env:str):
     conda_path=isInstalled('conda')
+    conda_abs_path=os.path.dirname(os.path.abspath(conda_path))
     if conda_path:
-        return f'export PATH="{conda_path}:$PATH"\nconda activate {env}\n'
+        return f'export "PATH={conda_abs_path}:$PATH"\nconda activate {env}\n'
     else:
         return 'Error!!!'
 
