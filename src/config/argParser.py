@@ -90,7 +90,8 @@ def setOpts(name:str,version:str):
     )
     subpsr=addPairFqArg(subpsr)
     subpsr=addGlbArg(subpsr)
-    
+    subpsr=addProcArg(subpsr,'sm')
+
     subpsr=subparsers.add_parser(
         'identify',
         help='identify the viral contigs from a assembly fasta, using vir-id-sop'

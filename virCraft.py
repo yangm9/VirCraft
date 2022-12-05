@@ -29,13 +29,21 @@ elif sys.argv[1]=='assembly':
     print('VirCraft assembly...\n')
     Draft=assembly.Assembly(
         fq1=args.fq1,fq2=args.fq2,
-        outdir=args.outdir,
+        outdir=args.outdir
     )
-    Draft.Assemble(args.process)
+    Draft.Assemble(
+        process=args.process,
+        cutoff=5000,
+        threads=32
+    )
     print('Reads assembly completed!!!')
 elif sys.argv[1]=='identify':
     print('Viral contig identification')
-    viridsop.Identify(opts.config,outdir)
+    viridsop.Identify(
+        opts.config,
+        args.outdir
+    )
+    print('Config identification completed!!!')
 elif sys.argv[1]=='votus':
     print('Remove the redundancy')
     deRep.RmDup(opts.config,outdir)
