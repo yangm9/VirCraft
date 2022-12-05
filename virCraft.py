@@ -22,14 +22,16 @@ if sys.argv[1]=='reads_qc':
     Reads=readsQC.QualCtrl(
         fq1=args.fq1,fq2=args.fq2,
         outdir=args.outdir,
-        process=args.process
     )
-    Reads.readqc()
+    Reads.readqc(args.process)
     print('Reads quality control completed!!!')
 elif sys.argv[1]=='assembly':
     print('VirCraft assembly...\n')
-    Draft=assembly.Assembly(args.fq1,args.fq2,args.outdir)
-    Draft.Assemble()
+    Draft=assembly.Assembly(
+        fq1=args.fq1,fq2=args.fq2,
+        outdir=args.outdir,
+    )
+    Draft.Assemble(args.process)
     print('Reads assembly completed!!!')
 elif sys.argv[1]=='identify':
     print('Viral contig identification')

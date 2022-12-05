@@ -2,14 +2,14 @@
 
 import os
 import sys
-from ..fastqc.readsQC import Reads 
 from ..general import cmdExec,general
+from ..fastqc.readsQC import Reads 
 
 class Assembly(Reads):
     '''
     Assembly the clean reads combined spades and megahit.
     '''
-    def __init__(self,fq1='',fq2='',outdir=''):
+    def __init__(self,fq1='',fq2='',outdir='',process=''):
         super().__init__(fq1,fq2,outdir)
     def spades(self):
         '''
@@ -18,7 +18,7 @@ class Assembly(Reads):
         wkdir=f'{self.outdir}/spades'
         general.mkdir(wkdir)
         cmd=['spades.py','--pe1-1',self.fastqs[0],'--pe1-2',self.fastqs[1],
-            '--careful','-t 32 -m 1300 -k 21,33,55,77,99,127','-o',wkdir,'\n']
+            '--careful -t 32 -m 1300 -k 21,33,55,77,99,127','-o',wkdir,'\n']
         return cmd
     def megahit(self,fastqs:list):
         '''
@@ -62,7 +62,7 @@ class Assembly(Reads):
         cmd=['cat',scaffolds1,scaffolds2,'>',scaffolds,'\n',
              'assemb_stat.pl',scaffolds,scaffolds,f'>{stat_tab}\n']
         return cmd
-    def filtFastA(self,cutoff=2000):
+    def filtFastA(self,cutoff=5000):
         '''
         Filter the fasta sequence by length (cutoff).
         '''
@@ -71,16 +71,14 @@ class Assembly(Reads):
         filt_fa_prifix=f'{wkdir}/scaffolds.filt'
         cmd=['SeqLenCutoff.pl',scaffolds,filt_fa_prifix,str(cutoff),'\n']
         return cmd
-    def Assemble(self):
+    def Assemble(self,process='sumf',cutoff=5000):
         cmd=[self.envs]
         cmd.extend(self.spades())
         tmp_cmd,unused_fq=self.unmapReads()
         cmd.extend(tmp_cmd)
         cmd.extend(self.megahit([unused_fq]))
         cmd.extend(self.mergeFastA())
-        cmd.extend(self.filtFastA(2000))
         cmd.extend(self.filtFastA(5000))
-        cmd.extend(self.filtFastA(10000))
         shell=f'{self.outdir}/reads_assembly.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
