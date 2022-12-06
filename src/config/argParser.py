@@ -11,7 +11,7 @@ import argparse
 def addGlbArg(psr): #Add global arguments
     psr.add_argument(
         '-t','--threads',action='store',type=str,
-        dest='threads',metavar='INT',default=False,
+        dest='threads',metavar='INT',default=8,
         help='Num processes/threads to use\n'
     )
     psr.add_argument(

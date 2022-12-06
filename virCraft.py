@@ -22,6 +22,7 @@ if sys.argv[1]=='reads_qc':
     Reads=readsQC.QualCtrl(
         fq1=args.fq1,fq2=args.fq2,
         outdir=args.outdir,
+        threads=args.threads
     )
     Reads.readqc(args.process)
     print('Reads quality control completed!!!')
@@ -29,12 +30,12 @@ elif sys.argv[1]=='assembly':
     print('VirCraft assembly...\n')
     Draft=assembly.Assembly(
         fq1=args.fq1,fq2=args.fq2,
-        outdir=args.outdir
+        outdir=args.outdir,
+        threads=args.threads
     )
     Draft.Assemble(
         process=args.process,
-        cutoff=5000,
-        threads=32
+        cutoff=5000
     )
     print('Reads assembly completed!!!')
 elif sys.argv[1]=='identify':
@@ -47,6 +48,7 @@ elif sys.argv[1]=='identify':
 elif sys.argv[1]=='votus':
     print('Remove the redundancy')
     deRep.RmDup(opts.config,outdir)
+    print('vOTU cluster completed!!!')
 elif sys.argv[1]=='classify':
     print('Viral contig classification')
     taxAnnot.demovir(opts.config,outdir)

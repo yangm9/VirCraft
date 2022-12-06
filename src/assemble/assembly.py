@@ -13,8 +13,8 @@ class Assembly(Reads):
         super().__init__(fq1,fq2,outdir)
         self.threads=str(threads)
         self.methDict={
-            's':self.spades(),
-            'm':self.megahit()
+            's':self.spades,
+            'm':self.megahit
         }
     def spades(self,fastqs:list):
         '''
@@ -22,9 +22,17 @@ class Assembly(Reads):
         '''
         wkdir=f'{self.outdir}/spades'
         general.mkdir(wkdir)
-        cmd=['spades.py','--pe1-1',fastqs[0],'--pe1-2',fastqs[1],
-            '-t',self.threads,'-o',wkdir,
+        cmd=[]
+        if len(fastqs)==1:
+            cmd=['spades.py','-s',fastqs[0]]
+        elif len(fastqs)==2:
+            cmd=['spades.py','--pe1-1',fastqs[0],'--pe1-2',fastqs[1]]
+        else:
+            pass
+        cmd.extend(
+            ['-t',self.threads,'-o',wkdir,
             '--careful -m 1300 -k 21,33,55,77,99,127','\n']
+        )
         scaf=f'{wkdir}/scaffolds.fasta'
         return cmd,scaf
     def megahit(self,fastqs:list):
@@ -39,12 +47,14 @@ class Assembly(Reads):
         general.mkdir(tmpdir)
         if len(fastqs)==1:
             input_para=f'-r {fastqs[0]}'
-        else:
+        elif len(fastqs)==2:
             input_para=f'-1 {fastqs[0]} -2 {fastqs[1]}'
             other_paras='--continue'
+        else:
+            pass
         cmd=['megahit',input_para,'-o',self.outdir,
             '-t',self.threads,'-m','80000000000','--tmp-dir',
-            tmpdir,other_paras]
+            tmpdir,other_paras,'\n']
         scaf=f'{wkdir}/final.contigs.fa'
         return cmd,scaf
     def unmapReads(self,scaf:str):
@@ -65,37 +75,40 @@ class Assembly(Reads):
         scaf=f'{self.outdir}/final_assembly.fasta'
         stat_tab=f'{self.outdir}/stat.tab'
         cmd=['cat',scafs[0],scafs[1],'>',scaf,'\n',
-             'assemb_stat.pl',scaffolds,scaffolds,f'>{stat_tab}\n']
+             'assemb_stat.pl',scaf,scaf,f'>{stat_tab}\n']
         return cmd,scaf
-    def filtFastA(self,cutoff=5000):
+    def filtFastA(self,scaf,cutoff=5000):
         '''
         Filter the fasta sequence by length (cutoff).
         '''
         wkdir=f'{self.outdir}/filter'
-        scaf=f'{self.outdir}/final_assembly.fasta'
         filt_fa_prifix=f'{wkdir}/scaffolds.filt'
         cmd=['SeqLenCutoff.pl',scaf,filt_fa_prifix,str(cutoff),'\n']
         return cmd
     def mixAsse(self,fastqs,process='sm'):
+        '''
+        Analysis the Assembly process accordding to the process set.
+        '''
         cmd=[]
         scafs=[]
-        step_num=len(process)
         tmp_cmd,tmp_scaf=self.methDict[process[0]](fastqs)
         cmd.extend(tmp_cmd)
         scafs.append(tmp_scaf)
-        if step_num==2:
+        if len(process)==2:
             tmp_cmd,unused_fq=self.unmapReads(tmp_scaf)
             cmd.extend(tmp_cmd)
             tmp_cmd,tmp_scaf=self.methDict[process[1]]([unused_fq])
             cmd.extend(tmp_cmd)
-        scafs.append(tmp_scaf)
-        cmd.extend(self.mergeFastA(scafs))
-        return cmd,scafs
-    def Assemble(self,process='sm',cutoff=5000,threads=8):
+            scafs.append(tmp_scaf)
+        tmp_cmd,scaf=self.mergeFastA(scafs)
+        cmd.extend(tmp_cmd)
+        return cmd,scaf
+    def Assemble(self,process='sm',cutoff=5000):
         cmd=[self.envs]
         scafs=[]
-        tmp_cmd,scafs=mixAsse(self.fastqs,process)
-        cmd.extend(self.filtFastA(cutoff))
+        tmp_cmd,scaf=self.mixAsse(self.fastqs,process)
+        cmd.extend(tmp_cmd)
+        cmd.extend(self.filtFastA(scaf,cutoff))
         shell=f'{self.outdir}/{self.samp}_assembly.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
