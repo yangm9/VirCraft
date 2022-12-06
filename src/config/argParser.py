@@ -110,6 +110,7 @@ def setOpts(name:str,subcmds:str,version:str):
         'classify',
         help='sub-command help'
     )
+    subpsr=addFaArg(subpsr)
     subpsr=addGlbArg(subpsr)
     
     subpsr=subparsers.add_parser(

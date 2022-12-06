@@ -58,7 +58,13 @@ elif sys.argv[1]=='votus':
     print('vOTU cluster completed!!!')
 elif sys.argv[1]=='classify':
     print('Viral contig classification')
-    taxAnnot.demovir(opts.config,outdir)
+    Taxa=taxAnnot.VirTaxa(
+        fasta=args.fasta,
+        outdir=args.outdir,
+        threads=args.threads
+    )
+    Taxa.Classify()
+    print('Contigs classification completed!!!')
 elif sys.argv[1]=='quantify':
     print('Viral abundance and diversity')
     quantify.quantVir(opts.config,outdir)

@@ -2,17 +2,13 @@
 
 import sys,os
 from ..general import cmdExec,general
-from ..classify.taxAnnot import VirTaxa
+from ..fastqc.readsQC import Reads
 
-class VirAln(VirTaxa):
+class VirAln(Reads):
     '''
     '''
-    def __init__(self,config,outdir):
-        VirTaxa.__init__(self,config,outdir)
-        self.datadir=self.wkdir
-        self.wkdir=f'{self.outdir}/05.abundance'
-        self.bwa_idx=f'{self.wkdir}/0.index/all_votus'
-        general.mkdir(self.wkdir)
+    def __init__(self,fq1='',fq2='',fasta='',outdir='',threads=8):
+        super().__init__(fq1,fq2,outdir)
     def mkIdx(self):
         "Make bwa index for votus."
         cmd=[self.envs]
