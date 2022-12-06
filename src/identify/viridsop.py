@@ -1,100 +1,95 @@
+import os
 from ..general import cmdExec,general
-from ..assemble.assembly import Assembly
+from ..config.cfgInfo import VirCfg
 
-class VirSurvey(Assembly):
+class VirScan(VirCfg):
     '''
+    According to the Viral sequence identification SOP with VirSorter2 (https://www.protocols.io/view/viral-sequence-identification-sop-with-virsorter2-5qpvoyqebg4o/v3)
     '''
-    def __init__(self,config,outdir):
-        Assembly.__init__(self,config,outdir)
-        self.datadir=self.wkdir
-        self.wkdir=f'{self.outdir}/02.identify'
-        general.mkdir(self.wkdir)
-    def findVir(self,grp: str):
-        find_vir_cmd=[self.envs]
-        wkdir=f'{self.wkdir}/{grp}'
+    n=0
+    vs2_subcmds=['--keep-original-seq','--seqname-suffix-off --viral-gene-enrich-off --provirus-off --prep-for-dramv']
+    def __init__(self,fasta='',outdir='',threads=8):
+        super().__init__()
+        self.fasta=os.path.abspath(fasta)
+        self.outdir=os.path.abspath(outdir)
+        self.threads=str(threads)
+        general.mkdir(self.outdir)
+    def virsorter(self,in_fa:str):
+        idx=str(self.n+1)
+        wkdir=f'{self.outdir}/vs2-pass{idx}'
         general.mkdir(wkdir)
-        vs2_pass1_dir=f'{wkdir}/vs2-pass1'
-        general.mkdir(vs2_pass1_dir)
-        scaffolds=f'{self.datadir}/{grp}/scaffolds.filt.gt5000.fasta'
-        find_vir_cmd.extend(
-            ['virsorter','run','--keep-original-seq','-i',scaffolds,
-             '-d ',self.confDict['virsorter2DB'],'-v',vs2_pass1_dir,
-             '--include-groups dsDNAphage,ssDNA',
-             '--min-length 0 --min-score 0.5 -j 28 all\n']
+        cmd=['virsorter run',vs2_subcmds[self.n],'-i',in_fa,
+            '-d',self.confDict['virsorter2DB'],'-w',wkdir,
+            '--include-groups dsDNAphage,ssDNA','-j',self.threads,
+            '--min-length 5000 --min-score 0.5 all\n']
+        self.n+=1
+        return cmd,wkdir
+    def checkv(self,in_fa:str)
+        wkdir=f'{self.outdir}/checkv'
+        general.mkdir(wkdir)
+        cmd=['checkv','end_to_end',in_fa,wkdir,
+             '-d',self.confDict['CheckVDB'],'-t',self.threads]
+        provir_fna=f'{wkdir}/proviruses.fna'
+        vir_fna=f'{wkdir}/viruses.fna'
+        out_fa=f'{wkdir}/combined.fna'
+        cmd.extend(
+            ['cat',provir_fna,vir_fna,'>',out_fa,'\n']
         )
-        vs2_pass1_fasta=f'{vs2_pass1_dir}/final-viral-combined.fa'
-        checkv_dir=f'{wkdir}/checkv'
-        general.mkdir(checkv_dir)
-        find_vir_cmd.extend(
-            ['checkv','end_to_end',vs2_pass1_fasta,checkv_dir,
-             '-d',self.confDict['CheckVDB'],'-t 32']
+        return cmd,out_fa
+    def annotate(self,indir:str):
+        vs2_fa=f'{indir}/for-dramv/final-viral-combined-for-dramv.fa'
+        vs2_tab=f'{indir}/for-dramv/viral-affi-contigs-for-dramv.tab'
+        wkdir=f'{self.outdir}/dramv-annotate'
+        general.mkdir(wkdir)
+        cmd=['DRAM-v.py annotate','-i',vs2_fa,'-v',vs2_tab,'-o',wkdir,
+            '--threads',self.threads,'--skip_trnascan --min_contig_size 1000\n']
+        dramv_annot=f'{wkdir}/annotations.tsv'
+        wkdir=f'{self.outdir}/dramv-distill'
+        general.mkdir(wkdir)
+        cmd.extend(['DRAM-v.py distill','-i',dramv_annot,'-o',wkdir,'\n'])
+        return cmd
+    def curate(self):
+        wkdir=f'{self.outdir}/curation'
+        general.mkdir(wkdir)
+        vir_score=f'{self.outdir}/vs2-pass1/final-viral-score.tsv'
+        curation_score=f'{wkdir}/final-viral-score.tsv'
+        contamination=f'{self.outdir}/checkv/contamination.tsv'
+        cmd=["sed '1s/seqname/contig_id/'",vir_score,'>',curation_score,'\n']
+        cura_vs2_chkv=f'{wkdir}/curation_vs2_checkv.tsv'
+        cmd.extend(
+            ['linkTab.py',curation_score,contamination,
+            'left contig_id',cura_vs2_chkv,'\n',
+            'vCurator.py',self.outdir,'\n']
         )
-    
-        provir_fna=f'{checkv_dir}/proviruses.fna'
-        vir_fna=f'{checkv_dir}/viruses.fna'
-        combined_fna=f'{checkv_dir}/combined.fna'
-        find_vir_cmd.extend(
-            ['cat',provir_fna,vir_fna,combined_fna,'\n']
+        combined_modi_fna=f'{self.outdir}/checkv/combined_modi.fna'
+        contig_id_list=f'{wkdir}/contigs_id.list'
+        virus_posi_fna=f'{wkdir}/virus_positive.fna'
+        cmd.extend(
+            ["sed 's/_1 / /'",combined_fna,'>',combined_modi_fna,'\n',
+            'extrSeqByName.pl',contig_id_list,combined_modi_fna,
+            virus_posi_fna,'\n']
         )
-    
-        vs2_pass2_dir=f'{identify_dir}/vs2-pass2'
-        general.mkdir(vs2_pass2_dir)
-        find_vir_cmd.extend(
-            ['virsorter','run','--seqname-suffix-off','--viral-gene-enrich-off',        '--provirus-off','--prep-for-dramv','-i',combined_fna,
-             '-w',vs2_pass2_dir,'--include-groups dsDNAphage,ssDNA',
-             '--min-length 5000 --min-score 0.5 -j 28 all\n']
-        )
-    
-        dramv_annotate_dir=f'{identify_dir}/dramv-annotate'
-        general.mkdir(dramv_annotate_dir)
-        vs2_pass2_fasta=f'{vs2_pass2_dir}/for-dramv/final-viral-combined-for-dramv.fa'
-        vs2_pass2_tab=f'{vs2_pass2_dir}/for-dramv/viral-affi-contigs-for-dramv.tab'
-        find_vir_cmd.extend(
-            ['DRAM-v.py annotate','-i',vs2_pass2_fasta,'-v',vs2_pass2_tab,
-             '-o',dramv_annotate_dir,'--skip_trnascan --threads 28 --min_contig_size 1000\n']
-        )
-    
-        dramv_distill_dir=f'{identify_dir}/dramv-distill'
-        general.mkdir(dramv_distill_dir)
-        dramv_annot=f'{dramv_annotate_dir}/annotations.tsv'
-        find_vir_cmd.extend(
-            ['DRAM-v.py distill','-i',dramv_annot,'-o',dramv_distill_dir,'\n']  
-        )
-    
-        curation_dir=f'{identify_dir}/curation'
-        general.mkdir(curation_dir)
-        vir_score=f'{vs2_pass2_dir}/final-viral-score.tsv'
-        curation_score=f'{curation_dir}/final-viral-score.tsv'
-        contamination=f'{checkv_dir}/contamination.tsv'
-        find_vir_cmd.extend(
-            ["sed '1s/seqname/contig_id/'",vir_score,'>',curation_score,'\n']
-        )
-        
-        cura_vs2_chkv=f'{curation_dir}/curation_vs2_checkv.tsv'
-        find_vir_cmd.extend(
-            ['linkTab.py',curation_score,contamination,'left contig_id',cura_vs2_chkv,'\n']
-        )
-        
-        find_vir_cmd.extend(
-            ['vCurator.py',identify_dir,'\n']
-        )
-        combined_modi_fna=f'{checkv_dir}/combined_modi.fna'
-        find_vir_cmd.extend(
-            ["sed 's/_1 / /'",combined_fna,'>',combined_modi_fna,'\n']
-        )
-    
-        contig_id_list=f'{curation_dir}/contigs_id.list'
-        virus_posi_fna=f'{curation_dir}/virus_positive.fna'
-        find_vir_cmd.extend(
-            ['extrSeqByName.pl',contig_id_list,combined_modi_fna,virus_posi_fna,'\n']
-        )
-        find_vir_sh=f'{identify_dir}/find_vir.sh'
-        general.printSH(find_vir_sh,find_vir_cmd)
-        results=cmdExec.execute(find_vir_cmd)
-        return results 
+        return cmd
     def Identify(self):
-        results=''
-        for grp in self.groups:
-            results+=f'{grp}: \n'
-            results+=findVir(grp,outdir)
+        cmd=[self.envs]
+        #Step 1 Run VirSorter2
+        tmp_cmd,wkdir=self.virsorter(self.fasta)
+        cmd.extend(tmp_cmd)
+        #Step 2 Run CheckV
+        vs2_fa=f'{wkdir}/final-viral-combined.fa'
+        tmp_cmd,checkv_fa=self.checkv(vs2_fa)
+        cmd.extend(tmp_cmd)
+        #Step 3 rerun VirSorter2 
+        tmp_cmd,wkdir=self.virsorter(checkv_fa)
+        cmd.extend(tmp_cmd)
+        #Step 4 DRAMv annotation
+        tmp_cmd=self.annotate(wkdir) 
+        cmd.extend(tmp_cmd)
+        #Step 5 Curation
+        tmp_cmd=self.curate(wkdir)
+        cmd.extend(tmp_cmd)
+        #Generate shell and exeute it
+        shell=f'{self.outdir}/find_vir.sh'
+        general.printSH(shell,cmd)
+        results=cmdExec.execute(cmd)
         return results

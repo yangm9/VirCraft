@@ -82,6 +82,7 @@ class Assembly(Reads):
         Filter the fasta sequence by length (cutoff).
         '''
         wkdir=f'{self.outdir}/filter'
+        general.mkdir(wkdir)
         filt_fa_prifix=f'{wkdir}/scaffolds.filt'
         cmd=['SeqLenCutoff.pl',scaf,filt_fa_prifix,str(cutoff),'\n']
         return cmd

@@ -41,7 +41,7 @@ elif sys.argv[1]=='assembly':
 elif sys.argv[1]=='identify':
     print('Viral contig identification')
     viridsop.Identify(
-        opts.config,
+        ,
         args.outdir
     )
     print('Config identification completed!!!')
