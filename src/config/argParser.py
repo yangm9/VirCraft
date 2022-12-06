@@ -56,13 +56,13 @@ def addFaArg(psr):
     )
     return psr
 
-def setOpts(name:str,version:str):
+def setOpts(name:str,subcmds:str,version:str):
     #ver=src.version.__version__
     parser=argparse.ArgumentParser(
         prog=name,
         description='VirCraft is an flexible pipeline for metaviromic data analysis.',
         usage=f'''
-        virCraft.py <subcommands> [<options>] -o <outdir>
+        virCraft.py {subcmds} [<options>] -o <outdir>
         subcommands: an optional functional module, including assembly, identify, votus, classify, quantify, func_annot and host_prid.
         options: options described below in the section of Options.
         outdir: output directory.

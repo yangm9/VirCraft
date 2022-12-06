@@ -15,7 +15,7 @@ from src.func_annot import geneAnnot
 from src.compare import vCont
 
 version='0.0.3'
-args=argParser.setOpts(sys.argv[0],version)
+args=argParser.setOpts(sys.argv[0],sys.argv[1],version)
 
 if sys.argv[1]=='reads_qc':
     print('VirCraft data QC...\n')
@@ -40,14 +40,21 @@ elif sys.argv[1]=='assembly':
     print('Reads assembly completed!!!')
 elif sys.argv[1]=='identify':
     print('Viral contig identification')
-    viridsop.Identify(
-        ,
-        args.outdir
+    VirSeq=viridsop.VirScan(
+        fasta=args.fasta,
+        outdir=args.outdir,
+        threads=args.threads
     )
+    VirSeq.Identify()
     print('Config identification completed!!!')
 elif sys.argv[1]=='votus':
     print('Remove the redundancy')
-    deRep.RmDup(opts.config,outdir)
+    vOTUs=deRep.VirRef(
+        fasta=args.fasta,
+        outdir=args.outdir,
+        threads=args.threads
+    )
+    vOTUs.RmDup()
     print('vOTU cluster completed!!!')
 elif sys.argv[1]=='classify':
     print('Viral contig classification')
