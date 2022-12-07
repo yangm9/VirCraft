@@ -49,7 +49,7 @@ elif sys.argv[1]=='identify':
     print('Config identification completed!!!')
 elif sys.argv[1]=='votus':
     print('Remove the redundancy')
-    vOTUs=deRep.VirRef(
+    vOTUs=votus.VirRef(
         fasta=args.fasta,
         outdir=args.outdir,
         threads=args.threads
@@ -58,7 +58,7 @@ elif sys.argv[1]=='votus':
     print('vOTU cluster completed!!!')
 elif sys.argv[1]=='classify':
     print('Viral contig classification')
-    Taxa=taxAnnot.VirTaxa(
+    Taxa=classify.VirTaxa(
         fasta=args.fasta,
         outdir=args.outdir,
         threads=args.threads

@@ -23,7 +23,7 @@ class VirTaxa(VirScan):
         cmd.extend(['cp',demovir,self.outdir,'\n'])
         votus=f'{self.outdir}/03.vOTUs/merged_virus_positive_nodup.fa'
         demovir=f'{self.outdir}/demovir.sh'
-        cmd.extend([demovir,votus,self.threads])
+        cmd.extend([demovir,votus,self.threads,'\n'])
         return cmd
     def Classify(self):
         cmd=[self.envs]

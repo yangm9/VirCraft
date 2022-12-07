@@ -1,5 +1,5 @@
-../virCraft.py reads_qc 
-../virCraft.py assembly -1 test1.fq -2 test2.fq -t 32 -o results
-../virCraft.py identify -c vircraft.cfg -o results
-../virCraft.py votus -c vircraft.cfg -o results
-../virCraft.py classify -c vircraft.cfg -o results
+../virCraft.py reads_qc -1 read_1.fq -2 read_2.fq -t 32 -o results 
+../virCraft.py assembly -1 read_1.fq -2 read_2.fq -t 32 -o results
+../virCraft.py identify -a scaffolds.fa -t 32 -o results 
+../virCraft.py votus -a scaffolds.fa -t 32 -o results
+../virCraft.py classify
