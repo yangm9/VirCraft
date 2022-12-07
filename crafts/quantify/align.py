@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 
-import sys,os
+import os
+import sys
+from ..config.config import VirCfg
 from ..general import cmdExec,general
-from ..fastqc.readsQC import Reads
+from ..dataqc.fastqc import Reads
+from ..identify.viridsop import VirScan
 
-class VirAln(Reads):
+class VirAln(VirCfg):
     '''
+
     '''
     def __init__(self,fq1='',fq2='',fasta='',outdir='',threads=8):
         super().__init__(fq1,fq2,outdir)

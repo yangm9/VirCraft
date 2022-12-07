@@ -1,6 +1,6 @@
 from ..general import cmdExec,general
 from ..func_annot.geneAnnot import GeneFunc
-from ..votus.deRep import VirRef 
+from ..votus.votus import VirRef 
 
 class EnviComp(VirRef):
     '''

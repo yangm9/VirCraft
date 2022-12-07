@@ -1,6 +1,6 @@
 import sys,os
 from ..general import cmdExec,general
-from ..votus.deRep import VirRef 
+from ..votus.votus import VirRef 
 
 class GeneFunc(VirRef):
     '''

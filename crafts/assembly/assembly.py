@@ -3,7 +3,7 @@
 import os
 import sys
 from ..general import cmdExec,general
-from ..fastqc.readsQC import Reads 
+from ..dataqc.fastqc import Reads 
 
 class Assembly(Reads):
     '''

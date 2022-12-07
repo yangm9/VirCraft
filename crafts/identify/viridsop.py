@@ -1,6 +1,6 @@
 import os
 from ..general import cmdExec,general
-from ..config.cfgInfo import VirCfg
+from ..config.config import VirCfg
 
 class VirScan(VirCfg):
     '''

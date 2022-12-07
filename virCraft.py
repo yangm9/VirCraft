@@ -3,23 +3,23 @@
 
 import os
 import sys
-sys.path.append(sys.path[0]+'/src')
-from src.fastqc import readsQC
-from src.assemble import assembly
-from src.identify import viridsop
-from src.config import argParser
-from src.votus import deRep
-from src.classify import taxAnnot
-from src.quantify import align,coverage 
-from src.func_annot import geneAnnot
-from src.compare import vCont
+sys.path.append(sys.path[0]+'/crafts')
+from crafts.dataqc import fastqc
+from crafts.assembly import assembly
+from crafts.identify import viridsop
+from crafts.config import arguments
+from crafts.votus import votus
+from crafts.classify import classify
+from crafts.quantify import align,quantify
+from crafts.func_annot import geneAnnot
+from crafts.compare import vCont
 
 version='0.0.3'
-args=argParser.setOpts(sys.argv[0],sys.argv[1],version)
+args=arguments.setOpts(sys.argv[0],sys.argv[1],version)
 
 if sys.argv[1]=='reads_qc':
     print('VirCraft data QC...\n')
-    Reads=readsQC.QualCtrl(
+    Reads=fastqc.QualCtrl(
         fq1=args.fq1,fq2=args.fq2,
         outdir=args.outdir,
         threads=args.threads
@@ -66,7 +66,7 @@ elif sys.argv[1]=='classify':
     Taxa.Classify()
     print('Contigs classification completed!!!')
 elif sys.argv[1]=='quantify':
-    print('Viral abundance and diversity')
+    print('Viral abundance and diversity analysis')
     quantify.quantVir(opts.config,outdir)
 elif sys.argv[1]=='func_annot':
     print('Function annotation')

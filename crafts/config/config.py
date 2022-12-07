@@ -6,8 +6,8 @@ class VirCfg:
     '''
     Configure class.
     '''
-    config=f'{sys.path[0]}/src/config/vircraft.cfg'
-    def __init__(self):
+    config=f'{sys.path[0]}/crafts/config/vircraft.cfg'
+    def __init__(self,fq1='',fq2='',fasta='',outdir=''):
         self.confDict=self.getCfg
     @property
     def getCfg(self):
