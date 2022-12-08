@@ -1,23 +1,10 @@
 import os
 from ..general import cmdExec,general
-from ..config.config import VirCfg
-
-class Reads(VirCfg):
-    '''
-    FastQ processing class.
-    '''
-    envs=general.selectENV('VirCraft')
-    def __init__(self,fq1='',fq2='',outdir='',*args,**kwargs):
-        super().__init__()
-        self.fastqs=[fq1,fq2]
-        self.basename_fq1=os.path.basename(self.fastqs[0])
-        self.basename_fq2=os.path.basename(self.fastqs[1])
-        self.outdir=os.path.abspath(outdir)
-        self.samp=self.basename_fq1.replace('_1.fastq','')
-        self.samp=self.samp.replace('_1.fq','')
-        general.mkdir(self.outdir)
+from ..config.config import Reads
 
 class QualCtrl(Reads):
+    "FastQ cuality control class."
+    envs=general.selectENV('VirCraft')
     def __init__(self,fq1='',fq2='',outdir='',*args,**kwargs):
         super().__init__(fq1,fq2,outdir,*args,**kwargs)
     def filtReads(self,process):

@@ -1,13 +1,14 @@
 import os
 import re
 import sys
+from ..general import general
 
 class VirCfg:
     '''
     Configure class.
     '''
     config=f'{sys.path[0]}/crafts/config/vircraft.cfg'
-    def __init__(self,fq1='',fq2='',fasta='',outdir=''):
+    def __init__(self):
         self.confDict=self.getCfg
     @property
     def getCfg(self):
@@ -24,3 +25,41 @@ class VirCfg:
         inconf.close()
         #confDict['subProjectName']=re.split(r'_',confDict['ProjectName'])[1]
         return confDict
+
+class Reads(VirCfg):
+    '''
+    FastQ processing class.
+    '''
+    envs=general.selectENV('VirCraft')
+    def __init__(self,fq1='',fq2='',outdir='',*args,**kwargs):
+        super().__init__()
+        self.fastqs=[fq1,fq2]
+        self.basename_fq1=os.path.basename(self.fastqs[0])
+        self.basename_fq2=os.path.basename(self.fastqs[1])
+        self.outdir=os.path.abspath(outdir)
+        self.samp=self.basename_fq1.replace('_1.fastq','')
+        self.samp=self.samp.replace('_1.fq','')
+        general.mkdir(self.outdir)
+
+class Seq(VirCfg):
+    '''
+    Fasta processing class.
+    '''
+    envs=general.selectENV('VirCraft')
+    def __init__(self,fasta='',outdir='',*args,**kwargs):
+        super().__init__()
+        basename_fa=os.path.basename(fasta)
+        self.name=os.path.splitext(basename_fa)[0]
+        self.fasta=os.path.abspath(fasta)
+        self.outdir=os.path.abspath(outdir)
+        general.mkdir(self.outdir)
+    @property
+    def mkBwaIdx(self):
+        "Make bwa index for votus."
+        cmd=[self.envs]
+        idx=f'{self.outdir}/{self.name}BWAIDX'
+        cmd.extend(['bwa index -a bwtsw',self.fasta,'-p',idx,'\n'])
+        shell=f'{self.outdir}/{self.name}_bwaidx.sh'
+        general.printSH(shell,cmd)
+        results=cmdExec.execute(cmd)
+        return idx,results

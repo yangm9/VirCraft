@@ -1,13 +1,14 @@
 import sys
 from ..general import cmdExec,general
-from ..identify.viridsop import VirScan
+from ..config.config import Seq
 
-class VirTaxa(VirScan):
+class VirTaxa(Seq):
     '''
     Taxonomic assignment
     '''
     def __init__(self,fasta='',outdir='',threads=8):
-        super().__init__(fasta,outdir,threads)
+        super().__init__(fasta,outdir)
+        self.threads=str(threads)
     def demovir(self):
         '''
         Classify the virus contig by Demovir software for a certain single group.
@@ -32,4 +33,3 @@ class VirTaxa(VirScan):
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
         return results
-

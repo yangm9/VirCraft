@@ -1,14 +1,12 @@
 from ..general import cmdExec,general
-from .align import VirAln
+from .align import multiAln
 
-class VirTPM(VirAln):
+class VirTPM(multiAln):
     '''
     '''
-    def __init__(self,config,outdir):
-        VirAln.__init__(self,config,outdir)
-        self.datadir=self.wkdir
-        general.mkdir(self.wkdir)
-    def calcTPM(self,samp: str,sort_bam: str,wkdir: str):
+    def __init__(self,fastqs='',outdir='',threads=8):
+        super().__init__(self,config,outdir,threads)
+    def calcTPM(self,samp:str,sort_bam:str,wkdir:str):
         cmd=[self.envs]
         tpm=f'{wkdir}/{samp}.tpm'
         cmd.extend(

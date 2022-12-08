@@ -1,22 +1,16 @@
 import os
 from ..general import cmdExec,general
-from ..config.config import VirCfg
+from ..config.config import Seq
 
-class VirScan(VirCfg):
+class VirScan(Seq):
     '''
     According to the Viral sequence identification SOP with VirSorter2 (https://www.protocols.io/view/viral-sequence-identification-sop-with-virsorter2-5qpvoyqebg4o/v3)
     '''
     n=0
     vs2_subcmds=['--keep-original-seq','--seqname-suffix-off --viral-gene-enrich-off --provirus-off --prep-for-dramv']
-    envs=general.selectENV('VirCraft')
     def __init__(self,fasta='',outdir='',threads=8):
-        super().__init__()
-        basename_fa=os.path.basename(fasta)
-        self.name=os.path.splitext(basename_fa)[0]
-        self.fasta=os.path.abspath(fasta)
-        self.outdir=os.path.abspath(outdir)
+        super().__init__(fasta,outdir)
         self.threads=str(threads)
-        general.mkdir(self.outdir)
     def virsorter(self,in_fa:str):
         idx=str(self.n+1)
         wkdir=f'{self.outdir}/vs2-pass{idx}'

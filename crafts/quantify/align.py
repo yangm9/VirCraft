@@ -2,50 +2,48 @@
 
 import os
 import sys
-from ..config.config import VirCfg
+import glob
+from ..config.config import Reads,Seq
 from ..general import cmdExec,general
-from ..dataqc.fastqc import Reads
 from ..identify.viridsop import VirScan
 
-class VirAln(VirCfg):
-    '''
-
-    '''
-    def __init__(self,fq1='',fq2='',fasta='',outdir='',threads=8):
+class AlnData(Reads):
+    def __init__(self,fq1='',fq2='',outdir='',threads=8):
         super().__init__(fq1,fq2,outdir)
-    def mkIdx(self):
-        "Make bwa index for votus."
-        cmd=[self.envs]
-        wkdir=f'{self.wkdir}/0.index'
-        general.mkdir(wkdir)
-        votus_lnk=f'{wkdir}/all_votus.fa'
-        cmd.extend(['ln -s',self.votus,votus_lnk,'\n'])
-        shell=f'{self.wkdir}/bwa_index.sh'
-        cmd.extend(['bwa index -a bwtsw',votus_lnk,'-p',self.bwa_idx,'\n'])
-        general.printSH(shell,cmd)
-        results=cmdExec.execute(cmd)
-        return results
-    def alnReads(self,samp:str,bwa_idx:str,wkdir:str):
+        self.threads=str(threads)
+    def alnReads(self,samp:str,bwa_idx:str):
         '''
         Align the reads to the vOTUs for each sample.
         '''
         cmd=[self.envs]
-        raw_bam=f'{wkdir}/{samp}.raw.bam'
-        sort_bam=f'{wkdir}/{samp}.sort.bam'
-        fastqs=self.sampDict[samp][2].split(',')
+        raw_bam=f'{self.outdir}/{samp}.raw.bam'
+        sort_bam=f'{self.outdir}/{samp}.sort.bam'
         cmd.extend(
-            ['bwa mem','-t 28',bwa_idx,fastqs[0],fastqs[1],
-             '|samtools view','-o',raw_bam,'-@ 28 -b -S\n',
-             'samtools sort',raw_bam,'-o',sort_bam,'-@ 28\n']
+            ['bwa mem','-t',self.threads,bwa_idx,
+            self.fastqs[0],self.fastqs[1],
+            '|samtools view','-o',raw_bam,'-@ 28 -b -S\n',
+            'samtools sort',raw_bam,'-o',sort_bam,'-@ 28\n']
         )
-        shell=f'{outdir}/0.bwa/{samp}_bwa.sh'
+        shell=f'{self.outdir}/{samp}_aln.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
         return results
+
+class multiAln(Seq):
+    def __init__(self,fastqs='',outdir='',threads=8)
+        super().__init__(fasta,outdir)
+        self.fastqs=glob.glob(os.path.abspath(fastqs))
+        self.indir=os.path.dirname(self.fastqs[0])
+        self.postfix=os.path.splitext(self.fastqs[0])[1]
+        fq1postfix=f'_1{self.postfix}'
+        self.samps=[os.path.basename(name.replace(fq1postfix,'')) for name in fastqs if name.endswith(fq1postfix)]
+        self.threads=str(threads)
     def AlnBySamp(self):
-        wkdir=f'{self.wkdir}/1.bwa'
-        general.mkdir(wkdir)
-        results=mkIdx()
-        for samp in self.sampDict.keys():
-            results+=self.alnReads(samp,bwa_idx,wkdir)
+        results=''
+        _,bwa_idx=self.mkBwaIdx
+        for samp in self.samps:
+            fq1=f'{self.indir}/{samp}_1{self.postfix}'
+            fq2=f'{self.indir}/{samp}_2{self.postfix}'
+            Aln=AlnData(fq1,fq2,self.outdir,self.threads)
+            results+=Aln.alnReads(samp,bwa_idx)
         return results

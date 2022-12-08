@@ -7,7 +7,7 @@ class VirRef(VirScan):
     Generate vOTUs
     '''
     def __init__(self,fasta='',outdir='',threads=8):
-        super().__init__(fasta,outdir,threads)
+        super().__init__(fasta,outdir)
     def cluster(self):
         '''
         Cluster the sequence and remove redundancy for FastA file.
