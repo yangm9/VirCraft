@@ -44,7 +44,7 @@ def addPairFqArg(psr):
 def addAllFqArg(psr):
     psr.add_argument(
         '-q','--fastqs',action='store',type=str,
-        dest='fqs',metavar='STR',default=False,
+        dest='fastqs',metavar='STR',default=False,
         help='All clean FastQs, i.e. path/*.fastq'
     )
     return psr
@@ -118,7 +118,18 @@ def setOpts(name:str,subcmds:str,version:str):
         help='sub-command help'
     )
     subpsr=addAllFqArg(subpsr)
+    subpsr=addFaArg(subpsr)
     subpsr=addGlbArg(subpsr)
+    subpsr.add_argument(
+        '-x','--taxa',action='store',type=str,
+        dest='taxa',metavar='STR',default=False,
+        help='Taxonomic annotation file'
+    )
+    subpsr.add_argument(
+        '-g','--group',action='store',type=str,
+        dest='group',metavar='STR',default=False,
+        help='Group Name'
+    )
     
     subpsr=subparsers.add_parser(
         'func_annot',

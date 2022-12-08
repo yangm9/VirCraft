@@ -1,7 +1,7 @@
 import os
 import re
 import sys
-from ..general import general
+from ..general import general,cmdExec
 
 class VirCfg:
     '''
@@ -25,6 +25,26 @@ class VirCfg:
         inconf.close()
         #confDict['subProjectName']=re.split(r'_',confDict['ProjectName'])[1]
         return confDict
+    def readSampInfo(self,samp_info:str):
+        '''
+        Extract the groups list and the Sample information from "samp_info.xls" file. 
+        Note: the format of sample information is "Sample: [GroupName,DataPath]".
+        '''
+        groups=[]
+        sampDict={}
+        insamp=open(samp_info)
+        header=insamp.readline()
+        header=header.strip().split('\t')
+        name_idx=header.index('SampleName')
+        group_idx=header.index('GroupName')
+        path_idx=header.index('DataPath')
+        for line in insamp:
+            items=line.strip().split('\t')
+            sampDict[items[name_idx]]=[items[group_idx],items[path_idx]]
+            groups.append(items[group_idx])
+        groups=list(set(groups))
+        insamp.close()
+        return groups,sampDict
 
 class Reads(VirCfg):
     '''

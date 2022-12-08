@@ -10,7 +10,7 @@ from crafts.identify import viridsop
 from crafts.config import arguments
 from crafts.votus import votus
 from crafts.classify import classify
-from crafts.quantify import align,quantify
+from crafts.quantify import multiQuant
 from crafts.func_annot import geneAnnot
 from crafts.compare import vCont
 
@@ -67,7 +67,14 @@ elif sys.argv[1]=='classify':
     print('Contigs classification completed!!!')
 elif sys.argv[1]=='quantify':
     print('Viral abundance and diversity analysis')
-    quantify.quantVir(opts.config,outdir)
+    VirQuant=multiQuant.multiCount(
+        fastqs=args.fastqs,
+        outdir=args.outdir,
+        threads=args.threads
+    )
+    VirQuant.countBySamp(args.group)
+    VirQuant.statPlot(args.taxa)
+    print('Viral quantifications completed!!!')
 elif sys.argv[1]=='func_annot':
     print('Function annotation')
     geneAnnot.funcAnno(opts.config,outdir)

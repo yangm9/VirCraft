@@ -1,4 +1,0 @@
-SampleID	SampleName	GroupName	DataPath	DataType	Description
-ylbh	ylbh	ylbh	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V1234_DNA_1.fq.gz,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V1234_DNA_2.fq.gz"	FastQ	
-cariaco	cariaco	cariaco	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/cariaco_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/cariaco_2.fq"	FastQ	
-amberjack	amberjack	amberjack	"/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/amberjack_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/amberjack_2.fq"	FastQ	
