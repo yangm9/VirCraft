@@ -14,11 +14,12 @@ class GeneFunc(Seq):
         wkdir=f'{self.outdir}/0.prodigal'
         general.mkdir(wkdir)
         temp_orfs_faa=f'{wkdir}/temp.orfs.faa'
-        orfs_faa=f'{wkdir}/all_votus.faa'
-        orfs_ffn=f'{wkdir}/all_votus.ffn'
+        orfs_faa=f'{wkdir}/{self.name}_votus.faa'
+        orfs_ffn=f'{wkdir}/{self.name}_votus.ffn'
         temp_orfs_ffn=f'{wkdir}/temp.orfs.ffn'
         temp_txt=f'{wkdir}/temp.txt'
-        cmd=['prodigal','-i',self.fasta,'-a',temp_orfs_faa,'-d',temp_orfs_ffn,'-m','-o',temp_txt,'-p meta -q\n',
+        cmd=['prodigal','-i',self.fasta,'-a',temp_orfs_faa,
+            '-d',temp_orfs_ffn,'-m','-o',temp_txt,'-p meta -q\n',
             'cut -f 1 -d \" \"',temp_orfs_faa,'>',orfs_faa,'\n',
             'cut -f 1 -d \" \"',temp_orfs_ffn,'>',orfs_ffn,'\n',
             f'rm -f {wkdir}/temp.*\n']
@@ -30,11 +31,11 @@ class GeneFunc(Seq):
         seed_orth=f'{anno_prefix}.emapper.seed_orthologs'
         eggout=f'{wkdir}/eggout'
         eggnog_db=self.confDict['EggNOGDB']
-        cmd=['emapper.py -m diamond --no_annot --no_file_comments --cpu 40',
-            '-i',orfs_faa,'-o',anno_prefix,
-            '--data_dir',eggnog_db,'\n',
+        cmd=['emapper.py -m diamond --no_annot --no_file_comments'
+            '--cpu',self.threads,'-i',orfs_faa,
+            '-o',anno_prefix,'--data_dir',eggnog_db,'\n',
             'emapper.py','--annotate_hits_table',seed_orth,
-            '--no_file_comments','-o',eggout,'--cpu 40',
+            '--no_file_comments','-o',eggout,'--cpu',self.threads,
             '--data_dir',eggnog_db,'--override\n']
         return cmd
     def keggAnno(self,orfs_faa):
