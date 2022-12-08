@@ -1,4 +1,5 @@
 import os
+import sys
 
 def mkdir(name:str):
     if not os.path.exists(name):
@@ -19,10 +20,11 @@ def insLable(file_name:str,label:str):
     return f'{prefix}.{label}{extension}'
 
 def selectENV(env:str):
+    bin_dir=os.path.abspath(sys.path[0]+'/bin')
     conda_path=isInstalled('conda')
-    conda_abs_path=os.path.dirname(os.path.abspath(conda_path))
+    conda_abs_dir=os.path.dirname(os.path.abspath(conda_path))
     if conda_path:
-        return f'export "PATH={conda_abs_path}:$PATH"\nconda activate {env}\n'
+        return f'export "PATH={bin_dir}:{conda_abs_dir}:$PATH"\nconda activate {env}\n'
     else:
         return 'Error!!!'
 

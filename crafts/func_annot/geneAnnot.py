@@ -45,10 +45,10 @@ class GeneFunc(Seq):
         ko_list=f'{self.confDict["KofamscanDB"]}/ko_list'
         exec_anno=f'{wkdir}/all_votus.exec_annotation.txt'
         exec_anno_detail=f'{exec_anno}.xls'
-        cmd=['exec_annotation -f mapper --cpu 16','-p',ko_prof,
-            '-k',ko_list,'-o',exec_anno,orfs_faa,'\n',
-            'exec_annotation -f detail --cpu 32','-p',ko_prof,'-k',ko_list,
-            '-o',exec_anno_detail,orfs_faa,'\n']
+        cmd=['exec_annotation -f mapper','--cpu',self.threads,
+            '-p',ko_prof,'-k',ko_list,'-o',exec_anno,orfs_faa,'\n',
+            'exec_annotation -f detail --cpu 32','-p',ko_prof,
+            '-k',ko_list,'-o',exec_anno_detail,orfs_faa,'\n']
         return cmd
     def FuncAnnot(self):
         cmd=[self.envs]
