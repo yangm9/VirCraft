@@ -21,7 +21,8 @@ def setOpts(name:str,subcmds:str,version:str):
     ''',
         epilog='Text at the bottom of help'
     )
-    
+
+    #Create subcommands objects
     subparsers=parser.add_subparsers(
         title='subcommands',
         description='valid subcommands',
@@ -30,7 +31,7 @@ def setOpts(name:str,subcmds:str,version:str):
     
     subpsr=subparsers.add_parser(
         'reads_qc',
-        help='sub-command help'
+        help='Pair-end FastQ reads qualitiy control.'
     )
     subpsr=addPairFqArg(subpsr)
     subpsr=addGlbArg(subpsr)
@@ -87,6 +88,7 @@ def setOpts(name:str,subcmds:str,version:str):
         'func_annot',
         help='sub-command help'
     )
+    subpsr=addFaArg(subpsr)
     subpsr=addGlbArg(subpsr)
     
     subpsr=subparsers.add_parser(
@@ -115,7 +117,7 @@ def addProcArg(psr,dflt:str):
     psr.add_argument(
         '-p','--process',action='store',type=str,
         dest='process',metavar='STR',default=dflt,
-        help='Select the analysis process for module\n'
+        help='Select the analysis process for a certain module\n'
     )
     return psr
 
@@ -131,6 +133,7 @@ def addPairFqArg(psr):
         help='FastQ file for read 2'
     )
     return psr
+
 def addAllFqArg(psr):
     psr.add_argument(
         '-q','--fastqs',action='store',type=str,
@@ -138,6 +141,7 @@ def addAllFqArg(psr):
         help='All clean FastQs, i.e. path/*.fastq'
     )
     return psr
+
 def addFaArg(psr):
     psr.add_argument(
         '-a','--fasta',action='store',type=str,

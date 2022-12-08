@@ -78,7 +78,13 @@ elif sys.argv[1]=='quantify':
     print('Viral quantifications completed!!!')
 elif sys.argv[1]=='func_annot':
     print('Function annotation')
-    geneAnnot.funcAnno(opts.config,outdir)
+    VirGene=geneAnnot.GeneFunc(
+        fasta=args.fasta,
+        outdir=args.outdir,
+        threads=args.threads
+    )
+    VirGene.FuncAnnot()
+    print('Function annotation completed!!!')
 elif sys.argv[1]=='comparison':
     print('Viral comparison')
     vCont.compSeq(opts.config,outdir)

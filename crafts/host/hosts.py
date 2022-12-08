@@ -4,7 +4,7 @@ from ..votus.deRep import VirRef
 
 class VirHost(VirRef):
     '''
-    
+    Predict the relationship of virus and hosts.   
     '''
     def __init__(self,config,outdir):
         VirRef.__init__(self,config,outdir)
