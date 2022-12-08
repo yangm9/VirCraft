@@ -8,54 +8,6 @@ Created on Fri Dec 18 18:17:58 2022
 import argparse
 #import src.version
 
-def addGlbArg(psr): #Add global arguments
-    psr.add_argument(
-        '-t','--threads',action='store',type=str,
-        dest='threads',metavar='INT',default=8,
-        help='Num processes/threads to use\n'
-    )
-    psr.add_argument(
-        '-o','--outdir',action='store',type=str,
-        dest='outdir',metavar='STR',default=False,
-        required=True,help='Output direcortory\n'
-    )
-    return psr
-
-def addProcArg(psr,dflt:str):
-    psr.add_argument(
-        '-p','--process',action='store',type=str,
-        dest='process',metavar='STR',default=dflt,
-        help='Select the analysis process for module\n'
-    )
-    return psr
-
-def addPairFqArg(psr):
-    psr.add_argument(
-        '-1','--fastq1',action='store',type=str,
-        dest='fq1',metavar='STR',default=False,
-        required=True,help='FastQ file for read 1'
-    )
-    psr.add_argument(
-        '-2','--fastq2',action='store',type=str,
-        dest='fq2',metavar='STR',default=False,
-        help='FastQ file for read 2'
-    )
-    return psr
-def addAllFqArg(psr):
-    psr.add_argument(
-        '-q','--fastqs',action='store',type=str,
-        dest='fastqs',metavar='STR',default=False,
-        help='All clean FastQs, i.e. path/*.fastq'
-    )
-    return psr
-def addFaArg(psr):
-    psr.add_argument(
-        '-a','--fasta',action='store',type=str,
-        dest='fasta',metavar='STR',default=False,
-    help='a Fasta file'
-    )
-    return psr
-
 def setOpts(name:str,subcmds:str,version:str):
     #ver=src.version.__version__
     parser=argparse.ArgumentParser(
@@ -121,14 +73,14 @@ def setOpts(name:str,subcmds:str,version:str):
     subpsr=addFaArg(subpsr)
     subpsr=addGlbArg(subpsr)
     subpsr.add_argument(
+        '-s','--sampinfo',action='store',type=str,
+        dest='samp_info',metavar='STR',default=False,
+        required=True,help='Taxonomic annotation file'
+    )
+    subpsr.add_argument(
         '-x','--taxa',action='store',type=str,
         dest='taxa',metavar='STR',default=False,
         help='Taxonomic annotation file'
-    )
-    subpsr.add_argument(
-        '-g','--group',action='store',type=str,
-        dest='group',metavar='STR',default=False,
-        help='Group Name'
     )
     
     subpsr=subparsers.add_parser(
@@ -145,3 +97,51 @@ def setOpts(name:str,subcmds:str,version:str):
     
     args=parser.parse_args()
     return args
+
+def addGlbArg(psr): #Add global arguments
+    psr.add_argument(
+        '-t','--threads',action='store',type=str,
+        dest='threads',metavar='INT',default=8,
+        help='Num processes/threads to use\n'
+    )
+    psr.add_argument(
+        '-o','--outdir',action='store',type=str,
+        dest='outdir',metavar='STR',default=False,
+        required=True,help='Output direcortory\n'
+    )
+    return psr
+
+def addProcArg(psr,dflt:str):
+    psr.add_argument(
+        '-p','--process',action='store',type=str,
+        dest='process',metavar='STR',default=dflt,
+        help='Select the analysis process for module\n'
+    )
+    return psr
+
+def addPairFqArg(psr):
+    psr.add_argument(
+        '-1','--fastq1',action='store',type=str,
+        dest='fq1',metavar='STR',default=False,
+        required=True,help='FastQ file for read 1'
+    )
+    psr.add_argument(
+        '-2','--fastq2',action='store',type=str,
+        dest='fq2',metavar='STR',default=False,
+        help='FastQ file for read 2'
+    )
+    return psr
+def addAllFqArg(psr):
+    psr.add_argument(
+        '-q','--fastqs',action='store',type=str,
+        dest='fastqs',metavar='STR',default=False,
+        help='All clean FastQs, i.e. path/*.fastq'
+    )
+    return psr
+def addFaArg(psr):
+    psr.add_argument(
+        '-a','--fasta',action='store',type=str,
+        dest='fasta',metavar='STR',default=False,
+    help='a Fasta file'
+    )
+    return psr

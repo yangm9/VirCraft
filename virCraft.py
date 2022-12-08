@@ -68,12 +68,13 @@ elif sys.argv[1]=='classify':
 elif sys.argv[1]=='quantify':
     print('Viral abundance and diversity analysis')
     VirQuant=multiQuant.multiCount(
-        fastqs=args.fastqs,
+        samp_info=args.samp_info,
+        fasta=args.fasta,
         outdir=args.outdir,
         threads=args.threads
     )
-    VirQuant.countBySamp(args.group)
-    VirQuant.statPlot(args.taxa)
+    VirQuant.countBySamp()
+    VirQuant.statPlot()
     print('Viral quantifications completed!!!')
 elif sys.argv[1]=='func_annot':
     print('Function annotation')
