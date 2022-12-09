@@ -39,6 +39,7 @@ class QualCtrl(Reads):
         wkdir=f'{self.outdir}/decontaminate'
         prefix=f'{wkdir}/{self.samp}'
         contam_db=self.confDict['ContamDB']
+        general.mkdir(wkdir)
         cmd=['bowtie2','-p 40 -N 1','-x',contam_db,
             '-l',fq1,'-2',fq2,'--un-conc',prefix,'\n']
         fastqs=[f'{prefix}_1.fq',f'{prefix}_2.fq']

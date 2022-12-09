@@ -31,7 +31,7 @@ class GeneFunc(Seq):
         seed_orth=f'{anno_prefix}.emapper.seed_orthologs'
         eggout=f'{wkdir}/eggout'
         eggnog_db=self.confDict['EggNOGDB']
-        cmd=['emapper.py -m diamond --no_annot --no_file_comments'
+        cmd=['emapper.py -m diamond --no_annot --no_file_comments',
             '--cpu',self.threads,'-i',orfs_faa,
             '-o',anno_prefix,'--data_dir',eggnog_db,'\n',
             'emapper.py','--annotate_hits_table',seed_orth,
@@ -41,14 +41,15 @@ class GeneFunc(Seq):
     def keggAnno(self,orfs_faa):
         wkdir=f'{self.outdir}/2.kegg'
         general.mkdir(wkdir)
-        ko_prof=f'{self.confDict["KofamscanDB"]}/profiles'
-        ko_list=f'{self.confDict["KofamscanDB"]}/ko_list'
-        exec_anno=f'{wkdir}/all_votus.exec_annotation.txt'
-        exec_anno_detail=f'{exec_anno}.xls'
+        kegg_db=self.confDict['KofamscanDB']
+        ko_prof=f'{kegg_db}/profiles'
+        ko_list=f'{kegg_db}/ko_list'
+        exec_anno=f'{wkdir}/all_votus.exec_annotation.xls'
+        exec_anno_detail=f'{exec_anno}.detail.xls'
         cmd=['exec_annotation -f mapper','--cpu',self.threads,
             '-p',ko_prof,'-k',ko_list,'-o',exec_anno,orfs_faa,'\n',
-            'exec_annotation -f detail --cpu 32','-p',ko_prof,
-            '-k',ko_list,'-o',exec_anno_detail,orfs_faa,'\n']
+            'exec_annotation -f detail','--cpu',self.threads,
+            '-p',ko_prof,'-k',ko_list,'-o',exec_anno_detail,orfs_faa,'\n']
         return cmd
     def FuncAnnot(self):
         cmd=[self.envs]
