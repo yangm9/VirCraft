@@ -1,7 +1,8 @@
 import subprocess
 
-def execute(command: list, silent=False):
+def execute(command:list, silent=False):
     '''
+    :ref: virmatcher
     :param command: Command suitable for running in subprocess, must use a ['ls', '-l'] format
     :param silent: Run silently
     :return: Response from command
