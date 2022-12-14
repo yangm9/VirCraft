@@ -1,6 +1,3 @@
-
-#setwd('G:\\project\\YM1XLD211101MV-西沙永乐龙洞生态系统结构和生物无氧适应机制\\virus\\5.abundance\\diversity')
-
 if (!require("vegan")) {install.packages("vegan")}
 library(vegan)
 
