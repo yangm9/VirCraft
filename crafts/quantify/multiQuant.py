@@ -22,7 +22,7 @@ class multiCount(Seq):
             general.printSH(shell,cmd)
             results+=cmdExec.execute(cmd)
         return results
-    def statPlot(self,tax_anno='test.xls'):
+    def statPlot(self,tax_anno=''):
         cmd=[self.envs]
         cmd.extend(['merge_tpms.pl',self.samp_info,self.outdir,'\n'])
         modi_tax_anno=general.insLable(tax_anno,'modi')
