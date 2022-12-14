@@ -22,9 +22,8 @@ class VirTaxa(Seq):
         cmd.extend(['ln -s',uniprot_trembl_viral,uniprot_trembl_viral_lnk,'\n'])
         demovir=f'{sys.path[0]}/bin/demovir.*'
         cmd.extend(['cp',demovir,self.outdir,'\n'])
-        votus=f'{self.outdir}/03.vOTUs/merged_virus_positive_nodup.fa'
         demovir=f'{self.outdir}/demovir.sh'
-        cmd.extend([demovir,votus,self.threads,'\n'])
+        cmd.extend([demovir,self.fasta,self.threads,'\n'])
         return cmd
     def Classify(self):
         cmd=[self.envs]

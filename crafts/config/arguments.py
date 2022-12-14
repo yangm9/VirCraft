@@ -70,13 +70,13 @@ def setOpts(name:str,subcmds:str,version:str):
         'quantify',
         help='Calculate the abundance and diversity of each microbial community'
     )
-    subpsr=addAllFqArg(subpsr)
+    #subpsr=addAllFqArg(subpsr)
     subpsr=addFaArg(subpsr)
     subpsr=addGlbArg(subpsr)
     subpsr.add_argument(
         '-s','--sampinfo',action='store',type=str,
-        dest='samp_info',metavar='STR',default=False,
-        required=True,help='Sample information file with the header of \"#Sample\\tGroup\\tDataPath\", and the format of each line in the text is \"sample name\\tgroup name\\tfull path of fastq1,full path of fastq2\\n\"'
+        dest='samp_info',metavar='STR',default=False,required=True,
+        help='Sample information file with the header of \"#Sample\\tGroup\\tDataPath\n\", and the format of each line in the text is \"sample name\\tgroup name\\tfull path of fastq1,full path of fastq2\\n\"'
     )
     subpsr.add_argument(
         '-x','--taxa',action='store',type=str,
@@ -143,9 +143,10 @@ def addAllFqArg(psr):
     return psr
 
 def addFaArg(psr):
+    Help='A vOTUs FastA file'
     psr.add_argument(
         '-a','--fasta',action='store',type=str,
         dest='fasta',metavar='STR',default=False,
-    help='a Fasta file'
+        help=Help
     )
     return psr

@@ -74,7 +74,7 @@ elif sys.argv[1]=='quantify':
         threads=args.threads
     )
     VirQuant.countBySamp()
-    VirQuant.statPlot()
+    VirQuant.statPlot(args.taxa)
     print('Viral quantifications completed!!!')
 elif sys.argv[1]=='func_annot':
     print('Function annotation')

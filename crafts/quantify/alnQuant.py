@@ -27,5 +27,5 @@ class VirCount(Reads):
         sort_bam=f'{self.outdir}/{samp}.sort.bam'
         cmd=['coverm contig','-b',sort_bam,'-t',self.threads,
             '--min-read-aligned-length 50 --min-read-percent-identity 0.95 --proper-pairs-only -m tpm',
-            '>',tpm]
+            '>',tpm,'\n']
         return cmd

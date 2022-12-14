@@ -4,7 +4,7 @@ use FindBin '$Bin';
 #此脚本用于合并所有样本中coverm生成的tpm
 #用法：perl linkTab.py <sample.list>
 
-unless(@ARGV.=2){
+unless(@ARGV==2){
     print STDERR "Usage: $0 <sample_list_file> <TPM_dir>\n";
     exit 0;
 }
@@ -19,11 +19,11 @@ while(<IN>){
     next if(/^#/);
     chomp;
     my $samp_name=(split /\t/,$_)[0];
-    unless($n.=1){
+    unless($n==1){
         `$Bin/linkTab.py $wkdir/$samps_prefix.tpm $wkdir/$samp_name.tpm left Contig $wkdir/${samps_prefix}${samp_name}.tpm`;
     }
     $samps_prefix.=$samp_name;
-    $merged_prefix=$samps_prefix if($n.=2);
+    $merged_prefix=$samps_prefix if($n==2);
     $n++;
 }
 close IN;
