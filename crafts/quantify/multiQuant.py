@@ -43,7 +43,8 @@ class multiCount(Seq):
         tax_tpm=f'{self.outdir}/tax_tpm.xls'
         cmd.extend(
             ['abundByTax.py',all_anno_modi_tpm,self.outdir,'\n',
-             'barplot_for_taxa_tpm.R',tax_tpm,self.outdir,'\n']
+             'barplot_for_taxa_tpm.R',tax_tpm,self.outdir,'\n',
+             'NMDS.R',all_anno_modi_tpm,self.samp_info,self.outdir,'\n']
         )
         shell=f'{self.outdir}/stat_plot.sh'
         general.printSH(shell,cmd)
