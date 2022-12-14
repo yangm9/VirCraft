@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 if(!require("vegan")){install.packages("vegan")}
 if(!require("ggplot2")){install.packages("ggplot2")}
 

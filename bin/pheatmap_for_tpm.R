@@ -14,7 +14,7 @@ df<-read.table(
     argv[1],header=TRUE,sep="\t",
     row.names=1,check.names=F,quote=""
 )
-
+print(argv[1])
 samp_goup_df<-read.table(
     argv[2],header=TRUE,sep="\t",
     check.names=F,quote=""

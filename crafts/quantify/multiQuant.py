@@ -25,7 +25,7 @@ class multiCount(Seq):
     def statPlot(self,tax_anno=''):
         cmd=[self.envs]
         cmd.extend(['merge_tpms.pl',self.samp_info,self.outdir,'tpm\n'])
-        modi_tax_anno=general.insLable(tax_anno,'modi')
+        modi_tax_anno=f'{self.outdir}/DemoVir_assignments.txt'
         all_tpm=f'{self.outdir}/all_merged.tpm'
         all_anno_tpm=general.insLable(all_tpm,'anno')
         all_anno_modi_tpm=general.insLable(all_tpm,'modi')
@@ -46,6 +46,7 @@ class multiCount(Seq):
              'barplot_for_taxa_tpm.R',tax_tpm,self.outdir,'\n',
              'NMDS.R',all_anno_modi_tpm,self.samp_info,self.outdir,'\n']
         )
+        print(cmd)
         shell=f'{self.outdir}/stat_plot.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
