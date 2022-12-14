@@ -24,7 +24,7 @@ class multiCount(Seq):
         return results
     def statPlot(self,tax_anno=''):
         cmd=[self.envs]
-        cmd.extend(['merge_tpms.pl',self.samp_info,self.outdir,'\n'])
+        cmd.extend(['merge_tpms.pl',self.samp_info,self.outdir,'tpm\n'])
         modi_tax_anno=general.insLable(tax_anno,'modi')
         all_tpm=f'{self.outdir}/all_merged.tpm'
         all_anno_tpm=general.insLable(all_tpm,'anno')
