@@ -61,14 +61,14 @@ def setOpts(name:str,subcmds:str,version:str):
     
     subpsr=subparsers.add_parser(
         'classify',
-        help='sub-command help'
+        help='classify the virus contigs by Demovir'
     )
     subpsr=addFaArg(subpsr)
     subpsr=addGlbArg(subpsr)
     
     subpsr=subparsers.add_parser(
         'quantify',
-        help='sub-command help'
+        help='Calculate the abundance and diversity of each microbial community'
     )
     subpsr=addAllFqArg(subpsr)
     subpsr=addFaArg(subpsr)
@@ -86,14 +86,14 @@ def setOpts(name:str,subcmds:str,version:str):
     
     subpsr=subparsers.add_parser(
         'func_annot',
-        help='sub-command help'
+        help='Gene annotation and quantification'
     )
     subpsr=addFaArg(subpsr)
     subpsr=addGlbArg(subpsr)
     
     subpsr=subparsers.add_parser(
         'host_prid',
-        help='sub-command help'
+        help='Predict the hosts of virus'
     )
     subpsr=addGlbArg(subpsr)
     
