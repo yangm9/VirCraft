@@ -76,7 +76,7 @@ def setOpts(name:str,subcmds:str,version:str):
     subpsr.add_argument(
         '-s','--sampinfo',action='store',type=str,
         dest='samp_info',metavar='STR',default=False,
-        required=True,help='Taxonomic annotation file'
+        required=True,help='Sample information file with the header of \"#Sample\\tGroup\\tDataPath\", and the format of each line in the text is \"sample name\\tgroup name\\tfull path of fastq1,full path of fastq2\\n\"'
     )
     subpsr.add_argument(
         '-x','--taxa',action='store',type=str,
