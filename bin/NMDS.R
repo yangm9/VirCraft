@@ -1,16 +1,16 @@
 #!/usr/bin/env Rscript
 
-if(!require("vegan")){install.packages("vegan")}
-if(!require("ggplot2")){install.packages("ggplot2")}
-
-library(vegan)#计算距离时需要的包
-library(ggplot2)#绘图包
-
 argv<-commandArgs(T)
 
 if(length(argv)<2){
     stop("inputs: <otus_tab.xls> <group.txt> <outdir>")
 }
+
+if(!require("vegan")){install.packages("vegan")}
+if(!require("ggplot2")){install.packages("ggplot2")}
+
+library(vegan)#计算距离时需要的包
+library(ggplot2)#绘图包
 
 otu <- read.table(argv[1],sep="\t",header=T,check.names=FALSE,row.names=1)
 otu_t <- t(otu)
@@ -42,8 +42,8 @@ plt <- ggplot(data=df,aes(x=NMDS1,y=NMDS2))+#指定数据、X轴、Y轴，颜色
     geom_vline(xintercept=0,lty="dashed",size=1,color='grey50')+
     geom_hline(yintercept=0,lty="dashed",size=1,color='grey50')+#图中虚线
     geom_text(aes(label=sample,
-                y=NMDS2+0.03,x=NMDS1+0.03,
-                vjust=0,color=group),
+                  y=NMDS2+0.03,x=NMDS1+0.03,
+                  vjust=0,color=group),
               size=3.5,show.legend=F)+#添加数据点的标签
     stat_ellipse(data=df, #添加椭圆
                  geom="polygon",level=0.95,
@@ -57,7 +57,7 @@ plt <- ggplot(data=df,aes(x=NMDS1,y=NMDS2))+#指定数据、X轴、Y轴，颜色
         axis.text.y=element_text(size=10),#修改x轴刻度标签文本
         axis.text.x=element_text(size=10),#修改y轴刻度标签文本
         panel.grid=element_blank())+#隐藏网格线
-    ggtitle(paste('Stress=',round(df_nmds_stress, 3)))#添加应力函数值
+    ggtitle(paste('Stress=',round(df_nmds_stress,3)))#添加应力函数值
 
 pdf(paste(argv[3],'/NMDS.pdf',sep=''),width=10,height=8)
 plt

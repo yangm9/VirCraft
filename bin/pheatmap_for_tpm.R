@@ -1,14 +1,13 @@
 #!/usr/bin/env Rscript
-#coding:utf8
-
-if (!require("pheatmap")) {install.packages("pheatmap")}
-library(pheatmap)
 
 argv<-commandArgs(T)
 
 if (length(argv)<3){
     stop("inputs: <merged_tpm_xls> <samp_group_xls> <heatmap_dir>")
 }
+
+if (!require("pheatmap")) {install.packages("pheatmap")}
+library(pheatmap)
 
 df<-read.table(
     argv[1],header=TRUE,sep="\t",

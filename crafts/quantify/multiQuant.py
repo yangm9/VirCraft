@@ -46,7 +46,6 @@ class multiCount(Seq):
              'barplot_for_taxa_tpm.R',tax_tpm,self.outdir,'\n',
              'NMDS.R',all_anno_modi_tpm,self.samp_info,self.outdir,'\n']
         )
-        print(cmd)
         shell=f'{self.outdir}/stat_plot.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
