@@ -12,30 +12,30 @@ if(!require("ggplot2")){install.packages("ggplot2")}
 library(vegan)#计算距离时需要的包
 library(ggplot2)#绘图包
 
-otu <- read.table(argv[1],sep="\t",header=T,check.names=FALSE,row.names=1)
-otu_t <- t(otu)
-otu.distance <- vegdist(otu_t,method='bray')
-df_nmds <- metaMDS(otu.distance,k=2)
+otu<-read.table(argv[1],sep="\t",header=T,check.names=FALSE,row.names=1)
+otu_t<-t(otu)
+otu.distance<-vegdist(otu_t,method='bray')
+df_nmds<-metaMDS(otu.distance,k=2)
 summary(df_nmds)
-df_nmds_stress <- df_nmds$stress
+df_nmds_stress<-df_nmds$stress
 pdf(paste(argv[3],'/stressplot.pdf',sep=''),width=10,height=8)
 stressplot(df_nmds)
 dev.off()
 
 #提取作图数据
-df_points <- as.data.frame(df_nmds$points)
+df_points<-as.data.frame(df_nmds$points)
 #添加samp1es变量
-df_points$sample <- row.names(df_points)
-names(df_points)[1:2] <- c('NMDS1','NMDS2')
+df_points$sample<-row.names(df_points)
+names(df_points)[1:2]<-c('NMDS1','NMDS2')
 
 #添加分组
-group <- read.table(argv[2],sep='\t',header=T)
-group <- group[,0:2]
-colnames(group) <- c("sample","group")
-df <- merge(df_points,group,by="sample")
-color <- c("#1597A5","#FFC24B","#FEB3AE","#FEB3AE")#颜色变量
+group<-read.table(argv[2],sep='\t',header=T)
+group<-group[,0:2]
+colnames(group)<-c("sample","group")
+df<-merge(df_points,group,by="sample")
+color<-c("#1597A5","#FFC24B","#FEB3AE","#FEB3AE")#颜色变量
 
-plt <- ggplot(data=df,aes(x=NMDS1,y=NMDS2))+#指定数据、X轴、Y轴，颜色
+plt<-ggplot(data=df,aes(x=NMDS1,y=NMDS2))+#指定数据、X轴、Y轴，颜色
     theme_bw()+#主题设置
     geom_point(aes(color=group),shape=19,size=3)+#绘制点图并设定大小
     theme(panel.grid=element_blank())+

@@ -10,23 +10,24 @@ if (!require("pheatmap")) {install.packages("pheatmap")}
 library(pheatmap)
 
 df<-read.table(
-    argv[1],header=TRUE,sep="\t",
+    argv[1],header=T,sep="\t",
     row.names=1,check.names=F,quote=""
 )
-print(argv[1])
+
 samp_goup_df<-read.table(
-    argv[2],header=TRUE,sep="\t",
+    argv[2],header=T,sep="\t",
     check.names=F,quote=""
 )
 
-ColNames<-samp_goup_df$GroupName
+colnames(samp_goup_df)<-c("sample","group")
+ColNames<-samp_goup_df$group
 RowNames<-rownames(df)
 
 annotation_col<-data.frame(
   Group=factor(ColNames)
 )
 
-annotation_row = data.frame(Source=factor(df$Source))
+annotation_row<-data.frame(Source=factor(df$Source))
 rownames(annotation_row)<-RowNames
 df<-subset(df,select=-c(Order,Family,Source,Length))
 rownames(annotation_col)=names(df)
@@ -35,7 +36,7 @@ plot<-pheatmap(
   log10(df+1),
   cluster_row=TRUE,
   cluster_col=FALSE,
-  show_rownames = F,
+  show_rownames=F,
   #scale = "row",#参数归一化
   #clustering_method参数设定不同聚类方法，默认为"complete",可以设定为'ward','ward.D','ward.D2','single','complete','average','mcquitty','median' or 'centroid')
   clustering_method="complete",

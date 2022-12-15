@@ -33,7 +33,7 @@ class multiCount(Seq):
             ["sed '1s/Sequence_ID/Contig/'",tax_anno,'>',modi_tax_anno,'\n',
             'linkTab.py',all_tpm,modi_tax_anno,'left Contig',all_anno_tpm,'\n',
             'tpmAddSource.py',all_anno_tpm,all_anno_modi_tpm,'\n',
-            'pheatmap_for_tpm.R',all_anno_modi_tpm,self.samp_info,self.outdir,'\n']
+            'pheatmap_for_abd.R',all_anno_modi_tpm,self.samp_info,self.outdir,'\n']
         )
         len_sum_tpm_qual_xls=f'{self.outdir}/contig_quality_summary.xls'
         cmd.extend(
@@ -43,8 +43,8 @@ class multiCount(Seq):
         tax_tpm=f'{self.outdir}/tax_tpm.xls'
         cmd.extend(
             ['abundByTax.py',all_anno_modi_tpm,self.outdir,'\n',
-             'barplot_for_taxa_tpm.R',tax_tpm,self.outdir,'\n',
-             'NMDS.R',all_anno_modi_tpm,self.samp_info,self.outdir,'\n']
+            'barplot_for_taxa_tpm.R',tax_tpm,self.outdir,'\n',
+            'NMDS.R',all_anno_modi_tpm,self.samp_info,self.outdir,'\n']
         )
         shell=f'{self.outdir}/stat_plot.sh'
         general.printSH(shell,cmd)

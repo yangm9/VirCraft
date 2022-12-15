@@ -87,9 +87,16 @@ elif sys.argv[1]=='func_annot':
     print('Function annotation completed!!!')
 elif sys.argv[1]=='comparison':
     print('Viral comparison')
-    vCont.compSeq(opts.config,outdir)
+    vCont.compSeq(
+        fasta=args.fasta,
+        outdir=args.outdir,
+        threads=args.threads
+    )
+    print('Viral comparison done!!!')
 elif sys.argv[1]=='host_prid':
     print('Host prediction')
+    
+    print('Viral-host relationship prediction done!!!')
 else:
     ERROR=f'\nERROR: {sys.argv[1]} is not a module of VirCraft\n'
     print(ERROR)
