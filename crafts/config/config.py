@@ -35,7 +35,7 @@ class VirCfg:
         insamp=open(samp_info)
         header=insamp.readline()
         header=header.strip().split('\t')
-        name_idx=header.index('#Sample')
+        name_idx=header.index('Sample')
         group_idx=header.index('Group')
         path_idx=header.index('DataPath')
         for line in insamp:

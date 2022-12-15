@@ -53,8 +53,8 @@ class Assembly(Reads):
         else:
             pass
         cmd=['megahit',input_para,'-o',self.outdir,
-            '-t',self.threads,'-m','80000000000','--tmp-dir',
-            tmpdir,other_paras,'\n']
+            '-t',self.threads,'-m','80000000000',
+            '--tmp-dir',tmpdir,other_paras,'\n']
         scaf=f'{wkdir}/final.contigs.fa'
         return cmd,scaf
     def unmapReads(self,scaf:str):
@@ -77,14 +77,18 @@ class Assembly(Reads):
         cmd=['cat',scafs[0],scafs[1],'>',scaf,'\n',
              'assemb_stat.pl',scaf,scaf,f'>{stat_tab}\n']
         return cmd,scaf
-    def filtFastA(self,scaf,cutoff=5000):
+    def statFilt(self,scaf,cutoff=5000):
         '''
         Filter the fasta sequence by length (cutoff).
         '''
         wkdir=f'{self.outdir}/filter'
         general.mkdir(wkdir)
-        filt_fa_prifix=f'{wkdir}/scaffolds.filt'
-        cmd=['SeqLenCutoff.pl',scaf,filt_fa_prifix,str(cutoff),'\n']
+        stat_prefix=f'{wkdir}/scaffolds.stat'
+        filt_prefix=f'{wkdir}/scaffolds.filt'
+        cmd=['fasta_size_distribution_plot.py',scaf,'-o',stat_prefix,
+            '-t Sequence Size Distribution -s 2000 -g 10\n',
+            'SeqLenCutoff.pl',scaf,filt_prefix,str(cutoff),'\n'
+        ]
         return cmd
     def mixAsse(self,fastqs,process='sm'):
         '''
@@ -109,7 +113,7 @@ class Assembly(Reads):
         scafs=[]
         tmp_cmd,scaf=self.mixAsse(self.fastqs,process)
         cmd.extend(tmp_cmd)
-        cmd.extend(self.filtFastA(scaf,cutoff))
+        cmd.extend(self.statFilt(scaf,cutoff))
         shell=f'{self.outdir}/{self.samp}_assembly.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
