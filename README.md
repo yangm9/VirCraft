@@ -17,10 +17,11 @@ VirCraft is an automatic virus analysis pipeline.
 ```
 
 **VirCraft-v0.0.2**
-
+```
 尝试多路分析失败的版本。
-
+```
 **VirCraft-v0.0.3**
-
+```
 暂时不支持多线程的版本。
-
+Scatter暂时不上。
+```
