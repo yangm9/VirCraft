@@ -8,7 +8,7 @@ def seqGcLen(seq:str):
     return length,gc_perc
 
 def statFasta(fasta:str):
-    print('SeqID\tGCcontent\tLength\n')
+    print('SeqID\tGCcontent\tLength')
     for record in SeqIO.parse(fasta,'fasta'):
         length,gc_perc=seqGcLen(str(record.seq))
         length=str(length)
