@@ -40,10 +40,6 @@ class multiCount(Seq):
             'pheatmap_for_abd.R',all_anno_modi_tpm,self.samp_info,self.outdir,'\n']
         )
         len_sum_tpm_qual_xls=f'{self.outdir}/contig_quality_summary.xls'
-        cmd.extend(
-             ['sumAbundance.py',all_anno_modi_tpm,len_sum_tpm_qual_xls,self.outdir,'\n',
-             'fa_length_tpm_scatter.R',len_sum_tpm_qual_xls,self.outdir,'\n']
-        )
         tax_tpm=f'{self.outdir}/tax_tpm.xls'
         cmd.extend(
             ['abd_by_taxa.py',all_anno_modi_tpm,self.outdir,'\n',

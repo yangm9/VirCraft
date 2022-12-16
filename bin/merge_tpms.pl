@@ -17,7 +17,7 @@ my $n=1;
 my $samps_prefix="";
 my $merged_prefix="";
 while(<IN>){
-    next if(/^#/);
+    next if(/^Sample/);
     chomp;
     my $samp_name=(split /\t/,$_)[0];
     unless($n==1){

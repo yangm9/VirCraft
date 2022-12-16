@@ -9,10 +9,9 @@ from crafts.assembly import assembly
 from crafts.identify import viridsop
 from crafts.config import arguments
 from crafts.votus import votus
-from crafts.classify import classify
-from crafts.quantify import multiQuant
+from crafts.classify import classify,vCont
+from crafts.quantify import multiQuant,quantStat
 from crafts.func_annot import geneAnnot
-from crafts.compare import vCont
 
 version='0.0.3'
 args=arguments.setOpts(sys.argv[0],sys.argv[1],version)
@@ -58,14 +57,13 @@ elif sys.argv[1]=='votus':
     print('vOTU cluster completed!!!')
 elif sys.argv[1]=='quantify':
     print('Viral abundance and diversity analysis')
-    VirQuant=multiQuant.multiCount(
+    VirQuant=quantStat.AbdStat(
         samp_info=args.samp_info,
         fasta=args.fasta,
         outdir=args.outdir,
         threads=args.threads
     )
-    VirQuant.countBySamp()
-    VirQuant.statPlot(args.taxa)
+    VirQuant.QuantStat(args.taxa)
     print('Viral quantifications completed!!!')
 elif sys.argv[1]=='func_annot':
     print('Function annotation')
@@ -87,7 +85,7 @@ elif sys.argv[1]=='classify':
     print('Contigs classification completed!!!')
 elif sys.argv[1]=='host_prid':
     print('Host prediction')
-    
+    #Hosts=
     print('Viral-host relationship prediction done!!!')
 else:
     ERROR=f'\nERROR: {sys.argv[1]} is not a module of VirCraft\n'
