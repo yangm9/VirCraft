@@ -6,8 +6,7 @@ class AbdStat(multiCount):
         super().__init__(samp_info,fasta,outdir,threads)
     def mergeAbd(self): #Heatmap for contigs abundance
         abd=f'{self.outdir}/all_merged.tpm'
-        cmd=['merge_tpms.pl',self.samp_info,self.outdir,'tpm\n',
-            'pheatmap_for_abd.R',abd,self.samp_info,self.outdir,'tpm\n']
+        cmd=['merge_tpms.pl',self.samp_info,self.outdir,'tpm\n']
         return cmd,abd
     def sizeAbdPlot(self,abd:str):
         tmp_cmd,fasta_stat=self.sizeGC() #calculate the size of each contig
@@ -23,10 +22,16 @@ class AbdStat(multiCount):
         )
         return cmd
     def taxaAbd(self,abd:str,taxa_anno:str):
-        modi_tax_anno=f'{self.outdir}/DemoVir_assignments.txt'
-        cmd=["sed '1s/Sequence_ID/Contig/'",tax_anno,'>',modi_tax_anno,'\n',
-            'linkTab.py',abd,'left Contig',modi_tax_anno,'\n',
-            'sum_abd_by_taxa.py',abd,self.outdir,'\n',
+        if not taxa_anno:
+            return ['pheatmap_for_abd.R',abd,self.samp_info,self.outdir,'\n']
+        m_tax_anno=f'{self.outdir}/DemoVir_assignments.txt'
+        abd_taxa=f'{self.outdir}/all_sum_abd_taxa.xls'
+        m_abd_taxa=f'{self.outdir}/all_sum_abd_taxa.m.xls'
+        cmd=["sed '1s/Sequence_ID/Contig/'",tax_anno,'>',m_tax_anno,'\n',
+            'linkTab.py',abd,m_tax_anno,'left Contig',abd_taxa,'\n',
+            "sed '1s/Order/Source/'",abd_taxa,'>',m_abd_taxa,'\n',
+            'pheatmap_for_abd.R',m_abd_taxa,self.samp_info,self.outdir,'\n',
+            'sum_abd_by_taxa.py',abd_taxa,self.outdir,'\n',
             'barplot_for_taxa_tpm.R',tax_tpm,self.outdir,'\n']
         return cmd
     def diversity(self,abd:str):        
@@ -39,7 +44,7 @@ class AbdStat(multiCount):
         tmp_cmd,abd=self.mergeAbd()
         cmd.extend(tmp_cmd)
         cmd.extend(self.sizeAbdPlot(abd))
-        if taxa_anno: cmd.extend(self.taxaAbd(abd,self.taxa_anno))
+        cmd.extend(self.taxaAbd(abd,self.taxa_anno))
         cmd.extend(self.diversity(abd))
         shell=f'{self.outdir}/{self.name}_count.sh'
         general.printSH(shell,cmd)

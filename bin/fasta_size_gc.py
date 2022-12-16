@@ -4,11 +4,11 @@ from Bio import SeqIO
 
 def seqGcLen(seq:str):
     length=len(seq)
-    gc_perc=round((seq.count('C')+seq.count('G'))/length*100)
+    gc_perc=round((seq.count('C')+seq.count('G')+0.00)/length*100,2)
     return length,gc_perc
 
 def statFasta(fasta:str):
-    print('Contig\tGC\tLength')
+    print('Contig\tLength\tGC%')
     for record in SeqIO.parse(fasta,'fasta'):
         length,gc_perc=seqGcLen(str(record.seq))
         length=str(length)

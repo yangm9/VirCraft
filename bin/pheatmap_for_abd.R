@@ -1,9 +1,9 @@
 #!/usr/bin/env Rscript
-
+#为每一行添加来源或者Taxa
 argv<-commandArgs(T)
 
 if(length(argv)<3){
-    stop("inputs: <merged_tpm_xls> <samp_group_xls> <heatmap_dir>")
+    stop("inputs: <merged_tpm_xls> <samp_group_xls> <heatmap_dir>\n")
 }
 
 if(!require("pheatmap")){install.packages("pheatmap")}
@@ -25,8 +25,12 @@ ColNames<-samp_goup_df$group
 RowNames<-rownames(df)
 
 annotation_col<-data.frame(Group=factor(ColNames))
-annotation_row<-data.frame(Source=factor(df$Source))
-rownames(annotation_row)<-RowNames
+if('Source' %in% colnames(df)){
+    annotation_row<-data.frame(Source=factor(df$Source))
+    rownames(annotation_row)<-RowNames
+}else{
+    annotation_row<-NA
+}
 df<-subset(df,select=SampNames)
 rownames(annotation_col)=names(df)
 
