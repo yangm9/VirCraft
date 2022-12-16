@@ -16,4 +16,4 @@ def statFasta(fasta:str):
         print(f'{record.id}\t{length}\t{gc_perc}')
     return 0
 
-if __name__=='__main__':seqGcLen(sys.argv[1])
+if __name__=='__main__':statFasta(sys.argv[1])
