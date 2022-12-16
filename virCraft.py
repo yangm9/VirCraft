@@ -56,15 +56,6 @@ elif sys.argv[1]=='votus':
     )
     vOTUs.RmDup()
     print('vOTU cluster completed!!!')
-elif sys.argv[1]=='classify':
-    print('Viral contig classification')
-    Taxa=classify.VirTaxa(
-        fasta=args.fasta,
-        outdir=args.outdir,
-        threads=args.threads
-    )
-    Taxa.Classify()
-    print('Contigs classification completed!!!')
 elif sys.argv[1]=='quantify':
     print('Viral abundance and diversity analysis')
     VirQuant=multiQuant.multiCount(
@@ -85,14 +76,15 @@ elif sys.argv[1]=='func_annot':
     )
     VirGene.FuncAnnot()
     print('Function annotation completed!!!')
-elif sys.argv[1]=='comparison':
-    print('Viral comparison')
-    vCont.compSeq(
+elif sys.argv[1]=='classify':
+    print('Viral contig classification')
+    Taxa=classify.VirTaxa(
         fasta=args.fasta,
         outdir=args.outdir,
         threads=args.threads
     )
-    print('Viral comparison done!!!')
+    Taxa.Classify()
+    print('Contigs classification completed!!!')
 elif sys.argv[1]=='host_prid':
     print('Host prediction')
     

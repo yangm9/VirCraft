@@ -4,7 +4,7 @@ from .multiQuant import multiCount
 class AbdStat(multiCount):
     def __init__(self,samp_info='',fasta='',outdir='',threads=8):
         super().__init__(samp_info,fasta,outdir,threads)
-    def calcAbd(self): #Heatmap for contigs abundance
+    def mergeAbd(self): #Heatmap for contigs abundance
         abd=f'{self.outdir}/all_merged.tpm'
         cmd.extend(
             ['merge_tpms.pl',self.samp_info,self.outdir,'tpm\n',
@@ -24,4 +24,20 @@ class AbdStat(multiCount):
             'fa_length_tpm_scatter.R',sum_len_abd,self.outdir,'\n']
         )
         return cmd
+    def diversity(self,abd:str):        
+        cmd.extend(
+            ['alpha_diversity.R',abd,self.samp_info,self.outdir,'\n',
+            'NMDS.R',abd,self.samp_info,self.outdir,'\n']
+        )
+        return cmd
+    def QuantStat(self):
+        cmd=[self.envs]
+        tmp_cmd,abd=cmd.extend(self.mergeAbd())
+        cmd.extend(tmp_cmd)
+        cmd.extend(self.sizeAbdPlot(abd))
+        cmd.extend((self.diversity(abd))
+        shell=f'{self.outdir}/{samp}_count.sh'
+        general.printSH(shell,cmd)
+        results=cmdExec.execute(cmd)
+        return results
 
