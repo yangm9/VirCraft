@@ -83,3 +83,11 @@ class Seq(VirCfg):
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
         return idx,results
+    def sizeGC(self): #Plot scatter for contigs size (x) and GC content (y)
+        cmd=[self.envs]
+        fasta_stat=f'{self.outdir}/fasta_stat.xls'
+        cmd.extend(
+            ['fasta_size_gc.py',self.fasta,'>',fasta_stat,'\n',
+            'size_gc_scatter.R',fasta_stat,self.outdir,'\n']
+        )
+        return cmd,fasta_stat

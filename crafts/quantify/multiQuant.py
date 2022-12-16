@@ -22,18 +22,18 @@ class multiCount(Seq):
             general.printSH(shell,cmd)
             results+=cmdExec.execute(cmd)
         return results
-    def statPlot(self,tax_anno=''):
-        cmd=[self.envs]
-        cmd.extend(['merge_tpms.pl',self.samp_info,self.outdir,'tpm\n'])
-        modi_tax_anno=f'{self.outdir}/DemoVir_assignments.txt'
-        all_tpm=f'{self.outdir}/all_merged.tpm'
-        all_tpm_=f'{self.outdir}/all_gc.tpm'
+
+'''
+    def statPlot(self,tax_anno=None):
+        all_tpm_gc=f'{self.outdir}/all_merged_gc.tpm'
+#Scatter for contigs size (x) and abundance (y)
+
+        if tax_anno:
+            modi_tax_anno=f'{self.outdir}/DemoVir_assignments.txt'
         all_anno_tpm=general.insLable(all_tpm,'anno')
         all_anno_modi_tpm=general.insLable(all_tpm,'modi')
-        votu_stat=f'{self.outdir}/votu_stat.xls'
         cmd.extend(
-            ['fasta_size_gc.py',self.fasta,'>',votu_stat,'\n',
-            "sed '1s/Sequence_ID/Contig/'",tax_anno,'>',modi_tax_anno,'\n',
+            ["sed '1s/Sequence_ID/Contig/'",tax_anno,'>',modi_tax_anno,'\n',
             'linkTab.py',all_tpm,votu_stat,'left Contig',all_tpm_gc,'\n',
             'linkTab.py',all_tpm_gc,modi_tax_anno,'left Contig',all_anno_tpm,'\n',
             'tpmAddSource.py',all_anno_tpm,all_anno_modi_tpm,'\n',
@@ -51,6 +51,8 @@ class multiCount(Seq):
             'NMDS.R',all_anno_modi_tpm,self.samp_info,self.outdir,'\n']
         )
         shell=f'{self.outdir}/stat_plot.sh'
+        print(cmd)
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
         return results
+'''

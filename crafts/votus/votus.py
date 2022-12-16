@@ -22,6 +22,7 @@ class VirRef(VirScan):
         cmd.extend(tmp_cmd)
         tmp_cmd,tmp_fa=self.checkv(votus)
         cmd.extend(tmp_cmd)
+        cmd.extend(self.sizeGC())
         shell=f'{self.outdir}/{self.name}_votu.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)

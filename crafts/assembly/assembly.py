@@ -114,6 +114,7 @@ class Assembly(Reads):
         tmp_cmd,scaf=self.mixAsse(self.fastqs,process)
         cmd.extend(tmp_cmd)
         cmd.extend(self.statFilt(scaf,cutoff))
+        cmd.extend(self.sizeGC())
         shell=f'{self.outdir}/{self.samp}_assembly.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
