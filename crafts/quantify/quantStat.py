@@ -18,21 +18,21 @@ class AbdStat(multiCount):
             ['fasta_size_gc.py',self.fasta,'>',fasta_stat,'\n',
             'sum_abd_by_seq.py',abd,self.outdir,'\n',
             'linkTab.py',fasta_stat,sum_abd,'left Contig',sum_len_abd,'\n',
-            'fa_length_tpm_scatter.R',sum_len_abd,self.outdir,'\n']
+            'variables_scatter.R',sum_len_abd,self.outdir,'\n']
         )
         return cmd
     def taxaAbd(self,abd:str,taxa_anno:str):
         if not taxa_anno:
             return ['pheatmap_for_abd.R',abd,self.samp_info,self.outdir,'\n']
-        m_tax_anno=f'{self.outdir}/DemoVir_assignments.txt'
+        m_taxa_anno=f'{self.outdir}/DemoVir_assignments.txt'
         abd_taxa=f'{self.outdir}/all_sum_abd_taxa.xls'
         m_abd_taxa=f'{self.outdir}/all_sum_abd_taxa.m.xls'
-        cmd=["sed '1s/Sequence_ID/Contig/'",tax_anno,'>',m_tax_anno,'\n',
-            'linkTab.py',abd,m_tax_anno,'left Contig',abd_taxa,'\n',
+        cmd=["sed '1s/Sequence_ID/Contig/'",taxa_anno,'>',m_taxa_anno,'\n',
+            'linkTab.py',abd,m_taxa_anno,'left Contig',abd_taxa,'\n',
             "sed '1s/Order/Source/'",abd_taxa,'>',m_abd_taxa,'\n',
             'pheatmap_for_abd.R',m_abd_taxa,self.samp_info,self.outdir,'\n',
-            'sum_abd_by_taxa.py',abd_taxa,self.outdir,'\n',
-            'barplot_for_taxa_tpm.R',tax_tpm,self.outdir,'\n']
+            'sum_abd_by_taxa.py',m_abd_taxa,self.outdir,'\n',
+            'barplot_for_taxa_tpm.R',m_abd_taxa,self.outdir,'\n']
         return cmd
     def diversity(self,abd:str):        
         cmd=['alpha_diversity.R',abd,self.samp_info,self.outdir,'\n',
@@ -44,7 +44,7 @@ class AbdStat(multiCount):
         tmp_cmd,abd=self.mergeAbd()
         cmd.extend(tmp_cmd)
         cmd.extend(self.sizeAbdPlot(abd))
-        cmd.extend(self.taxaAbd(abd,self.taxa_anno))
+        cmd.extend(self.taxaAbd(abd,taxa_anno))
         cmd.extend(self.diversity(abd))
         shell=f'{self.outdir}/{self.name}_count.sh'
         general.printSH(shell,cmd)
