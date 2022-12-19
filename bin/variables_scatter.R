@@ -16,13 +16,16 @@ df=read.table(
 Variables=strsplit(argv[2],"~")[[1]]
 X_Val=log(df[,Variables[1]])
 Y_Val=log(df[,Variables[2]])
-if(!exists(Variables[3])){i
+n=0
+if(is.na(Variables[3])){
     Variables[3]="Colour"
     df[,Variables[3]]="NA"
+    n=n+1
 }
-if(!exists(Variables[4])){
+if(is.na(Variables[4])){
     Variables[4]="Shape"
     df[,Variables[4]]="NA"
+    n=n+1
 }
 Title=paste("The_",Variables[1],"_and_",Variables[2],sep='')
 plot<-ggplot(df,
@@ -40,10 +43,15 @@ plot<-ggplot(df,
 
 out_pdf=paste(argv[3],"/",Variables[1],"_",Variables[2],"_scatter.pdf",sep="")
 pdf(out_pdf,width=10,height=8)
-plot
+if(n==2){
+    plot+theme(legend.position='none')
+}else{
+    plot
+}
+dev.off()
   #scale_color_manual(values=c('#E00303','#03E0B6','#E0BF03',"#EE9A00","#006400"))+
   #geom_point(
     #shape=21,
     #size=4,
     #stroke =1.5
-  #)
+  #z
