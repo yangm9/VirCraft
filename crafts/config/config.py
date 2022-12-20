@@ -27,7 +27,7 @@ class VirCfg:
         return confDict
     def readSampInfo(self,samp_info:str):
         '''
-        Extract the groups list and the Sample information from "samp_info.xls" file. 
+        Extract the groups list and the Sample information from "samp_info.xls" file, with the format: "Sample\tGroup\tDataPath\n". 
         Note: the format of sample information is "Sample: [GroupName,DataPath]".
         '''
         groups=[]

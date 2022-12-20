@@ -12,13 +12,16 @@ if(!require("ggplot2")){install.packages("ggplot2")}
 library(vegan)#计算距离时需要的包
 library(ggplot2)#绘图包
 
-otu<-read.table(argv[1],sep="\t",header=T,check.names=FALSE,row.names=1)
+otu<-read.table(
+    argv[1],sep="\t",header=T,
+    check.names=FALSE,row.names=1
+)
 otu_t<-t(otu)
 otu.distance<-vegdist(otu_t,method='bray')
 df_nmds<-metaMDS(otu.distance,k=2)
-summary(df_nmds)
+#summary(df_nmds)
 df_nmds_stress<-df_nmds$stress
-pdf(paste(argv[3],'/stressplot.pdf',sep=''),width=10,height=8)
+pdf(paste(argv[3],'/nmds_stressplot.pdf',sep=''),width=10,height=8)
 stressplot(df_nmds)
 dev.off()
 
@@ -39,15 +42,15 @@ plt<-ggplot(data=df,aes(x=NMDS1,y=NMDS2))+#指定数据、X轴、Y轴，颜色
     theme_bw()+#主题设置
     geom_point(aes(color=group),shape=19,size=3)+#绘制点图并设定大小
     theme(panel.grid=element_blank())+
-    geom_vline(xintercept=0,lty="dashed",size=1,color='grey50')+
-    geom_hline(yintercept=0,lty="dashed",size=1,color='grey50')+#图中虚线
+    geom_vline(xintercept=0,lty="dashed",linewidth=1,color='grey50')+
+    geom_hline(yintercept=0,lty="dashed",linewidth=1,color='grey50')+#图中虚线
     geom_text(aes(label=sample,
                   y=NMDS2+0.03,x=NMDS1+0.03,
                   vjust=0,color=group),
               size=3.5,show.legend=F)+#添加数据点的标签
     stat_ellipse(data=df, #添加椭圆
                  geom="polygon",level=0.95,
-                 linetype=2,size=0.5,
+                 linetype=2,linewidth=0.5,
                  aes(fill=group),
                  alpha=0.2)+
     scale_color_manual(values=color) +#点的颜色设置

@@ -5,7 +5,7 @@ library(vegan)
 argv<-commandArgs(T)
 
 if (length(argv)<2){
-    stop("inputs: <all_tpm.xls> <alpha_diversity.xls>")
+    stop("inputs: <all_abundance.xls> <alpha_diversity.xls>")
 }
 
 otu<-read.table(argv[1],sep="\t",header=T,check.names=FALSE,row.names=1)

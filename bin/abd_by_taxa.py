@@ -22,11 +22,12 @@ def sumAbundByTaxa(taxa_tpm: str, outdir: str):
         series=df.loc[TaxaList[i]]
         if isinstance(series,pd.DataFrame):
             series=pd.Series(series.sum(),name=TaxaList[i])
-        sumDF=sumDF.append(series)
+        sumDF=pd.concat([sumDF,series.to_frame().T])
+        #sumDF=sumDF.append(series) #append will be instead by concat
     sumDF.reset_index(inplace=True)
     sumDF.rename(columns={'index':'Contig'},inplace=True)
     sumDF.fillna(0,inplace=True)
-    sumed_tpm=f'{outdir}/all_taxa_sum_abd.xls'
+    sumed_tpm=f'{outdir}/all_taxa_sum_abdi.xls'
     sumDF.to_csv(sumed_tpm,sep='\t',index=False)
     return 0
 

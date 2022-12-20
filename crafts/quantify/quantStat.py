@@ -9,14 +9,17 @@ class AbdStat(multiCount):
         abd=f'{self.outdir}/all_merged.tpm'
         cmd=['merge_tpms.pl',self.samp_info,self.outdir,'tpm\n']
         return cmd,abd
-    def sizeAbdPlot(self,abd:str):
+    def sizeAbdPlot(self,abd:str,checkv_dir=None):
+        cmd=[]
         sum_abd=f'{self.outdir}/contig_sum_abd.xls'
-        tmp_fa=self.fasta
-        tmp_dir=self.outdir
-        tmp_threads=self.threads
-        VirSOP=VirScan(tmp_fa,tmp_dir,tmp_threads)
-        cmd,__=VirSOP.checkv(tmp_fa)
-        votu_qual=f'{self.outdir}/checkv/quality_summary.tsv'
+        if not checkv_dir:
+            tmp_fa=self.fasta
+            tmp_dir=self.outdir
+            tmp_threads=self.threads
+            VirSOP=VirScan(tmp_fa,tmp_dir,tmp_threads)
+            cmd,__=VirSOP.checkv(tmp_fa)
+            checkv_dir=f'{self.outdir}/checkv'
+        votu_qual=f'{checkv_dir}/quality_summary.tsv'
         sum_qual=f'{self.outdir}/sum_abd_qual.xls'
         cmd.extend(
             ['sum_abd_by_seq.py',abd,sum_abd,'\n',
@@ -25,7 +28,7 @@ class AbdStat(multiCount):
             'variables_scatter.R',sum_qual,'Total_Abundance~contig_length~checkv_quality',self.outdir,'\n']
         )
         return cmd
-    def taxaAbd(self,abd:str,taxa_anno:str):
+    def taxaAbd(self,abd:str,taxa_anno=None):
         if not taxa_anno:
             return ['pheatmap_for_abd.R',abd,self.samp_info,self.outdir,'\n']
         m_taxa_anno=f'{self.outdir}/DemoVir_assignments.txt'
@@ -33,24 +36,32 @@ class AbdStat(multiCount):
         m_abd_taxa=f'{self.outdir}/all_sum_abd_taxa.m.xls'
         ctg_taxa_abd=f'{self.outdir}/all_ctg_abd_taxa.xls'
         taxa_sum_abd=f'{self.outdir}/all_taxa_sum_abd.xls'
-        cmd=["sed '1s/Sequence_ID/Contig/'",taxa_anno,'>',m_taxa_anno,'\n',
+        cmd=[
+            'echo "Heatmap for abundance"\n',
+            "sed '1s/Sequence_ID/Contig/'",taxa_anno,'>',m_taxa_anno,'\n',
             'linkTab.py',abd,m_taxa_anno,'left Contig',abd_taxa,'\n',
             "sed '1s/Order/Source/'",abd_taxa,'>',m_abd_taxa,'\n',
             'pheatmap_for_abd.R',m_abd_taxa,self.samp_info,self.outdir,'\n',
+            'echo "Barplot for abundance by taxa"\n',
             'taxa_annot_abd.py',abd_taxa,ctg_taxa_abd,'\n',
             'sum_abd_by_taxa.py',ctg_taxa_abd,self.outdir,'\n',
-            'barplot_for_taxa_tpm.R',taxa_sum_abd,self.outdir,'\n']
+            'barplot_for_taxa_tpm.R',taxa_sum_abd,self.outdir,'\n'
+        ]
         return cmd
-    def diversity(self,abd:str):        
-        cmd=['alpha_diversity.R',abd,self.samp_info,self.outdir,'\n',
-            'NMDS.R',abd,self.samp_info,self.outdir,'\n']
+    def diversity(self,abd:str):
+        alpha_diversity=f'{self.outdir}/alpha_diversity.xls'
+        cmd=[
+            'echo "Alpha and Beta Diversity"\n',
+            'alpha_diversity.R',abd,alpha_diversity,'\n',
+            'NMDS.R',abd,self.samp_info,self.outdir,'\n'
+        ]
         return cmd
-    def QuantStat(self,taxa_anno:str):
+    def QuantStat(self,taxa_anno=None,checkv_dir=None):
         self.countBySamp()
         cmd=[self.envs]
         tmp_cmd,abd=self.mergeAbd()
         cmd.extend(tmp_cmd)
-        cmd.extend(self.sizeAbdPlot(abd))
+        cmd.extend(self.sizeAbdPlot(abd,checkv_dir))
         cmd.extend(self.taxaAbd(abd,taxa_anno))
         cmd.extend(self.diversity(abd))
         shell=f'{self.outdir}/{self.name}_count.sh'

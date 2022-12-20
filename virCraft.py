@@ -63,7 +63,7 @@ elif sys.argv[1]=='quantify':
         outdir=args.outdir,
         threads=args.threads
     )
-    VirQuant.QuantStat(args.taxa)
+    VirQuant.QuantStat(args.taxa,args.checkv)
     print('Viral quantifications completed!!!')
 elif sys.argv[1]=='func_annot':
     print('Function annotation')

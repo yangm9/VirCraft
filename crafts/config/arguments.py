@@ -83,6 +83,11 @@ def setOpts(name:str,subcmds:str,version:str):
         dest='taxa',metavar='STR',default=False,
         help='Taxonomic annotation file'
     )
+    subpsr.add_argument(
+        '-c','--checkv',action='store',type=str,
+        dest='checkv',metavar='STR',default=False,
+        help='CheckV results directory'
+    )
     
     subpsr=subparsers.add_parser(
         'func_annot',
