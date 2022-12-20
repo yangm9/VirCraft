@@ -7,11 +7,9 @@ import pandas as pd
 def sumAbundByTaxa(taxa_tpm: str, outdir: str):
     '''
     Sum the abundance by Taxa for each sample.
-    input format:
-    Contig\tSample1 Abundance\t...\tSampleN Abundance\n
     '''
     df=pd.read_csv(taxa_tpm,sep='\t',header=0)
-    samp_num=df.columns.size
+    samp_num=df.columns.size-4
     df=df.iloc[:,0:samp_num]
     df['Contig']=df['Contig'].apply(lambda x:x.split(':')[1])
     df['Contig'].replace('nan;nan','Unassigned',inplace=True)
@@ -26,7 +24,7 @@ def sumAbundByTaxa(taxa_tpm: str, outdir: str):
     sumDF.reset_index(inplace=True)
     sumDF.rename(columns={'index':'Contig'},inplace=True)
     sumDF.fillna(0,inplace=True)
-    sumed_tpm=f'{outdir}/all_taxa_sum_abd.xls'
+    sumed_tpm=f'{outdir}/tax_sumed_tpm.xls'
     sumDF.to_csv(sumed_tpm,sep='\t',index=False)
     return 0
 

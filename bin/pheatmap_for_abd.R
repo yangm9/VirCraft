@@ -52,7 +52,7 @@ plot<-pheatmap(
     #display_numbers=matrix(ifelse(dat > 0.01,"*",""),nrow(dat))
 )
 
-pdf(paste(argv[3],'/tpm_heatmap.pdf',sep=''),width=10,height=8)
+pdf(paste(argv[3],'/abundance_heatmap.pdf',sep=''),width=10,height=8)
 plot
 dev.off()
 #Sys.setenv("DISPLAY"=":0")

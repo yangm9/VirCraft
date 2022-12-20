@@ -1,3 +1,4 @@
+#!/usr/bin/env Rscript
 if (!require("vegan")) {install.packages("vegan")}
 library(vegan)
 

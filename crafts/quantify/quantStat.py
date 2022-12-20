@@ -1,5 +1,6 @@
 from .multiQuant import multiCount
 from ..general import cmdExec,general
+from ..identify.viridsop import VirScan
 
 class AbdStat(multiCount):
     def __init__(self,samp_info='',fasta='',outdir='',threads=8):
@@ -9,16 +10,19 @@ class AbdStat(multiCount):
         cmd=['merge_tpms.pl',self.samp_info,self.outdir,'tpm\n']
         return cmd,abd
     def sizeAbdPlot(self,abd:str):
-        tmp_cmd,fasta_stat=self.sizeGC() #calculate the size of each contig
-        cmd=tmp_cmd
-        abd=f'{self.outdir}/all_merged'
-        sum_abd=f'{self.outdir}/all_sum_abd.xls'
-        sum_len_abd=f'{self.outdir}/all_sum_len_abd.xls'
+        sum_abd=f'{self.outdir}/contig_sum_abd.xls'
+        tmp_fa=self.fasta
+        tmp_dir=self.outdir
+        tmp_threads=self.threads
+        VirSOP=VirScan(tmp_fa,tmp_dir,tmp_threads)
+        cmd,__=VirSOP.checkv(tmp_fa)
+        votu_qual=f'{self.outdir}/checkv/quality_summary.tsv'
+        sum_qual=f'{self.outdir}/sum_abd_qual.xls'
         cmd.extend(
-            ['fasta_size_gc.py',self.fasta,'>',fasta_stat,'\n',
-            'sum_abd_by_seq.py',abd,self.outdir,'\n',
-            'linkTab.py',fasta_stat,sum_abd,'left Contig',sum_len_abd,'\n',
-            'variables_scatter.R',sum_len_abd,'',self.outdir,'\n']
+            ['sum_abd_by_seq.py',abd,sum_abd,'\n',
+            "sed -i '1s/contig_id/Contig/'",votu_qual,'\n',
+            'linkTab.py',sum_abd,votu_qual,'left Contig',sum_qual,'\n',
+            'variables_scatter.R',sum_qual,'Total_Abundance~contig_length~checkv_quality',self.outdir,'\n']
         )
         return cmd
     def taxaAbd(self,abd:str,taxa_anno:str):
@@ -27,12 +31,15 @@ class AbdStat(multiCount):
         m_taxa_anno=f'{self.outdir}/DemoVir_assignments.txt'
         abd_taxa=f'{self.outdir}/all_sum_abd_taxa.xls'
         m_abd_taxa=f'{self.outdir}/all_sum_abd_taxa.m.xls'
+        ctg_taxa_abd=f'{self.outdir}/all_ctg_abd_taxa.xls'
+        taxa_sum_abd=f'{self.outdir}/all_taxa_sum_abd.xls'
         cmd=["sed '1s/Sequence_ID/Contig/'",taxa_anno,'>',m_taxa_anno,'\n',
             'linkTab.py',abd,m_taxa_anno,'left Contig',abd_taxa,'\n',
             "sed '1s/Order/Source/'",abd_taxa,'>',m_abd_taxa,'\n',
             'pheatmap_for_abd.R',m_abd_taxa,self.samp_info,self.outdir,'\n',
-            'sum_abd_by_taxa.py',m_abd_taxa,self.outdir,'\n',
-            'barplot_for_taxa_tpm.R',m_abd_taxa,self.outdir,'\n']
+            'taxa_annot_abd.py',abd_taxa,ctg_taxa_abd,'\n',
+            'sum_abd_by_taxa.py',ctg_taxa_abd,self.outdir,'\n',
+            'barplot_for_taxa_tpm.R',taxa_sum_abd,self.outdir,'\n']
         return cmd
     def diversity(self,abd:str):        
         cmd=['alpha_diversity.R',abd,self.samp_info,self.outdir,'\n',

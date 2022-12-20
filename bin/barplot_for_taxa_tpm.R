@@ -28,20 +28,22 @@ df_p$SampleID<-factor(
 )
 #"#556B2F","#556B2F","#CD950C","#00688B","#8B795E","#458B74",
 color<-c(
-           "#9ACD32","#EECFA1","#4F94CD","#8B636C","#EE9A00",
-           "#FF00FF","#EECFA1","#0000FF","#BF3EFF","#00FFFF",
-           "#A52A2A","#FFFF00","#FF00FF","#00FF00","#BEBEBE",
-           "#FF0000","#EE9A00","#006400"
+    "#9ACD32","#EECFA1","#4F94CD","#8B636C","#EE9A00",
+    "#FF00FF","#EECFA1","#0000FF","#BF3EFF","#00FFFF",
+    "#A52A2A","#FFFF00","#FF00FF","#00FF00","#BEBEBE",
+    "#FF0000","#EE9A00","#006400","#556B2F","#556B2F",
+    "#CD950C","#00688B","#8B795E","#458B74","#9ACDF2"
 )
 
 plot<-ggplot(df_p,aes(fill=Type,y=Relative_Abundance,x=SampleID))+
-  geom_bar(stat="identity",position="fill",width =.8,color="black") +
-  scale_fill_manual(values =color)+
+  geom_bar(stat="identity",position="fill",width=.8,color="black")+
+  scale_fill_manual(values=color)+
   theme_bw()+
-  theme(legend.text =element_text(size=10),
-        legend.title =element_text(size=10),
-        axis.text.x =element_text(angle=90,hjust=0.5,vjust=0.5),
-        axis.title =element_text(size=10),
-        axis.text =element_text(size=10))
+  theme(legend.text=element_text(size=10),
+        legend.title=element_text(size=10),
+        axis.text.x=element_text(angle=90,hjust=0.5,vjust=0.5),
+        axis.title=element_text(size=10),
+        axis.text=element_text(size=10))
 pdf(paste(argv[2],"/taxa_relative_abundance_baplot.pdf",sep=""),width=10,height=8)
 plot
+dev.off()
