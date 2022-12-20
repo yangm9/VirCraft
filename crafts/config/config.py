@@ -88,6 +88,6 @@ class Seq(VirCfg):
         fasta_stat=f'{self.outdir}/fasta_stat.xls'
         cmd.extend(
             ['fasta_size_gc.py',self.fasta,'>',fasta_stat,'\n',
-            'size_gc_scatter.R',fasta_stat,self.outdir,'\n']
+            'variables_scatter.R',fasta_stat,'Length~GC',self.outdir,'\n']
         )
         return cmd,fasta_stat

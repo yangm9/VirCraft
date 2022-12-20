@@ -18,7 +18,7 @@ class AbdStat(multiCount):
             ['fasta_size_gc.py',self.fasta,'>',fasta_stat,'\n',
             'sum_abd_by_seq.py',abd,self.outdir,'\n',
             'linkTab.py',fasta_stat,sum_abd,'left Contig',sum_len_abd,'\n',
-            'variables_scatter.R',sum_len_abd,self.outdir,'\n']
+            'variables_scatter.R',sum_len_abd,'',self.outdir,'\n']
         )
         return cmd
     def taxaAbd(self,abd:str,taxa_anno:str):
