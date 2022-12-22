@@ -53,6 +53,8 @@ class Reads(VirCfg):
     envs=general.selectENV('VirCraft')
     def __init__(self,fq1='',fq2='',outdir='',*args,**kwargs):
         super().__init__()
+        fq1=os.path.abspath(fq1)
+        fq2=os.path.abspath(fq2)
         self.fastqs=[fq1,fq2]
         self.basename_fq1=os.path.basename(self.fastqs[0])
         self.basename_fq2=os.path.basename(self.fastqs[1])
