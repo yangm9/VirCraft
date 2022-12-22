@@ -3,7 +3,7 @@
 import os
 import sys
 from ..general import cmdExec,general
-from ..dataqc.fastqc import Reads,Seq
+from ..config.config import Reads,Seq
 
 class Assembly(Reads):
     '''
