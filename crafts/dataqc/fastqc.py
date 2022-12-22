@@ -9,8 +9,8 @@ class QualCtrl(Reads):
         super().__init__(fq1,fq2,outdir,*args,**kwargs)
     def filtReads(self,process):
         wkdir=f'{self.outdir}/fastp'
-        out_fq1=f'{wkdir}/{self.basename_fq1}'
-        out_fq2=f'{wkdir}/{self.basename_fq2}'
+        out_fq1=f'{wkdir}/{self.basename_fq1}'.replace('.gz','')
+        out_fq2=f'{wkdir}/{self.basename_fq2}'.replace('.gz','')
         filt_rpts=f'{wkdir}/{self.samp}_report.html'
         out_fq_list=f'{wkdir}/{self.samp}_list.txt'
         general.mkdir(wkdir)
