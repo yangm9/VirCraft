@@ -42,9 +42,7 @@ class Assembly(Reads):
         input_para=''
         other_paras=''
         wkdir=f'{self.outdir}/megahit'
-        general.mkdir(wkdir)
-        tmpdir=f'{wkdir}/megahit.tmp'
-        general.mkdir(tmpdir)
+        tmpdir=f'{self.outdir}/megahit.tmp'
         if len(fastqs)==1:
             input_para=f'-r {fastqs[0]}'
         elif len(fastqs)==2:
@@ -52,7 +50,7 @@ class Assembly(Reads):
             other_paras='--continue'
         else:
             pass
-        cmd=['megahit',input_para,'-o',self.outdir,
+        cmd=['megahit',input_para,'-o',wkdir,
             '-t',self.threads,'-m','80000000000',
             '--tmp-dir',tmpdir,other_paras,'\n']
         scaf=f'{wkdir}/final.contigs.fa'
