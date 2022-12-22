@@ -57,9 +57,16 @@ class Reads(VirCfg):
         self.basename_fq1=os.path.basename(self.fastqs[0])
         self.basename_fq2=os.path.basename(self.fastqs[1])
         self.outdir=os.path.abspath(outdir)
-        self.samp=self.basename_fq1.replace('_1.fastq','')
-        self.samp=self.samp.replace('_1.fq','')
+        self.samp=self.getSampName
         general.mkdir(self.outdir)
+    @property
+    def getSampName(self):
+        samp=''
+        postfixes=['_1.fastq.gz','_1.fastq','_1.fq','_1.fq.gz']
+        for post in postfixes:
+            if self.basename_fq1.endswith(post):
+                samp=self.basename_fq1.replace(postfixes,'')
+        return samp
 
 class Seq(VirCfg):
     '''

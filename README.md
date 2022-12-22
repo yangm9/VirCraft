@@ -11,17 +11,29 @@ VirCraft is an automatic virus analysis pipeline.
 
 ## 6 版本更新日志
 
-**VirCraft-v0.0.1**
+
+**VirCraft-v0.0.1版**
 ```
-未完成的初始版本。
+初始版本。
 ```
 
-**VirCraft-v0.0.2**
+**VirCraft-v0.0.2版**
+```
+初始版本。
+```
+
+**VirCraft-v0.0.3版**
 ```
 尝试多路分析失败的版本。
 ```
-**VirCraft-v0.0.3**
+
+**VirCraft-v0.0.4版**
 ```
-暂时不支持多线程的版本。
-Scatter暂时不上。
+1.暂时不支持多线程的版本。
+2.quantify模块完成，包括统计多样性分析、散点图、柱状图等。
+3.大势所趋，用import argparse代替from optparse import OptionParser。
+```
+
+**VirCraft-v0.0.5版**
+```
 ```
