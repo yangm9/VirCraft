@@ -3,7 +3,7 @@
 import os
 import sys
 from ..general import cmdExec,general
-from ..dataqc.fastqc import Reads 
+from ..dataqc.fastqc import Reads,Seq
 
 class Assembly(Reads):
     '''
@@ -114,7 +114,9 @@ class Assembly(Reads):
         tmp_cmd,scaf=self.mixAsse(self.fastqs,process)
         cmd.extend(tmp_cmd)
         cmd.extend(self.statFilt(scaf,cutoff))
-        cmd.extend(self.sizeGC())
+        FastA=Seq(scaf,self.outdir)
+        tmp_cmd,__=FastA.sizeGC()
+        cmd.extend(tmp_cmd)
         shell=f'{self.outdir}/{self.samp}_assembly.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
