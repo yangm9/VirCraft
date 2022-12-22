@@ -65,7 +65,7 @@ class Reads(VirCfg):
         postfixes=['_1.fastq.gz','_1.fastq','_1.fq','_1.fq.gz']
         for post in postfixes:
             if self.basename_fq1.endswith(post):
-                samp=self.basename_fq1.replace(postfixes,'')
+                samp=self.basename_fq1.replace(post,'')
         return samp
 
 class Seq(VirCfg):
