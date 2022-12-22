@@ -55,9 +55,11 @@ class QualCtrl(Reads):
         if 'c' in process:
             tmp_cmd,fastqs=self.decontaminate(fastqs[0],fastqs[1])
             cmd.extend(tmp_cmd)
+        lnk_fq1=os.path.basename(fastqs[0])
+        lnk_fq2=os.path.basename(fastqs[1])
         cmd.extend(
-            [f'ln -s {fastqs[0]} {self.outdir}/{self.basename_fq1}\n',
-            f'ln -s {fastqs[1]} {self.outdir}/{self.basename_fq2}\n']
+            [f'ln -s {fastqs[0]} {self.outdir}/{lnk_fq1}\n',
+            f'ln -s {fastqs[1]} {self.outdir}/{lnk_fq2}\n']
         )
         shell=f'{self.outdir}/{self.samp}_readsqc.sh'
         general.printSH(shell,cmd)
