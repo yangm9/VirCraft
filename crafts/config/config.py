@@ -51,6 +51,11 @@ class Reads(VirCfg):
     FastQ processing class.
     '''
     envs=general.selectENV('VirCraft')
+    postfixes=[
+        '_1.fastq','_1.fastq.gz','_1.fq','_1.fq.gz',
+        '_R1.fastq','_R1.fastq.gz','_R1.fq','_R1.fq.gz',
+        '.R1.fastq','.R1.fastq.gz','.R1.fq','.R1.fq.gz'
+    ]
     def __init__(self,fq1='',fq2='',outdir='',*args,**kwargs):
         super().__init__()
         fq1=os.path.abspath(fq1)
@@ -64,8 +69,7 @@ class Reads(VirCfg):
     @property
     def getSampName(self):
         samp=''
-        postfixes=['_1.fastq.gz','_1.fastq','_1.fq','_1.fq.gz']
-        for post in postfixes:
+        for post in self.postfixes:
             if self.basename_fq1.endswith(post):
                 samp=self.basename_fq1.replace(post,'')
         return samp
