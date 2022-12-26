@@ -25,7 +25,7 @@ class AbdStat(multiCount):
             ['sum_abd_by_seq.py',abd,sum_abd,'\n',
             "sed -i '1s/contig_id/Contig/'",votu_qual,'\n',
             'linkTab.py',sum_abd,votu_qual,'left Contig',sum_qual,'\n',
-            'variables_scatter.R',sum_qual,'Total_Abundance~contig_length~checkv_quality',self.outdir,'\n']
+            'variables_scatter.R',sum_qual,'contig_length~Total_Abundance~checkv_quality',self.outdir,'\n']
         )
         return cmd
     def taxaAbd(self,abd:str,taxa_anno=None):
