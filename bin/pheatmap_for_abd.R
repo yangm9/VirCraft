@@ -31,6 +31,7 @@ if('Source' %in% colnames(df)){
 }else{
     annotation_row<-NA
 }
+
 df<-subset(df,select=SampNames)
 rownames(annotation_col)=names(df)
 
