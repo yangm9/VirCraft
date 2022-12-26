@@ -2,9 +2,8 @@
 use strict;
 use FindBin '$Bin';
 #此脚本用于合并所有样本中coverm生成的tpm
-#用法：perl linkTab.py <sample.list>
 
-unless(@ARGV==3){
+unless(@ARGV>2){
     print STDERR "Usage: $0 <sample_list_file> <count_dir> <postfix>\n";
     exit 0;
 }
@@ -21,6 +20,7 @@ while(<IN>){
     chomp;
     my $samp_name=(split /\t/,$_)[0];
     unless($n==1){
+        #print "$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left Contig $wkdir/${samps_prefix}${samp_name}.$postfix\n";
         `$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left Contig $wkdir/${samps_prefix}${samp_name}.$postfix`;
     }
     $samps_prefix.=$samp_name;
