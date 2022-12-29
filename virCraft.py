@@ -83,6 +83,8 @@ elif sys.argv[1]=='classify':
     )
     Taxa.Classify()
     print('Contigs classification completed!!!')
+elif sys.argv[1]=='comparison':
+    
 elif sys.argv[1]=='host_prid':
     print('Host prediction')
     #Hosts=
