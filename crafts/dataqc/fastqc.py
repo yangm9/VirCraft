@@ -46,9 +46,10 @@ class QualCtrl(Reads):
         return cmd,fastqs
     def readqc(self,process='fuc'):
         cmd=[self.envs]
-        fastqs=[]
-        tmp_cmd,fastqs,fq_list=self.filtReads(process)
-        cmd.extend(tmp_cmd)
+        fastqs=self.fastqs
+        if 'f' in process:
+            tmp_cmd,fastqs,fq_list=self.filtReads(process)
+            cmd.extend(tmp_cmd)
         if 'u' in process:
             tmp_cmd,fastqs=self.fastUniq(fq_list)
             cmd.extend(tmp_cmd)
