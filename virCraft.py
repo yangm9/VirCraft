@@ -9,8 +9,9 @@ from crafts.assembly import assembly
 from crafts.identify import viridsop
 from crafts.config import arguments
 from crafts.votus import votus
-from crafts.classify import classify,vCont
-from crafts.quantify import multiQuant,quantStat
+from crafts.classify import classify
+from crafts.compare import vCont
+from crafts.quantify import quantStat
 from crafts.func_annot import geneAnnot
 
 version='0.0.4'
@@ -83,8 +84,13 @@ elif sys.argv[1]=='classify':
     )
     Taxa.Classify()
     print('Contigs classification completed!!!')
-elif sys.argv[1]=='comparison':
-    
+elif sys.argv[1]=='compare':
+    NWK=vCont.EnviComp(
+        orfs=args.fasta,
+        outdir=args.outdir,
+        threads=args.threads
+    ) #network
+    NWK
 elif sys.argv[1]=='host_prid':
     print('Host prediction')
     #Hosts=

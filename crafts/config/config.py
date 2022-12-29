@@ -104,3 +104,8 @@ class Seq(VirCfg):
             'variables_scatter.R',fasta_stat,'Length~GC',self.outdir,'\n']
         )
         return cmd,fasta_stat
+
+class ORF(Seq):
+    def __init__(self,orfs='',outdir='',*args,**kwargs):
+        super().__init__(orfs,outdir,*args,**kwargs)
+        self.orfs=self.fasta
