@@ -10,26 +10,12 @@ class GeneFunc(Seq):
     def __init__(self,fasta='',outdir='',threads=8):
         super().__init__(fasta,outdir)
         self.threads=str(threads)
-    def genePred(self):
-        wkdir=f'{self.outdir}/0.prodigal'
-        general.mkdir(wkdir)
-        temp_orfs_faa=f'{wkdir}/temp.orfs.faa'
-        orfs_faa=f'{wkdir}/{self.name}_votus.faa'
-        orfs_ffn=f'{wkdir}/{self.name}_votus.ffn'
-        temp_orfs_ffn=f'{wkdir}/temp.orfs.ffn'
-        temp_txt=f'{wkdir}/temp.txt'
-        cmd=['prodigal','-i',self.fasta,'-a',temp_orfs_faa,
-            '-d',temp_orfs_ffn,'-m','-o',temp_txt,'-p meta -q\n',
-            'cut -f 1 -d \" \"',temp_orfs_faa,'>',orfs_faa,'\n',
-            'cut -f 1 -d \" \"',temp_orfs_ffn,'>',orfs_ffn,'\n',
-            f'rm -f {wkdir}/temp.*\n']
-        return cmd,orfs_faa
     def eggnogAnno(self,orfs_faa):
-        wkdir=f'{self.outdir}/1.eggnog'
+        wkdir=f'{self.outdir}/eggnog'
         general.mkdir(wkdir)
-        anno_prefix=f'{wkdir}/all_votus'
+        anno_prefix=f'{wkdir}/{self.name}'
         seed_orth=f'{anno_prefix}.emapper.seed_orthologs'
-        eggout=f'{wkdir}/eggout'
+        eggout=f'{wkdir}/{self.name}_eggout'
         eggnog_db=self.confDict['EggNOGDB']
         cmd=['emapper.py -m diamond --no_annot --no_file_comments',
             '--cpu',self.threads,'-i',orfs_faa,
@@ -39,13 +25,13 @@ class GeneFunc(Seq):
             '--data_dir',eggnog_db,'--override\n']
         return cmd
     def keggAnno(self,orfs_faa):
-        wkdir=f'{self.outdir}/2.kegg'
+        wkdir=f'{self.outdir}/kegg'
         general.mkdir(wkdir)
         kegg_db=self.confDict['KofamscanDB']
         ko_prof=f'{kegg_db}/profiles'
         ko_list=f'{kegg_db}/ko_list'
-        exec_anno=f'{wkdir}/all_votus.exec_annotation.xls'
-        exec_anno_detail=f'{exec_anno}.detail.xls'
+        exec_anno=f'{wkdir}/{self.name}.exec_annotation.xls'
+        exec_anno_detail=f'{wkdir}/{self.name}.exec_annotation.detail.xls'
         cmd=['exec_annotation -f mapper','--cpu',self.threads,
             '-p',ko_prof,'-k',ko_list,'-o',exec_anno,orfs_faa,'\n',
             'exec_annotation -f detail','--cpu',self.threads,

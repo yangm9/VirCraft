@@ -11,7 +11,7 @@ from crafts.config import arguments
 from crafts.votus import votus
 from crafts.classify import classify
 from crafts.compare import vCont
-from crafts.quantify import quantStat
+from crafts.quantify import virQuantStat
 from crafts.func_annot import geneAnnot
 
 version='0.0.4'
@@ -56,9 +56,9 @@ elif sys.argv[1]=='votus':
     )
     vOTUs.RmDup()
     print('vOTU cluster completed!!!')
-elif sys.argv[1]=='quantify':
+elif sys.argv[1]=='vir_quant':
     print('Viral abundance and diversity analysis')
-    VirQuant=quantStat.AbdStat(
+    VirQuant=virQuantStat.VirAbdStat(
         samp_info=args.samp_info,
         fasta=args.fasta,
         outdir=args.outdir,

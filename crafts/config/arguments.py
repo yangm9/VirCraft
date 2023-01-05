@@ -67,7 +67,7 @@ def setOpts(name:str,subcmds:str,version:str):
     subpsr=addGlbArg(subpsr)
     
     subpsr=subparsers.add_parser(
-        'quantify',
+        'vir_quant',
         help='Calculate the abundance and diversity of each microbial community'
     )
     #subpsr=addAllFqArg(subpsr)

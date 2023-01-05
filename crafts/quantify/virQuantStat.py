@@ -1,8 +1,8 @@
-from .multiQuant import multiCount
+from .multiQuant import multiVirCount
 from ..general import cmdExec,general
 from ..identify.viridsop import VirScan
 
-class AbdStat(multiCount):
+class VirAbdStat(multiVirCount):
     def __init__(self,samp_info='',fasta='',outdir='',threads=8):
         super().__init__(samp_info,fasta,outdir,threads)
     def mergeAbd(self): #Heatmap for contigs abundance
@@ -36,8 +36,7 @@ class AbdStat(multiCount):
         m_abd_taxa=f'{self.outdir}/all_sum_abd_taxa.m.xls'
         ctg_taxa_abd=f'{self.outdir}/all_ctg_abd_taxa.xls'
         taxa_sum_abd=f'{self.outdir}/all_taxa_sum_abd.xls'
-        cmd=[
-            'echo "Heatmap for abundance"\n',
+        cmd=['echo "Heatmap for abundance"\n',
             "sed '1s/Sequence_ID/Contig/'",taxa_anno,'>',m_taxa_anno,'\n',
             'linkTab.py',abd,m_taxa_anno,'left Contig',abd_taxa,'\n',
             "sed '1s/Order/Source/'",abd_taxa,'>',m_abd_taxa,'\n',
@@ -45,19 +44,16 @@ class AbdStat(multiCount):
             'echo "Barplot for abundance by taxa"\n',
             'taxa_annot_abd.py',abd_taxa,ctg_taxa_abd,'\n',
             'sum_abd_by_taxa.py',ctg_taxa_abd,self.outdir,'\n',
-            'barplot_for_taxa_tpm.R',taxa_sum_abd,self.outdir,'\n'
-        ]
+            'barplot_for_taxa_tpm.R',taxa_sum_abd,self.outdir,'\n']
         return cmd
     def diversity(self,abd:str):
         alpha_diversity=f'{self.outdir}/alpha_diversity.xls'
-        cmd=[
-            'echo "Alpha and Beta Diversity"\n',
+        cmd=['echo "Alpha and Beta Diversity"\n',
             'alpha_diversity.R',abd,alpha_diversity,'\n',
-            'NMDS.R',abd,self.samp_info,self.outdir,'\n'
-        ]
+            'NMDS.R',abd,self.samp_info,self.outdir,'\n']
         return cmd
     def QuantStat(self,taxa_anno=None,checkv_dir=None):
-        self.countBySamp()
+        self.virCountBySamp()
         cmd=[self.envs]
         tmp_cmd,abd=self.mergeAbd()
         cmd.extend(tmp_cmd)

@@ -13,7 +13,9 @@ class EnviComp(ORF):
     def __init__(self,orfs='',outdir='',threads=8):
         super().__init__(orfs,outdir,threads)
         self.envs=general.selectENV('vContact2')
-    def compSeq(self):
+    def prodigal(self):
+        return 0
+    def vContact(self):
         cmd=[self.envs]
         wkdir=f'{self.outdir}/vContact2'
         general.mkdir(wkdir)
@@ -31,3 +33,4 @@ class EnviComp(ORF):
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
         return results
+#    def compSeq(self):

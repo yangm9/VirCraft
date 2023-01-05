@@ -104,8 +104,35 @@ class Seq(VirCfg):
             'variables_scatter.R',fasta_stat,'Length~GC',self.outdir,'\n']
         )
         return cmd,fasta_stat
+    def genePred(self):
+        cmd=[self.envs]
+        wkdir=f'{self.outdir}/prodigal'
+        general.mkdir(wkdir)
+        temp_orfs_faa=f'{wkdir}/temp.orfs.faa'
+        orfs_ffn=f'{wkdir}/{self.name}_votus.ffn'
+        orfs_faa=f'{wkdir}/{self.name}_votus.faa'
+        temp_orfs_ffn=f'{wkdir}/temp.orfs.ffn'
+        temp_txt=f'{wkdir}/temp.txt'
+        cmd=['prodigal','-i',self.fasta,'-a',temp_orfs_faa,
+            '-d',temp_orfs_ffn,'-m','-o',temp_txt,'-p meta -q\n',
+            'cut -f 1 -d \" \"',temp_orfs_faa,'>',orfs_faa,'\n',
+            'cut -f 1 -d \" \"',temp_orfs_ffn,'>',orfs_ffn,'\n',
+            f'rm -f {wkdir}/temp.*\n']
+        return cmd,orfs_faa
 
 class ORF(Seq):
     def __init__(self,orfs='',outdir='',*args,**kwargs):
         super().__init__(orfs,outdir,*args,**kwargs)
         self.orfs=self.fasta
+    @property
+    def mkSalmonIdx(self):
+        cmd=[self.envs]
+        idx=f'{self.outdir}/SalmonIdx' # A directory
+        general.mkdir(wkdir)
+        cmd.extend(
+            ['salmon index','-p 9 -k 31','-t',self.orfs,'-i',wkdir,'\n']
+        )
+        shell=f'{self.outdir}/{self.name}_salmonidx.sh'
+        general.printSH(shell,cmd)
+        results=cmdExec.execute(cmd)
+        return idx,results

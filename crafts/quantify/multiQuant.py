@@ -3,52 +3,38 @@ from ..general import cmdExec,general
 from .alnQuant import VirCount
 from ..config.config import Seq
 
-class multiCount(Seq):
+class multiVirCount(Seq):
     def __init__(self,samp_info='',fasta='',outdir='',threads=8):
         super().__init__(fasta,outdir)
         self.samp_info=os.path.abspath(samp_info)
         self.groups,self.sampDict=self.readSampInfo(self.samp_info)
         self.threads=str(threads)
-    def countBySamp(self):
+    def virCountBySamp(self):
         bwa_idx,_=self.mkBwaIdx
         results=''
         for samp in self.sampDict.keys():
             cmd=[self.envs]
             fq1,fq2=self.sampDict[samp][1].split(',')
             Count=VirCount(fq1,fq2,self.outdir,self.threads)
-            cmd.extend(Count.aln(samp,bwa_idx))
+            cmd.extend(Count.bwa(samp,bwa_idx))
             cmd.extend(Count.coverm(samp))
-            shell=f'{self.outdir}/{samp}_count.sh'
+            shell=f'{self.outdir}/{samp}_viral_count.sh'
             general.printSH(shell,cmd)
             results+=cmdExec.execute(cmd)
         return results
 
-'''
-    def statPlot(self,tax_anno=None):
-        all_tpm_gc=f'{self.outdir}/all_merged_gc.tpm'
-#Scatter for contigs size (x) and abundance (y)
-
-        if tax_anno:
-            modi_tax_anno=f'{self.outdir}/DemoVir_assignments.txt'
-        all_anno_tpm=general.insLable(all_tpm,'anno')
-        all_anno_modi_tpm=general.insLable(all_tpm,'modi')
-        cmd.extend(
-            ["sed '1s/Sequence_ID/Contig/'",tax_anno,'>',modi_tax_anno,'\n',
-            'linkTab.py',all_tpm,votu_stat,'left Contig',all_tpm_gc,'\n',
-            'linkTab.py',all_tpm_gc,modi_tax_anno,'left Contig',all_anno_tpm,'\n',
-            'tpmAddSource.py',all_anno_tpm,all_anno_modi_tpm,'\n',
-            'pheatmap_for_abd.R',all_anno_modi_tpm,self.samp_info,self.outdir,'\n']
-        )
-        len_sum_tpm_qual_xls=f'{self.outdir}/contig_quality_summary.xls'
-        tax_tpm=f'{self.outdir}/tax_tpm.xls'
-        cmd.extend(
-            ['abd_by_taxa.py',all_anno_modi_tpm,self.outdir,'\n',
-            'barplot_for_taxa_tpm.R',tax_tpm,self.outdir,'\n',
-            'NMDS.R',all_anno_modi_tpm,self.samp_info,self.outdir,'\n']
-        )
-        shell=f'{self.outdir}/stat_plot.sh'
-        print(cmd)
-        general.printSH(shell,cmd)
-        results=cmdExec.execute(cmd)
+class multiGeneCount(multiVirCount):
+    def __init__(self,samp_info='',fasta='',outdir='',threads=8):
+        super().__init__(samp_info,fasta,outdir,threads)
+    def geneCountBySamp(self):
+        salmon_idx,_=self.mkSalmonIdx
+        results=''
+        for samp in self.sampDict.keys():
+            cmd=[self.envs]
+            fq1,fq2=self.sampDict[samp][1].split(',')
+            Count=GeneCount(fq1,fq2,self.outdir,self.threads)
+            cmd.extend(Count.salmon(samp,salmon_idx))
+            shell=f'{self.outdir}/{samp}_gene_count.sh'
+            general.printSH(shell,cmd)
+            results+=cmdExec.execute(cmd)
         return results
-'''
