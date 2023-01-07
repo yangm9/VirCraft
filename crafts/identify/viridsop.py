@@ -38,12 +38,10 @@ class VirScan(Seq):
         vs2_fa=f'{indir}/for-dramv/final-viral-combined-for-dramv.fa'
         vs2_tab=f'{indir}/for-dramv/viral-affi-contigs-for-dramv.tab'
         wkdir=f'{self.outdir}/dramv-annotate'
-        general.mkdir(wkdir)
         cmd=['DRAM-v.py annotate','-i',vs2_fa,'-v',vs2_tab,'-o',wkdir,
             '--threads',self.threads,'--skip_trnascan --min_contig_size 1000\n']
         dramv_annot=f'{wkdir}/annotations.tsv'
         wkdir=f'{self.outdir}/dramv-distill'
-        general.mkdir(wkdir)
         cmd.extend(['DRAM-v.py distill','-i',dramv_annot,'-o',wkdir,'\n'])
         return cmd
     def curate(self):
