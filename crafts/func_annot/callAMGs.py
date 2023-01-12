@@ -24,4 +24,14 @@ class AMGs(Seq):
         return cmd
     def vibrant(self):
         wkdir=f'{self.outdir}/vibrant'
+        cmd=['VIBRANT_run.py','-i',self.fasta,
+            '-t',self.threads,'-folder',wkdir,'\n']
         return cmd
+    def annotAMGs(self):
+        cmd=[self.envs]
+        cmd.extend(self.dramv())
+        cmd.extend(self.vibrant())
+        shell=f'{self.outdir}/{self.name}_call_amgs.sh'
+        general.printSH(shell,cmd)
+        results=cmdExec.execute(cmd)
+        return results

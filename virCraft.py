@@ -90,7 +90,7 @@ elif sys.argv[1]=='compare':
         outdir=args.outdir,
         threads=args.threads
     ) #network
-    NWK
+    NWK.vContact()
 elif sys.argv[1]=='host_prid':
     print('Host prediction')
     #Hosts=
