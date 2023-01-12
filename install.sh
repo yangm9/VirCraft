@@ -12,6 +12,7 @@ minced=0.4.2 trnascan-se=2.0.11 salmon=0.14.2 hmmer=3.3.2 muscle=5.1 \
 drep=3.3.1 aragorn=1.2.41 kofamscan=1.3.0 fastuniq=1.1
 conda install -c conda-forge r-base=4.2.1 r-ggplot2=3.4.0 r-vctrs=0.5.1
 pip install -r requirements.txt
+pip install Bio
 ## Install usearch
 cd ~/VirCraft/bin
 wget https://www.drive5.com/downloads/usearch11.0.667_i86linux32.gz
