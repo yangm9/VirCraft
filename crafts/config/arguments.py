@@ -122,7 +122,7 @@ def addProcArg(psr,dflt:str):
     psr.add_argument(
         '-p','--process',action='store',type=str,
         dest='process',metavar='STR',default=dflt,
-        help='Select the analysis process for a certain module\n'
+        help='Select the analysis process (f, u, and/or c) for a certain module, i.e. "-p fuc". Among these, "f" means filter, "u" means removing the duplications and get the unique reads, and "c" refers to the process of remove the contamination in a certain reference database.\n'
     )
     return psr
 
