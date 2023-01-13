@@ -13,7 +13,8 @@ drep=3.3.1 aragorn=1.2.41 kofamscan=1.3.0 fastuniq=1.1
 conda install -c conda-forge r-base=4.2.1 r-ggplot2=3.4.0 r-vctrs=0.5.1
 pip install -r requirements.txt
 pip install Bio
-pip install "scikit_learn==0.22.2.post1" #FutureWarning: The sklearn.neural_network.multilayer_perceptron module is  deprecated in version 0.22 and will be removed in version 0.24.
+#pip install "scikit_learn==0.22.2.post1" #FutureWarning: The sklearn.neural_network.multilayer_perceptron module is  deprecated in version 0.22 and will be removed in version 0.24.
+pip install --upgrade scikit-learn==0.21.3
 ## Install usearch
 cd ~/VirCraft/bin
 wget https://www.drive5.com/downloads/usearch11.0.667_i86linux32.gz

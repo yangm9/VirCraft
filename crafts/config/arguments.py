@@ -98,7 +98,7 @@ def setOpts(name:str,subcmds:str,version:str):
     
     subpsr=subparsers.add_parser(
         'host_prid',
-        help='Predict the hosts of virus'
+        help='Predict the hosts of virus.'
     )
     subpsr=addGlbArg(subpsr)
     
@@ -109,12 +109,12 @@ def addGlbArg(psr): #Add global arguments
     psr.add_argument(
         '-t','--threads',action='store',type=str,
         dest='threads',metavar='INT',default=8,
-        help='Num processes/threads to use\n'
+        help='Number of processes/threads to use'
     )
     psr.add_argument(
         '-o','--outdir',action='store',type=str,
         dest='outdir',metavar='STR',default=False,
-        required=True,help='Output direcortory\n'
+        required=True,help='Output directory'
     )
     return psr
 
@@ -122,7 +122,7 @@ def addProcArg(psr,dflt:str):
     psr.add_argument(
         '-p','--process',action='store',type=str,
         dest='process',metavar='STR',default=dflt,
-        help='Select the analysis process (f, u, and/or c) for a certain module, i.e. "-p fuc". Among these, "f" means filter, "u" means removing the duplications and get the unique reads, and "c" refers to the process of remove the contamination in a certain reference database.\n'
+        help='Select the optional analysis process (f, u, and/or c) for a certain module, i.e. "-p fuc". Among these, "f" means filter, "u" means removing the duplications and get the unique reads, and "c" refers to the process of remove the contamination from a customized reference database'
     )
     return psr
 
@@ -148,10 +148,9 @@ def addAllFqArg(psr):
     return psr
 
 def addFaArg(psr):
-    Help='A vOTUs FastA file'
     psr.add_argument(
         '-a','--fasta',action='store',type=str,
         dest='fasta',metavar='STR',default=False,
-        help=Help
+        help='The absolute/relative path of a vOTUs FastA file'
     )
     return psr
