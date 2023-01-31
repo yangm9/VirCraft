@@ -2,10 +2,12 @@
 import sys
 import pandas as pd
 from db import suspGenes
-#https://www.protocols.io/view/viral-sequence-identification-sop-with-virsorter2-5qpvoyqebg4o/v3?step=4
+
+#Reference DOI: dx.doi.org/10.17504/protocols.io.bwm5pc86
 
 def curateV(VirSort2_f,CheckV_f,annot_f):
     '''
+    Step 4: Screening based on viral and host gene counts, score, hallmark gene counts, and contig length
     Merge and Filter the contigs according to some certain criteria.
     1) Merge "vs2-pass1/final-viral-score.tsv" and "checkv/contamination.tsv".
     2) Filter the contigs by the empirical screening criteria as follows:
