@@ -31,6 +31,8 @@ def curateV(VirSort2_f,CheckV_f,annot_f):
 def markBySuspGene(keep2_df,annot_f):
     '''
     Mark the contigs with suspicious gene in dramv-annotate/annotations.tsv for the subsequent manual/semi-autometic curation.
+    DRAMv annotation screening
+    There are some genes that are common in both viruses and hosts (e.g.  Polyliposaccharides [LPS] related) and mobile element, which can cause false positives in the above "Keep2" category. Thus we want to be cautious with contigs with these genes. We have compiled a list of "suspicious" genes in this link (https://bitbucket.org/MAVERICLab/virsorter2-sop/raw/03b8f28bee979e2b7fd99d7375d915c29c938339/resource/suspicious-gene.list). You can subset the DRAMv table using contigs in the "Keep2" category, and screen for the "suspicious" genes in the subset DRAMv table (ignore case, e.g. use "-i" option for "grep"),  and then put contigs with those genes in the "Manual check" category.
     '''
     df=pd.DataFrame(pd.read_csv(annot_f,header=0,sep='\t'))
     df.rename(columns={'Unnamed: 0':'contig_id'},inplace=1)
