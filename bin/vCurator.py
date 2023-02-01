@@ -20,12 +20,12 @@ def curateV(VirSort2_f,CheckV_f,annot_f):
     df1.rename(columns={'seqname':'contig_id'},inplace=1)
     df2=pd.DataFrame(pd.read_csv(CheckV_f,header=0,sep='\t'))
     df=pd.merge(df1,df2,how='left',on='contig_id')
-    FiltDF=df[(df['viral_genes']>0)]
+    FiltDF=df[(df['viral_genes']>0)] #Get Keep1
     Keep2DF=df[(df['viral_genes']==0)&((df['host_genes']==0)|(df['max_score']>=0.95)|(df['hallmark']>2))]
-    Keep2DF,ManuDF=markBySuspGene(Keep2DF,annot_f)
-    FiltDF=FiltDF.append(Keep2DF)
+    Keep2DF,ManuDF=markBySuspGene(Keep2DF,annot_f) #keep2
+    FiltDF=FiltDF.append(Keep2DF) 
     RestDF=df[~df.index.isin(FiltDF.index.tolist())]
-    FiltDF=FiltDF.append(RestDF[(RestDF['viral_genes']==0)&(RestDF['host_genes']==1)&(RestDF['length']>10000)])
+    ManuDF=ManuDF.append(RestDF[(RestDF['viral_genes']==0)&(RestDF['host_genes']==1)&(RestDF['length']>10000)])
     return FiltDF,ManuDF
 
 def markBySuspGene(keep2_df,annot_f):

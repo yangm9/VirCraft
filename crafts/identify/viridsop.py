@@ -66,7 +66,7 @@ class VirScan(Seq):
         cmd.extend(
             ['cut -f 1',curated_contigs_xls,
             '|grep -v "contig_id" >',contig_id_list,'\n',
-            "sed 's/_1 / /'",combined_fna,'>',combined_modi_fna,'\n',
+            "sed 's/_[12] / /'",combined_fna,'>',combined_modi_fna,'\n',
             'extrSeqByName.pl',contig_id_list,combined_modi_fna,
             virus_posi_fna,'\n']
         )
