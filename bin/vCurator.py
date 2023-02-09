@@ -42,7 +42,7 @@ def markBySuspGene(keep2_df,annot_f):
         tmpList=SuspDF['contig_id'].apply(lambda x:x.split('-')[0].replace('__','||')).tolist()
         ContigList.extend(tmpList)
     ContigList=list(set(ContigList))
-    print(ContigList)
+    #print(ContigList)
     ManuDF=keep2_df[keep2_df['contig_id'].isin(ContigList)]
     keep2_df=keep2_df[~keep2_df['contig_id'].isin(ContigList)]
     return keep2_df,ManuDF
