@@ -24,7 +24,7 @@ def selectENV(env:str):
     conda_path=isInstalled('conda')
     conda_abs_dir=os.path.dirname(os.path.abspath(conda_path))
     if conda_path:
-        return f'export "PATH={bin_dir}:{conda_abs_dir}:$PATH"\nconda activate {env}\n'
+        return f'export PATH="{bin_dir}:{conda_abs_dir}:$PATH"\nconda activate {env}\n'
     else:
         return 'Error!!!'
 
