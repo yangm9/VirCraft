@@ -47,7 +47,7 @@ def markBySuspGene(keep2_df,anno_f):
     keep2_df=keep2_df[~keep2_df['contig_id'].isin(ContigList)]
     return keep2_df,ManuDF
 
-def manuAnno(manu_f,anno_f):
+def filtAnnoForManu(manu_f,anno_f):
     ManuDF=pd.read_csv(manu_f,header=0,sep='\t')
     AnnoDF=pd.read_csv(anno_f,header=0,sep='\t')
     AnnoDF.rename(columns={'Unnamed: 0':'gene_id'},inplace=1)
@@ -66,6 +66,6 @@ if __name__=='__main__':
     manu_curate_f=wkdir+'/curation/manu_curate_contigs.xls'
     AutoDF.to_csv(autu_curated_f,index=False,sep='\t')
     ManuDF.to_csv(manu_curate_f,index=False,sep='\t')
-    ManuAnnoDF=manuAnno(manu_curate_f,anno_f)
+    ManuAnnoDF=filtAnnoForManu(manu_curate_f,anno_f)
     manu_anno_f=wkdir+'/curation/manu_curate_anno.xls'
     ManuAnnoDF.to_csv(manu_anno_f,index=False,sep='\t')
