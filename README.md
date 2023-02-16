@@ -41,5 +41,5 @@ VirCraft is an automatic virus analysis pipeline.
 
 **VirCraft-v0.0.6版**
 ```
-手动curation的自动化
+手动curation部分的自动化
 ```
