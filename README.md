@@ -37,4 +37,5 @@ VirCraft is an automatic virus analysis pipeline.
 **VirCraft-v0.0.5版**
 ```
 1.添加AMGs分析，暂定用dramv和vibrant分析，尚未整合。
+2.手动curation进行自动化。
 ```
