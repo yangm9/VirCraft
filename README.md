@@ -1,7 +1,8 @@
 # VirCraft
-VirCraft is an automatic virus analysis pipeline.
+VirCraft is an automatic viromic analysis pipeline.
 
 ## 1 软件结构
+[Overall workflow of VirCraft](docs/Overall_workflow_of_VirCraft.png)
 
 ## 2 安装和使用教程
 
@@ -41,6 +42,7 @@ VirCraft is an automatic virus analysis pipeline.
 
 **VirCraft-v0.0.6版**
 ```
-1.手动curation部分的自动化
-2.整合compare结果和classify结果
+1.手动curation部分的自动化。
+2.整合compare结果和classify结果。
+3.完善host_pred模块。
 ```
