@@ -65,7 +65,7 @@ def calcAnno(ctg_anno_df):
     }
     row_num=ctg_anno_df.shape[0]
     for i in range(row_num):
-        SubSeries=ContigAnnoDF.iloc[i,AnnoDbIdx].fillna(0)
+        SubSeries=ctg_anno_df.iloc[i,AnnoDbIdx].fillna(0)
         if SubSeries.any():
             ContigInfo['anno']+=1
             if SubSeries['viral_id']:
@@ -92,14 +92,17 @@ def manuCurate(manu_f,anno_f):
     '''
     The classification of viral curation includes Positive (P), Likely Positive(LP), Virus of Uncertain Significance (VUS), Likely Negative (LN) and Negative (N). 
     '''
-    ManuList,ManuDF,ManuAnnoDF=filtAnnoForManu(manu_f,anno_f):
+    ManuList,ManuDF,ManuAnnoDF=filtAnnoForManu(manu_f,anno_f)
     manu_anno_f=wkdir+'/curation/manu_curate_anno.xls'
     ManuAnnoDF.to_csv(manu_anno_f,index=False,sep='\t')
+    ManuDF.set_index('contig_id',inplace=True)
+    ManuDF['curation']=''
     for contig in ManuList:
         ContigAnnoDF=ManuAnnoDF[ManuAnnoDF['contig_id']==contig]
         ContigInfo=calcAnno(ContigAnnoDF)
         judge=contigCurate(ContigInfo)
         ManuDF.loc[contig,'curation']=judge
+    ManuDF.reset_index(inplace=True)
     return ManuDF
 
 if __name__=='__main__':
@@ -114,6 +117,7 @@ if __name__=='__main__':
     ManuDF.to_csv(manu_curate_f,index=False,sep='\t')
     CuratedDF=manuCurate(manu_curate_f,anno_f)
     manu_curated_f=wkdir+'/curation/manu_curated_contigs.xls'
+    CuratedDF.to_csv(manu_curated_f,index=False,sep='\t')
 
 '''
     Step 5: Manual curation
