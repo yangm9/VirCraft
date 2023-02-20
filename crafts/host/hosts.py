@@ -1,6 +1,7 @@
 import os
 import sys
-from ..general import cmdExec,general
+from ..general import general
+from ..general import cmdExec
 from ..votus.votus import VirRef
 
 class VirHost(VirRef):
