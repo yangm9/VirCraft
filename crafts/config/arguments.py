@@ -98,10 +98,15 @@ def setOpts(name:str,subcmds:str,version:str):
     
     subpsr=subparsers.add_parser(
         'host_prid',
-        help='Predict the hosts of virus.'
+        help='Predict the hosts of virus'
     )
+    subpsr=addFaArg(subpsr)
     subpsr=addGlbArg(subpsr)
-    
+    subpsr.add_argument(
+        '-m','--mags',action='store',type=str,
+        dest='hostsdir',metavar='STR',default=False,required=True,
+        help='A directory stored the MAGs of hosts'
+    )
     args=parser.parse_args()
     return args
 

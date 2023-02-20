@@ -12,6 +12,7 @@ from crafts.votus import votus
 from crafts.classify import classify
 from crafts.classify import vCont
 from crafts.quantify import virQuantStat
+from crafts.host import hosts
 from crafts.func_annot import geneAnnot
 
 version='0.0.4'
@@ -95,7 +96,13 @@ elif sys.argv[1]=='compare':
     print('Contigs comparasion completed!!!')
 elif sys.argv[1]=='host_prid':
     print('Host prediction')
-    #Hosts=
+    Hosts=hosts.VirHost(
+       fasta=args.fasta,
+       hostsdir=args.hostsdir,
+       outdir=args.outdir,
+       threads=args.threads
+    )
+    Hosts.PredHosts()
     print('Viral-host relationship prediction done!!!')
 else:
     ERROR=f'\nERROR: {sys.argv[1]} is not a module of VirCraft\n'
