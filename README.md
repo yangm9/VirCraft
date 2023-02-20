@@ -2,7 +2,7 @@
 VirCraft is an automatic viromic analysis pipeline.
 
 ## 1 软件结构
-[Overall workflow of VirCraft](docs/Overall_workflow_of_VirCraft.png)
+![Overall workflow of VirCraft](docs/Overall_workflow_of_VirCraft.png)
 
 ## 2 安装和使用教程
 
