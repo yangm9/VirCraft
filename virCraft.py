@@ -91,16 +91,17 @@ elif sys.argv[1]=='compare':
         orfs=args.fasta,
         outdir=args.outdir,
         threads=args.threads
+        orfprefix=args.orfprefix
     ) #network
     NWK.vContact()
     print('Contigs comparasion completed!!!')
 elif sys.argv[1]=='host_prid':
     print('Host prediction')
     Hosts=hosts.VirHost(
-       fasta=args.fasta,
-       hostsdir=args.hostsdir,
-       outdir=args.outdir,
-       threads=args.threads
+        fasta=args.fasta,
+        hostsdir=args.hostsdir,
+        outdir=args.outdir,
+        threads=args.threads
     )
     Hosts.PredHosts()
     print('Viral-host relationship prediction done!!!')
