@@ -6,6 +6,10 @@ VirCraft is an automatic viromic analysis pipeline.
 
 ## 2 安装和使用教程
 
+```
+sh install.sh
+```
+
 ## 3 结果文件说明
 
 ## 5 注意事项
