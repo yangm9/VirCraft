@@ -1,7 +1,13 @@
-wget -c https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-sh Miniconda3-latest-Linux-x86_64.sh -b
-conda init
-source ~/.bashrc
+if conda --version >/dev/null 2>&1; then
+    echo "Conda has been installed."
+else
+    echo "Now conda will be installed..."
+    wget -c https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    sh Miniconda3-latest-Linux-x86_64.sh -b
+    conda init
+    source ~/.bashrc
+    echo "The installation of conda is complete！"
+fi
 conda create -y -n VirCraft megahit -c bioconda
 conda activate VirCraft
 conda install -y -c bioconda bwa=0.7.17 blast=2.13.0 trimmomatic=0.39 \
