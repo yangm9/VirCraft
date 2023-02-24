@@ -17,9 +17,6 @@ click==8.0.3
 coloredlogs==15.0.1
 colormath==3.0.0
 commonmark==0.9.1
-conda==22.9.0
-conda-package-handling
-conda_package_streaming
 ConfigArgParse==1.5.3
 connection-pool==0.0.3
 contourpy==1.0.5
@@ -86,7 +83,6 @@ ratelimiter==1.2.0.post0
 requests
 rich==12.6.0
 rich-click==1.5.2
-ruamel-yaml-conda
 scipy==1.9.1
 seaborn==0.12.1
 selenium==4.1.0
