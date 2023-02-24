@@ -90,7 +90,7 @@ elif sys.argv[1]=='compare':
     NWK=vCont.EnviComp(
         orfs=args.fasta,
         outdir=args.outdir,
-        threads=args.threads
+        threads=args.threads,
         orfprefix=args.orfprefix
     ) #network
     NWK.vContact()
