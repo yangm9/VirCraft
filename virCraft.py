@@ -15,7 +15,7 @@ from crafts.quantify import virQuantStat
 from crafts.host import hosts
 from crafts.func_annot import geneAnnot
 
-version='0.0.4'
+version='0.0.6'
 args=arguments.setOpts(sys.argv[0],sys.argv[1],version)
 
 if sys.argv[1]=='reads_qc':
