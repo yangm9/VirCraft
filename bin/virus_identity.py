@@ -113,7 +113,7 @@ def main(
         f.writelines(result)
 
 if __name__ == '__main__':
-    if len(sys.argv)==3:
-        main(sys.argv[1],sys.argv[2])
+    if len(sys.argv)>=3:
+        main(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4])
     else:
-        print('python '+sys.argv[0]+' <scaffolds_positive_contigs.fa> <scaffolds_positive_contigs.faa>')
+        print('python '+sys.argv[0]+' <virus_contigs.fa> <virus_contigs.faa> <eggout.emapper.annotations> <output.fa>')
