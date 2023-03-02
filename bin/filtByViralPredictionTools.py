@@ -12,8 +12,7 @@ def getWtPRes(ctg_l,wtpresults_d):
         cmd='cat '+PosiCtgfile+'|sort -u'
         tmp=set(os.popen(cmd).read().split('\n'))
         WtPSet=WtPSet.intersection(tmp)
-    WtPList=list(WtPSet)
-    return WtPList
+    return WtPSet
 
 def filtViruScaf(wtpresults_d,checkv_d):
     '''
@@ -24,10 +23,8 @@ def filtViruScaf(wtpresults_d,checkv_d):
     CtgList=df['contig_id'].tolist()
     PosiCtgList=df[~((df['checkv_quality']=='Not-determined') & (df['viral_genes']==0))]['contig_id'].tolist()
     AmbiCtgList=df[(df['checkv_quality']=='Not-determined') & (df['viral_genes']==0)]['contig_id'].tolist()
-    WtPList=getWtPRes(CtgList,wtpresults_d)
-    for ctg in AmbiCtgList:
-        if ctg in WtPList:
-            PosiCtgList.append(ctg)
+    WtPSet=getWtPRes(CtgList,wtpresults_d)
+    PosiCtgList.extend(list(WtPSet.intersection(set(AmbiCtgList))))
     for ctg in PosiCtgList: print(ctg)
     return 0
 
