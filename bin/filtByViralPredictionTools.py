@@ -2,26 +2,33 @@
 import os,sys
 import pandas as pd
 
-def filtViruScaf(wtpresults_d,checkv_d):
-    "Scaffolds without a determined completeness and viral specific genes predicted by CheckV must contain viral signature using benchmarked viral prediction tools (DeepVirFinder, VirSorter, VirSorter2, MARVEL and VIBRANT) with conservative cutoff, published in standard operating procedure"
+BMVPTools=['deepvirfinder','virsorter','virsorter2','marvel','vibrant']
+ToolsNum=len(BMVPTools)
 
-    BMVPTools=['deepvirfinder','virsorter','virsorter2','marvel','vibrant']
-    posi_scaf_files=wtpresults_d+'/identified_contigs_by_tools/*.txt'
-    cmd='cat '+posi_scaf_files+'|sort -u'
-    PosiToolScafList=os.popen(cmd).read().split('\n')
-    complete_genomes_tsv=checkv_d+'/complete_genomes.tsv'
-    df=pd.read_csv(complete_genomes_tsv,sep='\t')
-    CompleteGenomeList=df['contig_id'].tolist()
-    PosiScafList=list(set(PosiToolScafList+CompleteGenomeList))
-    quality_summary_tsv=checkv_d+'/quality_summary.tsv'
-    QST=open(quality_summary_tsv)
-    head=QST.readline()
-    for line in QST:
-        items=line.strip('\n').split('\t')
-        seq_name=items[0]
-        if seq_name in PosiScafList or int(items[5])>0:
-            print(seq_name)
-    QST.close()
+def getWtPRes(ctg_l,wtpresults_d):
+    WtPSet=set(ctg_l)
+    for tool in BMVPTools:
+        PosiCtgfile=f'{wtpresults_d}/identified_contigs_by_tools/{tool}.txt'
+        cmd='cat '+PosiCtgfile+'|sort -u'
+        tmp=set(os.popen(cmd).read().split('\n'))
+        WtPSet=WtPSet.intersection(tmp)
+    WtPList=list(WtPSet)
+    return WtPList
+
+def filtViruScaf(wtpresults_d,checkv_d):
+    '''
+    Scaffolds without a determined completeness and viral specific genes predicted by CheckV must contain viral signature using benchmarked viral prediction tools (DeepVirFinder, VirSorter, VirSorter2, MARVEL and VIBRANT) with conservative cutoff, published in standard operating procedure.
+    '''
+    checkv_qual_file=f'{checkv_d}/quality_summary.tsv'
+    df=pd.read_csv(checkv_qual_file,sep='\t')
+    CtgList=df['contig_id'].tolist()
+    PosiCtgList=df[~((df['checkv_quality']=='Not-determined') & (df['viral_genes']==0))]['contig_id'].tolist()
+    AmbiCtgList=df[(df['checkv_quality']=='Not-determined') & (df['viral_genes']==0)]['contig_id'].tolist()
+    WtPList=getWtPRes(CtgList,wtpresults_d)
+    for ctg in AmbiCtgList:
+        if ctg in WtPList:
+            PosiCtgList.append(ctg)
+    for ctg in PosiCtgList: print(ctg)
     return 0
 
 if __name__=='__main__':
