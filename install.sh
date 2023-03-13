@@ -12,9 +12,10 @@ fi
 conda create -y -n VirCraft megahit -c bioconda
 conda activate VirCraft
 conda install -y -c bioconda diamond=2.0.14 #dimond must be thisversion.
+conda install -y -c bioconda spades=3.15.4 #dimond must be thisversion.
 conda install -y -c bioconda bwa=0.7.17 blast=2.13.0 trimmomatic=0.39 \
-prodigal=2.6.3 spades=3.15.4 fastp=0.23.2 sortmerna=4.3.4 bowtie2=2.4.4 \
-virsorter=2.2.3 checkv=0.8.1 dram=1.3.5 cd-hit=4.8.1 eggnog-mapper=2.1.7 \
+prodigal=2.6.3 fastp=0.23.2 sortmerna=4.3.4 bowtie2=2.4.4 virsorter=2.2.3 \
+checkv=0.8.1 dram=1.3.5 cd-hit=4.8.1 eggnog-mapper=2.1.7 \
 vibrant=1.2.1 iqtree=2.2.0.3 coverm=0.6.1 crass=1.0.1 \
 minced=0.4.2 trnascan-se=2.0.11 salmon=0.14.2 hmmer=3.3.2 muscle=5.1 \
 drep=3.3.1 aragorn=1.2.41 kofamscan=1.3.0 fastuniq=1.1
