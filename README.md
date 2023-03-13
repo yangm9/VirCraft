@@ -46,7 +46,8 @@ sh install.sh
 
 **VirCraft-v0.0.6版**
 ```
-1.手动curation部分的自动化。
-2.整合compare结果和classify结果。
-3.完善host_pred模块。
+1.classify工具的更新：增加blast aginst NCBI viral RefSeq分类部分。
+2.手动curation部分的自动化。
+3.整合compare结果和classify结果。
+4.完善host_pred模块。
 ```
