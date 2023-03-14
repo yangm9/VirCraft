@@ -1,0 +1,1 @@
+/home/yangming/VirCraft/bin/extract_name.py

@@ -14,7 +14,7 @@ contig_family = defaultdict(list)
 contig_class = defaultdict(list)
 
 ## get the dictionary of contig:[gene1,gene2...]
-#with open('/data_backup/zhouyl/Project/1.Mariana/3.virus/2.Annotation/5.checkV/tmp/CD_viral.faa','r') as f:
+# with open('/data_backup/zhouyl/Project/1.Mariana/3.virus/2.Annotation/5.checkV/tmp/CD_viral.faa','r') as f:
 with open(sys.argv[1],'r') as f:
     for i in f.readlines():
         if i.startswith('>'):
@@ -22,7 +22,8 @@ with open(sys.argv[1],'r') as f:
             contig = gene.rsplit('_',1)[0]
             contig_dict[contig].append(gene)
 
-#with open('CD_gene_taxonomy.txt','r') as f:
+## get the dictionary of contig:[class,family]
+# with open('CD_gene_taxonomy.txt','r') as f:
 with open(sys.argv[2],'r') as f:
     lastgene=''
     for i in f.readlines()[1:]:
@@ -40,7 +41,6 @@ with open(sys.argv[2],'r') as f:
 for contig in contig_dict.keys():
     gene_num = len(contig_dict[contig])
     class_rate = 0
-
     if contig in contig_family.keys():
         class_static = Counter(contig_class[contig])
         for class_level in class_static.keys():
@@ -52,7 +52,6 @@ for contig in contig_dict.keys():
             line = contig + '\tUnassigned'
     else:
         line = contig + '\tUnassigned'
-
 
     if contig in contig_family.keys():
         family_static = Counter(contig_family[contig])

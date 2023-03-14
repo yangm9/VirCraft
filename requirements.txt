@@ -5,7 +5,7 @@ attrs==21.4.0
 binaryornot==0.4.4
 bio==1.4.0
 biocode==0.10.0
-biopython==1.79
+biopython==1.81
 biothings-client==0.2.6
 Brotli==1.0.9
 brotlipy
@@ -49,7 +49,7 @@ lxml==4.9.2
 lzstring==1.0.4
 Markdown==3.4.1
 MarkupSafe==2.0.1
-matplotlib==3.6.0
+matplotlib==3.7.1
 matplotlib-venn==0.11.7
 multiqc==1.13
 mygene==3.2.2

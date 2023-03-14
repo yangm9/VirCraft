@@ -22,11 +22,13 @@ def insLable(file_name:str,label:str):
 def selectENV(env:str):
     bin_dir=os.path.abspath(sys.path[0]+'/bin')
     conda_path=isInstalled('conda')
-    conda_abs_dir=os.path.dirname(os.path.abspath(conda_path))
-    if conda_path:
-        return f'export PATH="{bin_dir}:{conda_abs_dir}:$PATH"\nconda activate {env}\n'
+    condash_path='/'.join(conda_path.split('/')[0:-2])
+    condash_path+='/etc/profile.d/conda.sh'
+    if os.path.exist(condash_path):
+        return f'. "{condash_path}"\nconda activate {env}\n'
     else:
-        return 'Error!!!'
+        conda_bin=os.path.dirname('conda_path')
+        return f'export PATH="{conda_bin}:$PATH"'
 
 def isInstalled(name:str):
     """
