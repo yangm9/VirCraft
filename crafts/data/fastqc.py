@@ -1,11 +1,12 @@
 import os
-from ..general import cmdExec,general
-from ..config.config import Reads
+from ..general import cmdExec
+from ..general import general
+from .bioseq import Reads
 
 class QualCtrl(Reads):
     "FastQ cuality control class."
     envs=general.selectENV('VirCraft')
-    def __init__(self,fq1='',fq2='',outdir='',*args,**kwargs):
+    def __init__(self,fq1='',fq2='',outdir='',threads=8,*args,**kwargs):
         super().__init__(fq1,fq2,outdir,*args,**kwargs)
     def filtReads(self,process):
         wkdir=f'{self.outdir}/fastp'
@@ -40,7 +41,7 @@ class QualCtrl(Reads):
         prefix=f'{wkdir}/{self.samp}'
         contam_db=self.confDict['ContamDB']
         general.mkdir(wkdir)
-        cmd=['bowtie2','-p 40 -N 1','-x',contam_db,
+        cmd=['bowtie2','-p',self.threads,'-N 1','-x',contam_db,
             '-l',fq1,'-2',fq2,'--un-conc',prefix,'\n']
         fastqs=[f'{prefix}_1.fq',f'{prefix}_2.fq']
         return cmd,fastqs

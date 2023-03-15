@@ -3,6 +3,7 @@ import re
 import sys
 from ..general import general
 from ..general import cmdExec
+from ..config.config import VirCfg
 
 class Reads(VirCfg):
     '''
@@ -81,18 +82,18 @@ class Seq(VirCfg):
 class VirSeq(Seq):
     def __init__(self,fasta='',outdir='',*args,**kwargs):
         super().__init__(fasta,outdir,*args,**kwargs)
-    def checkv(self,in_fa:str):
+    def checkv(self):
         cmd=[self.envs]
         wkdir=f'{self.outdir}/checkv'
         general.mkdir(wkdir)
-        cmd=['checkv','end_to_end',in_fa,wkdir,
+        cmd=['checkv','end_to_end',self.fasta,wkdir,
             '-d',self.confDict['CheckvDB'],
             '-t',self.threads,'\n']
         provir_fna=f'{wkdir}/proviruses.fna'
         vir_fna=f'{wkdir}/viruses.fna'
-        out_fa=f'{wkdir}/combined.fna'
+        merged_fa=f'{wkdir}/combined.fna'
         cmd.extend(['cat',provir_fna,vir_fna,'>',out_fa,'\n'])
-        return cmd,out_fa
+        return cmd,merged_fa
 
 class ORF(Seq):
     def __init__(self,orfs='',outdir='',*args,**kwargs):
@@ -101,7 +102,8 @@ class ORF(Seq):
     @property
     def mkSalmonIdx(self):
         cmd=[self.envs]
-        idx=f'{self.outdir}/SalmonIdx' # A directory
+        wkdir=f'{self.outdir}/salmonidx'
+        idx=f'{wkdir}/SalmonIdx' # A directory
         general.mkdir(wkdir)
         cmd.extend(
             ['salmon index','-p 9 -k 31','-t',self.orfs,'-i',wkdir,'\n']
