@@ -16,9 +16,11 @@ conda install -y -c bioconda megahit=1.2.9 spades=3.15.4
 conda install -y -c bioconda diamond=2.0.14 blast=2.13.0 #dimond must be thisversion.
 conda install -y -c bioconda bwa=0.7.17 bowtie2=2.4.4
 conda install -y -c conda-forge -c bioconda checkv=1.0.1
-conda install -y -c bioconda virsorter=2.2.3 dram=1.3.5 vibrant=1.2.1
+conda install -y -c bioconda virsorter=2.2.4 vibrant=1.2.1
 conda install -y -c bioconda prodigal=2.6.3 
-conda install -y -c bioconda eggnog-mapper=2.1.10 kofamscan=1.3.0 iqtree=2.2.0.conda install -y -c bioconda coverm=0.6.1 crass=1.0.1 minced=0.4.2 trnascan-se=2.0.11 salmon=0.14.2 hmmer=3.3.2 muscle=5.1 drep=3.3.1 aragorn=1.2.41
+conda install -y -c bioconda eggnog-mapper=2.1.10 kofamscan=1.3.0 dram=1.3.5 
+conda install -y -c bioconda iqtree=2.2.0
+conda install -y -c bioconda coverm=0.6.1 crass=1.0.1 minced=0.4.2 trnascan-se=2.0.11 salmon=0.14.2 hmmer=3.3.2 muscle=5.1 drep=3.3.1 aragorn=1.2.41
 conda install -c conda-forge r-base=4.2.1 r-ggplot2=3.4.0 r-vctrs=0.5.1
 conda install -c conda-forge scikit-learn-intelex
 conda install -c bioconda megan
