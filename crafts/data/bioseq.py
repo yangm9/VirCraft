@@ -67,17 +67,17 @@ class Seq(VirCfg):
         cmd=[self.envs]
         wkdir=f'{self.outdir}/prodigal'
         general.mkdir(wkdir)
-        temp_orfs_faa=f'{wkdir}/temp.orfs.faa'
-        orfs_ffn=f'{wkdir}/{self.name}_votus.ffn'
-        orfs_faa=f'{wkdir}/{self.name}_votus.faa'
-        temp_orfs_ffn=f'{wkdir}/temp.orfs.ffn'
+        temp_orf_faa=f'{wkdir}/temp.orf.faa'
+        orf_ffn=f'{wkdir}/{self.name}_votus.ffn'
+        orf_faa=f'{wkdir}/{self.name}_votus.faa'
+        temp_orf_ffn=f'{wkdir}/temp.orf.ffn'
         temp_txt=f'{wkdir}/temp.txt'
-        cmd=['prodigal','-i',self.fasta,'-a',temp_orfs_faa,
-            '-d',temp_orfs_ffn,'-m','-o',temp_txt,'-p meta -q\n',
-            'cut -f 1 -d \" \"',temp_orfs_faa,'>',orfs_faa,'\n',
-            'cut -f 1 -d \" \"',temp_orfs_ffn,'>',orfs_ffn,'\n',
+        cmd=['prodigal','-i',self.fasta,'-a',temp_orf_faa,
+            '-d',temp_orf_ffn,'-m','-o',temp_txt,'-p meta -q\n',
+            'cut -f 1 -d \" \"',temp_orf_faa,'>',orf_faa,'\n',
+            'cut -f 1 -d \" \"',temp_orf_ffn,'>',orf_ffn,'\n',
             f'rm -f {wkdir}/temp.*\n']
-        return cmd,orfs_faa
+        return cmd,orf_faa
 
 class VirSeq(Seq):
     def __init__(self,fasta='',outdir='',*args,**kwargs):
@@ -96,9 +96,9 @@ class VirSeq(Seq):
         return cmd,merged_fa
 
 class ORF(Seq):
-    def __init__(self,orfs='',outdir='',*args,**kwargs):
-        super().__init__(orfs,outdir,*args,**kwargs)
-        self.orfs=self.fasta
+    def __init__(self,orf='',outdir='',*args,**kwargs):
+        super().__init__(orf,outdir,*args,**kwargs)
+        self.orf=self.fasta
     @property
     def mkSalmonIdx(self):
         cmd=[self.envs]
@@ -106,9 +106,23 @@ class ORF(Seq):
         idx=f'{wkdir}/SalmonIdx' # A directory
         general.mkdir(wkdir)
         cmd.extend(
-            ['salmon index','-p 9 -k 31','-t',self.orfs,'-i',wkdir,'\n']
+            ['salmon index','-p 9 -k 31','-t',self.orf,'-i',wkdir,'\n']
         )
         shell=f'{self.outdir}/{self.name}_salmonidx.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
         return idx,results
+    def eggnogAnno(self):
+        wkdir=f'{self.outdir}/eggnog'
+        general.mkdir(wkdir)
+        anno_prefix=f'{wkdir}/{self.name}'
+        seed_orth=f'{anno_prefix}.emapper.seed_orthologs'
+        eggout=f'{wkdir}/{self.name}_eggout'
+        eggnog_db=self.confDict['EggNOGDB']
+        cmd=['emapper.py -m diamond --no_annot --no_file_comments',
+            '--cpu',self.threads,'-i',self.fasta,
+            '-o',anno_prefix,'--data_dir',eggnog_db,'\n',
+            'emapper.py','--annotate_hits_table',seed_orth,
+            '--no_file_comments','-o',eggout,'--cpu',self.threads,
+            '--data_dir',eggnog_db,'--override\n']
+        return cmd

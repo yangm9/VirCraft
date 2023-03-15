@@ -1,9 +1,9 @@
 import os
 from ..general import cmdExec
 from ..general import general
-from ..config.config import Seq
+from ..data.bioseq import VirSeq
 
-class posiWTP(Seq):
+class posiWTP(VirSeq):
     '''
     posiWTP: positive WTP
     According to 10.1038/s42003-022-04027-y
@@ -22,54 +22,22 @@ class posiWTP(Seq):
             '--workdir',tmpdir,'--cores',self.threads,
             '-profile local,singularity --filter 10000\n']
         return cmd,wkdir
-    def checkv(self,in_fa:str):
-        wkdir=f'{self.outdir}/checkv'
-        general.mkdir(wkdir)
-        cmd=['checkv','end_to_end',in_fa,wkdir,
-             '-d',self.confDict['CheckvDB'],
-             '-t',self.threads,'\n']
-        provir_fna=f'{wkdir}/proviruses.fna'
-        vir_fna=f'{wkdir}/viruses.fna'
-        out_fa=f'{wkdir}/combined.fna'
-        cmd.extend(
-            ['cat',provir_fna,vir_fna,'>',out_fa,'\n']
-        )
-        return cmd,out_fa
-    def annotate(self,indir:str):
-        vs2_fa=f'{indir}/for-dramv/final-viral-combined-for-dramv.fa'
-        vs2_tab=f'{indir}/for-dramv/viral-affi-contigs-for-dramv.tab'
-        wkdir=f'{self.outdir}/dramv-annotate'
-        cmd=['DRAM-v.py annotate','-i',vs2_fa,'-v',vs2_tab,'-o',wkdir,
-            '--threads',self.threads,'--skip_trnascan --min_contig_size 1000\n']
-        dramv_annot=f'{wkdir}/annotations.tsv'
-        wkdir=f'{self.outdir}/dramv-distill'
-        cmd.extend(['DRAM-v.py distill','-i',dramv_annot,'-o',wkdir,'\n'])
-        return cmd
     def curate(self):
         checkv_dir=f'{self.outdir}/checkv'
         wkdir=f'{self.outdir}/curation'
+        wtpdir=f'{self.outdir}/wtp/{self.name}'
+        checkvdir=f'{self.outdir}/checkv'
+        posi_ctg_list=f'{wkdir}/{self.name}_posi_ctg.list'
         general.mkdir(wkdir)
-        vir_score=f'{self.outdir}/vs2-pass1/final-viral-score.tsv'
-        curation_score=f'{wkdir}/final-viral-score.tsv'
-        contamination=f'{checkv_dir}/contamination.tsv'
-        cmd=["sed '1s/seqname/contig_id/'",vir_score,'>',curation_score,'\n']
-        cura_vs2_chkv=f'{wkdir}/curation_vs2_checkv.tsv'
+        orf_f='{self.outdir}/prodigal/{self.name}.orf.faa'
+        eggout='{self.outdir}/eggnog/{self.name}.eggout.emapper.annotations'
+        keywords_fa='{wkdir}/{self.name}_vkeywd_posi_ctg.fa'
+        posi_ctg_fa='{wkdir}/{self.name}_v_posi_ctg.fa'
         cmd.extend(
-            ['linkTab.py',curation_score,contamination,
-            'left contig_id',cura_vs2_chkv,'\n',
-            'vCurator.py',self.outdir,'\n']
-        )
-        combined_fna=f'{checkv_dir}/combined.fna'
-        combined_modi_fna=f'{checkv_dir}/combined_modi.fna'
-        curated_contigs_xls=f'{wkdir}/curated_contigs.xls'
-        curated_contigs_list=f'{wkdir}/curated_contigs_id.list'
-        virus_posi_fna=f'{wkdir}/virus_positive.fna'
-        cmd.extend(
-            ['cut -f 1',curated_contigs_xls,
-            '|grep -v "contig_id" >',curated_contigs_list,'\n',
-            "sed 's/_[12] / /'",combined_fna,'>',combined_modi_fna,'\n',
-            'extrSeqByName.pl',curated_contigs_list,combined_modi_fna,
-            virus_posi_fna,'\n']
+            ['virus_identity.py',self.fasta,orf_f,keywords_fa,'\n',
+            'filtByViralPredictionTools.py',wtpdir,checkvdir,
+            '>',posi_ctg_list,'\n',
+            'extrSeqByName.pl',posi_ctg_list,keywords_fa,posi_ctg_fa,'\n']
         )
         return cmd
     def Identify(self):
