@@ -1,6 +1,7 @@
 import os
-from ..general import cmdExec,general
-from ..config.config import Seq
+from ..general import cmdExec
+from ..general import general
+from ..data.bioseq import Seq
 
 class VirScan(Seq):
     '''

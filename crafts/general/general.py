@@ -24,7 +24,7 @@ def selectENV(env:str):
     conda_path=isInstalled('conda')
     condash_path='/'.join(conda_path.split('/')[0:-2])
     condash_path+='/etc/profile.d/conda.sh'
-    if os.path.exist(condash_path):
+    if os.path.exists(condash_path):
         return f'. "{condash_path}"\nconda activate {env}\n'
     else:
         conda_bin=os.path.dirname('conda_path')

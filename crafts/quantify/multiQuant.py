@@ -1,7 +1,8 @@
 import os
-from ..general import cmdExec,general
+from ..general import general
+from ..general import cmdExec
 from .alnQuant import VirCount
-from ..config.config import Seq
+from ..data.bioseq import Seq
 
 class multiVirCount(Seq):
     def __init__(self,samp_info='',fasta='',outdir='',threads=8):

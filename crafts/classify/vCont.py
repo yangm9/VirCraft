@@ -1,7 +1,7 @@
 import os
 from ..general import general
 from ..general import cmdExec
-from ..config.config import ORF
+from ..data.bioseq import ORF
 
 class Dataset:
     def __init__(self,fa_list='',outdir='',threads=8):

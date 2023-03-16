@@ -1,6 +1,7 @@
 import sys
-from ..general import cmdExec,general
-from ..config.config import Seq
+from ..general import cmdExec
+from ..general import general
+from ..data.bioseq import Seq
 
 class VirTaxa(Seq):
     '''
@@ -9,6 +10,29 @@ class VirTaxa(Seq):
     def __init__(self,fasta='',outdir='',threads=8):
         super().__init__(fasta,outdir)
         self.threads=str(threads)
+    def ncbiRefSeqTaxa(self,orfs_f):
+        '''
+        ORFs predicated from Prodigal (v2.6.3) were subjected to BLASTp (E-value of < 0.001, bitscore ≥ 50) against the NCBI viral RefSeq database (https://ftp.ncbi.nlm.nih.gov/refseq/release/viral/).
+        '''
+        wkdir=f'{self.outdir}/blast'
+        dbdir=self.confDict['NCBIvRefProtDB']
+        refdb=f'{dbdir}/viral.1.protein'
+        taxadb=f'{dbdir}/NCBI_viral_full_taxnomomy.txt'
+        blast_resu=f'{wkdir}/{self.name}.votu.blast'
+        filt_blast=general.insLable(blast_resu,'filt')
+        filt_h_blast=general.insLable(filt_blast,'h')
+        gene_taxa_blast=general.insLable(filt_h_blast,'sp')
+        votu_taxa=f'{wkdir}/{self.name}.votu.taxa.txt'
+        sed_cmd="'1i\QueryID\tNCBI_ID\tIdentity\tAlnLen\tMismatches\tGap\tQstart\tQend\tSstart\tSend\tEValue\tBitScore'"
+        cmd=['blastp','-query',orfs_f,'-out',blast_resu,
+            '-db',refdb,'-num_threads',self.threads,
+            '-outfmt 6 -evalue 1e-3 -max_target_seqs 1\n',
+            "awk '$12>=50'",blast_resu,'>',filt_blast,'\n',
+            'sed',sed_cmd,filt_blast,'>',filt_h_blast,'\n',
+            "csvtk join -t -f 'NCBI_ID,NCBI_ID'",
+            filt_h_blast,taxadb,'>',gene_taxa_blast,'\n',
+            'viruse_tax.py',gene_taxa_blast,'>',votu_taxa,'\n']
+        return cmd,votu_taxa
     def demovir(self):
         '''
         Classify the virus contig by Demovir software for a certain single group.
@@ -22,13 +46,23 @@ class VirTaxa(Seq):
         cmd.extend(['ln -s',uniprot_trembl_viral,uniprot_trembl_viral_lnk,'\n'])
         demovir=f'{sys.path[0]}/bin/demovir.*'
         cmd.extend(['cp',demovir,self.outdir,'\n'])
-        demovir=f'{self.outdir}/demovir.sh'
+        wkdir=f'{self.outdir}/demovir'
+        demovir=f'{wkdir}/demovir.sh'
         cmd.extend([demovir,self.fasta,self.threads,'\n'])
+        votu_taxa=f'{wkdir}/DemoVir_assignments.txt'
+        return cmd,votu_taxa
+    def mergeTaxa(self,taxa1,taxa2):
+        taxa=f'{self.outdir}/{self.name}.votu.taxa.txt'
+        cmd=['merge_taxa.pl',taxa1,taxa2,'>',taxa,'\n']
         return cmd
     def Classify(self):
-        cmd=[self.envs]
-        cmd.extend(self.demovir())
-        shell=f'{self.outdir}/{self.name}_demovir.sh'
+        cmd,orf_faa=self.genePred()
+        tmp_cmd,ncbi_taxa=self.ncbiRefSeqTaxa(orf_faa)
+        cmd.extend(tmp_cmd)
+        tmp_cmd,demovir_taxa=self.demovir()
+        cmd.extend(tmp_cmd)
+        cmd.extend(self.mergeTaxa(demovir_taxa,ncbi_taxa))
+        shell=f'{self.outdir}/{self.name}_classify.sh'
         general.printSH(shell,cmd)
         results=cmdExec.execute(cmd)
         return results

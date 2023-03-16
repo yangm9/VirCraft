@@ -2,8 +2,10 @@
 
 import os
 import sys
-from ..general import cmdExec,general
-from ..config.config import Reads,Seq
+from ..general import cmdExec
+from ..general import general
+from ..data.bioseq import Reads
+from ..data.bioseq import Seq
 
 class Assembly(Reads):
     '''
