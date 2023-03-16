@@ -2,6 +2,7 @@ import os
 from ..general import cmdExec
 from ..general import general
 from ..data.bioseq import VirSeq
+from ..data.bioseq import ORF
 
 class posiWTP(VirSeq):
     '''
@@ -21,7 +22,7 @@ class posiWTP(VirSeq):
             '--cachedir',self.confDict['wtpIMG'],'--output',resdir,
             '--workdir',tmpdir,'--cores',self.threads,
             '-profile local,singularity --filter 10000\n']
-        return cmd,wkdir
+        return cmd,resdir
     def curate(self):
         checkv_dir=f'{self.outdir}/checkv'
         wkdir=f'{self.outdir}/curation'
@@ -42,12 +43,17 @@ class posiWTP(VirSeq):
         return cmd
     def Identify(self):
         cmd=[self.envs]
-        #Step 1 Run VirSorter2
-        tmp_cmd,wkdir=self.virsorter(self.fasta)
+        #Step 1 Run WTP
+        tmp_cmd,resdir=self.wtp(self.fasta)
         cmd.extend(tmp_cmd)
-        #Step 2 Run CheckV
-        vs2_fa=f'{wkdir}/final-viral-combined.fa'
-        tmp_cmd,checkv_fa=self.checkv(vs2_fa)
+        #Step 2 Predict Genes
+        self.fasta=f'{resdir}/phage_positive_contigs/{self.name}_positive_contigs.fa'
+        tmp_cmd,orf_faa=self.genePred()
+        cmd.extend(tmp_cmd)
+        #Step 3 eggnog annotation
+        SeqO=ORF(orf=orf_faa,outdir=self.outdir)
+        cmd.extend(SeqO.eggnogAnno())
+        tmp_cmd,checkv_fa=self.checkv(wtp_fa)
         cmd.extend(tmp_cmd)
         #Step 3 rerun VirSorter2 
         tmp_cmd,wkdir=self.virsorter(checkv_fa)
