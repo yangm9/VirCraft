@@ -56,7 +56,9 @@ class VirTaxa(Seq):
         cmd=['merge_taxa.pl',taxa1,taxa2,'>',taxa,'\n']
         return cmd
     def Classify(self):
-        cmd,orf_faa=self.genePred()
+        cmd=[self.envs]
+        tmp_cmd,orf_faa=self.genePred()
+        cmd.extend(tmp_cmd)
         tmp_cmd,ncbi_taxa=self.ncbiRefSeqTaxa(orf_faa)
         cmd.extend(tmp_cmd)
         tmp_cmd,demovir_taxa=self.demovir()

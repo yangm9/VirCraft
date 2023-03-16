@@ -24,12 +24,14 @@ def selectENV(env:str):
     conda_path=isInstalled('conda')
     condash_path='/'.join(conda_path.split('/')[0:-2])
     condash_path+='/etc/profile.d/conda.sh'
+    envs=''
     if os.path.exists(condash_path):
-        return f'. "{condash_path}"\nconda activate {env}\n'
+        envs=f'. "{condash_path}"\nconda activate {env}\n'
     else:
         conda_bin=os.path.dirname('conda_path')
-        return f'export PATH="{conda_bin}:$PATH"'
-
+        envs=f'export PATH="{conda_bin}:$PATH"\n'
+    envs+=f'export PATH="{bin_dir}:$PATH"\n'
+    return envs
 def isInstalled(name:str):
     """
     Check whether `name` is on PATH and marked as executable.
