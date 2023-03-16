@@ -37,7 +37,7 @@ with open(sys.argv[2],'r') as f:
             contig_class[contig].append(class_level)
             contig_family[contig].append(family)
         lastgene=thisgene
-
+print('Sequence_ID\tOrder\tFamily')
 for contig in contig_dict.keys():
     gene_num = len(contig_dict[contig])
     class_rate = 0
