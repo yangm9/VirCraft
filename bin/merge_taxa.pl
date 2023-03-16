@@ -1,7 +1,23 @@
 #!/usr/bin/perl
 use strict;
 
+=head1 merge_taxa.pl
+Name:
+    merge_taxa.pl
+Purpose:
+    Merge the classification results of NCBI BLAST and DemoVir.
+Usage:
+    perl merge_taxa.pl <DemoVir_Taxa> <NCBI_BLAST_Taxa> > <Merged_Taxa>
+Author:
+    Ming Yang yangm@idsse.ac.cn
+Vwesion:
+    0.0.1 2023.3.16 16:28
+=cut
 
+unless(@ARGV==2){
+    print STDERR `pod2text $0`;
+    exit 0;
+}
 
 open DEMOVIR,$ARGV[0] or die $!;
 my $header=<DEMOVIR>;

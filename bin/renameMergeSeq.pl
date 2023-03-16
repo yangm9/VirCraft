@@ -22,6 +22,7 @@ Author:
 Vwesion:
     0.0.2 2022.6.17 18:08
 =cut
+
 my ($fadir,$outfa,$postfix,$seqtype,$help);
 GetOptions(
     "i:s"=>\$fadir,
