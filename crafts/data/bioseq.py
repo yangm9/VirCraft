@@ -1,15 +1,14 @@
 import os
 import re
 import sys
-from ..general import general
-from ..general import cmdExec
+from ..general import utils
 from ..config.config import VirCfg
 
 class Reads(VirCfg):
     '''
     FastQ processing class.
     '''
-    envs=general.selectENV('VirCraft')
+    envs=utils.selectENV('VirCraft')
     postfixes=[
         '_1.fastq','_1.fastq.gz','_1.fq','_1.fq.gz',
         '_R1.fastq','_R1.fastq.gz','_R1.fq','_R1.fq.gz',
@@ -24,7 +23,7 @@ class Reads(VirCfg):
         self.basename_fq2=os.path.basename(self.fastqs[1])
         self.outdir=os.path.abspath(outdir)
         self.samp=self.getSampName
-        general.mkdir(self.outdir)
+        utils.mkdir(self.outdir)
     @property
     def getSampName(self):
         samp=''
@@ -37,14 +36,14 @@ class Seq(VirCfg):
     '''
     Fasta processing class.
     '''
-    envs=general.selectENV('VirCraft')
+    envs=utils.selectENV('VirCraft')
     def __init__(self,fasta='',outdir='',*args,**kwargs):
         super().__init__()
         basename_fa=os.path.basename(fasta)
         self.name=os.path.splitext(basename_fa)[0]
         self.fasta=os.path.abspath(fasta)
         self.outdir=os.path.abspath(outdir)
-        general.mkdir(self.outdir)
+        utils.mkdir(self.outdir)
     @property
     def mkBwaIdx(self):
         "Make bwa index for votus."
@@ -52,8 +51,8 @@ class Seq(VirCfg):
         idx=f'{self.outdir}/{self.name}BWAIDX'
         cmd.extend(['bwa index -a bwtsw',self.fasta,'-p',idx,'\n'])
         shell=f'{self.outdir}/{self.name}_bwaidx.sh'
-        general.printSH(shell,cmd)
-        results=cmdExec.execute(cmd)
+        utils.printSH(shell,cmd)
+        results=utils.execute(cmd)
         return idx,results
     def sizeGC(self): #Plot scatter for contigs size (x) and GC content (y)
         cmd=[self.envs]
@@ -66,7 +65,7 @@ class Seq(VirCfg):
     def genePred(self):
         cmd=[self.envs]
         wkdir=f'{self.outdir}/prodigal'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         temp_orf_faa=f'{wkdir}/temp.orf.faa'
         orf_ffn=f'{wkdir}/{self.name}_votus.ffn'
         orf_faa=f'{wkdir}/{self.name}_votus.faa'
@@ -85,7 +84,7 @@ class VirSeq(Seq):
     def checkv(self):
         cmd=[self.envs]
         wkdir=f'{self.outdir}/checkv'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         cmd=['checkv','end_to_end',self.fasta,wkdir,
             '-d',self.confDict['CheckvDB'],
             '-t',self.threads,'\n']
@@ -104,17 +103,17 @@ class ORF(Seq):
         cmd=[self.envs]
         wkdir=f'{self.outdir}/salmonidx'
         idx=f'{wkdir}/SalmonIdx' # A directory
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         cmd.extend(
             ['salmon index','-p 9 -k 31','-t',self.orf,'-i',wkdir,'\n']
         )
         shell=f'{self.outdir}/{self.name}_salmonidx.sh'
-        general.printSH(shell,cmd)
-        results=cmdExec.execute(cmd)
+        utils.printSH(shell,cmd)
+        results=utils.execute(cmd)
         return idx,results
     def eggnogAnno(self):
         wkdir=f'{self.outdir}/eggnog'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         anno_prefix=f'{wkdir}/{self.name}'
         seed_orth=f'{anno_prefix}.emapper.seed_orthologs'
         eggout=f'{wkdir}/{self.name}_eggout'

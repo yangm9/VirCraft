@@ -1,7 +1,6 @@
 import os
 import sys
-from ..general import general
-from ..general import cmdExec
+from ..general import utils
 from ..votus.votus import VirRef
 
 class VirHost(VirRef):
@@ -16,7 +15,7 @@ class VirHost(VirRef):
         Classify the host MAGs by GTDBTK tools.
         '''
         wkdir=f'{self.outdir}/classify_wf'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         cmd=['gtdbtk classify_wf','--genome_dir',self.hostsdir,
             '--out_dir',wkdir,'--pplacer_cpus',self.threads,
             '--extension fasta\n']
@@ -26,18 +25,18 @@ class VirHost(VirRef):
         Predict the hosts for viral contigs using VirMatcher.
         '''
         wkdir=f'{self.outdir}/virmatcher'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         cmd=['VirMatcher --preparer','--gtdbtk-out-dir',tredir,
             '--gtdbtk-in-dir',self.hostsdir,'-v',self.fasta,
             '-o',wkdir,'--threads',self.threads,'--python-aggregator']
         return cmd
     def PredHosts(self):
-        cmd=[general.selectENV('gtdbtk')]
+        cmd=[utils.selectENV('gtdbtk')]
         tmp_cmd,tredir=self.magsTree()
         cmd.extend(tmp_cmd)
         cmd.extend([self.envs])
         cmd.extend(self.virmatch(tredir))
         shell=f'{self.outdir}/{self.name}_hosts.sh'
-        general.printSH(shell,cmd)
-        results=cmdExec.execute(cmd)
+        utils.printSH(shell,cmd)
+        results=utils.execute(cmd)
         return results

@@ -1,8 +1,7 @@
 import os
 import re
 import sys
-from ..general import general
-from ..general import cmdExec
+from ..general import utils
 
 class VirCfg:
     '''

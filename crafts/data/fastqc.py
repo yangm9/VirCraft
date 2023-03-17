@@ -1,11 +1,10 @@
 import os
-from ..general import cmdExec
-from ..general import general
+from ..general import utils
 from .bioseq import Reads
 
 class QualCtrl(Reads):
     "FastQ cuality control class."
-    envs=general.selectENV('VirCraft')
+    envs=utils.selectENV('VirCraft')
     def __init__(self,fq1='',fq2='',outdir='',threads=8,*args,**kwargs):
         super().__init__(fq1,fq2,outdir,*args,**kwargs)
     def filtReads(self,process):
@@ -14,7 +13,7 @@ class QualCtrl(Reads):
         out_fq2=f'{wkdir}/{self.basename_fq2}'.replace('.gz','')
         filt_rpts=f'{wkdir}/{self.samp}_report.html'
         out_fq_list=f'{wkdir}/{self.samp}_list.txt'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         cmd=''
         out_fastqs=[]
         if 'f' in process:
@@ -32,7 +31,7 @@ class QualCtrl(Reads):
         in_fq_list=f'{self.outdir}/fastp/{self.samp}_list.txt'
         out_fq1=f'{wkdir}/{self.basename_fq1}'.replace('.gz','')
         out_fq2=f'{wkdir}/{self.basename_fq2}'.replace('.gz','')
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         cmd=['fastuniq','-i',in_fq_list,'-o',out_fq1,'-p',out_fq2,'\n']
         fastqs=[out_fq1,out_fq2]
         return cmd,fastqs
@@ -40,7 +39,7 @@ class QualCtrl(Reads):
         wkdir=f'{self.outdir}/decontaminate'
         prefix=f'{wkdir}/{self.samp}'
         contam_db=self.confDict['ContamDB']
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         cmd=['bowtie2','-p',self.threads,'-N 1','-x',contam_db,
             '-l',fq1,'-2',fq2,'--un-conc',prefix,'\n']
         fastqs=[f'{prefix}_1.fq',f'{prefix}_2.fq']
@@ -64,6 +63,6 @@ class QualCtrl(Reads):
             f'ln -s {fastqs[1]} {self.outdir}/{lnk_fq2}\n']
         )
         shell=f'{self.outdir}/{self.samp}_readsqc.sh'
-        general.printSH(shell,cmd)
-        results=cmdExec.execute(cmd)
+        utils.printSH(shell,cmd)
+        results=utils.execute(cmd)
         return results
