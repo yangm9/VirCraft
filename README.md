@@ -11,7 +11,8 @@ assembly
 #### 1.3 病毒鉴定
 identify
 ###### 1.3.1 What_the_Phage流程
-表1-1 What_the_Phage识别病毒contigs的标准参数
+
+[表1-1 What_the_Phage识别病毒contigs的标准参数](https://doi.org/10.1038/s42003-022-04027-y)
 |tool|criteria|filter|
 |:----:|:----:|:----:|
 |marvel|probability according to Random Forest algorithm|>75%|
