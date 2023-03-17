@@ -26,11 +26,12 @@ conda install -c conda-forge scikit-learn-intelex
 conda install -c bioconda megan
 pip install -r requirements.txt
 pip install biopython=1.81
+pip install DRAM-bio
 #pip install "scikit_learn==0.22.2.post1" #FutureWarning: The sklearn.neural_network.multilayer_perceptron module is  deprecated in version 0.22 and will be removed in version 0.24.
 #pip install --upgrade scikit-learn==0.21.3
 pip install --upgrade scikit-learn
 ## Install usearch
-cd ~/VirCraft/bin
+cd VirCraft/bin
 wget https://www.drive5.com/downloads/usearch11.0.667_i86linux32.gz
 gunzip usearch11.0.667_i86linux32.gz
 ln -s usearch11.0.667_i86linux32 usearch

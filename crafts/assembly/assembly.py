@@ -2,8 +2,7 @@
 
 import os
 import sys
-from ..general import cmdExec
-from ..general import general
+from ..general import utils
 from ..data.bioseq import Reads
 from ..data.bioseq import Seq
 
@@ -119,5 +118,5 @@ class Assembly(Reads):
         cmd.extend(tmp_cmd)
         shell=f'{self.outdir}/{self.samp}_assembly.sh'
         general.printSH(shell,cmd)
-        results=cmdExec.execute(cmd)
+        results=utils.execute(cmd)
         return results

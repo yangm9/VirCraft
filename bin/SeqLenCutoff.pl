@@ -28,3 +28,4 @@ $/="\n";
 close FA;
 close OUT1;
 close OUT2;
+__END__

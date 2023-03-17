@@ -36,7 +36,7 @@ elif sys.argv[1]=='assembly':
     )
     Draft.Assemble(
         process=args.process,
-        cutoff=5000
+        cutoff=args.cutoff
     )
     print('Reads assembly completed!!!')
 elif sys.argv[1]=='identify':

@@ -44,6 +44,11 @@ def setOpts(name:str,subcmds:str,version:str):
     subpsr=addPairFqArg(subpsr)
     subpsr=addGlbArg(subpsr)
     subpsr=addProcArg(subpsr,'sm')
+    subpsr.add_argument(
+        '-l','--cutoff',action='store',type=int,
+        dest='cutoff',metavar='INT',default=False,
+        help='the minimal length of contigs/scaffolds.Default is 5000.'
+    )
 
     subpsr=subparsers.add_parser(
         'identify',
