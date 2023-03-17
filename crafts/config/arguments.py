@@ -6,10 +6,8 @@ Created on Fri Dec 18 18:17:58 2022
 '''
 
 import argparse
-#import src.version
 
 def setOpts(name:str,subcmds:str,version:str):
-    #ver=src.version.__version__
     parser=argparse.ArgumentParser(
         prog=name,
         description='VirCraft is an flexible pipeline for metaviromic data analysis.',
