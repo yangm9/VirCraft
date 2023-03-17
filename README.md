@@ -14,7 +14,7 @@ identify
 表1-1 What_the_Phage识别病毒contigs的标准参数
 |tool|criteria|filter|
 |:----:|:----:|:----:|
-|marvel|"probability according to Random Forest algorithm"|>75%|
+|marvel|probability according to Random Forest algorithm|>75%|
 |VirFinder|p-value|>0.9|
 |PPP-Meta|contig classification|"Phage"|
 |VirSoter and VirSorter_virome|Category of detection (1, 2 or 3: intact, incomplete or questionable)|Category 1 & 2|
@@ -22,10 +22,9 @@ identify
 |DeepVirFinder|p-value|> 0.9|
 |Vibrant & Vibrant_virome|contig classification|Virus|
 |Phigaro|Indicator function||
-|Virnet|p-value (as median across all hits per contig)|> 0.5|
-|Virsorter 2|dsDNA phage score| > 0.9|
-|Seeker|Score|> 0.75|
-
+|Virnet|p-value (as median across all hits per contig)|>0.5|
+|Virsorter 2|dsDNA phage score|>0.9|
+|Seeker|Score|>0.75|
 
 ###### 1.3.2 VirSorter2流程
 
