@@ -1,5 +1,5 @@
 from os import path
-from ..general import cmdExec,general
+from ..general import utils
 from ..identify.viridsop import VirScan
 
 class VirRef(VirScan):
@@ -24,6 +24,6 @@ class VirRef(VirScan):
         cmd.extend(tmp_cmd)
         cmd.extend(self.sizeGC())
         shell=f'{self.outdir}/{self.name}_votu.sh'
-        general.printSH(shell,cmd)
-        results=cmdExec.execute(cmd)
+        utils.printSH(shell,cmd)
+        results=utils.execute(cmd)
         return results

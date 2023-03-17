@@ -1,6 +1,5 @@
 import os
-from ..general import cmdExec
-from ..general import general
+from ..general import utils
 from ..data.bioseq import VirSeq
 from ..data.bioseq import ORF
 
@@ -16,7 +15,7 @@ class posiWTP(VirSeq):
         wkdir=f'{self.outdir}/1.wtp'
         resdir=f'{wkdir}/result'
         tmpdir=f'{wkdir}/tempt'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         cmd=['nextflow run ~/.nextflow/assets/replikation/What_the_Phage',
             '--fasta',self.fasta,'--databases',self.confDict['wtpDB'],
             '--cachedir',self.confDict['wtpIMG'],'--output',resdir,
@@ -29,7 +28,7 @@ class posiWTP(VirSeq):
         wtpdir=f'{self.outdir}/wtp/{self.name}'
         checkvdir=f'{self.outdir}/checkv'
         posi_ctg_list=f'{wkdir}/{self.name}_posi_ctg.list'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         orf_f='{self.outdir}/prodigal/{self.name}.orf.faa'
         eggout='{self.outdir}/eggnog/{self.name}.eggout.emapper.annotations'
         keywords_fa='{wkdir}/{self.name}_vkeywd_posi_ctg.fa'
@@ -66,6 +65,6 @@ class posiWTP(VirSeq):
         cmd.extend(tmp_cmd)
         #Generate shell and exeute it
         shell=f'{self.outdir}/{self.name}_find_vir.sh'
-        general.printSH(shell,cmd)
-        results=cmdExec.execute(cmd)
+        utils.printSH(shell,cmd)
+        results=utils.execute(cmd)
         return results

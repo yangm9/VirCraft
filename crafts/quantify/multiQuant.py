@@ -1,8 +1,7 @@
 import os
-from ..general import general
-from ..general import cmdExec
-from .alnQuant import VirCount
+from ..general import utils
 from ..data.bioseq import Seq
+from .alnQuant import VirCount
 
 class multiVirCount(Seq):
     def __init__(self,samp_info='',fasta='',outdir='',threads=8):
@@ -20,8 +19,8 @@ class multiVirCount(Seq):
             cmd.extend(Count.bwa(samp,bwa_idx))
             cmd.extend(Count.coverm(samp))
             shell=f'{self.outdir}/{samp}_viral_count.sh'
-            general.printSH(shell,cmd)
-            results+=cmdExec.execute(cmd)
+            utils.printSH(shell,cmd)
+            results+=utils.execute(cmd)
         return results
 
 class multiGeneCount(multiVirCount):
@@ -36,6 +35,6 @@ class multiGeneCount(multiVirCount):
             Count=GeneCount(fq1,fq2,self.outdir,self.threads)
             cmd.extend(Count.salmon(samp,salmon_idx))
             shell=f'{self.outdir}/{samp}_gene_count.sh'
-            general.printSH(shell,cmd)
-            results+=cmdExec.execute(cmd)
+            utils.printSH(shell,cmd)
+            results+=utils.execute(cmd)
         return results

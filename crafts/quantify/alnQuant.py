@@ -5,8 +5,6 @@ import sys
 import glob
 from ..data.bioseq import Reads
 from ..data.bioseq import Seq
-from ..general import cmdExec
-from ..general import general
 from ..identify.viridsop import VirScan
 
 class VirCount(Reads):

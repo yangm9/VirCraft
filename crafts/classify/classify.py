@@ -1,6 +1,5 @@
 import sys
-from ..general import cmdExec
-from ..general import general
+from ..general import utils
 from ..data.bioseq import Seq
 
 class VirTaxa(Seq):
@@ -19,9 +18,9 @@ class VirTaxa(Seq):
         refdb=f'{dbdir}/viral.1.protein'
         taxadb=f'{dbdir}/NCBI_viral_full_taxnomomy.txt'
         blast_resu=f'{wkdir}/{self.name}.votu.blast'
-        filt_blast=general.insLable(blast_resu,'filt')
-        filt_h_blast=general.insLable(filt_blast,'h')
-        gene_taxa_blast=general.insLable(filt_h_blast,'sp')
+        filt_blast=utils.insLable(blast_resu,'filt')
+        filt_h_blast=utils.insLable(filt_blast,'h')
+        gene_taxa_blast=utils.insLable(filt_h_blast,'sp')
         votu_taxa=f'{wkdir}/{self.name}.votu.taxa.txt'
         sed_cmd="'1i\QueryID\tNCBI_ID\tIdentity\tAlnLen\tMismatches\tGap\tQstart\tQend\tSstart\tSend\tEValue\tBitScore'"
         cmd=['blastp','-query',orfs_f,'-out',blast_resu,
@@ -65,6 +64,6 @@ class VirTaxa(Seq):
         cmd.extend(tmp_cmd)
         cmd.extend(self.mergeTaxa(demovir_taxa,ncbi_taxa))
         shell=f'{self.outdir}/{self.name}_classify.sh'
-        general.printSH(shell,cmd)
-        results=cmdExec.execute(cmd)
+        utils.printSH(shell,cmd)
+        results=utils.execute(cmd)
         return results

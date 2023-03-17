@@ -1,6 +1,5 @@
 import os
-from ..general import cmdExec
-from ..general import general
+from ..general import utils
 from ..data.bioseq import Seq
 
 class VirScan(Seq):
@@ -15,7 +14,7 @@ class VirScan(Seq):
     def virsorter(self,in_fa:str):
         idx=str(self.n+1)
         wkdir=f'{self.outdir}/vs2-pass{idx}'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         cmd=['virsorter run',self.vs2_subcmds[self.n],'-i',in_fa,
             '-d',self.confDict['Virsorter2DB'],'-w',wkdir,
             '--include-groups dsDNAphage,ssDNA','-j',self.threads,
@@ -24,7 +23,7 @@ class VirScan(Seq):
         return cmd,wkdir
     def checkv(self,in_fa:str):
         wkdir=f'{self.outdir}/checkv'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         cmd=['checkv','end_to_end',in_fa,wkdir,
              '-d',self.confDict['CheckvDB'],
              '-t',self.threads,'\n']
@@ -48,7 +47,7 @@ class VirScan(Seq):
     def curate(self):
         checkv_dir=f'{self.outdir}/checkv'
         wkdir=f'{self.outdir}/curation'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         vir_score=f'{self.outdir}/vs2-pass1/final-viral-score.tsv'
         curation_score=f'{wkdir}/final-viral-score.tsv'
         contamination=f'{checkv_dir}/contamination.tsv'
@@ -92,6 +91,6 @@ class VirScan(Seq):
         cmd.extend(tmp_cmd)
         #Generate shell and exeute it
         shell=f'{self.outdir}/{self.name}_find_vir.sh'
-        general.printSH(shell,cmd)
-        results=cmdExec.execute(cmd)
+        utils.printSH(shell,cmd)
+        results=utils.execute(cmd)
         return results

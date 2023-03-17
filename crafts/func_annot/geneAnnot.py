@@ -1,5 +1,4 @@
-from ..general import cmdExec
-from ..general import general
+from ..general import utils
 from ..data.bioseq import Seq
 
 class GeneFunc(Seq):
@@ -13,7 +12,7 @@ class GeneFunc(Seq):
         self.threads=str(threads)
     def eggnogAnno(self,orfs_faa):
         wkdir=f'{self.outdir}/eggnog'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         anno_prefix=f'{wkdir}/{self.name}'
         seed_orth=f'{anno_prefix}.emapper.seed_orthologs'
         eggout=f'{wkdir}/{self.name}_eggout'
@@ -27,7 +26,7 @@ class GeneFunc(Seq):
         return cmd
     def keggAnno(self,orfs_faa):
         wkdir=f'{self.outdir}/kegg'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         kegg_db=self.confDict['KofamscanDB']
         ko_prof=f'{kegg_db}/profiles'
         ko_list=f'{kegg_db}/ko_list'
@@ -42,11 +41,11 @@ class GeneFunc(Seq):
         cmd=[self.envs]
         tmp_cmd,orfs_faa=self.genePred()
         cmd.extend(tmp_cmd)
-        cmd.append(general.selectENV('emapper'))
+        cmd.append(utils.selectENV('emapper'))
         cmd.extend(self.eggnogAnno(orfs_faa))
-        cmd.append(general.selectENV('kofamscan'))
+        cmd.append(utils.selectENV('kofamscan'))
         cmd.extend(self.keggAnno(orfs_faa))
         shell=f'{self.outdir}/{self.name}_gene_annot.sh'
-        general.printSH(shell,cmd)
-        results=cmdExec.execute(cmd)
+        utils.printSH(shell,cmd)
+        results=utils.execute(cmd)
         return results

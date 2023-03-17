@@ -1,5 +1,4 @@
 from .multiQuant import multiGeneCount
-from ..general import cmdExec,general
 
 class GeneAbdStat(multiGeneCount):
     def __init__(self,samp_info='',fasta='',outdir='',threads=8):

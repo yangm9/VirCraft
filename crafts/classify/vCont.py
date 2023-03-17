@@ -1,6 +1,5 @@
 import os
-from ..general import general
-from ..general import cmdExec
+from ..general import utils
 from ..data.bioseq import ORF
 
 class Dataset:
@@ -19,7 +18,7 @@ class EnviComp(ORF):
         return 0
     def vContact(self):
         wkdir=f'{self.outdir}/vContact2'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         #OtherORFs=self.confDict['OtherDataSetFAA']
         vContDB="'ProkaryoticViralRefSeq94-Merged'"
         orfs_info=f'{self.outdir}/all_merged_orfs.csv'
@@ -38,9 +37,9 @@ class EnviComp(ORF):
             )
         return cmd
     def CompSeq(self):
-        cmd=[general.selectENV('vContact2')]
+        cmd=[utils.selectENV('vContact2')]
         cmd.extend(self.vContact())
         shell=f'{comp_dir}/v_compare.sh'
-        general.printSH(shell,cmd)
-        results=cmdExec.execute(cmd)
+        utils.printSH(shell,cmd)
+        results=utils.execute(cmd)
         return results

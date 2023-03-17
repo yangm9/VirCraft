@@ -22,7 +22,7 @@ class Assembly(Reads):
         Assemble metagenome by SPAdes.
         '''
         wkdir=f'{self.outdir}/spades'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         cmd=[]
         if len(fastqs)==1:
             cmd=['spades.py','-s',fastqs[0]]
@@ -61,7 +61,7 @@ class Assembly(Reads):
         Align the FastQs back to Assembled Contigs.
         '''
         wkdir=f'{self.outdir}/alignment'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         bwa_idx=f'{wkdir}/scaffoldsIDX'
         unused_sam=f'{wkdir}/unused_reads.sam'
         unused_fq=f'{wkdir}/unused_reads.fq'
@@ -81,7 +81,7 @@ class Assembly(Reads):
         Filter the fasta sequence by length (cutoff).
         '''
         wkdir=f'{self.outdir}/filter'
-        general.mkdir(wkdir)
+        utils.mkdir(wkdir)
         stat_prefix=f'{wkdir}/scaffolds.stat'
         filt_prefix=f'{wkdir}/scaffolds.filt'
         cmd=['fasta_size_distribution_plot.py',scaf,'-o',stat_prefix,
@@ -117,6 +117,6 @@ class Assembly(Reads):
         tmp_cmd,__=FastA.sizeGC()
         cmd.extend(tmp_cmd)
         shell=f'{self.outdir}/{self.samp}_assembly.sh'
-        general.printSH(shell,cmd)
+        utils.printSH(shell,cmd)
         results=utils.execute(cmd)
         return results

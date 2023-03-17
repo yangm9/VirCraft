@@ -1,5 +1,5 @@
-from ..general import cmdExec,general
-from ..config.config import Seq
+from ..general import utils
+from ..data.bioseq import Seq
 
 class AMGs(Seq):
     '''
@@ -31,6 +31,6 @@ class AMGs(Seq):
         cmd.extend(self.dramv())
         cmd.extend(self.vibrant())
         shell=f'{self.outdir}/{self.name}_call_amgs.sh'
-        general.printSH(shell,cmd)
-        results=cmdExec.execute(cmd)
+        utils.printSH(shell,cmd)
+        results=utils.execute(cmd)
         return results

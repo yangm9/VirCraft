@@ -1,5 +1,5 @@
 from .multiQuant import multiVirCount
-from ..general import cmdExec,general
+from ..general import utils
 from ..identify.viridsop import VirScan
 
 class VirAbdStat(multiVirCount):
@@ -61,6 +61,6 @@ class VirAbdStat(multiVirCount):
         cmd.extend(self.taxaAbd(abd,taxa_anno))
         cmd.extend(self.diversity(abd))
         shell=f'{self.outdir}/{self.name}_count.sh'
-        general.printSH(shell,cmd)
-        results=cmdExec.execute(cmd)
+        utils.printSH(shell,cmd)
+        results=utils.execute(cmd)
         return results
