@@ -42,18 +42,63 @@ func_annot
 host_prid
 
 
-## 2 安装和使用教程
+## 2 软件安装和数据库部署
+
 
 ```
 sh install.sh
 ```
+## 3 软件使用方法
+当所有依赖的软件和数据库准备就绪，VirCraft使用起来就比较简单了。VirCraft主程序脚本（virCraft.py）不包含任何功能模块，使用者可以单独使用这些模块。
+```
+virCraft.py -h
+usage:
+        ./virCraft.py -h [<options>] -o <outdir>
+        subcommands: an optional functional module, including assembly, identify, votus, classify, compare, vir_quant, func_annot and host_prid.
+        options: options described below in the section of Options.
+        outdir: output directory.
 
-## 3 结果文件说明
+VirCraft is an flexible pipeline for metaviromic data analysis.
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+subcommands:
+  valid subcommands
+
+  {reads_qc,assembly,identify,votus,classify,compare,vir_quant,func_annot,host_prid}
+    reads_qc            Pair-end FastQ reads qualitiy control.
+    assembly            Assemble the reads to contigs or scaffolds using
+                        MegaHit and/or SPAdes
+    identify            identify the viral contigs from a assembly fasta,
+                        using vir-id-sop
+    votus               construct the non-redundant virus operational
+                        taxonomic unit (vOTU) reference
+    classify            classify the virus contigs by Demovir
+    compare             Compare the virus protein sequence by vContact2
+    vir_quant           Calculate the abundance and diversity of each
+                        microbial community                                        func_annot          Gene annotation and quantification
+    host_prid           Predict the hosts of virus
+```
+各个模块可单独运行。例如，运行identify（病毒鉴定）模块。
+```
+usage: ./virCraft.py identify [<options>] -o <outdir>
+        subcommands: an optional functional module, including assembly, identify, votus, classify, compare, vir_quant, func_annot and host_prid.
+        options: options described below in the section of Options.
+        outdir: output directory. identify
+        [-h] [-a STR] [-t INT] -o STR
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -a STR, --fasta STR   The absolute/relative path of a vOTUs FastA file
+  -t INT, --threads INT   Number of processes/threads to use
+  -o STR, --outdir STR  Output directory
+```
+## 4 结果文件说明
 
 ## 5 注意事项
 当前版本只能生成脚本并不能直接运行，请生成脚本后自行运行。
 ## 6 版本更新日志
-
 
 **VirCraft-v0.0.1版**
 ```

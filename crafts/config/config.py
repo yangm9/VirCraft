@@ -23,7 +23,6 @@ class VirCfg:
             [keys,values]=re.split(r'\s*=\s*',line,1)
             confDict[keys]=values
         inconf.close()
-        #confDict['subProjectName']=re.split(r'_',confDict['ProjectName'])[1]
         return confDict
     def readSampInfo(self,samp_info:str):
         '''
