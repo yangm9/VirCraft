@@ -14,6 +14,7 @@ class VirTaxa(Seq):
         ORFs predicated from Prodigal (v2.6.3) were subjected to BLASTp (E-value of < 0.001, bitscore ≥ 50) against the NCBI viral RefSeq database (https://ftp.ncbi.nlm.nih.gov/refseq/release/viral/).
         '''
         wkdir=f'{self.outdir}/blast'
+        utils.mkdir(wkdir)
         dbdir=self.confDict['NCBIvRefProtDB']
         refdb=f'{dbdir}/viral.1.protein'
         taxadb=f'{dbdir}/NCBI_viral_full_taxnomomy.txt'
@@ -46,6 +47,7 @@ class VirTaxa(Seq):
         demovir=f'{sys.path[0]}/bin/demovir.*'
         cmd.extend(['cp',demovir,self.outdir,'\n'])
         wkdir=f'{self.outdir}/demovir'
+        utils.mkdir(wkdir)
         demovir=f'{wkdir}/demovir.sh'
         cmd.extend([demovir,self.fasta,self.threads,'\n'])
         votu_taxa=f'{wkdir}/DemoVir_assignments.txt'

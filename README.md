@@ -133,4 +133,6 @@ optional arguments:
 2.手动curation部分的自动化。
 3.整合compare结果和classify结果。
 4.完善host_pred模块。
+5.部分模块支持RUN功能。
+6.软件结构更新：data、general等模块。
 ```
