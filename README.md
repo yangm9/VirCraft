@@ -27,7 +27,33 @@ identify
 |Virsorter 2|dsDNA phage score|>0.9|
 |Seeker|Score|>0.75|
 
-###### 1.3.2 VirSorter2流程
+###### 1.3.2 vir-id-sop流程
+
+vir-id-sop流程主要依据[Guo等](dx.doi.org/10.17504/protocols.io.bwm5pc86)提供的病毒鉴定标准分析流程（Viral sequence identification SOP with VirSorter2 V.3）开发，主要包括以下步骤。
+1.病毒序列鉴定。设置cutoff值为0.5，以最大的灵敏度运行VirSorter2，一般深海病毒组学项目只针对噬菌体dsDNA和ssDNA噬菌体。选择最小序列长度5000 bp。"-j"选项为CPU核数。注意，"--keep-original-seq"选项保留了环状和(接近)完整病毒contigs的原始序列(整个序列的评分为>0.8)，
+2.病毒序列质控和修剪。应用checkV对VirSorter2结果进行质控，以修剪末端留下的可能的宿主基因，并处理环状contigs的重复片段。"-t"用于调整使用的CPU核数。
+3.VirSorter2(>=2.2.1)再次运行。输入文件为checkv修剪的序列，结果生成的"affi-contigs.tab"文件是DRAMv识别AMG所需的文件。"--seqname-suffix-off"选项保留原始输入序列名称，因为在第二步中不可能从同一个contig中获得1个前病毒，而"--viral-gene-rich-off"选项关闭了病毒基因多于宿主基因的要求，以确保VirSorter2在这一步不进行任何筛选。
+4.基因注释。DRAMv对识别的序列进行基因注释，可用于手动判定。
+5.病毒序列判定。本步骤所有程序均为in-house。
+```
+#step 1 viral sequence identification.
+virsorter run --keep-original-seq -i 5seq.fa -w vs2-pass1 --include-groups dsDNAphage,ssDNA --min-length 5000 --min-score 0.5 -j 28 all
+#step 2 Quality Control
+checkv end_to_end vs2-pass1/final-viral-combined.fa checkv -t 28 -d /fs/project/PAS1117/jiarong/db/checkv-db-v1.0
+cat checkv/proviruses.fna checkv/viruses.fna > checkv/combined.fna
+#step 3 Prepare for DRAMv
+virsorter run --seqname-suffix-off --viral-gene-enrich-off --provirus-off --prep-for-dramv -i checkv/combined.fna -w vs2-pass2 --include-groups dsDNAphage,ssDNA --min-length 5000 --min-score 0.5 -j 28 all
+#step 4 annotation
+DRAM-v.py annotate -i vs2-pass2/for-dramv/final-viral-combined-for-dramv.fa -v vs2-pass2/for-dramv/viral-affi-contigs-for-dramv.tab -o dramv-annotate --skip_trnascan --threads 28 --min_contig_size 1000
+DRAM-v.py distill -i dramv-annotate/annotations.tsv -o dramv-distill
+#step 5 curation
+sed '1s/seqname/contig_id/' vs2-pass1/final-viral-score.tsv > curation/final-viral-score.tsv #add the header for "final-viral-score.tsv" file
+linkTab.py curation/final-viral-score.tsv checkv/contamination.tsv left contig_id curation/curation_vs2_checkv.tsv #combine two tables (curation/final-viral-score.tsv and checkv/contamination.tsv) by "contig_id" field.
+vCurator.py . #Generate the auto-curated viral contigs and manu-curate contigs table.
+cut -f 1 curation/curated_contigs.xls |grep -v "contig_id" > curation/contigs_id.list #Get the curated contigs list
+sed 's/_1 / /' checkv/combined.fna > checkv/combined_modi.fna #Rename contig id
+extrSeqByName.pl curation/contigs_id.list checkv/combined_modi.fna curation/virus_positive.fna #
+```
 
 #### 1.4 病毒分类
 classify
