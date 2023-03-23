@@ -231,17 +231,68 @@ identify结果文件中最重要的就是curation结果。
 
 #### 3.4 病毒序列聚类
 
-votu模块用于对阳性病毒序列进行聚类获得病毒操作分类单元(virus operational taxonomic units, vOTUs)。  
+votus模块用于对阳性病毒序列进行聚类获得病毒操作分类单元(virus operational taxonomic units, vOTUs)。  
 所有判定阳性的病毒contigs采用cd-hit-est软件，基于最小contigs的比对率>85%且平均核苷酸同源性(average nucleotide identity)为95%在物种水平上进行聚类，获得vOTUs。CheckV用于对vOTUs进行质控。  
 
+###### 3.4.1 votus使用方法
+```
+virCraft.py votus -a scaffold.fasta -t 8 -o votus_out
+主要参数说明:
+-a 输入文件FastA格式
+-t CPU核数
+-o 输出结果目录
+```
+
+###### 3.4.2 votus结果文件说明
+
+```
+├── votu_cluster.sh
+├── scaffolds.votu.fa #vOTU序列文件
+├── scaffolds.votu.fa.clstr #vOTU聚类
+├── checkv/ #checkv质控结果
+│   ├── complete_genomes.tsv
+│   ├── completeness.tsv
+│   ├── contamination.tsv 
+│   ├── proviruses.fna #前病毒序列文件
+│   ├── quality_summary.tsv
+│   ├── viruses.fna #病毒序列文件
+│   └── ...
+```
+
 #### 3.5 病毒分类
+
 classify模块基于相关数据库对vOTUs进行目和科水平分类。主要分为以下两个步骤：
 1. 首先用prodigal预测vOTU中的ORF蛋白序列，用blastp将之比对NCBI viral RefSeq数据库。倘若某vOTU中超过50%的蛋白序列比对到同一科，则该vOTU被分类为该科。
 2. 随后使用demovir软件将未获得分类的序列进一步在目和科水平进行分类。
 
+###### 3.5.1 classify使用方法
+
+```
+virCraft.py classify -a scaffolds.votu.fa -t 8 -o classify_out
+```
+主要参数说明:
+-a 输入文件FastA格式
+-t CPU核数
+-o 输出结果目录
+
+###### 3.5.2 classify结果文件说明
+
+```
+.
+├── 0.prodigal
+│   ├── ylbh_estp_cariaco.votu.faa
+│   └── ylbh_estp_cariaco.votu.ffn
+├── 1.blastp
+│   ├── ylbh_estp_cariaco_viral_ncbi_taxonomy.txt #blastp病毒物种注释结果
+├── 2.demovir
+│   ├── DemoVir_assignments.txt #demovir病毒物种注释结果
+│   └── ... 
+└── ylbh_estp_cariaco_taxonomy.txt #最终物种注释结果 
+```
+
 #### 3.6 病毒物种丰度分析
 vir_quant模块用于病毒物种丰度和多样性分析。主要步骤如下：
-1. 使用BWA分别将各个样本的reads比对到vOTU。
+1. 使用BWA分别将各个样本的reads比对到vOTUs。
 2. 使用coverm选择TPM算法计算各个样本中vOTUs丰度，合并各个样本的vOTUs，获得vOTU丰度表。
 3. 有了vOTU丰度表，可做的事情就比较多了。进一步分析Alpha多样性和Beta多样性，绘制vOTU丰度热图、散点图、柱状图等。
 
@@ -254,7 +305,9 @@ func_annot模块主要用于对vOTU进行基因预测和基因功能注释。
 host_prid模块用于对病毒-宿主关系进行分析。使用集成工具VirMatcher预测病毒的宿主。
 
 ## 5 注意事项
+
 当前版本目前vir_quant模块只能生成脚本并不能直接运行，请生成脚本后自行运行。
+
 ## 6 版本更新日志
 
 **VirCraft-v0.0.1版**
