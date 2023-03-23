@@ -54,14 +54,25 @@ class Seq(VirCfg):
         utils.printSH(shell,cmd)
         results=utils.execute(cmd)
         return idx,results
-    def sizeGC(self): #Plot scatter for contigs size (x) and GC content (y)
+    def statFA(self,cutoff=5000):
         cmd=[self.envs]
-        fasta_stat=f'{self.outdir}/fasta_stat.xls'
+        wkdir=f'{self.outdir}/stat'
+        utils.mkdir(wkdir)
+        size_dist=f'{wkdir}/fasta_size_distribution.pdf'
+        len_gc_stat=f'{wkdir}/fasta_size_gc_stat.xls'
+        n50_stat1=f'{wkdir}/fasta_n50_stat1.xls'
+        n50_stat2=f'{wkdir}/fasta_n50_stat2.xls'
+        filt_prefix=f'{self.outdir}/{self.name}.filt'
         cmd.extend(
-            ['fasta_size_gc.py',self.fasta,'>',fasta_stat,'\n',
-            'variables_scatter.R',fasta_stat,'Length~GC',self.outdir,'\n']
+            ['fasta_size_distribution_plot.py',self.fasta,'-o',size_dist,
+            '-t "Sequence Size Distribution" -s 2000 -g 10\n',
+            'fasta_size_gc.py',self.fasta,'>',len_gc_stat,'\n',
+            'variables_scatter.R',len_gc_stat,'Length~GC',wkdir,'\n',
+            'stat_N50.pl',self.fasta,n50_stat1,'\n'
+            'assemb_stat.pl',self.fasta,self.fasta,'>',n50_stat2,'\n',
+            'SeqLenCutoff.pl',self.fasta,filt_prefix,str(cutoff),'\n']
         )
-        return cmd,fasta_stat
+        return cmd
     def genePred(self):
         cmd=[self.envs]
         wkdir=f'{self.outdir}/prodigal'

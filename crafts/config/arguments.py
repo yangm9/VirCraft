@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
 '''
 Created on Fri Dec 18 18:17:58 2022
 @author: yangming
@@ -45,7 +46,7 @@ def setOpts(name:str,subcmds:str,version:str):
     subpsr.add_argument(
         '-l','--cutoff',action='store',type=int,
         dest='cutoff',metavar='INT',default=False,
-        help='the minimal length of contigs/scaffolds.Default is 5000.'
+        help='The minimal length of contigs/scaffolds. Default is 5000.'
     )
 
     subpsr=subparsers.add_parser(
@@ -139,10 +140,14 @@ def addGlbArg(psr): #Add global arguments
     return psr
 
 def addProcArg(psr,dflt:str):
+    helpDict={
+        'fuc' : 'Select the optional analysis process of read_qc (f, u, and/or c), i.e. "-p fuc". Among these, "f" means filter, "u" means removing the duplications and get the unique reads, and "c" refers to the process of remove the contamination from a customized reference database. Default is "fuc"',   
+        'sm'  : 'Select the optional analysis process of assembly (s and/or c), i.e. "-p sm". Among these, "s" or "m" represent the assembly tool of SPAdes or megahit. i.e. "sm" refer to the process as follows: 1) assemble the reads to metagenome using SPAdes, 2) map all reads to the assembled contigs and get the unmapped reads, 3) assemble the unmapped reads with megahit, and 4) merge the assembly results from 2) and 3). Default is "sm"'
+    }
     psr.add_argument(
         '-p','--process',action='store',type=str,
         dest='process',metavar='STR',default=dflt,
-        help='Select the optional analysis process (f, u, and/or c) for a certain module, i.e. "-p fuc". Among these, "f" means filter, "u" means removing the duplications and get the unique reads, and "c" refers to the process of remove the contamination from a customized reference database'
+        help=helpDict[dflt]
     )
     return psr
 

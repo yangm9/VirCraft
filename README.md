@@ -8,119 +8,14 @@ VirCraft is an automatic viromic analysis pipeline.
 sh install.sh
 ```
 
-## 2 软件结构
+## 2 软件结构和基本使用方法
+
+#### 2.1 软件结构
+
 ![Overall workflow of VirCraft](docs/Overall_workflow_of_VirCraft.png)
 
-## 3 软件模块功能、用法和结果说明
+#### 2.2 软件基本使用方法
 
-#### 1.1 测序数据质控
-
-reads_qc为Illumina测序下机数据(FastQ)自动化质控模块，集成了fastp、fastuniq和bowtie2三种质控相关软件。
-###### 1.1.1 测序数据质控步骤
-
-1. fastp用于过滤掉原始数据中的接头污染和低质量reads，获得高质量reads。
-2. fastuniq用于去除高质量reads中的重复。
-3. 如果项目中存在空白对照数据参考库，则用bowtie2软件比对参考库用以去除试剂中存在的污染。
-
-###### 1.1.2 reads_qc使用方法
-
-```
-virCraft.py reads_qc -1 ../data/St07a_A01_raw_1.fq -2 ../data/St07a_A01_raw_2.fq -t 16 -o . -p fu
-```
-###### 1.1.3 reads_qc结果文件说明
-
-```
-.
-├── all.fastqc.sh #程序运行的脚本
-├── fastp/ #fastp结果目录
-│   ├── St07a_A01_1.fq #clean data
-│   ├── St07a_A01_2.fq
-│   ├── St07a_A01_list.txt #clean data文件列表
-│   └── St07a_A01_report.html #fastp结果报告
-├── fastp.json
-├── fastuniq/ #fastuniq结果目录
-│   ├── St07a_A01_1.fq #去重复之后的clean data
-│   ├── St07a_A01_2.fq
-├── St07a_A01_raw_1.fq -> fastuniq/St07a_A01_1.fq #链接最终结果文件
-└── St07a_A01_raw_2.fq -> fastuniq/St07a_A01_2.fq
-```
-
-#### 1.2 宏基因组组装
-assembly模块主要功能是将高质量reads进行组装成宏基因组。首先用SPAdes/megahit对高质量reads进行组装，然后使用bwa将reads比对组装结果，收集未比对上的reads(Unmapped
- reads)。Unmapped reads采用megahit/SPAdes再次进行组装。最后合并两次组装结果。
-
-#### 1.3 病毒鉴定
-identify模块用于从组装好的宏基因组序列判定病毒序列，主要包括两种方法：What_the_Phage流程和vir-id-sop流程。
-
-###### 1.3.1 What_the_Phage流程
-What_the_Phage(WtP)流程目前正在开发中……
-[表1-1 What_the_Phage识别病毒contigs的标准参数](https://doi.org/10.1038/s42003-022-04027-y)
-|tool|criteria|filter|
-|:----:|:----:|:----:|
-|marvel|probability according to Random Forest algorithm|>75%|
-|VirFinder|p-value|>0.9|
-|PPP-Meta|contig classification|"Phage"|
-|VirSoter and VirSorter_virome|Category of detection (1, 2 or 3: intact, incomplete or questionable)|Category 1 & 2|
-|MetaPhinder & MetaPhinder-own-DB| A) contig classification & B) average nucleotide identity % |A) Phage & B) > 50|
-|DeepVirFinder|p-value|> 0.9|
-|Vibrant & Vibrant_virome|contig classification|Virus|
-|Phigaro|Indicator function||
-|Virnet|p-value (as median across all hits per contig)|>0.5|
-|Virsorter 2|dsDNA phage score|>0.9|
-|Seeker|Score|>0.75|
-
-###### 1.3.2 vir-id-sop流程
-
-vir-id-sop流程主要依据[Guo等](dx.doi.org/10.17504/protocols.io.bwm5pc86)提供的病毒鉴定标准分析流程（Viral sequence identification SOP with VirSorter2 V.3）开发，主要包括以下步骤。
-1.病毒序列鉴定。设置cutoff值为0.5，以最大的灵敏度运行VirSorter2，一般深海病毒组学项目只针对噬菌体dsDNA和ssDNA噬菌体。选择最小序列长度5000 bp。"-j"选项为CPU核数。注意，"--keep-original-seq"选项保留了环状和(接近)完整病毒contigs的原始序列(整个序列的评分为>0.8)，
-2.病毒序列质控和修剪。应用checkV对VirSorter2结果进行质控，以修剪末端留下的可能的宿主基因，并处理环状contigs的重复片段。"-t"用于调整使用的CPU核数。
-3.VirSorter2(>=2.2.1)再次运行。输入文件为checkv修剪的序列，结果生成的"affi-contigs.tab"文件是DRAMv识别AMG所需的文件。"--seqname-suffix-off"选项保留原始输入序列名称，因为在第二步中不可能从同一个contig中获得1个前病毒，而"--viral-gene-rich-off"选项关闭了病毒基因多于宿主基因的要求，以确保VirSorter2在这一步不进行任何筛选。
-4.基因注释。DRAMv对识别的序列进行基因注释，可用于手动判定。
-5.病毒序列判定。本步骤所有程序均为in-house。
-以上所有步骤的示例脚本内容如下：
-```
-#step 1 viral sequence identification.
-virsorter run --keep-original-seq -i 5seq.fa -w vs2-pass1 --include-groups dsDNAphage,ssDNA --min-length 5000 --min-score 0.5 -j 28 all
-#step 2 Quality Control
-checkv end_to_end vs2-pass1/final-viral-combined.fa checkv -t 28 -d /fs/project/PAS1117/jiarong/db/checkv-db-v1.0
-cat checkv/proviruses.fna checkv/viruses.fna > checkv/combined.fna
-#step 3 Prepare for DRAMv
-virsorter run --seqname-suffix-off --viral-gene-enrich-off --provirus-off --prep-for-dramv -i checkv/combined.fna -w vs2-pass2 --include-groups dsDNAphage,ssDNA --min-length 5000 --min-score 0.5 -j 28 all
-#step 4 annotation
-DRAM-v.py annotate -i vs2-pass2/for-dramv/final-viral-combined-for-dramv.fa -v vs2-pass2/for-dramv/viral-affi-contigs-for-dramv.tab -o dramv-annotate --skip_trnascan --threads 28 --min_contig_size 1000
-DRAM-v.py distill -i dramv-annotate/annotations.tsv -o dramv-distill
-#step 5 curation
-sed '1s/seqname/contig_id/' vs2-pass1/final-viral-score.tsv > curation/final-viral-score.tsv #add the header for "final-viral-score.tsv" file
-linkTab.py curation/final-viral-score.tsv checkv/contamination.tsv left contig_id curation/curation_vs2_checkv.tsv #combine two tables (curation/final-viral-score.tsv and checkv/contamination.tsv) by "contig_id" field.
-vCurator.py . #Generate the auto-curated viral contigs and manu-curate contigs table.
-cut -f 1 curation/curated_contigs.xls |grep -v "contig_id" > curation/contigs_id.list #Get the curated contigs list
-sed 's/_1 / /' checkv/combined.fna > checkv/combined_modi.fna #Rename contig id
-extrSeqByName.pl curation/contigs_id.list checkv/combined_modi.fna curation/virus_positive.fna #
-```
-#### 1.4 病毒序列聚类
-votu模块用于对阳性病毒序列进行聚类获得病毒操作分类单元(virus operational taxonomic units, vOTUs)。
-所有判定阳性的病毒contigs采用cd-hit-est软件，基于最小contigs的比对率>85%且平均核苷酸同源性(average nucleotide identity)为95%在物种水平上进行聚类，获得vOTUs。CheckV用于对vOTUs进行质控。
-
-#### 1.5 病毒分类
-classify模块基于相关数据库对vOTUs进行目和科水平分类。主要分为以下两个步骤：
-1. 首先用prodigal预测vOTU中的ORF蛋白序列，用blastp将之比对NCBI viral RefSeq数据库。倘若某vOTU中超过50%的蛋白序列比对到同一科，则该vOTU被分类为该科。
-2. 随后使用demovir软件将未获得分类的序列进一步在目和科水平进行分类。
-
-#### 1.6 病毒物种丰度分析
-vir_quant模块用于病毒物种丰度和多样性分析。主要步骤如下：
-1. 使用BWA分别将各个样本的reads比对到vOTU。
-2. 使用coverm选择TPM算法计算各个样本中vOTUs丰度，合并各个样本的vOTUs，获得vOTU丰度表。
-3. 有了vOTU丰度表，可做的事情就比较多了。进一步分析Alpha多样性和Beta多样性，绘制vOTU丰度热图、散点图、柱状图等。
-
-#### 1.7 基因功能注释
-func_annot模块主要用于对vOTU进行基因预测和基因功能注释。
-1. prodigal用于预测vOTU中的ORFs序列。
-2. 应用egg-mapper和kofamscan分别对ORFs序列进行功能注释。
-
-#### 1.8 病毒宿主分析
-host_prid模块用于对病毒-宿主关系进行分析。使用集成工具VirMatcher预测病毒的宿主。
-
-## 3 软件使用方法
 当所有依赖的软件和数据库准备就绪，VirCraft使用起来就比较简单了。VirCraft主程序脚本（virCraft.py）不包含任何功能模块，使用者可以单独使用这些模块。
 
 ```
@@ -169,8 +64,194 @@ optional arguments:
   -t INT, --threads INT   Number of processes/threads to use
   -o STR, --outdir STR  Output directory
 ```
+各个模块使用方法，详见**3 软件模块功能、用法和结果说明**。
 
-## 4 结果文件说明
+## 3 软件模块功能、用法和结果说明
+
+#### 3.1 测序数据质控
+
+reads_qc为Illumina测序下机数据(FastQ)自动化质控模块，集成了fastp、fastuniq和bowtie2三种质控相关软件。
+
+###### 3.1.1 测序数据质控步骤
+
+1. fastp用于过滤掉原始数据中的接头污染和低质量reads，获得高质量reads。
+2. fastuniq用于去除高质量reads中的重复。
+3. 如果项目中存在空白对照数据参考库，则用bowtie2软件比对参考库用以去除试剂中存在的污染。
+
+###### 3.1.2 reads_qc使用方法
+
+```
+virCraft.py reads_qc -1 Sample01_1.fq -2 Sample01_2.fq -t 8 -o dataqc -p fu -o reads_qc_out
+```
+主要参数说明：
+-1 输入文件FastQ1
+-2 输入文件FastQ2
+-o 输出结果的目录
+-p 选择可选的分析步骤(f, u，和/或c)。例如，"-p fuc"。其中，"f"为过滤，"u"去除重复reads，"c"表示从定制的参考数据库中去除污染。
+
+###### 3.1.3 reads_qc结果文件说明
+
+```
+.
+├── all.fastqc.sh #程序运行的脚本
+├── fastp/ #fastp结果目录
+│   ├── Sample01_1.fq #clean data
+│   ├── Sample01_2.fq
+│   ├── Sample01_list.txt #clean data文件列表
+│   └── Sample01_report.html #fastp结果报告
+├── fastp.json
+├── fastuniq/ #fastuniq结果目录
+│   ├── Sample01_1.fq #去重复之后的clean data
+│   ├── Sample01_2.fq
+├── Sample01_1.fq -> fastuniq/Sample01_1.fq #链接最终结果文件
+└── Sample01_2.fq -> fastuniq/Sample01_2.fq
+```
+
+#### 3.2 宏基因组组装
+
+assembly模块主要功能是将高质量reads进行组装成宏基因组。
+###### 3.2.1 宏基因组组装步骤
+
+1. 首先用SPAdes/megahit对高质量reads进行组装。
+2. 然后使用bwa将reads比对组装结果，收集未比对上的reads(Unmapped reads)。
+3. Unmapped reads采用megahit/SPAdes再次进行组装。最后合并两次组装结果。
+
+###### 3.2.1 assembly使用方法
+
+```
+./virCraft.py assembly -1 Sample01_1.fq -2 Sample01_2.fq -t 8 -p sm -l 10000 -o assembly_out
+```
+
+主要参数说明：
+-1 输入文件FastQ1
+-2 输入文件FastQ2
+-o 输出结果的目录
+-p 选择分析步骤(s和/或m)。例如，"-p sm"。其中，"s"和"m"分别表示选择用SPAdes和megahit进行组装。"sm"表示先用SPAdes组装，然后用所有reads比对组装结果获得unmapped reads，unmapped reads用megahit组装，最后整合所有组装结果。
+
+###### 3.1.3 assembly结果文件说明
+
+```
+.
+├── spades/
+│   ├── scaffolds.fasta #spades组装结果
+│   └── ...
+├── alignment/
+│   ├── scaffoldsIDX.* #组装结果的索引文件
+│   ├── unused_reads.fq #未比对上组装结果的reads(FastQ格式)
+│   └── unused_reads.sam #未比对上组装结果的reads(sam格式)
+├── megahit/
+│   ├── final.contigs.fa #megahit组装结果
+│   └── ...
+├── stat/
+│   ├── fasta_size_distribution.pdf #序列长度分布统计图
+│   ├── fasta_size_gc_stat.xls #序列长度和GC统计表
+│   ├── Length_GC_scatter.pdf #序列长度和GC散点图
+│   ├── fasta_n50_stat.xls #序列基本信息统计表，如N50等
+│   └── ...
+├── final_assembly.fasta #合并后的组装结果
+├── scaffolds.filt.gt*.fa #根据设定长度cutoff值过滤后的序列 
+└── *_assembly.sh #程序运行的脚本
+```
+
+#### 3.3 病毒鉴定
+identify模块用于从组装好的宏基因组序列判定病毒序列，主要包括两种方法：What_the_Phage流程和vir-id-sop流程。
+
+###### 3.3.1 What_the_Phage流程
+
+What_the_Phage(WtP)自动化流程目前正在开发中……
+
+[表1-1 What_the_Phage识别病毒contigs的标准参数](https://doi.org/10.1038/s42003-022-04027-y)
+|tool|criteria|filter|
+|:----:|:----:|:----:|
+|marvel|probability according to Random Forest algorithm|>75%|
+|VirFinder|p-value|>0.9|
+|PPP-Meta|contig classification|"Phage"|
+|VirSoter and VirSorter_virome|Category of detection (1, 2 or 3: intact, incomplete or questionable)|Category 1 & 2|
+|MetaPhinder & MetaPhinder-own-DB| A) contig classification & B) average nucleotide identity % |A) Phage & B) > 50|
+|DeepVirFinder|p-value|> 0.9|
+|Vibrant & Vibrant_virome|contig classification|Virus|
+|Phigaro|Indicator function||
+|Virnet|p-value (as median across all hits per contig)|>0.5|
+|Virsorter 2|dsDNA phage score|>0.9|
+|Seeker|Score|>0.75|
+
+###### 3.3.2 vir-id-sop流程
+
+vir-id-sop流程主要依据[Guo等](dx.doi.org/10.17504/protocols.io.bwm5pc86)提供的病毒鉴定标准分析流程（Viral sequence identification SOP with VirSorter2 V.3）开发，主要包括以下步骤。
+1.病毒序列鉴定。设置cutoff值为0.5，以最大的灵敏度运行VirSorter2，一般深海病毒组学项目只针对噬菌体dsDNA和ssDNA噬菌体。选择最小序列长度5000 bp。"-j"选项为CPU核数。注意，"--keep-original-seq"选项保留了环状和(接近)完整病毒contigs的原始序列(整个序列的评分为>0.8)，
+2.病毒序列质控和修剪。应用checkV对VirSorter2结果进行质控，以修剪末端留下的可能的宿主基因，并处理环状contigs的重复片段。"-t"用于调整使用的CPU核数。
+3.VirSorter2(>=2.2.1)再次运行。输入文件为checkv修剪的序列，结果生成的"affi-contigs.tab"文件是DRAMv识别AMG所需的文件。"--seqname-suffix-off"选项保留原始输入序列名称，因为在第二步中不可能从同一个contig中获得1个前病毒，而"--viral-gene-rich-off"选项关闭了病毒基因多于宿主基因的要求，以确保VirSorter2在这一步不进行任何筛选。
+4.基因注释。DRAMv对识别的序列进行基因注释，可用于手动判定。
+5.病毒序列判定。本步骤所有程序均为in-house。
+以上所有步骤的示例脚本内容如下：
+```
+#step 1 viral sequence identification.
+virsorter run --keep-original-seq -i 5seq.fa -w vs2-pass1 --include-groups dsDNAphage,ssDNA --min-length 5000 --min-score 0.5 -j 28 all
+#step 2 Quality Control
+checkv end_to_end vs2-pass1/final-viral-combined.fa checkv -t 28 -d /fs/project/PAS1117/jiarong/db/checkv-db-v1.0
+cat checkv/proviruses.fna checkv/viruses.fna > checkv/combined.fna
+#step 3 Prepare for DRAMv
+virsorter run --seqname-suffix-off --viral-gene-enrich-off --provirus-off --prep-for-dramv -i checkv/combined.fna -w vs2-pass2 --include-groups dsDNAphage,ssDNA --min-length 5000 --min-score 0.5 -j 28 all
+#step 4 annotation
+DRAM-v.py annotate -i vs2-pass2/for-dramv/final-viral-combined-for-dramv.fa -v vs2-pass2/for-dramv/viral-affi-contigs-for-dramv.tab -o dramv-annotate --skip_trnascan --threads 28 --min_contig_size 1000
+DRAM-v.py distill -i dramv-annotate/annotations.tsv -o dramv-distill
+#step 5 curation
+sed '1s/seqname/contig_id/' vs2-pass1/final-viral-score.tsv > curation/final-viral-score.tsv #add the header for "final-viral-score.tsv" file
+linkTab.py curation/final-viral-score.tsv checkv/contamination.tsv left contig_id curation/curation_vs2_checkv.tsv #combine two tables (curation/final-viral-score.tsv and checkv/contamination.tsv) by "contig_id" field.
+vCurator.py . #Generate the auto-curated viral contigs and manu-curate contigs table.
+cut -f 1 curation/curated_contigs.xls |grep -v "contig_id" > curation/contigs_id.list #Get the curated contigs list
+sed 's/_1 / /' checkv/combined.fna > checkv/combined_modi.fna #Rename contig id
+extrSeqByName.pl curation/contigs_id.list checkv/combined_modi.fna curation/virus_positive.fna #
+```
+
+###### 3.3.3 identify使用方法
+
+```
+virCraft.py identify -a scaffold.fasta -t 8 -o identify_out
+```
+主要参数说明:
+-a 输入文件FastA格式
+-t CPU核数
+-o 输出结果目录
+
+###### 3.3.4 identify结果文件说明
+
+identify结果文件中最重要的就是curation结果。
+
+```
+.
+├── scaffolds_find_vir.sh
+├── curation/
+│   ├── autu_curated_contigs.xls #自动判定的病毒序列
+│   ├── virus_positive.fna #最终判定为阳性的病毒序列
+│   ├── manu_curate_anno.xls #需手动判定病毒基因注释文件
+│   ├── manu_curate_contigs.xls #需手动判定病毒contig信息文件
+│   └── ...
+```
+
+#### 3.4 病毒序列聚类
+votu模块用于对阳性病毒序列进行聚类获得病毒操作分类单元(virus operational taxonomic units, vOTUs)。
+所有判定阳性的病毒contigs采用cd-hit-est软件，基于最小contigs的比对率>85%且平均核苷酸同源性(average nucleotide identity)为95%在物种水平上进行聚类，获得vOTUs。CheckV用于对vOTUs进行质控。
+
+
+#### 3.5 病毒分类
+classify模块基于相关数据库对vOTUs进行目和科水平分类。主要分为以下两个步骤：
+1. 首先用prodigal预测vOTU中的ORF蛋白序列，用blastp将之比对NCBI viral RefSeq数据库。倘若某vOTU中超过50%的蛋白序列比对到同一科，则该vOTU被分类为该科。
+2. 随后使用demovir软件将未获得分类的序列进一步在目和科水平进行分类。
+
+#### 3.6 病毒物种丰度分析
+vir_quant模块用于病毒物种丰度和多样性分析。主要步骤如下：
+1. 使用BWA分别将各个样本的reads比对到vOTU。
+2. 使用coverm选择TPM算法计算各个样本中vOTUs丰度，合并各个样本的vOTUs，获得vOTU丰度表。
+3. 有了vOTU丰度表，可做的事情就比较多了。进一步分析Alpha多样性和Beta多样性，绘制vOTU丰度热图、散点图、柱状图等。
+
+#### 3.7 基因功能注释
+func_annot模块主要用于对vOTU进行基因预测和基因功能注释。
+1. prodigal用于预测vOTU中的ORFs序列。
+2. 应用egg-mapper和kofamscan分别对ORFs序列进行功能注释。
+
+#### 3.8 病毒宿主分析
+host_prid模块用于对病毒-宿主关系进行分析。使用集成工具VirMatcher预测病毒的宿主。
 
 ## 5 注意事项
 当前版本目前vir_quant模块只能生成脚本并不能直接运行，请生成脚本后自行运行。

@@ -70,25 +70,6 @@ class Assembly(Reads):
             '|grep -v NM:i:>',unused_sam,'\n',
             'sam_to_fastq.py',unused_sam,'>',unused_fq,'\n']
         return cmd,unused_fq
-    def mergeFastA(self,scafs:list):
-        scaf=f'{self.outdir}/final_assembly.fasta'
-        stat_tab=f'{self.outdir}/stat.tab'
-        cmd=['cat',scafs[0],scafs[1],'>',scaf,'\n',
-             'assemb_stat.pl',scaf,scaf,f'>{stat_tab}\n']
-        return cmd,scaf
-    def statFilt(self,scaf,cutoff=5000):
-        '''
-        Filter the fasta sequence by length (cutoff).
-        '''
-        wkdir=f'{self.outdir}/filter'
-        utils.mkdir(wkdir)
-        stat_prefix=f'{wkdir}/scaffolds.stat'
-        filt_prefix=f'{wkdir}/scaffolds.filt'
-        cmd=['fasta_size_distribution_plot.py',scaf,'-o',stat_prefix,
-            '-t Sequence Size Distribution -s 2000 -g 10\n',
-            'SeqLenCutoff.pl',scaf,filt_prefix,str(cutoff),'\n'
-        ]
-        return cmd
     def mixAsse(self,fastqs,process='sm'):
         '''
         Analysis the Assembly process accordding to the process set.
@@ -98,24 +79,25 @@ class Assembly(Reads):
         tmp_cmd,tmp_scaf=self.methDict[process[0]](fastqs)
         cmd.extend(tmp_cmd)
         scafs.append(tmp_scaf)
-        if len(process)==2:
+        final_scaf=f'{self.outdir}/final_assembly.fasta'
+        steps=len(process)
+        if steps==2:
             tmp_cmd,unused_fq=self.unmapReads(tmp_scaf)
             cmd.extend(tmp_cmd)
             tmp_cmd,tmp_scaf=self.methDict[process[1]]([unused_fq])
             cmd.extend(tmp_cmd)
             scafs.append(tmp_scaf)
-        tmp_cmd,scaf=self.mergeFastA(scafs)
-        cmd.extend(tmp_cmd)
-        return cmd,scaf
+            cmd.extend(['cat',scafs[0],scafs[1],'>',final_scaf,'\n'])
+        elif steps==1:
+            cmd.extend(['ln -s',tmp_scaf,final_scaf,'\n'])
+        return cmd,final_scaf
     def Assemble(self,process='sm',cutoff=5000):
         cmd=[self.envs]
         scafs=[]
         tmp_cmd,scaf=self.mixAsse(self.fastqs,process)
         cmd.extend(tmp_cmd)
-        cmd.extend(self.statFilt(scaf,cutoff))
         FastA=Seq(scaf,self.outdir)
-        tmp_cmd,__=FastA.sizeGC()
-        cmd.extend(tmp_cmd)
+        cmd.extend(FastA.statFA(cutoff))
         shell=f'{self.outdir}/{self.samp}_assembly.sh'
         utils.printSH(shell,cmd)
         results=utils.execute(cmd)
