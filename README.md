@@ -4,14 +4,20 @@ VirCraft is an automatic viromic analysis pipeline.
 
 ## 1 软件结构
 ![Overall workflow of VirCraft](docs/Overall_workflow_of_VirCraft.png)
-#### 1.1 测序数据质控
-reads_qc
-#### 1.2 宏基因组组装
-assembly
-#### 1.3 病毒鉴定
-identify
-###### 1.3.1 What_the_Phage流程
 
+#### 1.1 测序数据质控
+reads_qc为Illumina测序下机数据(FastQ)自动化质控模块，集成了fastp、fastuniq和bowtie2三种质控相关软件。
+fastp用于过滤掉原始数据中的接头污染和低质量reads，获得高质量reads。fastuniq用于去除高质量reads中的重复。如果项目中存在空白对照数据参考库，则用bowtie2软件比对参考库用以去除试剂中存在的污染。
+
+#### 1.2 宏基因组组装
+assembly模块主要功能是将高质量reads进行组装成宏基因组。首先用SPAdes/megahit对高质量reads进行组装，然后使用bwa将reads比对组装结果，收集未比对上的reads(Unmapped
+ reads)。Unmapped reads采用megahit/SPAdes再次进行组装。最后合并两次组装结果。
+
+#### 1.3 病毒鉴定
+identify模块用于从组装好的宏基因组序列判定病毒序列，主要包括两种方法：What_the_Phage流程和vir-id-sop流程。
+
+###### 1.3.1 What_the_Phage流程
+What_the_Phage(WtP)流程目前正在开发中……
 [表1-1 What_the_Phage识别病毒contigs的标准参数](https://doi.org/10.1038/s42003-022-04027-y)
 |tool|criteria|filter|
 |:----:|:----:|:----:|
@@ -35,6 +41,7 @@ vir-id-sop流程主要依据[Guo等](dx.doi.org/10.17504/protocols.io.bwm5pc86)�
 3.VirSorter2(>=2.2.1)再次运行。输入文件为checkv修剪的序列，结果生成的"affi-contigs.tab"文件是DRAMv识别AMG所需的文件。"--seqname-suffix-off"选项保留原始输入序列名称，因为在第二步中不可能从同一个contig中获得1个前病毒，而"--viral-gene-rich-off"选项关闭了病毒基因多于宿主基因的要求，以确保VirSorter2在这一步不进行任何筛选。
 4.基因注释。DRAMv对识别的序列进行基因注释，可用于手动判定。
 5.病毒序列判定。本步骤所有程序均为in-house。
+以上所有步骤的示例脚本内容如下：
 ```
 #step 1 viral sequence identification.
 virsorter run --keep-original-seq -i 5seq.fa -w vs2-pass1 --include-groups dsDNAphage,ssDNA --min-length 5000 --min-score 0.5 -j 28 all
@@ -54,28 +61,38 @@ cut -f 1 curation/curated_contigs.xls |grep -v "contig_id" > curation/contigs_id
 sed 's/_1 / /' checkv/combined.fna > checkv/combined_modi.fna #Rename contig id
 extrSeqByName.pl curation/contigs_id.list checkv/combined_modi.fna curation/virus_positive.fna #
 ```
+#### 1.4 病毒序列聚类
+votu模块用于对阳性病毒序列进行聚类获得病毒操作分类单元(virus operational taxonomic units, vOTUs)。
+所有判定阳性的病毒contigs采用cd-hit-est软件，基于最小contigs的比对率>85%且平均核苷酸同源性(average nucleotide identity)为95%在物种水平上进行聚类，获得vOTUs。CheckV用于对vOTUs进行质控。
 
-#### 1.4 病毒分类
-classify
+#### 1.5 病毒分类
+classify模块基于相关数据库对vOTUs进行目和科水平分类。主要分为以下两个步骤：
+1. 首先用prodigal预测vOTU中的ORF蛋白序列，用blastp将之比对NCBI viral RefSeq数据库。倘若某vOTU中超过50%的蛋白序列比对到同一科，则该vOTU被分类为该科。
+2. 随后使用demovir软件将未获得分类的序列进一步在目和科水平进行分类。
 
-#### 1.5 病毒物种丰度分析
-vir_quant
+#### 1.6 病毒物种丰度分析
+vir_quant模块用于病毒物种丰度和多样性分析。主要步骤如下：
+1. 使用BWA分别将各个样本的reads比对到vOTU。
+2. 使用coverm选择TPM算法计算各个样本中vOTUs丰度，合并各个样本的vOTUs，获得vOTU丰度表。
+3. 有了vOTU丰度表，可做的事情就比较多了。进一步分析Alpha多样性和Beta多样性，绘制vOTU丰度热图、散点图、柱状图等。
 
-#### 1.6 基因功能注释
-func_annot
+#### 1.7 基因功能注释
+func_annot模块主要用于对vOTU进行基因预测和基因功能注释。
+1. prodigal用于预测vOTU中的ORFs序列。
+2. 应用egg-mapper和kofamscan分别对ORFs序列进行功能注释。
 
-#### 1.7 病毒宿主分析
-host_prid
-
+#### 1.8 病毒宿主分析
+host_prid模块用于对病毒-宿主关系进行分析。使用集成工具VirMatcher预测病毒的宿主。
 
 ## 2 软件安装和数据库部署
-
 
 ```
 sh install.sh
 ```
+
 ## 3 软件使用方法
 当所有依赖的软件和数据库准备就绪，VirCraft使用起来就比较简单了。VirCraft主程序脚本（virCraft.py）不包含任何功能模块，使用者可以单独使用这些模块。
+
 ```
 virCraft.py -h
 usage:
@@ -106,7 +123,9 @@ subcommands:
                         microbial community                                        func_annot          Gene annotation and quantification
     host_prid           Predict the hosts of virus
 ```
+
 各个模块可单独运行。例如，运行identify（病毒鉴定）模块。
+
 ```
 usage: ./virCraft.py identify [<options>] -o <outdir>
         subcommands: an optional functional module, including assembly, identify, votus, classify, compare, vir_quant, func_annot and host_prid.
@@ -120,10 +139,11 @@ optional arguments:
   -t INT, --threads INT   Number of processes/threads to use
   -o STR, --outdir STR  Output directory
 ```
+
 ## 4 结果文件说明
 
 ## 5 注意事项
-当前版本只能生成脚本并不能直接运行，请生成脚本后自行运行。
+当前版本目前vir_quant模块只能生成脚本并不能直接运行，请生成脚本后自行运行。
 ## 6 版本更新日志
 
 **VirCraft-v0.0.1版**
