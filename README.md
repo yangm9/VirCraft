@@ -5,7 +5,7 @@ VirCraft is an automatic viromic analysis pipeline.
 ## 1 软件安装和数据库部署
 
 ```
-sh install.sh
+conda env create -f VirCraft.yaml
 ```
 
 ## 2 软件结构和基本使用方法
