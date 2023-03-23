@@ -1,5 +1,5 @@
 # VirCraft
-VirCraft是一个自动化病毒组学分析流程软件。
+VirCraft是一个自动化病毒组学分析流程软件。  
 VirCraft is an automatic viromic analysis pipeline.
 
 ## 1 软件安装和数据库部署
