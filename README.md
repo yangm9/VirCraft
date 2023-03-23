@@ -2,12 +2,48 @@
 VirCraft是一个自动化病毒组学分析流程软件。
 VirCraft is an automatic viromic analysis pipeline.
 
-## 1 软件结构
+## 1 软件安装和数据库部署
+
+```
+sh install.sh
+```
+
+## 2 软件结构
 ![Overall workflow of VirCraft](docs/Overall_workflow_of_VirCraft.png)
 
+## 3 软件模块功能、用法和结果说明
+
 #### 1.1 测序数据质控
+
 reads_qc为Illumina测序下机数据(FastQ)自动化质控模块，集成了fastp、fastuniq和bowtie2三种质控相关软件。
-fastp用于过滤掉原始数据中的接头污染和低质量reads，获得高质量reads。fastuniq用于去除高质量reads中的重复。如果项目中存在空白对照数据参考库，则用bowtie2软件比对参考库用以去除试剂中存在的污染。
+###### 1.1.1 测序数据质控步骤
+
+1. fastp用于过滤掉原始数据中的接头污染和低质量reads，获得高质量reads。
+2. fastuniq用于去除高质量reads中的重复。
+3. 如果项目中存在空白对照数据参考库，则用bowtie2软件比对参考库用以去除试剂中存在的污染。
+
+###### 1.1.2 reads_qc使用方法
+
+```
+virCraft.py reads_qc -1 ../data/St07a_A01_raw_1.fq -2 ../data/St07a_A01_raw_2.fq -t 16 -o . -p fu
+```
+###### 1.1.3 reads_qc结果文件说明
+
+```
+.
+├── all.fastqc.sh #程序运行的脚本
+├── fastp/ #fastp结果目录
+│   ├── St07a_A01_1.fq #clean data
+│   ├── St07a_A01_2.fq
+│   ├── St07a_A01_list.txt #clean data文件列表
+│   └── St07a_A01_report.html #fastp结果报告
+├── fastp.json
+├── fastuniq/ #fastuniq结果目录
+│   ├── St07a_A01_1.fq #去重复之后的clean data
+│   ├── St07a_A01_2.fq
+├── St07a_A01_raw_1.fq -> fastuniq/St07a_A01_1.fq #链接最终结果文件
+└── St07a_A01_raw_2.fq -> fastuniq/St07a_A01_2.fq
+```
 
 #### 1.2 宏基因组组装
 assembly模块主要功能是将高质量reads进行组装成宏基因组。首先用SPAdes/megahit对高质量reads进行组装，然后使用bwa将reads比对组装结果，收集未比对上的reads(Unmapped
@@ -83,12 +119,6 @@ func_annot模块主要用于对vOTU进行基因预测和基因功能注释。
 
 #### 1.8 病毒宿主分析
 host_prid模块用于对病毒-宿主关系进行分析。使用集成工具VirMatcher预测病毒的宿主。
-
-## 2 软件安装和数据库部署
-
-```
-sh install.sh
-```
 
 ## 3 软件使用方法
 当所有依赖的软件和数据库准备就绪，VirCraft使用起来就比较简单了。VirCraft主程序脚本（virCraft.py）不包含任何功能模块，使用者可以单独使用这些模块。
