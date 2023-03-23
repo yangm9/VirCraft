@@ -64,7 +64,7 @@ optional arguments:
   -t INT, --threads INT   Number of processes/threads to use
   -o STR, --outdir STR  Output directory
 ```
-各个模块使用方法，详见**3 软件模块功能、用法和结果说明**。
+各模块使用方法详见下文**3 软件模块功能、用法和结果说明**。
 
 ## 3 软件模块功能、用法和结果说明
 
@@ -83,11 +83,11 @@ reads_qc为Illumina测序下机数据(FastQ)自动化质控模块，集成了fas
 ```
 virCraft.py reads_qc -1 Sample01_1.fq -2 Sample01_2.fq -t 8 -o dataqc -p fu -o reads_qc_out
 ```
-主要参数说明：
--1 输入文件FastQ1
--2 输入文件FastQ2
--o 输出结果的目录
--p 选择可选的分析步骤(f, u，和/或c)。例如，"-p fuc"。其中，"f"为过滤，"u"去除重复reads，"c"表示从定制的参考数据库中去除污染。
+主要参数说明：  
+-1 输入文件FastQ1  
+-2 输入文件FastQ2  
+-o 输出结果的目录  
+-p 选择可选的分析步骤(f, u，和/或c)。例如，"-p fuc"。其中，"f"为过滤，"u"去除重复reads，"c"表示从定制的参考数据库中去除污染。  
 
 ###### 3.1.3 reads_qc结果文件说明
 
@@ -122,11 +122,11 @@ assembly模块主要功能是将高质量reads进行组装成宏基因组。
 ./virCraft.py assembly -1 Sample01_1.fq -2 Sample01_2.fq -t 8 -p sm -l 10000 -o assembly_out
 ```
 
-主要参数说明：
--1 输入文件FastQ1
--2 输入文件FastQ2
--o 输出结果的目录
--p 选择分析步骤(s和/或m)。例如，"-p sm"。其中，"s"和"m"分别表示选择用SPAdes和megahit进行组装。"sm"表示先用SPAdes组装，然后用所有reads比对组装结果获得unmapped reads，unmapped reads用megahit组装，最后整合所有组装结果。
+主要参数说明：  
+-1 输入文件FastQ1  
+-2 输入文件FastQ2  
+-o 输出结果的目录  
+-p 选择分析步骤(s和/或m)。例如，"-p sm"。其中，"s"和"m"分别表示选择用SPAdes和megahit进行组装。"sm"表示先用SPAdes组装，然后用所有reads比对组装结果获得unmapped reads，unmapped reads用megahit组装，最后整合所有组装结果。  
 
 ###### 3.1.3 assembly结果文件说明
 
@@ -177,13 +177,13 @@ What_the_Phage(WtP)自动化流程目前正在开发中……
 
 ###### 3.3.2 vir-id-sop流程
 
-vir-id-sop流程主要依据[Guo等](dx.doi.org/10.17504/protocols.io.bwm5pc86)提供的病毒鉴定标准分析流程（Viral sequence identification SOP with VirSorter2 V.3）开发，主要包括以下步骤。
-1.病毒序列鉴定。设置cutoff值为0.5，以最大的灵敏度运行VirSorter2，一般深海病毒组学项目只针对噬菌体dsDNA和ssDNA噬菌体。选择最小序列长度5000 bp。"-j"选项为CPU核数。注意，"--keep-original-seq"选项保留了环状和(接近)完整病毒contigs的原始序列(整个序列的评分为>0.8)，
-2.病毒序列质控和修剪。应用checkV对VirSorter2结果进行质控，以修剪末端留下的可能的宿主基因，并处理环状contigs的重复片段。"-t"用于调整使用的CPU核数。
-3.VirSorter2(>=2.2.1)再次运行。输入文件为checkv修剪的序列，结果生成的"affi-contigs.tab"文件是DRAMv识别AMG所需的文件。"--seqname-suffix-off"选项保留原始输入序列名称，因为在第二步中不可能从同一个contig中获得1个前病毒，而"--viral-gene-rich-off"选项关闭了病毒基因多于宿主基因的要求，以确保VirSorter2在这一步不进行任何筛选。
-4.基因注释。DRAMv对识别的序列进行基因注释，可用于手动判定。
-5.病毒序列判定。本步骤所有程序均为in-house。
-以上所有步骤的示例脚本内容如下：
+vir-id-sop流程主要依据[Guo等](dx.doi.org/10.17504/protocols.io.bwm5pc86)提供的病毒鉴定标准分析流程（Viral sequence identification SOP with VirSorter2 V.3）开发，主要包括以下步骤。  
+1.病毒序列鉴定。设置cutoff值为0.5，以最大的灵敏度运行VirSorter2，一般深海病毒组学项目只针对噬菌体dsDNA和ssDNA噬菌体。选择最小序列长度5000 bp。"-j"选项为CPU核数。注意，"--keep-original-seq"选项保留了环状和(接近)完整病毒contigs的原始序列(整个序列的评分为>0.8)，  
+2.病毒序列质控和修剪。应用checkV对VirSorter2结果进行质控，以修剪末端留下的可能的宿主基因，并处理环状contigs的重复片段。"-t"用于调整使用的CPU核数。  
+3.VirSorter2(>=2.2.1)再次运行。输入文件为checkv修剪的序列，结果生成的"affi-contigs.tab"文件是DRAMv识别AMG所需的文件。"--seqname-suffix-off"选项保留原始输入序列名称，因为在第二步中不可能从同一个contig中获得1个前病毒，而"--viral-gene-rich-off"选项关闭了病毒基因多于宿主基因的要求，以确保VirSorter2在这一步不进行任何筛选。  
+4.基因注释。DRAMv对识别的序列进行基因注释，可用于手动判定。  
+5.病毒序列判定。本步骤所有程序均为in-house。  
+以上所有步骤的示例脚本内容如下：  
 ```
 #step 1 viral sequence identification.
 virsorter run --keep-original-seq -i 5seq.fa -w vs2-pass1 --include-groups dsDNAphage,ssDNA --min-length 5000 --min-score 0.5 -j 28 all
@@ -209,10 +209,10 @@ extrSeqByName.pl curation/contigs_id.list checkv/combined_modi.fna curation/viru
 ```
 virCraft.py identify -a scaffold.fasta -t 8 -o identify_out
 ```
-主要参数说明:
--a 输入文件FastA格式
--t CPU核数
--o 输出结果目录
+主要参数说明:  
+-a 输入文件FastA格式  
+-t CPU核数  
+-o 输出结果目录  
 
 ###### 3.3.4 identify结果文件说明
 
@@ -230,9 +230,9 @@ identify结果文件中最重要的就是curation结果。
 ```
 
 #### 3.4 病毒序列聚类
-votu模块用于对阳性病毒序列进行聚类获得病毒操作分类单元(virus operational taxonomic units, vOTUs)。
-所有判定阳性的病毒contigs采用cd-hit-est软件，基于最小contigs的比对率>85%且平均核苷酸同源性(average nucleotide identity)为95%在物种水平上进行聚类，获得vOTUs。CheckV用于对vOTUs进行质控。
 
+votu模块用于对阳性病毒序列进行聚类获得病毒操作分类单元(virus operational taxonomic units, vOTUs)。  
+所有判定阳性的病毒contigs采用cd-hit-est软件，基于最小contigs的比对率>85%且平均核苷酸同源性(average nucleotide identity)为95%在物种水平上进行聚类，获得vOTUs。CheckV用于对vOTUs进行质控。  
 
 #### 3.5 病毒分类
 classify模块基于相关数据库对vOTUs进行目和科水平分类。主要分为以下两个步骤：
