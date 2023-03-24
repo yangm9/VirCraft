@@ -20,7 +20,7 @@ class multiVirCount(Seq):
             cmd.extend(Count.coverm(samp))
             shell=f'{self.outdir}/{samp}_viral_count.sh'
             utils.printSH(shell,cmd)
-            results+=utils.execute(cmd)
+            #results+=utils.execute(cmd)
         return results
 
 class multiGeneCount(multiVirCount):
@@ -36,5 +36,5 @@ class multiGeneCount(multiVirCount):
             cmd.extend(Count.salmon(samp,salmon_idx))
             shell=f'{self.outdir}/{samp}_gene_count.sh'
             utils.printSH(shell,cmd)
-            results+=utils.execute(cmd)
+            #results+=utils.execute(cmd)
         return results

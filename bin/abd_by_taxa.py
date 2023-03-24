@@ -27,7 +27,7 @@ def sumAbundByTaxa(taxa_tpm: str, outdir: str):
     sumDF.reset_index(inplace=True)
     sumDF.rename(columns={'index':'Contig'},inplace=True)
     sumDF.fillna(0,inplace=True)
-    sumed_tpm=f'{outdir}/all_taxa_sum_abdi.xls'
+    sumed_tpm=f'{outdir}/all_taxa_sum_abd.xls'
     sumDF.to_csv(sumed_tpm,sep='\t',index=False)
     return 0
 

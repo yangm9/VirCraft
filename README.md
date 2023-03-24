@@ -45,7 +45,8 @@ subcommands:
     classify            classify the virus contigs by Demovir
     compare             Compare the virus protein sequence by vContact2
     vir_quant           Calculate the abundance and diversity of each
-                        microbial community                                        func_annot          Gene annotation and quantification
+                        microbial community
+    func_annot          Gene annotation and quantification
     host_prid           Predict the hosts of virus
 ```
 
@@ -295,6 +296,9 @@ vir_quant模块用于病毒物种丰度和多样性分析。主要步骤如下�
 1. 使用BWA分别将各个样本的reads比对到vOTUs。
 2. 使用coverm选择TPM算法计算各个样本中vOTUs丰度，合并各个样本的vOTUs，获得vOTU丰度表。
 3. 有了vOTU丰度表，可做的事情就比较多了。进一步分析Alpha多样性和Beta多样性，绘制vOTU丰度热图、散点图、柱状图等。
+
+
+
 
 #### 3.7 基因功能注释
 func_annot模块主要用于对vOTU进行基因预测和基因功能注释。

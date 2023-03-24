@@ -20,10 +20,11 @@ while(<IN>){
     chomp;
     my $samp_name=(split /\t/,$_)[0];
     unless($n==1){
-        #print "$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left Contig $wkdir/${samps_prefix}${samp_name}.$postfix\n";
+        #print "$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left Contig $wkdir/${samps_prefix}${n}.$postfix\n";
         `$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left Contig $wkdir/${samps_prefix}${samp_name}.$postfix`;
     }
     $samps_prefix.=$samp_name;
+    #$samps_prefix.=$n;
     $merged_prefix=$samps_prefix if($n==2);
     $n++;
 }
