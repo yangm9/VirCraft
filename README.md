@@ -131,7 +131,7 @@ conda env create -f VirCraft.yaml
 表2-1 What_the_Phage识别病毒contigs的标准参数
 
 |软件|版本|备注|
-|:----:|:----:|:----:|
+|:----:|:----:|:----|
 |BWA|0.7.17-r1188|比对参考基因组|
 |coverm|0.6.1|计算TPM丰度信息|
 |bowtie2|2.4.4|比对参考序列|
