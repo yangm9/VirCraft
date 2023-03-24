@@ -2,7 +2,6 @@
 import re
 import sys
 import pandas as pd
-import linkTab
 
 df=pd.read_csv(sys.argv[1],sep='\t')
 samp_num=df.columns.size

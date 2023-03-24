@@ -12,7 +12,120 @@ conda env create -f VirCraft.yaml
 
 #### 2.1 软件结构
 
+#### 2.1.1 软件结构图
+
 ![Overall workflow of VirCraft](docs/Overall_workflow_of_VirCraft.png)
+
+#### 2.1.2 软件目录结构
+
+```
+.
+├── bin #自制脚本合集
+│   ├── abd_by_taxa.py 
+│   ├── alpha_diversity.R
+│   ├── barplot_for_taxa_tpm.R #物种丰度柱状图脚本
+│   ├── blast_classify.py #基于Blastp的病毒分类脚本
+│   ├── db #基因数据库
+│   │   ├── __init__.py
+│   │   ├── suspGenes.py #存储可疑基因列表用于病毒序列判定
+│   │   └── suspicious-gene.list #存储可疑基因列表用于病毒序列判定
+│   ├── demovir.R #demovir的R语言脚本
+│   ├── demovir.sh #demovir的bash脚本
+│   ├── extract_name.py #用于提取物种名的脚本
+│   ├── extract_pid_sp_from_faa.py -> extract_name.py #用于提取物种名的脚本
+│   ├── extrSeqByName.pl #根据序列名称提取FastA文件中的序列并输出FASTA文件
+│   ├── fa_length_tpm_scatter.R #散点图绘图脚本
+│   ├── fasta2phylip.pl #FastA转换为phylip格式
+│   ├── fasta_size_distribution_plot.py #序列长度分布图绘图程序
+│   ├── fasta_size_gc.py #序列长度和GC含量计算程序
+│   ├── filtByViralPredictionTools.py #用于从WtP结果中提取阳性病毒序列的程序
+│   ├── linkTab.py #根据字段连接表格的程序
+│   ├── merge_taxa.pl
+│   ├── merge_tpms.pl
+│   ├── NMDS.R #NMDS分析程序
+│   ├── ntw_annot.pl #vContact注释脚本
+│   ├── pheatmap_for_abd.R #热图绘制程序
+│   ├── renameMergeSeq.pl #vOTU序列重命名程序
+│   ├── sam_to_fastq.py #sam文件转换为fastq
+│   ├── SeqLenCutoff.pl #根据长度过滤Scaffolds程序
+│   ├── specTab4barplot.py -> abd_by_taxa.py
+│   ├── stat_N50.pl #计算Scaffolds的N50等指标
+│   ├── sum_abd_by_seq_bk.py #无用的备份
+│   ├── sum_abd_by_seq.py -> sumAbundance.py
+│   ├── sum_abd_by_taxa_bk.py #无用的备份
+│   ├── sum_abd_by_taxa.py -> abd_by_taxa.py
+│   ├── sumAbundance.py #tpm按物种
+│   ├── taxa_annot_abd.py -> tpmAddSource.py
+│   ├── tpmAddSource_bk.py #tpm求和程序的备份
+│   ├── tpmAddSource.py #tpm按物种纵向求和程序保留各个样本
+│   ├── usearch -> usearch11.0.667_i86linux32 #usearch软件链接
+│   ├── usearch11.0.667_i86linux32 #usearch软件
+│   ├── variables_scatter.R #通用散点图绘图脚本
+│   ├── vCurator-dev.py #病毒序列判定程序（基于vir-id-sop）开发版
+│   ├── vCurator.py #病毒序列判定程序（基于vir-id-sop）
+│   ├── virus2csv.py #用于制备vContact输入文件
+│   ├── viruse_tax.py #NCBI病毒RefSeq数据库处理程序
+│   └── virus_identity.py #根据关键字过滤病毒的程序
+├── conda.list #conda软件列表
+├── crafts #各个分析模块，详见"3 软件模块功能、用法和结果说明"
+│   ├── assembly/
+│   │   ├── assembly.py
+│   │   ├── __init__.py
+│   ├── classify/
+│   │   ├── classify.py
+│   │   ├── __init__.py
+│   │   └── vCont.py
+│   ├── config/
+│   │   ├── arguments.py
+│   │   ├── config.py
+│   │   ├── getOpts.py
+│   │   ├── __init__.py
+│   │   └── vircraft.cfg
+│   ├── data/
+│   │   ├── bioseq.py
+│   │   ├── fastqc.py
+│   │   ├── __init__.py
+│   ├── func_annot/
+│   │   ├── callAMGs.py
+│   │   ├── geneAnnot.py
+│   │   ├── __init__.py
+│   ├── general/
+│   │   ├── __init__.py
+│   │   └── utils.py
+│   ├── host/
+│   │   ├── hosts.py
+│   │   └── __init__.py
+│   ├── identify/
+│   │   ├── __init__.py
+│   │   ├── viridsop.py
+│   │   └── wtpsop.py
+│   ├── __init__.py
+│   ├── quantify/
+│   │   ├── alnQuant.py
+│   │   ├── geneQuantStat.py
+│   │   ├── __init__.py
+│   │   ├── multiQuant.py
+│   │   └── virQuantStat.py
+│   ├── summary/
+│   │   └── statPlot.py
+│   └── votus/
+│       ├── __init__.py
+│       └── votus.py
+├── docs #图片表格等文件存储目录
+│   └── Overall_workflow_of_VirCraft.png #软件结构图
+├── download_databases.sh #数据库部署程序，开发中...
+├── example #VirCraft示例脚本和输入文件
+│   ├── run_vircraft.sh #VirCraft示例脚本
+│   └── sample_info.xls #样本信息文件
+├── install.sh #依赖安装程序
+├── LICENSE
+├── README.md #本说明文档
+├── requirements.min.txt #最小化的python模块列表
+├── requirements.txt #python模块列表
+├── setup.py #build脚本，开发中...
+├── virCraft.py #主程序
+└── VirCraft.yaml #VirCraft环境文件
+```
 
 #### 2.2 软件基本使用方法
 
@@ -228,6 +341,7 @@ identify结果文件中最重要的就是curation结果。
 │   ├── manu_curate_anno.xls #需手动判定病毒基因注释文件
 │   ├── manu_curate_contigs.xls #需手动判定病毒contig信息文件
 │   └── ...
+└── ...
 ```
 
 #### 3.4 病毒序列聚类
@@ -258,6 +372,7 @@ virCraft.py votus -a scaffold.fasta -t 8 -o votus_out
 │   ├── quality_summary.tsv
 │   ├── viruses.fna #病毒序列文件
 │   └── ...
+└── ...
 ```
 
 #### 3.5 病毒分类
@@ -281,38 +396,115 @@ virCraft.py classify -a scaffolds.votu.fa -t 8 -o classify_out
 ```
 .
 ├── 0.prodigal
-│   ├── ylbh_estp_cariaco.votu.faa
-│   └── ylbh_estp_cariaco.votu.ffn
+│   ├── scaffolds.votu.faa
+│   └── scaffolds.votu.ffn
 ├── 1.blastp
-│   ├── ylbh_estp_cariaco_viral_ncbi_taxonomy.txt #blastp病毒物种注释结果
+│   ├── scaffolds_viral_ncbi_taxonomy.txt #blastp病毒物种注释结果
 ├── 2.demovir
 │   ├── DemoVir_assignments.txt #demovir病毒物种注释结果
 │   └── ... 
-└── ylbh_estp_cariaco_taxonomy.txt #最终物种注释结果 
+└── scaffolds_taxonomy.txt #最终物种注释结果 
 ```
 
 #### 3.6 病毒物种丰度分析
+
 vir_quant模块用于病毒物种丰度和多样性分析。主要步骤如下：
 1. 使用BWA分别将各个样本的reads比对到vOTUs。
 2. 使用coverm选择TPM算法计算各个样本中vOTUs丰度，合并各个样本的vOTUs，获得vOTU丰度表。
 3. 有了vOTU丰度表，可做的事情就比较多了。进一步分析Alpha多样性和Beta多样性，绘制vOTU丰度热图、散点图、柱状图等。
 
+###### 3.6.1 vir_quant使用方法
 
+```
+virCraft.py vir_quant -a scaffolds.votu.fa -t 8 -s samp_info.xls -x votus_taxonomy.txt -c checkv/ -o vir_quant_out
+```
+主要参数说明:  
+-a vOTUs序列文件(FastA格式)  
+-s 样本信息文件，表头为"Sample\tGroup\tDataPath"，表格内容信息格式为"sample name\tgroup name\tfull path of fastq1,full path of fastq2\n"  
+-x 物种注释信息文件
+-c CheckV结果目录
 
+###### 3.6.2 vir_quant结果文件说明
+
+```
+.
+├── all_merged.tpm #vOTU丰度表
+├── all_ctg_abd_taxa.xls #中间结果文件
+├── all_sum_abd_taxa.m.xls #中间结果文件
+├── all_sum_abd_taxa.xls #有物种注释的vOTU丰度表
+├── all_taxa_sum_abd.xls #已注释物种丰度表
+├── alpha_diversity.xls #Alpha多样性统计表
+├── contig_sum_abd.xls #OTU总丰度表
+├── sum_abd_qual.xls #中间结果文件
+├── checkv/ #CheckV结果文件目录
+├── contig_length_Total_Abundance_scatter.pdf #序列长度丰度散点图
+├── abundance_heatmap.pdf #丰度热图
+├── taxa_relative_abundance_baplot.pdf #物种丰度柱状图
+├── NMDS.pdf #NMDS图片
+├── nmds_stressplot.pdf #nmds stress图
+├── *BWAIDX.amb #BWA Index文件
+└── ylbh_estp_cariaco.votu_c95_a85_count.sh
+```
 
 #### 3.7 基因功能注释
+
 func_annot模块主要用于对vOTU进行基因预测和基因功能注释。
 1. prodigal用于预测vOTU中的ORFs序列。
 2. 应用egg-mapper和kofamscan分别对ORFs序列进行功能注释。
+3. 应用dramv预测AMG基因。
+
+###### 3.6.1 func_annot使用方法
+
+```
+virCraft.py func_annot -a scaffolds.votu.fa -t 8 -o func_annot_out
+```
+主要参数说明:
+-a vOTUs序列文件(FastA格式)
+-s 样本信息文件，表头为"Sample\tGroup\tDataPath"，表格内容信息格式为"sample name\tgroup name\tfull path of fastq1,full path of fastq2\n"
+-x 物种注释信息文件
+-c CheckV结果目录
+
+###### 3.6.2 func_annot结果文件说明
+
+```
+.
+├── eggnog/ #EggNOG结果目录
+├── kegg/ #KEGG结果目录
+├── prodigal/ #基因预测结果目录
+│   ├── temp.orf.faa
+│   ├── temp.orf.ffn
+│   └── temp.txt
+└── ylbh_estp_cariaco.votu_c95_a85_gene_annot.sh
+```
 
 #### 3.8 病毒宿主分析
-host_prid模块用于对病毒-宿主关系进行分析。使用集成工具VirMatcher预测病毒的宿主。
 
-## 5 注意事项
+host_prid模块用于对病毒-宿主关系进行分析。使用集成工具VirMatcher预测病毒的宿主。
+###### 3.6.1 host_prid使用方法
+
+```
+virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
+```
+主要参数说明:
+-a vOTUs序列文件(FastA格式)
+-m MAGs存放目录
+
+###### 3.6.2 host_prid结果文件说明
+
+```
+.
+├── virmatcher/ #宿主预测结果目录
+│   ├── VirMatcher_Summary_Predictions.tsv
+│   └── ...
+└── ...
+```
+
+## 4 注意事项
 
 当前版本目前vir_quant模块只能生成脚本并不能直接运行，请生成脚本后自行运行。
+目前尚有很多。
 
-## 6 版本更新日志
+## 5 版本更新日志
 
 **VirCraft-v0.0.1版**
 ```
