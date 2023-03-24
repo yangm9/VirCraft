@@ -37,4 +37,4 @@ gunzip usearch11.0.667_i86linux32.gz
 ln -s usearch11.0.667_i86linux32 usearch
 ## Install Demovir
 git clone https://github.com/feargalr/Demovir.git
-#vegan rshape2 
+#vegan rshape2 vegan

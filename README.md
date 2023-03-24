@@ -126,6 +126,36 @@ conda env create -f VirCraft.yaml
 ├── virCraft.py #主程序
 └── VirCraft.yaml #VirCraft环境文件
 ```
+#### 2.1.3 依赖工具列表
+
+表2-1 What_the_Phage识别病毒contigs的标准参数
+
+|软件|版本|备注|
+|:----:|:----:|:----:|
+|BWA|0.7.17-r1188|比对参考基因组|
+|coverm|0.6.1|计算TPM丰度信息|
+|bowtie2|2.4.4|比对参考序列|
+|MEGAHIT|1.2.9|宏基因组组装|
+|SPAdes|3.15.4|宏基因组组装|
+|Trimmomatic|0.39|修剪FASTQ数据以及去除接头序列|
+|fastp|0.23.2|原始测序数据质量控制|
+|sortmerna|4.3.4|去除FASTQ数据中的rRNA|
+|fastuniq|1.1|去除重复reads|
+|cd-hit|4.8.1|序列聚类或去冗余|
+|diamond|2.0.14|序列比对|
+|blast|2.13.0|序列比对|
+|checkv|1.0.1|病毒序列质控和修剪|
+|virsorter2|2.2.4|病毒序列判定|
+|vibrant|1.2.1|识别裂解病毒基因组和整合前病毒|
+|prodigal|2.6.3|基因预测|
+|eggnog-mapper|2.1.10|基因功能注释|
+|kofamscan|1.3.0|基因功能注释|
+|dram|1.4.6|AMGs预测|
+|iqtree|2.2.0.3|建树|
+|salmon|0.14.2|不基于比对而直接对基因进行定量|
+|hmmer|3.3.2|序列比对|
+|bedtools|2.30.0|用于处理基因组信息分析的强大工具集合|
+|trnascan-se|2.0.11|用于基因组注释tRNA分子|
 
 #### 2.2 软件基本使用方法
 
@@ -274,7 +304,7 @@ identify模块用于从组装好的宏基因组序列判定病毒序列，主要
 
 What_the_Phage(WtP)自动化流程目前正在开发中……
 
-[表1-1 What_the_Phage识别病毒contigs的标准参数](https://doi.org/10.1038/s42003-022-04027-y)
+[表3-1 What_the_Phage识别病毒contigs的标准参数](https://doi.org/10.1038/s42003-022-04027-y)
 |tool|criteria|filter|
 |:----:|:----:|:----:|
 |marvel|probability according to Random Forest algorithm|>75%|
