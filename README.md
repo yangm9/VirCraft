@@ -4,8 +4,48 @@ VirCraft is an automatic viromic analysis pipeline.
 
 ## 1 软件安装和数据库部署
 
+#### 1.1 安装VirCraft环境
+
 ```
 conda env create -f VirCraft.yaml
+```
+
+表1-1 VirCraft使用的软件
+
+|软件|版本|备注|
+|:----:|:----:|:----|
+|BWA|0.7.17-r1188|比对参考基因组|
+|coverm|0.6.1|计算TPM丰度信息|
+|bowtie2|2.4.4|比对参考序列|
+|MEGAHIT|1.2.9|宏基因组组装|
+|SPAdes|3.15.4|宏基因组组装|
+|Trimmomatic|0.39|修剪FASTQ数据以及去除接头序列|
+|fastp|0.23.2|原始测序数据质量控制|
+|sortmerna|4.3.4|去除FASTQ数据中的rRNA|
+|fastuniq|1.1|去除重复reads|
+|cd-hit|4.8.1|序列聚类或去冗余|
+|diamond|2.0.14|序列比对|
+|blast|2.13.0|序列比对|
+|checkv|1.0.1|病毒序列质控和修剪|
+|virsorter2|2.2.4|病毒序列判定|
+|vibrant|1.2.1|识别裂解病毒基因组和整合前病毒|
+|prodigal|2.6.3|基因预测|
+|eggnog-mapper|2.1.10|基因功能注释|
+|kofamscan|1.3.0|基因功能注释|
+|dram|1.4.6|AMGs预测|
+|iqtree|2.2.0.3|建树|
+|salmon|0.14.2|不基于比对而直接对基因进行定量|
+|hmmer|3.3.2|序列比对|
+|bedtools|2.30.0|用于处理基因组信息分析的强大工具集合|
+|trnascan-se|2.0.11|用于基因组注释tRNA分子|
+
+#### 1.2 安装VirMatcher
+
+```
+conda activate VirCraft
+conda install -c bioconda -c conda-forge minced blast trnascan-se r-here r-seqinr r-dplyr r-data.table r-stringr pandas biopython psutil
+git clone https://github.com/soedinglab/WIsH.git && cd WIsH && cmake . && make && chmod +x WIsH && cp WIsH $CONDA_PREFIX/bin
+git clone https://bitbucket.org/MAVERICLab/virmatcher && cd virmatcher && pip install . --no-deps
 ```
 
 ## 2 软件结构和基本使用方法
@@ -21,8 +61,8 @@ conda env create -f VirCraft.yaml
 ```
 .
 ├── bin #自制脚本合集
-│   ├── abd_by_taxa.py 
-│   ├── alpha_diversity.R
+│   ├── abd_by_taxa.py #统计各个分类单元的相对丰度
+│   ├── alpha_diversity.R #计算alpha多样性统计表
 │   ├── barplot_for_taxa_tpm.R #物种丰度柱状图脚本
 │   ├── blast_classify.py #基于Blastp的病毒分类脚本
 │   ├── db #基因数据库
@@ -40,8 +80,8 @@ conda env create -f VirCraft.yaml
 │   ├── fasta_size_gc.py #序列长度和GC含量计算程序
 │   ├── filtByViralPredictionTools.py #用于从WtP结果中提取阳性病毒序列的程序
 │   ├── linkTab.py #根据字段连接表格的程序
-│   ├── merge_taxa.pl
-│   ├── merge_tpms.pl
+│   ├── merge_taxa.pl #合并NCBI BLAST和DemoVir病毒分类结果
+│   ├── merge_tpms.pl #合并所有样本的TPM生成vOTUs丰度表
 │   ├── NMDS.R #NMDS分析程序
 │   ├── ntw_annot.pl #vContact注释脚本
 │   ├── pheatmap_for_abd.R #热图绘制程序
@@ -118,7 +158,7 @@ conda env create -f VirCraft.yaml
 │   ├── run_vircraft.sh #VirCraft示例脚本
 │   └── sample_info.xls #样本信息文件
 ├── install.sh #依赖安装程序
-├── LICENSE
+├── LICENSE #许可
 ├── README.md #本说明文档
 ├── requirements.min.txt #最小化的python模块列表
 ├── requirements.txt #python模块列表
@@ -126,36 +166,6 @@ conda env create -f VirCraft.yaml
 ├── virCraft.py #主程序
 └── VirCraft.yaml #VirCraft环境文件
 ```
-#### 2.1.3 依赖工具列表
-
-表2-1 What_the_Phage识别病毒contigs的标准参数
-
-|软件|版本|备注|
-|:----:|:----:|:----|
-|BWA|0.7.17-r1188|比对参考基因组|
-|coverm|0.6.1|计算TPM丰度信息|
-|bowtie2|2.4.4|比对参考序列|
-|MEGAHIT|1.2.9|宏基因组组装|
-|SPAdes|3.15.4|宏基因组组装|
-|Trimmomatic|0.39|修剪FASTQ数据以及去除接头序列|
-|fastp|0.23.2|原始测序数据质量控制|
-|sortmerna|4.3.4|去除FASTQ数据中的rRNA|
-|fastuniq|1.1|去除重复reads|
-|cd-hit|4.8.1|序列聚类或去冗余|
-|diamond|2.0.14|序列比对|
-|blast|2.13.0|序列比对|
-|checkv|1.0.1|病毒序列质控和修剪|
-|virsorter2|2.2.4|病毒序列判定|
-|vibrant|1.2.1|识别裂解病毒基因组和整合前病毒|
-|prodigal|2.6.3|基因预测|
-|eggnog-mapper|2.1.10|基因功能注释|
-|kofamscan|1.3.0|基因功能注释|
-|dram|1.4.6|AMGs预测|
-|iqtree|2.2.0.3|建树|
-|salmon|0.14.2|不基于比对而直接对基因进行定量|
-|hmmer|3.3.2|序列比对|
-|bedtools|2.30.0|用于处理基因组信息分析的强大工具集合|
-|trnascan-se|2.0.11|用于基因组注释tRNA分子|
 
 #### 2.2 软件基本使用方法
 
@@ -473,7 +483,7 @@ virCraft.py vir_quant -a scaffolds.votu.fa -t 8 -s samp_info.xls -x votus_taxono
 ├── NMDS.pdf #NMDS图片
 ├── nmds_stressplot.pdf #nmds stress图
 ├── *BWAIDX.amb #BWA Index文件
-└── ylbh_estp_cariaco.votu_c95_a85_count.sh
+└── votus_count.sh
 ```
 
 #### 3.7 基因功能注释
@@ -483,7 +493,7 @@ func_annot模块主要用于对vOTU进行基因预测和基因功能注释。
 2. 应用egg-mapper和kofamscan分别对ORFs序列进行功能注释。
 3. 应用dramv预测AMG基因。
 
-###### 3.6.1 func_annot使用方法
+###### 3.7.1 func_annot使用方法
 
 ```
 virCraft.py func_annot -a scaffolds.votu.fa -t 8 -o func_annot_out
@@ -494,17 +504,28 @@ virCraft.py func_annot -a scaffolds.votu.fa -t 8 -o func_annot_out
 -x 物种注释信息文件
 -c CheckV结果目录
 
-###### 3.6.2 func_annot结果文件说明
+###### 3.7.2 func_annot结果文件说明
 
 ```
 .
 ├── eggnog/ #EggNOG结果目录
+│   ├── votus_eggout.emapper.annotations
+│   ├── votus.emapper.hits
+│   └── votus.emapper.seed_orthologs
 ├── kegg/ #KEGG结果目录
+│   ├── votus.exec_annotation.detail.xls
+│   └── votus.exec_annotation.xls
 ├── prodigal/ #基因预测结果目录
-│   ├── temp.orf.faa
-│   ├── temp.orf.ffn
-│   └── temp.txt
-└── ylbh_estp_cariaco.votu_c95_a85_gene_annot.sh
+│   ├── votus_votus.faa #ORF序列
+│   └── votus_votus.ffn #基因序列
+├── dramv-annotate
+│   ├── annotations.tsv #Scaffold注释结果
+│   └── ...
+├── dramv-distill
+│   ├── amg_summary.tsv #AMG注释结果
+│   ├── product.html #AMG注释结果热图
+│   └── vMAG_stats.tsv #AMG注释结果 
+└── votus_gene_annot.sh
 ```
 
 #### 3.8 病毒宿主分析
@@ -536,34 +557,34 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 
 ## 5 版本更新日志
 
-**VirCraft-v0.0.1版**
+**VirCraft-v0.0.1**
 ```
 初始版本。
 ```
 
-**VirCraft-v0.0.2版**
+**VirCraft-v0.0.2**
 ```
 初始版本。
 ```
 
-**VirCraft-v0.0.3版**
+**VirCraft-v0.0.3**
 ```
 尝试多路分析失败的版本。
 ```
 
-**VirCraft-v0.0.4版**
+**VirCraft-v0.0.4**
 ```
 1.暂时不支持多线程的版本。
 2.quantify模块完成，包括统计多样性分析、散点图、柱状图等。
 3.大势所趋，用import argparse代替from optparse import OptionParser。
 ```
 
-**VirCraft-v0.0.5版**
+**VirCraft-v0.0.5**
 ```
 添加AMGs分析，暂定用dramv和vibrant分析，尚未整合。
 ```
 
-**VirCraft-v0.0.6版**
+**VirCraft-v0.0.6**
 ```
 1.classify工具的更新：增加blast aginst NCBI viral RefSeq分类部分。
 2.手动curation部分的自动化。
