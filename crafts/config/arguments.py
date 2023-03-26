@@ -16,7 +16,7 @@ def setOpts(name:str,subcmds:str,version:str):
         {name} {subcmds} [<options>] -o <outdir>
         subcommands: an optional functional module, including assembly, identify, votus, classify, compare, vir_quant, func_annot and host_prid.
         options: options described below in the section of Options.
-        outdir: output directory.
+        outdir: output folder.
     ''',
         epilog='Text at the bottom of help'
     )
@@ -46,7 +46,7 @@ def setOpts(name:str,subcmds:str,version:str):
     subpsr.add_argument(
         '-l','--cutoff',action='store',type=int,
         dest='cutoff',metavar='INT',default=False,
-        help='The minimal length of contigs/scaffolds. Default is 5000.'
+        help='The minimal length of contigs/scaffolds. [default=5000]'
     )
 
     subpsr=subparsers.add_parser(
@@ -130,19 +130,19 @@ def addGlbArg(psr): #Add global arguments
     psr.add_argument(
         '-t','--threads',action='store',type=str,
         dest='threads',metavar='INT',default=8,
-        help='Number of processes/threads to use'
+        help='Number of processes/threads to use [default=8]'
     )
     psr.add_argument(
         '-o','--outdir',action='store',type=str,
         dest='outdir',metavar='STR',default=False,
-        required=True,help='Output directory'
+        required=True,help='output folder [default= working directory]'
     )
     return psr
 
 def addProcArg(psr,dflt:str):
     helpDict={
-        'fuc' : 'Select the optional analysis process of read_qc (f, u, and/or c), i.e. "-p fuc". Among these, "f" means filter, "u" means removing the duplications and get the unique reads, and "c" refers to the process of remove the contamination from a customized reference database. Default is "fuc"',   
-        'sm'  : 'Select the optional analysis process of assembly (s and/or c), i.e. "-p sm". Among these, "s" or "m" represent the assembly tool of SPAdes or megahit. i.e. "sm" refer to the process as follows: 1) assemble the reads to metagenome using SPAdes, 2) map all reads to the assembled contigs and get the unmapped reads, 3) assemble the unmapped reads with megahit, and 4) merge the assembly results from 2) and 3). Default is "sm"'
+        'fuc' : 'Select the optional analysis process of read_qc (f, u, and/or c), i.e. "-p fuc". Among these, "f" means filter, "u" means removing the duplications and get the unique reads, and "c" refers to the process of remove the contamination from a customized reference database [default="fuc"]',   
+        'sm'  : 'Select the optional analysis process of assembly (s and/or c), i.e. "-p sm". Among these, "s" or "m" represent the assembly tool of SPAdes or megahit. i.e. "sm" refer to the process as follows: 1) assemble the reads to metagenome using SPAdes, 2) map all reads to the assembled contigs and get the unmapped reads, 3) assemble the unmapped reads with megahit, and 4) merge the assembly results from 2) and 3) [default="sm"]'
     }
     psr.add_argument(
         '-p','--process',action='store',type=str,

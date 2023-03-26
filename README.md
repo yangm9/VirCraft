@@ -8,6 +8,11 @@ VirCraft is an automatic viromic analysis pipeline.
 
 ```
 conda env create -f VirCraft.yaml
+conda activate VirCraft
+conda install -c bioconda -c conda-forge minced blast trnascan-se r-here r-seqinr r-dplyr r-data.table r-stringr pandas biopython psutil
+git clone https://github.com/soedinglab/WIsH.git && cd WIsH && cmake . && make && chmod +x WIsH && cp WIsH $CONDA_PREFIX/bin
+git clone https://bitbucket.org/MAVERICLab/virmatcher && cd virmatcher && pip install . --no-deps
+conda create -y -n vibrant -c bioconda vibrant
 ```
 
 表1-1 VirCraft使用的软件
@@ -39,13 +44,14 @@ conda env create -f VirCraft.yaml
 |bedtools|2.30.0|用于处理基因组信息分析的强大工具集合|
 |trnascan-se|2.0.11|用于基因组注释tRNA分子|
 
-#### 1.2 安装VirMatcher
+#### 1.2 数据库的部署
 
 ```
-conda activate VirCraft
-conda install -c bioconda -c conda-forge minced blast trnascan-se r-here r-seqinr r-dplyr r-data.table r-stringr pandas biopython psutil
-git clone https://github.com/soedinglab/WIsH.git && cd WIsH && cmake . && make && chmod +x WIsH && cp WIsH $CONDA_PREFIX/bin
-git clone https://bitbucket.org/MAVERICLab/virmatcher && cd virmatcher && pip install . --no-deps
+#1.部署checkv数据库
+#2.部署vibriant数据库
+conda activate vibriant
+download-db.sh #大约需要40分钟，~11GB
+
 ```
 
 ## 2 软件结构和基本使用方法

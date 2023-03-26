@@ -75,6 +75,13 @@ elif sys.argv[1]=='func_annot':
         threads=args.threads
     )
     VirGene.FuncAnnot()
+    print('Predicting AMGs')
+    AMG=callAMGs.AMGs(
+        fasta=args.fasta,
+        outdir=args.outdir,
+        threads=args.threads
+    )
+    AMG.annotAMGs()
     print('Function annotation completed!!!')
 elif sys.argv[1]=='classify':
     print('Viral contig classification')

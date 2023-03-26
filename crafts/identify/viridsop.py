@@ -6,16 +6,15 @@ class VirScan(Seq):
     '''
     According to the Viral sequence identification SOP with VirSorter2 (https://www.protocols.io/view/viral-sequence-identification-sop-with-virsorter2-5qpvoyqebg4o/v3)
     '''
-    n=0
     vs2_subcmds=['--keep-original-seq','--seqname-suffix-off --viral-gene-enrich-off --provirus-off --prep-for-dramv']
     def __init__(self,fasta='',outdir='',threads=8):
         super().__init__(fasta,outdir)
         self.threads=str(threads)
-    def virsorter(self,in_fa:str):
-        idx=str(self.n+1)
+    def virsorter(self,in_fa:str,n:int):
+        idx=str(n+1)
         wkdir=f'{self.outdir}/vs2-pass{idx}'
         utils.mkdir(wkdir)
-        cmd=['virsorter run',self.vs2_subcmds[self.n],'-i',in_fa,
+        cmd=['virsorter run',self.vs2_subcmds[n],'-i',in_fa,'-w',wkdir,
             '-d',self.confDict['Virsorter2DB'],'-w',wkdir,
             '--include-groups dsDNAphage,ssDNA','-j',self.threads,
             '--min-length 5000 --min-score 0.5 all\n']
@@ -74,14 +73,14 @@ class VirScan(Seq):
     def Identify(self):
         cmd=[self.envs]
         #Step 1 Run VirSorter2
-        tmp_cmd,wkdir=self.virsorter(self.fasta)
+        tmp_cmd,wkdir=self.virsorter(self.fasta,0)
         cmd.extend(tmp_cmd)
         #Step 2 Run CheckV
         vs2_fa=f'{wkdir}/final-viral-combined.fa'
         tmp_cmd,checkv_fa=self.checkv(vs2_fa)
         cmd.extend(tmp_cmd)
         #Step 3 rerun VirSorter2 
-        tmp_cmd,wkdir=self.virsorter(checkv_fa)
+        tmp_cmd,wkdir=self.virsorter(checkv_fa,1)
         cmd.extend(tmp_cmd)
         #Step 4 DRAMv annotation
         tmp_cmd=self.annotate(wkdir) 
