@@ -10,6 +10,7 @@ class AMGs(VirScan):
         super().__init__(fasta,outdir,threads)
         self.threads=str(threads)
     def dramv(self):
+        cmd=[self.envs]
         vs2dir=f'{self.outdir}/virsorter2'
         wkdir=f'{self.outdir}/dramv'
         vs2_dramv_fa=f'{vs2dir}/for-dramv/final-viral-combined-for-dramv.fa'
@@ -24,13 +25,13 @@ class AMGs(VirScan):
             'DRAM-v.py distill','-i',anno_tsv,'-o',distill_dir,'\n']
         return cmd
     def vibrant(self):
+        cmd=[utils.selectENV('vibrant')]
         wkdir=f'{self.outdir}/vibrant'
         cmd=['VIBRANT_run.py','-i',self.fasta,
             '-t',self.threads,'-folder',wkdir,'\n']
         return cmd
     def annotAMGs(self):
-        cmd=[self.envs]
-        cmd.extend(self.dramv())
+        cmd=self.dramv()
         cmd.extend(self.vibrant())
         shell=f'{self.outdir}/{self.name}_call_amgs.sh'
         utils.printSH(shell,cmd)
