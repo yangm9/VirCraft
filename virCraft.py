@@ -14,6 +14,7 @@ from crafts.classify import vCont
 from crafts.quantify import virQuantStat
 from crafts.host import hosts
 from crafts.func_annot import geneAnnot
+from crafts.func_annot import callAMGs
 
 version='0.0.6'
 args=arguments.setOpts(sys.argv[0],sys.argv[1],version)
