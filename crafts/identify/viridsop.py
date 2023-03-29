@@ -71,7 +71,7 @@ class VirScan(Seq):
         )
         return cmd
     def Identify(self):
-        cmd=[self.envs]
+        cmd=[utils.selectENV('viral-id-sop')]
         #Step 1 Run VirSorter2
         tmp_cmd,wkdir=self.virsorter(self.fasta,0)
         cmd.extend(tmp_cmd)
