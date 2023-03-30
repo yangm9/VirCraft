@@ -1,6 +1,7 @@
 import os
 from ..general import utils
 from ..data.bioseq import Seq
+from ..data.bioseq import CDS
 from .alnQuant import VirCount
 from .alnQuant import GeneCount
 
@@ -24,11 +25,15 @@ class multiVirCount(Seq):
             #results+=utils.execute(cmd)
         return results
 
-class multiGeneCount(multiVirCount):
+class multiGeneCount(CDS):
     def __init__(self,samp_info='',fasta='',outdir='',threads=8):
-        super().__init__(samp_info,fasta,outdir,threads)
+        super().__init__(fasta,outdir,threads)
+        self.samp_info=os.path.abspath(samp_info)
+        self.groups,self.sampDict=self.readSampInfo(self.samp_info)
+        self.threads=str(threads)
     def geneCountBySamp(self):
-        salmon_idx,_=self.mkSalmonIdx
+        cmd=[self.envs] 
+        cmd,salmon_idx=self.mkSalmonIdx
         results=''
         for samp in self.sampDict.keys():
             cmd=[self.envs]

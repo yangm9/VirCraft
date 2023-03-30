@@ -32,9 +32,10 @@ class VirCount(Reads):
 class GeneCount(Reads):
     def __init__(self,fq1='',fq2='',outdir='',threads=8):
         super().__init__(fq1,fq2,outdir)
+        self.threads=str(threads)
     def salmon(self,samp:str,salmon_idx:str):
         wkdir=f'{self.outdir}/{samp}_gene_quant'
         cmd=['salmon quant --validateMappings','-i',salmon_idx,
-            '-l A -p 16 --meta','-1',self.fastqs[0],'-2',self.fastqs[1],
-            '-o',wkdir,'\n']
+            '-l A','-p',self.threads,'--meta',
+            '-1',self.fastqs[0],'-2',self.fastqs[1],'-o',wkdir,'\n']
         return cmd

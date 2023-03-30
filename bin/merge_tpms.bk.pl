@@ -4,16 +4,12 @@ use FindBin '$Bin';
 #此脚本用于合并所有样本中coverm生成的tpm
 
 unless(@ARGV>2){
-    print STDERR "Usage: $0 <sample_list_file> <count_dir> <postfix> [Contig/Gene]\n";
+    print STDERR "Usage: $0 <sample_list_file> <count_dir> <postfix>\n";
     exit 0;
 }
 
-my ($samp_info,$wkdir,$postfix,$object)=@ARGV;
-$postfix||='tpm';
-$object||='Contig'
-
-my $topleft='Contig';
-$topleft='Name' if($object eq 'Gene');
+my ($samp_info,$wkdir,$postfix)=@ARGV;
+$postfix||='count';
 
 open IN,$samp_info or die $!;
 my $n=1;
@@ -23,10 +19,9 @@ while(<IN>){
     next if(/^Sample/);
     chomp;
     my $samp_name=(split /\t/,$_)[0];
-    `sed '1s/TPM/$samp_name/' $wkdir/${samp_name}_gene_quant/quant.sf|cut -f 1,4>$samp_name.tpm` if($object eq 'Gene');
     unless($n==1){
         #print "$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left Contig $wkdir/${samps_prefix}${n}.$postfix\n";
-        `$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left $topleft $wkdir/${samps_prefix}${samp_name}.$postfix`;
+        `$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left Contig $wkdir/${samps_prefix}${samp_name}.$postfix`;
     }
     $samps_prefix.=$samp_name;
     #$samps_prefix.=$n;
@@ -38,5 +33,5 @@ close IN;
 `mv $wkdir/$samps_prefix.$postfix $wkdir/all_merged.$postfix`;
 `rm -f $wkdir/$merged_prefix*.$postfix`;
 #print "rm -f $b*.$postfix";
-`sed -i '1s/\.sort TPM//g' $wkdir/all_merged.$postfix` if($object eq 'Contig');
+`sed -i '1s/\.sort TPM//g' $wkdir/all_merged.$postfix`;
 __END__

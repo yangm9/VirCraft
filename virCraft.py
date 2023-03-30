@@ -95,25 +95,25 @@ elif sys.argv[1]=='compare':
     ) #network
     NWK.vContact()
     print('Contigs comparasion completed!!!')
-elif sys.argv[1]=='gene_quant':
-    GeneQuant=geneQuantStat.GeneAbdStat(
-        fasta=args.fasta,
-        samp_info=args.samp_info,
-        outdir=args.outdir,
-        threads=args.threads
-    )
-    GeneQuant.QuantStat()
-    print('gene quantifications completed!!!')
 elif sys.argv[1]=='vir_quant':
     print('Viral abundance and diversity analysis')
     VirQuant=virQuantStat.VirAbdStat(
-        fasta=args.fasta,
         samp_info=args.samp_info,
+        fasta=args.fasta,
         outdir=args.outdir,
         threads=args.threads
     )
     VirQuant.QuantStat(args.taxa,args.checkv)
     print('Viral quantifications completed!!!')
+elif sys.argv[1]=='gene_quant':
+    GeneQuant=geneQuantStat.GeneAbdStat(
+        samp_info=args.samp_info,
+        fasta=args.fasta,
+        outdir=args.outdir,
+        threads=args.threads
+    )
+    GeneQuant.QuantStat()
+    print('gene quantifications completed!!!')
 elif sys.argv[1]=='host_prid':
     print('Host prediction')
     Hosts=hosts.VirHost(
