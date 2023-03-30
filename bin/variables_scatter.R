@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-
+#yangm@idsse.ac.cn
 if(!require("ggplot2")) {install.packages("ggplot2")}
 
 library(ggplot2)

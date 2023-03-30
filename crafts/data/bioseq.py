@@ -105,10 +105,10 @@ class VirSeq(Seq):
         cmd.extend(['cat',provir_fna,vir_fna,'>',out_fa,'\n'])
         return cmd,merged_fa
 
-class ORF(Seq):
-    def __init__(self,orf='',outdir='',*args,**kwargs):
-        super().__init__(orf,outdir,*args,**kwargs)
-        self.orf=self.fasta
+class CDS(Seq):
+    def __init__(self,cds='',outdir='',*args,**kwargs):
+        super().__init__(cds,outdir,*args,**kwargs)
+        self.cds=self.cds
     @property
     def mkSalmonIdx(self):
         cmd=[self.envs]
@@ -116,12 +116,17 @@ class ORF(Seq):
         idx=f'{wkdir}/SalmonIdx' # A directory
         utils.mkdir(wkdir)
         cmd.extend(
-            ['salmon index','-p 9 -k 31','-t',self.orf,'-i',wkdir,'\n']
+            ['salmon index','-p 8 -k 31','-t',self.cds,'-i',wkdir,'\n']
         )
         shell=f'{self.outdir}/{self.name}_salmonidx.sh'
         utils.printSH(shell,cmd)
         results=utils.execute(cmd)
         return idx,results
+
+class ORF(Seq):
+    def __init__(self,orf='',outdir='',*args,**kwargs):
+        super().__init__(orf,outdir,*args,**kwargs)
+        self.orf=orf
     def eggnogAnno(self):
         wkdir=f'{self.outdir}/eggnog'
         utils.mkdir(wkdir)

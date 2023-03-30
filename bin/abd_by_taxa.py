@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 #Old Name: specTab4barplot.py
+#yangm@idsse.ac.cn
 
 import sys
 import pandas as pd
