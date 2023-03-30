@@ -2,6 +2,7 @@ import os
 from ..general import utils
 from ..data.bioseq import Seq
 from .alnQuant import VirCount
+from .alnQuant import GeneCount
 
 class multiVirCount(Seq):
     def __init__(self,samp_info='',fasta='',outdir='',threads=8):

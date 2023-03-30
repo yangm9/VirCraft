@@ -60,7 +60,7 @@ class VirAbdStat(multiVirCount):
         cmd.extend(self.sizeAbdPlot(abd,checkv_dir))
         cmd.extend(self.taxaAbd(abd,taxa_anno))
         cmd.extend(self.diversity(abd))
-        shell=f'{self.outdir}/{self.name}_count.sh'
+        shell=f'{self.outdir}/{self.name}_vir_count.sh'
         utils.printSH(shell,cmd)
         results=utils.execute(cmd)
         return results
