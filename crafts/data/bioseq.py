@@ -113,7 +113,7 @@ class CDS(Seq):
         cmd=[self.envs]
         wkdir=f'{self.outdir}/salmonidx'
         utils.mkdir(wkdir)
-        idx=f'{wkdir}/SalmonIdx' # A directory
+        idx=f'{wkdir}' # A directory
         cmd.extend(
             ['salmon index','-p 8 -k 31','-t',self.fasta,'-i',wkdir,'\n']
         )

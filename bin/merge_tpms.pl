@@ -10,7 +10,7 @@ unless(@ARGV>2){
 
 my ($samp_info,$wkdir,$postfix,$object)=@ARGV;
 $postfix||='tpm';
-$object||='Contig'
+$object||='Contig';
 
 my $topleft='Contig';
 $topleft='Name' if($object eq 'Gene');
@@ -24,13 +24,16 @@ while(<IN>){
     chomp;
     my $samp_name=(split /\t/,$_)[0];
     `sed '1s/TPM/$samp_name/' $wkdir/${samp_name}_gene_quant/quant.sf|cut -f 1,4>$samp_name.tpm` if($object eq 'Gene');
-    unless($n==1){
-        #print "$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left Contig $wkdir/${samps_prefix}${n}.$postfix\n";
-        `$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left $topleft $wkdir/${samps_prefix}${samp_name}.$postfix`;
+    if($n==1){
+        $samps_prefix=$samp_name;
+        $merged_prefix=$samp_name;
+    }else{
+        #print "$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left $topleft $wkdir/${samps_prefix}${n}.$postfix\n";
+        `$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left $topleft $wkdir/${samps_prefix}${n}.$postfix`;
+        $samps_prefix.=$n;
+        `rm -f $wkdir/$samp_name.$postfix`;
     }
-    $samps_prefix.=$samp_name;
     #$samps_prefix.=$n;
-    $merged_prefix=$samps_prefix if($n==2);
     $n++;
 }
 close IN;

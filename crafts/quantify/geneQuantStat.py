@@ -14,25 +14,11 @@ class GeneAbdStat(multiGeneCount):
     def QuantStat(self):
         self.geneCountBySamp()
         cmd=[self.envs]
-        multicmd = f'''\
-cd {self.outdir}
-sh {self.name}_salmonidx.sh
-processes=()
-ls *_gene_count.sh | while read i
-do
-     echo -e "nohup sh $i 1>$i.o 2>$i.e&" | bash
-     processes+=($!)
-done
-for process in "${{processes[@]}}"
-do
-     wait $process
-done
-'''
-        cmd.append(multicmd)
+        cmd.extend(['multithreads.pl',self.outdir,'gene_count.sh 5\n'])
         tmp_cmd,abd=self.mergeAbd()
         cmd.extend(tmp_cmd)
         cmd.append('rm -rf *_gene_count.sh*\n')
-        shell=f'{self.outdir}/{self.name}_gene_count.sh'
+        shell=f'{self.outdir}/{self.name}_gene_quant.sh'
         utils.printSH(shell,cmd)
         #results=utils.execute(cmd)
         return 0#results
