@@ -17,8 +17,8 @@ conda create -y -n vibrant -c bioconda vibrant
 
 表1-1 VirCraft使用的软件
 
-|软件|版本|备注|
-|:----:|:----:|:----|
+|软件名称|版本|备注|
+|:----|:----|:----|
 |BWA|0.7.17-r1188|比对参考基因组|
 |coverm|0.6.1|计算TPM丰度信息|
 |bowtie2|2.4.4|比对参考序列|
@@ -322,7 +322,7 @@ What_the_Phage(WtP)自动化流程目前正在开发中……
 
 [表3-1 What_the_Phage识别病毒contigs的标准参数](https://doi.org/10.1038/s42003-022-04027-y)
 |tool|criteria|filter|
-|:----:|:----:|:----:|
+|:----|:----|:----|
 |marvel|probability according to Random Forest algorithm|>75%|
 |VirFinder|p-value|>0.9|
 |PPP-Meta|contig classification|"Phage"|
