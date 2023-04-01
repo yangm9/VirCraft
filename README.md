@@ -58,11 +58,11 @@ download-db.sh #大约需要40分钟，~11GB
 
 #### 2.1 软件结构
 
-#### 2.1.1 软件结构图
+###### 2.1.1 软件结构图
 
 ![Overall workflow of VirCraft](docs/Overall_workflow_of_VirCraft.png)
 
-#### 2.1.2 软件目录结构
+###### 2.1.2 软件目录结构
 
 ```
 .
@@ -594,5 +594,4 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 5.部分模块支持RUN功能。
 6.软件结构更新：data、general等模块。
 7.添加AMGs分析，暂定用dramv和vibrant分析，尚未整合。
-
 ```
