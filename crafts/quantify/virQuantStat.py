@@ -55,6 +55,9 @@ class VirAbdStat(multiVirCount):
     def QuantStat(self,taxa_anno=None,checkv_dir=None):
         self.virCountBySamp()
         cmd=[self.envs]
+        cmd.extend(
+            ['multithreads.pl',self.outdir,'viral_count.sh',batch_size,'\n']
+        )
         tmp_cmd,abd=self.mergeAbd()
         cmd.extend(tmp_cmd)
         cmd.extend(self.sizeAbdPlot(abd,checkv_dir))

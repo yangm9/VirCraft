@@ -112,7 +112,7 @@ elif sys.argv[1]=='gene_quant':
         outdir=args.outdir,
         threads=args.threads
     )
-    GeneQuant.QuantStat()
+    GeneQuant.QuantStat(args.batch_size)
     print('gene quantifications completed!!!')
 elif sys.argv[1]=='host_prid':
     print('Host prediction')

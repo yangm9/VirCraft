@@ -587,15 +587,12 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 
 **VirCraft-v0.0.5**
 ```
-添加AMGs分析，暂定用dramv和vibrant分析，尚未整合。
-```
-
-**VirCraft-v0.0.6**
-```
 1.classify工具的更新：增加blast aginst NCBI viral RefSeq分类部分。
 2.手动curation部分的自动化。
 3.整合compare结果和classify结果。
 4.完善host_pred模块。
 5.部分模块支持RUN功能。
 6.软件结构更新：data、general等模块。
+7.添加AMGs分析，暂定用dramv和vibrant分析，尚未整合。
+
 ```
