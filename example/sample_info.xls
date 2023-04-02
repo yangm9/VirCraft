@@ -1,4 +1,4 @@
-#Sample	Group	DataPath
+Sample	Group	DataPath
 V1	ylbh	/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V1_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V1_2.fq
 V2	ylbh	/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V2_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V2_2.fq
 V3	ylbh	/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V3_1.fq,/data_backup/yangming/YM1XLD211101MV/0.data/5.decomtaminant/V3_2.fq
