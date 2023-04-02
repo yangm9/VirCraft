@@ -65,7 +65,7 @@ class Seq(VirCfg):
         filt_prefix=f'{self.outdir}/{self.name}.filt'
         cmd.extend(
             ['fasta_size_distribution_plot.py',self.fasta,'-o',size_dist,
-            '-t "Sequence Size Distribution" -s 2000 -g 10\n',
+            '-s 2000 -g 10 -t "Sequence Size Distribution"\n',
             'fasta_size_gc.py',self.fasta,'>',len_gc_stat,'\n',
             'variables_scatter.R',len_gc_stat,'Length~GC',wkdir,'\n',
             'stat_N50.pl',self.fasta,n50_stat1,'\n'

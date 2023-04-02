@@ -52,7 +52,8 @@ class VirAbdStat(multiVirCount):
             'alpha_diversity.R',abd,alpha_diversity,'\n',
             'NMDS.R',abd,self.samp_info,self.outdir,'\n']
         return cmd
-    def QuantStat(self,taxa_anno=None,checkv_dir=None):
+    def QuantStat(self,taxa_anno=None,checkv_dir=None,batch_size=2):
+        batch_size=str(batch_size)
         self.virCountBySamp()
         cmd=[self.envs]
         cmd.extend(
@@ -65,5 +66,5 @@ class VirAbdStat(multiVirCount):
         cmd.extend(self.diversity(abd))
         shell=f'{self.outdir}/{self.name}_vir_count.sh'
         utils.printSH(shell,cmd)
-        results=utils.execute(cmd)
+        #results=utils.execute(cmd)
         return results

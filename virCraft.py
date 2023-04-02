@@ -58,7 +58,7 @@ elif sys.argv[1]=='votus':
         outdir=args.outdir,
         threads=args.threads
     )
-    vOTUs.RmDup()
+    vOTUs.RmDup(args.cutoff)
     print('vOTU cluster completed!!!')
 elif sys.argv[1]=='func_annot':
     print('Function annotation')
@@ -103,7 +103,7 @@ elif sys.argv[1]=='vir_quant':
         outdir=args.outdir,
         threads=args.threads
     )
-    VirQuant.QuantStat(args.taxa,args.checkv)
+    VirQuant.QuantStat(args.taxa,args.checkv,args.batch_size)
     print('Viral quantifications completed!!!')
 elif sys.argv[1]=='gene_quant':
     GeneQuant=geneQuantStat.GeneAbdStat(

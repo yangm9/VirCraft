@@ -44,11 +44,7 @@ def setOpts(name:str,subcmds:str,version:str):
     subpsr=addPairFqArg(subpsr)
     subpsr=addGlbArg(subpsr)
     subpsr=addProcArg(subpsr,'sm')
-    subpsr.add_argument(
-        '-l','--cutoff',action='store',type=int,
-        dest='cutoff',metavar='INT',default=False,
-        help='The minimal length of contigs/scaffolds. [default=5000]'
-    )
+    subpsr=addCutoffArg(subpsr)
 
 #----------------------identify-----------------------
     subpsr=subparsers.add_parser(
@@ -57,6 +53,7 @@ def setOpts(name:str,subcmds:str,version:str):
     )
     subpsr=addFaArg(subpsr)
     subpsr=addGlbArg(subpsr)
+    subpsr=addCutoffArg(subpsr)
  
 #-----------------------votus-------------------------
     subpsr=subparsers.add_parser(
@@ -65,6 +62,7 @@ def setOpts(name:str,subcmds:str,version:str):
     )
     subpsr=addFaArg(subpsr)
     subpsr=addGlbArg(subpsr)
+    subpsr=addCutoffArg(subpsr)
 
 #---------------------classify------------------------
     subpsr=subparsers.add_parser(
@@ -213,3 +211,11 @@ def addSampArg(psr):
         help='Sample information file with the header of \"#Sample\\tGroup\\tDataPath\n\", and the format of each line in the text is \"sample name\\tgroup name\\tfull path of fastq1, full path of fastq2\\n\"'
     )
     return psr 
+
+def addCutoffArg(psr):
+    psr.add_argument(
+        '-l','--cutoff',action='store',type=int,
+        dest='cutoff',metavar='INT',default=False,
+        help='The minimal length of contigs/scaffolds. [default=5000]'
+    )
+    return psr
