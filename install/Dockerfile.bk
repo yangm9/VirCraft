@@ -1,0 +1,31 @@
+# This dockerfile uses the centos image
+# VERSION 1 - EDITION 1
+# Author: yangm9
+# Command format: Instruction [arguments / command] ..
+FROM centos:8.4.2105
+MAINTAINER yangm9 yangm9@qq.com
+RUN yum install -y wget tar && \
+cd /opt && \
+wget -c https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh; \
+sh Miniconda3-latest-Linux-x86_64.sh -p /opt/miniconda3 -b && \
+/opt/miniconda3/bin/conda init && \
+source /root/.bashrc && \
+mkdir /opt/idseqc/
+COPY ./ /opt/idseqc/
+RUN cd /opt/idseqc/; \
+rm -rf ./bk ./.git ./.gitignore ./dailyRpt.py ./setup.py; \
+rm -rf ./src/alarm ./src/templates ./src/update ./src/Global/email.yaml; \
+/opt/miniconda3/bin/python -m compileall -b ./src; \
+find ./src -name "*.py"|xargs rm -rf; \
+find . -name "*.png"|xargs rm -rf; \
+find . -name "*.pdf"|xargs rm -rf; \
+find . -name "*.md"|xargs rm -rf; \
+find . -name "*.html"|xargs rm -rf; \
+find . -name "*.json"|xargs rm -rf; \
+find . -name "*.pptx"|xargs rm -rf; \
+find . -name "*.list"|xargs rm -rf; \
+find . -name "__pycache__" |xargs rm -rf; \
+chmod 755 /opt/idseqc/*.py; \
+/opt/miniconda3/bin/pip install -r /opt/idseqc/requirements.txt
+EXPOSE 518 910
+CMD ['/opt/miniconda3/bin/python','--help']

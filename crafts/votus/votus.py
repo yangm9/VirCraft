@@ -27,4 +27,4 @@ class VirRef(VirScan):
         shell=f'{self.outdir}/{self.name}_votu.sh'
         utils.printSH(shell,cmd)
         #results=utils.execute(cmd)
-        return results
+        return 0#results
