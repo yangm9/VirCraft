@@ -328,7 +328,7 @@ What_the_Phage(WtP)自动化流程目前正在开发中……
 |PPP-Meta|contig classification|"Phage"|
 |VirSoter and VirSorter_virome|Category of detection (1, 2 or 3: intact, incomplete or questionable)|Category 1 & 2|
 |MetaPhinder & MetaPhinder-own-DB| A) contig classification & B) average nucleotide identity % |A) Phage & B) > 50|
-|DeepVirFinder|p-value|> 0.9|
+|DeepVirFinder|A) score & B) p-value|A) > 0.9 & B) <= 0.1|
 |Vibrant & Vibrant_virome|contig classification|Virus|
 |Phigaro|Indicator function||
 |Virnet|p-value (as median across all hits per contig)|>0.5|

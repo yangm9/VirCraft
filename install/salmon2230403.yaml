@@ -1,0 +1,46 @@
+name: salmon
+channels:
+  - bioconda
+  - conda-forge
+  - r
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=2_gnu
+  - boost=1.80.0=py311h59ea3da_4
+  - boost-cpp=1.80.0=h75c5d50_0
+  - bzip2=1.0.8=h7f98852_4
+  - ca-certificates=2022.12.7=ha878542_0
+  - icu=70.1=h27087fc_0
+  - ld_impl_linux-64=2.40=h41732ed_0
+  - libblas=3.9.0=16_linux64_openblas
+  - libcblas=3.9.0=16_linux64_openblas
+  - libexpat=2.5.0=hcb278e6_1
+  - libffi=3.4.2=h7f98852_5
+  - libgcc-ng=12.2.0=h65d4601_19
+  - libgfortran-ng=12.2.0=h69a702a_19
+  - libgfortran5=12.2.0=h337968e_19
+  - libgomp=12.2.0=h65d4601_19
+  - liblapack=3.9.0=16_linux64_openblas
+  - libnsl=2.0.0=h7f98852_0
+  - libopenblas=0.3.21=pthreads_h78a6416_3
+  - libsqlite=3.40.0=h753d276_0
+  - libstdcxx-ng=12.2.0=h46fd767_19
+  - libuuid=2.38.1=h0b41bf4_0
+  - libzlib=1.2.13=h166bdaf_4
+  - ncurses=6.3=h27087fc_1
+  - numpy=1.24.2=py311h8e6699e_0
+  - openssl=3.1.0=h0b41bf4_0
+  - pip=23.0.1=pyhd8ed1ab_0
+  - python=3.11.2=h2755cc3_0_cpython
+  - python_abi=3.11=3_cp311
+  - readline=8.2=h8228510_1
+  - salmon=0.6.0=1
+  - setuptools=67.6.1=pyhd8ed1ab_0
+  - tbb=2020.2=h4bd325d_4
+  - tk=8.6.12=h27826a3_0
+  - tzdata=2023c=h71feb2d_0
+  - wheel=0.40.0=pyhd8ed1ab_0
+  - xz=5.2.6=h166bdaf_0
+  - zstd=1.5.2=h3eb15da_6
+prefix: /data_backup/software/miniconda3/envs/salmon
