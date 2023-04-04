@@ -4,20 +4,7 @@ VirCraft is an automatic viromic analysis pipeline.
 
 ## 1 软件安装和数据库部署
 
-<<<<<<< HEAD
 #### 1.1 VirCraft所需软件
-=======
-#### 1.1 安装VirCraft环境
-
-```
-conda env create -f VirCraft.yaml
-conda activate VirCraft
-conda install -c bioconda -c conda-forge minced blast trnascan-se r-here r-seqinr r-dplyr r-data.table r-stringr pandas biopython psutil
-git clone https://github.com/soedinglab/WIsH.git && cd WIsH && cmake . && make && chmod +x WIsH && cp WIsH $CONDA_PREFIX/bin
-git clone https://bitbucket.org/MAVERICLab/virmatcher && cd virmatcher && pip install . --no-deps
-conda create -y -n vibrant -c bioconda vibrant
-```
->>>>>>> parent of 0f0468a... v0.0.6
 
 表1-1 VirCraft使用的软件
 |软件名称|版本|备注|
