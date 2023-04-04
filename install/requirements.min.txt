@@ -1,7 +1,3 @@
-pandas==1.5.3
-pyqt5-sip==4.19.18
-pyqtchart==5.12
-pyqtwebengine==5.12.1
-tqdm==4.65.0
 matplotlib==3.6.0
 bio==1.4.0
+tqdm
