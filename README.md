@@ -4,32 +4,9 @@ VirCraft is an automatic viromic analysis pipeline.
 
 ## 1 软件安装和数据库部署
 
-#### 1.1 安装VirCraft环境
-
-```
-#安装viral-id-sop所需软件
-conda env create -f install/viral-id-sop.yaml
-conda activate viral-id-sop
-#配置viral-id-sop相关数据库
-cd /absolute/path/to/store/database
-mkdir dramDB virsorter2DB checkvDB
-DRAM-setup.py prepare_databases --output_dir dramDB #DRAMv database setup can take a long time ~5h and ~60GB of memory.
-virsorter setup -d /absolute/path/to/store/virsorter2DB -j 4
-checkv download_database checkvDB #CheckV database takes ~6 mins and 1.27 GB of memory
-
-#安装vibrant环境和软件
-conda env create -f install/vibrant.yaml
-
-conda env create -f install/VirCraft.yaml
-conda activate VirCraft
-conda install -c bioconda -c conda-forge minced blast trnascan-se r-here r-seqinr r-dplyr r-data.table r-stringr pandas biopython psutil
-git clone https://github.com/soedinglab/WIsH.git && cd WIsH && cmake . && make && chmod +x WIsH && cp WIsH $CONDA_PREFIX/bin
-git clone https://bitbucket.org/MAVERICLab/virmatcher && cd virmatcher && pip install . --no-deps
-conda create -y -n vibrant -c bioconda vibrant
-```
+#### 1.1 VirCraft所需软件
 
 表1-1 VirCraft使用的软件
-
 |软件名称|版本|备注|
 |:----|:----|:----|
 |BWA|0.7.17-r1188|比对参考基因组|
@@ -57,14 +34,75 @@ conda create -y -n vibrant -c bioconda vibrant
 |bedtools|2.30.0|用于处理基因组信息分析的强大工具集合|
 |trnascan-se|2.0.11|用于基因组注释tRNA分子|
 
-#### 1.2 数据库的部署
+#### 1.2 VirCraft环境部署
+
+###### 1.2.1 reads_qc
+
+
+
+###### 1.2.2 assembly
+
+
+
+###### 1.2.3 identify
 
 ```
-#1.部署checkv数据库
-#2.部署vibriant数据库
-conda activate vibriant
-download-db.sh #大约需要40分钟，~11GB
+#安装viral-id-sop所需软件
+conda env create -f install/viral-id-sop.yaml
+conda activate viral-id-sop
 
+#配置viral-id-sop相关数据库
+cd /absolute/path/to/store/database
+mkdir dramDB virsorter2DB checkvDB
+DRAM-setup.py prepare_databases --skip_uniref --output_dir dramDB #DRAMv database setup can take a long time ~5h and ~60GB of memory.
+virsorter setup -d /absolute/path/to/store/virsorter2DB -j 4
+checkv download_database checkvDB #CheckV database takes ~6 mins and 1.27 GB of memory
+
+#安装vibrant环境和软件
+conda env create -f install/vibrant.yaml
+#2.部署vibrant数据库
+conda activate vibrant
+download-db.sh #It will take 40 mins and ~11 GB memory
+
+#安装DeepVirFinder环境和软件
+conda create --name deepvirfinder python=3.6 numpy theano=1.0.3 keras=2.2.4 scikit-learn Biopython h5py
+cd /absolute/path/to/store/software
+git clone https://github.com/jessieren/DeepVirFinder
+cd DeepVirFinder
+chmod 755 *.py
+echo 'export PATH=/absolute/path/to/store/software/DeepVirFinder:$PATH' >> ~/.bashrc
+```
+
+###### 1.2.3 classify
+
+```
+#安装vcontact2软件
+conda env create -f vContact2.yaml
+conda activate vContact2
+cd /absolute/path/to/store/software
+git clone https://bitbucket.org/MAVERICLab/vcontact2
+cd vcontact2 && pip install .
+
+#安装VirCraft基本组件
+conda env create -f install/VirCraft.yaml
+
+###### 1.2.3 host_pred
+#安装virmatcher
+conda activate VirCraft
+conda install -c bioconda -c conda-forge minced blast trnascan-se r-here r-seqinr r-dplyr r-data.table r-stringr pandas biopython psutil
+git clone https://github.com/soedinglab/WIsH.git && cd WIsH && cmake . && make && chmod +x WIsH && cp WIsH $CONDA_PREFIX/bin
+git clone https://bitbucket.org/MAVERICLab/virmatcher && cd virmatcher && pip install . --no-deps
+conda create -y -n vibrant -c bioconda vibrant
+```
+
+```
+#安装gtdbtk环境和软件
+conda env create -f gtdbtk.yaml
+cd 
+wget https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_v2_data.tar.gz
+wget https://data.ace.uq.edu.au/public/gtdb/data/releases/latest/auxillary_files/gtdbtk_v2_data.tar.gz  (or, mirror)
+tar xvzf gtdbtk_v2_data.tar.gz
+#Note that different versions of the GTDB release data may not run on all versions of GTDB-Tk, check the supported versions!
 ```
 
 ## 2 软件结构和基本使用方法
