@@ -427,6 +427,4 @@ dependencies:
       - pyqtchart==5.12
       - pyqtwebengine==5.12.1
       - tqdm==4.65.0
-      - vircraft==0.0.1
-      - virmatcher==0.3.3
 prefix: /data_backup/software/miniconda3/envs/VirCraft

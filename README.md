@@ -7,7 +7,20 @@ VirCraft is an automatic viromic analysis pipeline.
 #### 1.1 安装VirCraft环境
 
 ```
-conda env create -f VirCraft.yaml
+#安装viral-id-sop所需软件
+conda env create -f install/viral-id-sop.yaml
+conda activate viral-id-sop
+#配置viral-id-sop相关数据库
+cd /absolute/path/to/store/database
+mkdir dramDB virsorter2DB checkvDB
+DRAM-setup.py prepare_databases --output_dir dramDB #DRAMv database setup can take a long time ~5h and ~60GB of memory.
+virsorter setup -d /absolute/path/to/store/virsorter2DB -j 4
+checkv download_database checkvDB #CheckV database takes ~6 mins and 1.27 GB of memory
+
+#安装vibrant环境和软件
+conda env create -f install/vibrant.yaml
+
+conda env create -f install/VirCraft.yaml
 conda activate VirCraft
 conda install -c bioconda -c conda-forge minced blast trnascan-se r-here r-seqinr r-dplyr r-data.table r-stringr pandas biopython psutil
 git clone https://github.com/soedinglab/WIsH.git && cd WIsH && cmake . && make && chmod +x WIsH && cp WIsH $CONDA_PREFIX/bin
