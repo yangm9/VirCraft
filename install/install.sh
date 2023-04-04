@@ -11,10 +11,12 @@ else
 fi
 conda create -y -c bioconda -n VirCraft cd-hit=4.8.1
 conda activate VirCraft
-conda install -y -c bioconda trimmomatic=0.39 fastp=0.23.2 sortmerna=4.3.4 fastuniq=1.1
-conda install -y -c bioconda megahit=1.2.9 spades=3.15.4
+#For reads_qc
+conda install -y -c bioconda trimmomatic=0.39 fastp=0.23.2 sortmerna=4.3.4 fastuniq=1.1 bowtie2=2.4.4
+#for assembly
+conda install -y -c bioconda megahit=1.2.9 spades=3.15.4 bwa=0.7.17
+
 conda install -y -c bioconda diamond=2.0.14 blast=2.13.0 #dimond must be thisversion.
-conda install -y -c bioconda bwa=0.7.17 bowtie2=2.4.4
 conda install -y -c conda-forge -c bioconda checkv=1.0.1
 conda install -y -c bioconda virsorter=2.2.4 vibrant=1.2.1
 conda install -y -c bioconda prodigal=2.6.3 
