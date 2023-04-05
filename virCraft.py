@@ -9,6 +9,7 @@ from crafts.data import fastqc
 from crafts.assembly import assembly
 from crafts.identify import viridsop
 from crafts.config import arguments
+#from crafts.config import install
 from crafts.votus import votus
 from crafts.classify import classify
 from crafts.classify import vCont
@@ -21,7 +22,11 @@ from crafts.func_annot import callAMGs
 version='0.0.6'
 args=arguments.setOpts(sys.argv[0],sys.argv[1],version)
 
-if sys.argv[1]=='reads_qc':
+if sys.argv[1]=='setup':
+    print('Preparing the environments for VirCraft...\n')
+    #Sets=install.
+    print('VirCraft environments Done!!!\n')
+elif sys.argv[1]=='reads_qc':
     print('VirCraft data QC...\n')
     Reads=fastqc.QualCtrl(
         fq1=args.fq1,fq2=args.fq2,

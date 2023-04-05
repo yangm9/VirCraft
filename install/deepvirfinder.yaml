@@ -1,5 +1,6 @@
 name: deepvirfinder
 channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
@@ -25,10 +26,10 @@ dependencies:
   - gcc_linux-64=12.2.0=h4798a0e_12
   - gxx_impl_linux-64=12.2.0=hcc96c02_19
   - gxx_linux-64=12.2.0=hb41e900_12
-  - h5py=3.1.0=nompi_py36hc1bc4f5_100
   - hdf5=1.10.6=nompi_h6a2412b_1114
   - html5lib=0.9999999=py36_0
   - importlib-metadata=4.8.1=py36h5fab9bb_0
+  - intel-openmp=2021.4.0=h06a4308_3561
   - joblib=1.2.0=pyhd8ed1ab_0
   - keras=2.2.4=py36_1
   - keras-applications=1.0.8=py_1
@@ -63,6 +64,8 @@ dependencies:
   - mako=1.2.4=pyhd8ed1ab_0
   - markdown=3.4.3=pyhd8ed1ab_0
   - markupsafe=2.0.1=py36h8f6f2f9_0
+  - mkl=2021.4.0=h06a4308_640
+  - mkl-service=2.4.0=py36h8f6f2f9_0
   - mock=5.0.1=pyhd8ed1ab_0
   - ncurses=6.3=h27087fc_1
   - numpy=1.19.5=py36hfc0c790_2
@@ -92,4 +95,6 @@ dependencies:
   - yaml=0.2.5=h7f98852_2
   - zipp=3.6.0=pyhd8ed1ab_0
   - zlib=1.2.13=h166bdaf_4
+  - pip:
+      - h5py==2.10.0
 prefix: /backup/software/miniconda3/envs/deepvirfinder

@@ -47,7 +47,7 @@ class Seq(VirCfg):
     @property
     def mkBwaIdx(self):
         "Make bwa index for votus."
-        cmd=[self.envs]
+        cmd=[utils.selectENV('assembly')]
         idx=f'{self.outdir}/{self.name}BWAIDX'
         cmd.extend(['bwa index -a bwtsw',self.fasta,'-p',idx,'\n'])
         shell=f'{self.outdir}/{self.name}_bwaidx.sh'
@@ -90,6 +90,7 @@ class Seq(VirCfg):
         return cmd,orf_faa
 
 class VirSeq(Seq):
+    envs=utils.selectENV('viral-id-sop')
     def __init__(self,fasta='',outdir='',*args,**kwargs):
         super().__init__(fasta,outdir,*args,**kwargs)
     def checkv(self):
@@ -106,6 +107,7 @@ class VirSeq(Seq):
         return cmd,merged_fa
 
 class CDS(Seq):
+    envs=utils.selectENV('salmon')
     def __init__(self,fasta='',outdir='',*args,**kwargs):
         super().__init__(fasta,outdir,*args,**kwargs)
     @property

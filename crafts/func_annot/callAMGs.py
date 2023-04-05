@@ -1,8 +1,7 @@
 from ..general import utils
-from ..data.bioseq import Seq
-from ..identify.viridsop import VirScan
+from ..identify.findV import MultiTools 
 
-class AMGs(VirScan):
+class AMGs(MultiTools):
     '''
     Call AMGs.
     '''
@@ -23,12 +22,6 @@ class AMGs(VirScan):
             'DRAM-v.py annotate','--threads',self.threads,
             '-i',vs2_dramv_fa,'-v',vs2_dramv_tab,'-o',wkdir,'\n',
             'DRAM-v.py distill','-i',anno_tsv,'-o',distill_dir,'\n']
-        return cmd
-    def vibrant(self):
-        cmd=[utils.selectENV('vibrant')]
-        wkdir=f'{self.outdir}/vibrant'
-        cmd=['VIBRANT_run.py','-i',self.fasta,
-            '-t',self.threads,'-folder',wkdir,'\n']
         return cmd
     def annotAMGs(self):
         cmd=self.dramv()

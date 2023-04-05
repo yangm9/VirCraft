@@ -12,6 +12,7 @@ class Assembly(Reads):
     '''
     def __init__(self,fq1='',fq2='',outdir='',threads=8):
         super().__init__(fq1,fq2,outdir)
+        self.envs=utils.selectENV('assembly')
         self.threads=str(threads)
         self.methDict={
             's':self.spades,

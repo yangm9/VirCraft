@@ -4,7 +4,7 @@ from .bioseq import Reads
 
 class QualCtrl(Reads):
     "FastQ cuality control class."
-    envs=utils.selectENV('VirCraft')
+    envs=utils.selectENV('read_qc')
     def __init__(self,fq1='',fq2='',outdir='',threads=8,*args,**kwargs):
         super().__init__(fq1,fq2,outdir,*args,**kwargs)
     def filtReads(self,process):

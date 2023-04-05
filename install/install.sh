@@ -9,34 +9,16 @@ else
     source ~/.bashrc
     echo "The installation of conda is complete！"
 fi
-conda create -y -c bioconda -n VirCraft cd-hit=4.8.1
-conda activate VirCraft
-#For reads_qc
-conda install -y -c bioconda trimmomatic=0.39 fastp=0.23.2 sortmerna=4.3.4 fastuniq=1.1 bowtie2=2.4.4
-#for assembly
-conda install -y -c bioconda megahit=1.2.9 spades=3.15.4 bwa=0.7.17
+#reads_qc
+envs=(reads_qc assembly deepvirfinder gtdbtk vContact2 vibrant viral-id-sop VirCraft)
 
-conda install -y -c bioconda diamond=2.0.14 blast=2.13.0 #dimond must be thisversion.
-conda install -y -c conda-forge -c bioconda checkv=1.0.1
-conda install -y -c bioconda virsorter=2.2.4 vibrant=1.2.1
-conda install -y -c bioconda prodigal=2.6.3 
-conda install -y -c bioconda eggnog-mapper=2.1.10 kofamscan=1.3.0 dram=1.4.6 
-conda install -y -c bioconda iqtree=2.2.0.3
-conda install -y -c bioconda coverm=0.6.1 crass=1.0.1 minced=0.4.2 trnascan-se=2.0.11 salmon=0.14.2 hmmer=3.3.2 muscle=5.1 drep=3.3.1 aragorn=1.2.41
-conda install -y -c conda-forge r-base=4.1.1 r-ggplot2=3.4.1
-conda install -c conda-forge scikit-learn-intelex
-conda install -c bioconda megan
-pip install -r requirements.txt
-pip install biopython=1.81
-pip install DRAM-bio
-#pip install "scikit_learn==0.22.2.post1" #FutureWarning: The sklearn.neural_network.multilayer_perceptron module is  deprecated in version 0.22 and will be removed in version 0.24.
-#pip install --upgrade scikit-learn==0.21.3
-pip install --upgrade scikit-learn
-## Install usearch
-cd VirCraft/bin
-wget https://www.drive5.com/downloads/usearch11.0.667_i86linux32.gz
-gunzip usearch11.0.667_i86linux32.gz
-ln -s usearch11.0.667_i86linux32 usearch
-## Install Demovir
-git clone https://github.com/feargalr/Demovir.git
-#vegan rshape2 vegan
+for env in "${envs[@]}"
+do
+    if conda env list | grep -q $env; then
+        echo "reads_qc exists!"
+    else
+        conda env create -f $env.yaml
+        if 
+    fi
+done
+

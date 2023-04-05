@@ -58,7 +58,7 @@ conda activate viral-id-sop
 cd /absolute/path/to/store/database
 mkdir dramDB virsorter2DB checkvDB
 DRAM-setup.py prepare_databases --skip_uniref --output_dir dramDB #DRAMv database setup can take a long time ~5h and ~60GB of memory.
-virsorter setup -d /absolute/path/to/store/virsorter2DB -j 4
+virsorter setup -d db-vs2 -j 4
 checkv download_database checkvDB #CheckV database takes ~6 mins and 1.27 GB of memory
 ```
 
@@ -80,7 +80,7 @@ conda env create -f install/deepvirfinder.yaml
 conda create --name deepvirfinder python=3.6 numpy theano=1.0.3 keras=2.2.4 scikit-learn Biopython h5py
 # then
 cd /absolute/path/to/store/software
-git clone https://github.com/jessieren/DeepVirFinder
+git clone https://github.com/jessieren/DeepVirFinder.git
 cd DeepVirFinder
 chmod 755 *.py
 echo 'export PATH=/absolute/path/to/store/software/DeepVirFinder:$PATH' >> ~/.bashrc
@@ -95,7 +95,11 @@ conda activate vContact2
 cd /absolute/path/to/store/software
 git clone https://bitbucket.org/MAVERICLab/vcontact2
 cd vcontact2 && pip install .
+```
 
+###### 1.2.5 
+
+```
 #安装VirCraft基本组件
 conda env create -f install/VirCraft.yaml
 ```
