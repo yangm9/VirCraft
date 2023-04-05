@@ -3,11 +3,11 @@ from .multiQuant import multiGeneCount
 
 class GeneAbdStat(multiGeneCount):
     '''
-    Gene abundance main class
+    Gene abundance main class.
     '''
     def __init__(self,samp_info='',fasta='',outdir='',threads=8):
+        "The FastA file should be coding sequence file."
         super().__init__(samp_info,fasta,outdir,threads)
-        self.parallel=str(parallel)
     def mergeAbd(self):
         abd=f'{self.outdir}/all_merged_gene.sf'
         cmd=['merge_tpms.pl',self.samp_info,self.outdir,'tpm Gene\n']

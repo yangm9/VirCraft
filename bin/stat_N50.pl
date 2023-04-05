@@ -12,6 +12,8 @@ my ($total_slen,$total_clen)=(0,0);	### total_len
 my ($sca_gc,$con_gc)=(0,0);
 my ($sca100,$con100)=(0,0);		### number (>=cutoff)
 my ($sca2000,$con2000)=(0,0);		### number (>=2000)
+my ($sca5000,$con5000)=(0,0);		### number (>=2000)
+my ($sca10000,$con10000)=(0,0);		### number (>=2000)
 
 open FILE,"<","$fasta";
 $/=">";
@@ -31,6 +33,8 @@ while (<FILE>){
 		$sca_gc+=$this_s_gc;
 		$sca100++ if $sl>=$cutoff;
 		$sca2000++ if $sl>=2000;
+		$sca5000++ if $sl>=5000;
+		$sca10000++ if $sl>=10000;
 	}
 	### contig
 	my @contig=split /N+/i,$seq;
@@ -43,6 +47,8 @@ while (<FILE>){
 			$con_gc+=$this_c_gc;
 			$con100++ if $cl>=$cutoff;
 			$con2000++ if $cl>=2000;
+			$con5000++ if $cl>=5000;
+			$con10000++ if $cl>=10000;
 		}
 	}
 }
@@ -70,10 +76,12 @@ print OUT "max_len\t$smax_len\t\t$cmax_len\n";
 for (my $i=1;$i<=9;$i++){
 	print OUT "N$i"."0\t$sN{$i}{l}\t$sN{$i}{n}\t$cN{$i}{l}\t$cN{$i}{n}\n";
 }
-print OUT "Total_length\t$total_slen\t$total_clen\n";
-print OUT "number>=$cutoff"."bp\t$sca100\t$con100\n";
-print OUT "number>=2000bp\t$sca2000\t$con2000\n";
-print OUT "GC_rate\t$sca_gc_rate\t\t$con_gc_rate";
+print OUT "Total_length\t$total_slen\t-\t$total_clen\t-\n";
+print OUT "number>=$cutoff"."bp\t-\t$sca100\t-\t$con100\n";
+print OUT "number>=2000bp\t-\t$sca2000\t-\t$con2000\n";
+print OUT "number>=5000bp\t-\t$sca5000\t-\t$con5000\n";
+print OUT "number>=10000bp\t-\t$sca10000\t-\t$con10000\n";
+print OUT "GC_rate\t$sca_gc_rate\t-\t$con_gc_rate\t-\n";
 
 close OUT;
 

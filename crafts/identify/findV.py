@@ -1,6 +1,6 @@
 import os
 from ..general import utils
-from ..data.viridsop import VirScan
+from ..identify.viridsop import VirScan
 
 class MultiTools(VirScan):
     '''
@@ -8,8 +8,6 @@ class MultiTools(VirScan):
     def __init__(self,fasta='',outdir='',threads=8):
         super().__init__(fasta,outdir)
         self.threads=str(threads)
-    def vibrant(self,indir:str):
-        python
     def deepvirfider(self,cutoff:str):
         wkdir=f'{self.outdir}/deepvirfinder'
         cmd=[utils.selectENV('deepvirfider')]

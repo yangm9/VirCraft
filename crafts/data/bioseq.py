@@ -107,7 +107,7 @@ class VirSeq(Seq):
         return cmd,merged_fa
 
 class CDS(Seq):
-    envs=utils.selectENV('salmon')
+    envs=utils.selectENV('VirCraft')
     def __init__(self,fasta='',outdir='',*args,**kwargs):
         super().__init__(fasta,outdir,*args,**kwargs)
     @property
