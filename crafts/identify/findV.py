@@ -9,8 +9,8 @@ class MultiTools(VirScan):
         super().__init__(fasta,outdir)
         self.threads=str(threads)
     def deepvirfider(self,cutoff:str):
-        wkdir=f'{self.outdir}/deepvirfinder'
         cmd=[utils.selectENV('deepvirfider')]
+        wkdir=f'{self.outdir}/deepvirfinder'
         cmd.extend(
             ['python',dvf,'-i',self.fasta,'-m',models,'-o',wkdir,
             '-c',self.threads,'-l',cutoff,'\n']
@@ -22,6 +22,8 @@ class MultiTools(VirScan):
         cmd=['VIBRANT_run.py','-i',self.fasta,
             '-t',self.threads,'-folder',wkdir,'\n']
         return cmd
+    def vFilter(self):
+        
     def Identify(self):
         cmd.extend(tmp_cmd)
         #Step 4 DRAMv annotation
