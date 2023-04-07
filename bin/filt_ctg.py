@@ -63,46 +63,18 @@ def listToFile(list_l,list_f):
         LIST.write(f'{ctg}\n')
     return 0
 
-def selectENV(env:str):
-    bin_dir=os.path.abspath(__file__)
-    conda_path=which('conda')
-    condash_path='/'.join(conda_path.split('/')[0:-2])
-    condash_path+='/etc/profile.d/conda.sh'
-    envs=''
-    if os.path.exists(condash_path):
-        envs=f'. "{condash_path}"\nconda activate {env}\n'
-    else:
-        conda_bin=os.path.dirname('conda_path')
-        envs=f'export PATH="{conda_bin}:$PATH"\n'
-    envs+=f'export PATH="{bin_dir}:$PATH"\n'
-    return envs
-
-def getVCtg(fasta,wkdir):
+def ctgList(wkdir):
     full_ctgs,vs2_partial_ctgs,vb_partial_ctgs=vCtgMerge(wkdir)
     full_ctgs_li=f'{wkdir}/full_viral_ctgs.list'
     vs2_partial_ctgs_li=f'{wkdir}/vs2_partial_viral_ctgs.list'
     vb_partial_ctgs_li=f'{wkdir}/vb_partial_viral_ctgs.list'
-    vb_partial_ctgs_tab=f'{wkdir}/VIBRANT_scaffolds/VIBRANT_results_scaffolds/VIBRANT_integrated_prophage_coordinates_scaffolds.tsv'
-    vb_partial_ctgs_tab=f'{wkdir}/VIBRANT_scaffolds/VIBRANT_results_scaffolds/VIBRANT_integrated_prophage_coordinates_scaffolds.tsv'
-    vb_partial_ctgs_filt_tab=f'{wkdir}/VIBRANT_scaffolds/VIBRANT_results_scaffolds/VIBRANT_integrated_prophage_coordinates_scaffolds.filt.tsv'
-    full_ctgs_fa=f'{wkdir}/full_viral_ctgs.fa'
-    vs2_out_ctgs_fa=f'{wkdir}/vs2-pass1/final-viral-combined.fa'
-    vs2_partial_ctgs_fa=f'{wkdir}/vs2_partial_viral_ctgs.fa'
-    vb_partial_ctgs_fa=f'{wkdir}/vb_partial_viral_ctgs.fa'
     listToFile(full_ctgs,full_ctgs_li)
     listToFile(vs2_partial_ctgs,vs2_partial_ctgs_li)
     listToFile(vb_partial_ctgs,vb_partial_ctgs_li)
-    script_dir=os.path.abspath(__file__)
-    cmd_txt=selectENVs('VirCraft')
-    cmd_txt+=f'''
-extrSeqByName.pl {full_ctgs_li} {fasta} {full_ctgs_fa}
-extrSeqByName.pl {vs2_partial_ctgs_li} {vs2_out_ctgs_fa} {vs2_partial_ctgs_fa}
-sed -i '1i\\fragment' {vb_partial_ctgs_li}
-linkTab.py {vb_partial_ctgs_li} {vb_partial_ctgs_tab} left fragment {vb_partial_ctgs_filt_tab}
-cut -f 1,6,7 vb_partial_ctgs_filt_tab|sed '1d' > {wkdir}/regions.bed
-bedtools getfasta -fi {fasta} -bed {wkdir}/regions.bed -fo {vb_partial_ctgs_fa}
-cat {full_ctgs_fa} {vs2_partial_ctgs_fa} {vb_partial_ctgs_fa} >all_viral_ctgs.fa
-'''
-    result=os.system(cmd_txt)
-    return results
+    return 0
 
+if __name__=='__main__':
+    if len(sys.argv)<2:
+        print(f'sys.argv[0] <viral_identify_wkdir>')
+    else:
+        ctgList(wkdir)
