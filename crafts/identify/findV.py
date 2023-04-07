@@ -1,34 +1,18 @@
 import os
 from ..general import utils
-from ..identify.viridsop import VirScan
+from ..identify.multiFind import MultiTools
 
-class MultiTools(VirScan):
+class vIdentify(MultiTools):
     '''
+    Main Scripts
     '''
     def __init__(self,fasta='',outdir='',threads=8):
         super().__init__(fasta,outdir)
         self.threads=str(threads)
-    def deepvirfinder(self,cutoff:str):
-        cmd=[utils.selectENV('deepvirfinder')]
-        wkdir=f'{self.outdir}/deepvirfinder'
-        cmd.extend(
-            ['python',dvf,'-i',self.fasta,'-m',models,'-o',wkdir,
-            '-c',self.threads,'-l',cutoff,'\n']
-        )
-        return cmd,wkdir
-    def vibrant(self):
-        cmd=[utils.selectENV('vibrant')]
-        wkdir=f'{self.outdir}/VIBRANT_{self.name}'
-        cmd.extend(
-            ['VIBRANT_run.py','-i',self.fasta,
-            '-t',self.threads,'-folder',self.outdir,'\n']
-        )
-        return cmd,wkdir
     def vFilter(self):
         cmd=[utils.selectENV('VirCraft')]
         cmd.extend(['filt_ctg.py',self.outdir,'\n'])
-        return cmd
-        
+        return cmd 
     def Identify(self,cutoff):
         #VirSorter2
         cmd=[utils.selectENV('viral-id-sop')]
@@ -46,7 +30,6 @@ class MultiTools(VirScan):
         vb_partial_ctgs_tab=f'{wkdir}/VIBRANT_results_{self.name}/VIBRANT_integrated_prophage_coordinates_{self.name}.tsv'
         vb_partial_ctgs_filt_tab=f'{wkdir}/VIBRANT_results_{self.name}/VIBRANT_integrated_prophage_coordinates_{self.name}.filt.tsv'
         partial_ctg_region=f'{wkdir}/partial_ctg_regions.bed'
-
         #deepvirfinder
         cmd,wkdir=self.deepvirfinder(cutoff)
         shell=f'{self.outdir}/{self.name}_vb_ctg.sh'
@@ -88,6 +71,5 @@ class MultiTools(VirScan):
         cmd.extend(tmp_cmd)
         shell=f'{self.outdir}/{self.name}_find_vir.sh'
         utils.printSH(shell,cmd)
-        
-        results=utils.execute(cmd)
+        results=0#utils.execute(cmd)
         return results

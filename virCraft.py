@@ -8,6 +8,7 @@ sys.path.append(sys.path[0]+'/crafts')
 from crafts.data import fastqc
 from crafts.assembly import assembly
 from crafts.identify import viridsop
+from crafts.identify import findV
 from crafts.config import arguments
 #from crafts.config import install
 from crafts.votus import votus
@@ -49,12 +50,20 @@ elif sys.argv[1]=='assembly':
     print('Reads assembly completed!!!')
 elif sys.argv[1]=='identify':
     print('Viral contig identification')
-    VirSeq=viridsop.VirScan(
-        fasta=args.fasta,
-        outdir=args.outdir,
-        threads=args.threads
-    )
-    VirSeq.Identify()
+    if args.sop=='viral-id-sop':
+        VirSeq=viridsop.VirScan(
+            fasta=args.fasta,
+            outdir=args.outdir,
+            threads=args.threads
+        )
+        VirSeq.Identify()
+    else:
+        VirSeq=findV.vIdentify(
+            fasta=args.fasta,
+            outdir=args.outdir,
+            threads=args.threads
+        )
+        VirSeq.Identify(args.cutoff)
     print('Config identification completed!!!')
 elif sys.argv[1]=='votus':
     print('Remove the redundancy')

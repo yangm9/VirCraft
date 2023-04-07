@@ -54,6 +54,12 @@ def setOpts(name:str,subcmds:str,version:str):
     subpsr=addFaArg(subpsr)
     subpsr=addGlbArg(subpsr)
     subpsr=addCutoffArg(subpsr)
+    subpsr.add_argument(
+        '-w','--sop',action='store',type=str,
+        dest='sop',metavar='STR',default='vs2-vb-dvf',required=True,
+        help='the sop/pipeline for viral contigs identification, including "viral-id-sop" and "vs2-vb-dvf" [default=vs2-vb-dvf]'
+    )
+
  
 #-----------------------votus-------------------------
     subpsr=subparsers.add_parser(
