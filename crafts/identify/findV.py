@@ -20,7 +20,7 @@ class vIdentify(MultiTools):
         cmd.extend(tmp_cmd)
         vs2_partial_ctgs=f'{wkdir}/final-viral-score.tsv'
         vs2_out_ctgs_fa=f'{wkdir}/vs2-pass1/final-viral-combined.fa'
-        vs2_partial_ctgs_fa=f'{wkdir}/vs2_partial_viral_ctgs.fa'
+        vs2_partial_ctgs_fa=f'{self.outdir}/vs2_partial_viral_ctgs.fa'
         #vibrant
         shell=f'{self.outdir}/{self.name}_vs2_ctg.sh'
         utils.printSH(shell,cmd)
@@ -30,7 +30,9 @@ class vIdentify(MultiTools):
         vb_partial_ctgs_tab=f'{wkdir}/VIBRANT_results_{self.name}/VIBRANT_integrated_prophage_coordinates_{self.name}.tsv'
         vb_partial_ctgs_filt_tab=f'{wkdir}/VIBRANT_results_{self.name}/VIBRANT_integrated_prophage_coordinates_{self.name}.filt.tsv'
         partial_ctg_region=f'{wkdir}/partial_ctg_regions.bed'
+        vb_partial_ctgs_fa=f'{self.outdir}/vb_partial_viral_ctgs.fa'
         #deepvirfinder
+        cutoff=str(cutoff)
         cmd,wkdir=self.deepvirfinder(cutoff)
         shell=f'{self.outdir}/{self.name}_vb_ctg.sh'
         utils.printSH(shell,cmd)

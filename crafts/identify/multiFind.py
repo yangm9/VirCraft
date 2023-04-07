@@ -11,6 +11,7 @@ class MultiTools(VirScan):
     def deepvirfinder(self,cutoff:str):
         cmd=[utils.selectENV('deepvirfinder')]
         wkdir=f'{self.outdir}/deepvirfinder'
+        utils.mkdir(wkdir)
         dvf=self.confDict['DeepVirFinder']
         models=os.path.dirname(dvf)+'/models'
         cmd.extend(
