@@ -6,8 +6,8 @@ class VirAbdStat(multiVirCount):
     def __init__(self,samp_info='',fasta='',outdir='',threads=8):
         super().__init__(samp_info,fasta,outdir,threads)
     def mergeAbd(self): #Heatmap for contigs abundance
-        abd=f'{self.outdir}/all_merged.tpm'
-        cmd=['merge_tpms.pl',self.samp_info,self.outdir,'tpm\n']
+        abd=f'{self.outdir}/all_merged.cov'
+        cmd=['merge_abds.pl',self.samp_info,self.outdir,'cov\n']
         return cmd,abd
     def sizeAbdPlot(self,abd:str,checkv_dir=None):
         cmd=[]
@@ -46,7 +46,7 @@ class VirAbdStat(multiVirCount):
             'echo "Barplot for abundance by taxa"\n',
             'taxa_annot_abd.py',abd_taxa,ctg_taxa_abd,'\n',
             'sum_abd_by_taxa.py',ctg_taxa_abd,self.outdir,'\n',
-            'barplot_for_taxa_tpm.R',taxa_sum_abd,self.outdir,'\n']
+            'barplot_for_taxa_abd.R',taxa_sum_abd,self.outdir,'\n']
         return cmd
     def diversity(self,abd:str):
         alpha_diversity=f'{self.outdir}/alpha_diversity.xls'

@@ -8,6 +8,8 @@ from ..data.bioseq import Seq
 from ..identify.viridsop import VirScan
 
 class VirCount(Reads):
+    coverm_args='--min-read-percent-identity 0.95 --min-read-aligned-length 50 --min-covered-fraction 10 -m mean'
+    #coverm_args='--min-read-percent-identity 0.95 --min-read-aligned-length 50 --min-covered-fraction 10 --proper-pairs-only -m mean'
     def __init__(self,fq1='',fq2='',outdir='',threads=8):
         super().__init__(fq1,fq2,outdir)
         self.threads=str(threads)
@@ -23,10 +25,10 @@ class VirCount(Reads):
             'samtools sort',raw_bam,'-o',sort_bam,'-@ 28\n']
         return cmd
     def coverm(self,samp:str):
-        tpm=f'{self.outdir}/{samp}.tpm'
+        cov=f'{self.outdir}/{samp}.cov'
         sort_bam=f'{self.outdir}/{samp}.sort.bam'
         cmd=['coverm contig','-b',sort_bam,'-t',self.threads,
-            '--min-read-aligned-length 50 --min-read-percent-identity 0.95 --proper-pairs-only -m tpm','>',tpm,'\n']
+            self.coverm_args,'>',cov,'\n']
         return cmd
 
 class GeneCount(Reads):
