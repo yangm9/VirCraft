@@ -25,7 +25,7 @@ class vIdentify(MultiTools):
         shell=f'{self.outdir}/{self.name}_vs2_ctg.sh'
         utils.printSH(shell,cmd)
         cmd,wkdir=self.vibrant()
-        shell=f'{self.outdir}/{self.name}_dvf_ctg.sh'
+        shell=f'{self.outdir}/{self.name}_vb_ctg.sh'
         utils.printSH(shell,cmd)
         vb_partial_ctgs_tab=f'{wkdir}/VIBRANT_results_{self.name}/VIBRANT_integrated_prophage_coordinates_{self.name}.tsv'
         vb_partial_ctgs_filt_tab=f'{wkdir}/VIBRANT_results_{self.name}/VIBRANT_integrated_prophage_coordinates_{self.name}.filt.tsv'
@@ -34,7 +34,7 @@ class vIdentify(MultiTools):
         #deepvirfinder
         cutoff=str(cutoff)
         cmd,wkdir=self.deepvirfinder(cutoff)
-        shell=f'{self.outdir}/{self.name}_vb_ctg.sh'
+        shell=f'{self.outdir}/{self.name}_dvf_ctg.sh'
         utils.printSH(shell,cmd)
         
         #multiple run
