@@ -7,6 +7,7 @@ class QualCtrl(Reads):
     envs=utils.selectENV('reads_qc')
     def __init__(self,fq1='',fq2='',outdir='',threads=8,*args,**kwargs):
         super().__init__(fq1,fq2,outdir,*args,**kwargs)
+        self.threads=str(threads)
     def filtReads(self,process):
         wkdir=f'{self.outdir}/fastp'
         out_fq1=f'{wkdir}/{self.basename_fq1}'.replace('.gz','')

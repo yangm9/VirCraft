@@ -1,41 +1,42 @@
 # VirCraft
-VirCraft is an automatic viromic analysis pipeline.
+
+VirCraft is an open-source automatic viromic analysis pipeline designed for Linux-based systems. It comprises multiple modules for reads quality control (reads_qc), viral assembly (assembly),identification of viral contigs (identify), votus clustering (votus), viral classification (classify), dataset comparison (compare), functional annotation (func_annot), and quantification of viral and gene abundances (vir_quant and gene_quant).
 
 ## 1 Software installation and database deployment
 
 #### 1.1 The dependencies required by VirCraft
 
 Table 1-1 The tools used by VirCraft
-|Tool|Version|Modules|Note|
-|:----|:----|:----|
-|bedtools|2.30.0|identify|用于处理基因组信息分析的强大工具集合|
-|blast|2.13.0|classify|序列比对|
-|bowtie2|2.4.4|assembly|比对参考序列|
-|BWA|0.7.17-r1188|assembly|比对参考基因组|
-|cd-hit|4.8.1|votus|序列聚类或去冗余|
-|checkv|1.0.1|identify|votus|病毒序列质控和修剪|
-|coverm|0.6.1|vir_quant|计算TPM丰度信息|
-|diamond|2.0.14|classify|序列比对|
-|dram|1.4.6|identify|func_annot|AMGs预测|
-|eggnog-mapper|2.1.10|identify|基因功能注释|
-|fastp|0.23.2|read_qc|原始测序数据质量控制|
-|fastuniq|1.1|read_qc|去除重复reads|
-|GTDB-tk|1.7.0|host_pred|用于生成进化树文件用于宿主预测|
-|hmmer|3.3.2|identify|host_pred|序列比对|
-|iqtree|2.2.0.3|func_annot|建树|
-|kofamscan|1.3.0|func_annot|基因功能注释|
-|MEGAHIT|1.2.9|assembly|宏基因组组装|
-|prodigal|2.6.3|identify|compare|func_annot|基因预测|
-|salmon|0.14.2|gene_quant|不基于比对而直接对基因进行定量|
-|sortmerna|4.3.4|read_qc|去除FASTQ数据中的rRNA|
-|SPAdes|3.15.4|assembly|宏基因组组装|
-|Trimmomatic|0.39|read_qc|修剪FASTQ数据以及去除接头序列|
-|trnascan-se|2.0.11|host_pred|用于基因组注释tRNA分子|
-|vContact2|0.9.22|compare|用于病毒分类和比较|
-|vibrant|1.2.1|identify|识别裂解病毒基因组和整合前病毒|
-|virsorter2|2.2.4|identify|病毒序列判定|
+|Tool|Version|Modules|Note
+|:----|:----|:----|:----|
+|bedtools|2.30.0|identify|A powerful toolset for genome analysis|
+|blast|2.13.0|classify|Sequence alignment|
+|bowtie2|2.4.4|assembly|Alignment to reference genome|
+|BWA|0.7.17-r1188|assembly|Alignment to reference genome|
+|cd-hit|4.8.1|votus|Sequence clustering or de-redundancy|
+|checkv|1.0.1|identify|votus|
+|coverm|0.6.1|vir_quant|Calculation of TPM abundance|
+|diamond|2.0.14|classify|Sequence alignment|
+|dram|1.4.6|identify|func_annot AMGs prediction|
+|eggnog-mapper|2.1.10|identify|Gene functional annotation|
+|fastp|0.23.2|read_qc|Raw sequencing data quality control|
+|fastuniq|1.1|read_qc|Removal of duplicate reads|
+|GTDB-tk|1.7.0|host_pred|Generating evolutionary tree file for host prediction|
+|hmmer|3.3.2|identify|host_pred Sequence alignment|
+|iqtree|2.2.0.3|func_annot|Tree building|
+|kofamscan|1.3.0|func_annot|Gene functional annotation|
+|MEGAHIT|1.2.9|assembly|Metagenome assembly|
+|prodigal|2.6.3|identify|compare func_annot Gene prediction|
+|salmon|0.14.2|gene_quant|Direct quantification of genes without alignment|
+|sortmerna|4.3.4|read_qc|Removal of rRNA from FASTQ data|
+|SPAdes|3.15.4|assembly|Metagenome assembly|
+|Trimmomatic|0.39|read_qc|Trimming of FASTQ data and removal of adapter sequences|
+|trnascan-se|2.0.11|host_pred|Genome annotation for tRNA molecules|
+|vContact2|0.9.22|compare|Virus classification and comparison|
+|vibrant|1.2.1|identify|Identification of lysogenic viruses and integration sites|
+|virsorter2|2.2.4|identify|Virus sequence classification|
 
-#### 1.2 VirCraft环境部署
+#### 1.2 Deployment of VirCraft operating environment
 
 ###### 1.2.1 reads_qc
 
