@@ -41,7 +41,7 @@ class GeneFunc(Seq):
         cmd=[self.envs]
         tmp_cmd,orfs_faa=self.genePred()
         cmd.extend(tmp_cmd)
-        cmd.append(utils.selectENV('emapper'))
+        #cmd.append(utils.selectENV('emapper'))
         cmd.extend(self.eggnogAnno(orfs_faa))
         cmd.append(utils.selectENV('kofamscan'))
         cmd.extend(self.keggAnno(orfs_faa))

@@ -41,9 +41,11 @@ class QualCtrl(Reads):
         prefix=f'{wkdir}/{self.samp}'
         contam_db=self.confDict['ContamDB']
         utils.mkdir(wkdir)
-        cmd=['bowtie2','-p',self.threads,'-N 1','-x',contam_db,
-            '-l',fq1,'-2',fq2,'--un-conc',prefix,'\n']
+        outfqs=[f'{prefix}.1',f'{prefix}.2']
         fastqs=[f'{prefix}_1.fq',f'{prefix}_2.fq']
+        cmd=['bowtie2','-p',self.threads,'-N 1','-x',contam_db,
+            '-1',fq1,'-2',fq2,'--un-conc',prefix,'\n',
+            'mv',outfqs[0],fastqs[0],'\n','mv',outfqs[1],fastqs[1],'\n']
         return cmd,fastqs
     def readqc(self,process='fuc'):
         cmd=[self.envs]
