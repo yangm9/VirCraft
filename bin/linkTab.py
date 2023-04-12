@@ -3,8 +3,8 @@ import sys
 import pandas as pd
 
 def merge(tab1_f,tab2_f,linkType_s,title,out_f):
-    df1=pd.DataFrame(pd.read_csv(tab1_f,header=0,sep='\t'))
-    df2=pd.DataFrame(pd.read_csv(tab2_f,header=0,sep='\t'))
+    df1=pd.DataFrame(pd.read_csv(tab1_f,header=0,sep='\t',low_memory=False))
+    df2=pd.DataFrame(pd.read_csv(tab2_f,header=0,sep='\t',low_memory=False))
     df12=pd.merge(df1,df2,how=linkType_s,on=title)
     df12.to_csv(out_f,sep='\t',index=0)
     return 0
