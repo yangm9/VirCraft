@@ -77,15 +77,15 @@ class Seq(VirCfg):
         cmd=[self.envs]
         wkdir=f'{self.outdir}/prodigal'
         utils.mkdir(wkdir)
-        temp_orf_faa=f'{wkdir}/temp.orf.faa'
-        orf_ffn=f'{wkdir}/{self.name}_votus.ffn'
-        orf_faa=f'{wkdir}/{self.name}_votus.faa'
-        temp_orf_ffn=f'{wkdir}/temp.orf.ffn'
-        temp_txt=f'{wkdir}/temp.txt'
-        cmd=['prodigal','-i',self.fasta,'-a',temp_orf_faa,
-            '-d',temp_orf_ffn,'-m','-o',temp_txt,'-p meta -q\n',
-            'cut -f 1 -d \" \"',temp_orf_faa,'>',orf_faa,'\n',
-            'cut -f 1 -d \" \"',temp_orf_ffn,'>',orf_ffn,'\n',
+        orf_ffn=f'{wkdir}/{self.name}.ffn'
+        orf_faa=f'{wkdir}/{self.name}.faa'
+        orf_gff=f'{wkdir}/{self.name}.gff'
+        temp_faa=f'{wkdir}/temp.orf.faa'
+        temp_ffn=f'{wkdir}/temp.orf.ffn'
+        cmd=['prodigal','-i',self.fasta,'-d',temp_ffn,
+            '-a',temp_faa,'-o',orf_gff,'-f gff -p meta -m -q\n',
+            'cut -f 1 -d \" \"',temp_faa,'>',orf_faa,'\n',
+            'cut -f 1 -d \" \"',temp_ffn,'>',orf_ffn,'\n',
             f'rm -f {wkdir}/temp.*\n']
         return cmd,orf_faa
 

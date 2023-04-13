@@ -27,7 +27,7 @@ def selectENV(env:str):
     condash_path+='/etc/profile.d/conda.sh'
     envs=''
     if os.path.exists(condash_path):
-        envs=f'. "{condash_path}"\nconda activate {env}\n'
+        envs=f'. "{condash_path}"\nconda activate && conda activate {env}\n'
     else:
         conda_bin=os.path.dirname('conda_path')
         envs=f'export PATH="{conda_bin}:$PATH"\n'

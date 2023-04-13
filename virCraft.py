@@ -76,12 +76,12 @@ elif sys.argv[1]=='votus':
     print('vOTU cluster completed!!!')
 elif sys.argv[1]=='func_annot':
     print('Function annotation')
-    VirGene=geneAnnot.GeneFunc(
-        fasta=args.fasta,
-        outdir=args.outdir,
-        threads=args.threads
-    )
-    VirGene.FuncAnnot()
+    #VirGene=geneAnnot.GeneFunc(
+    #    fasta=args.fasta,
+    #    outdir=args.outdir,
+    #    threads=args.threads
+    #)
+    #VirGene.FuncAnnot()
     print('Predicting AMGs')
     AMG=callAMGs.AMGs(
         fasta=args.fasta,
