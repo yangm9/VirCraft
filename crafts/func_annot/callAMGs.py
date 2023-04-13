@@ -55,7 +55,7 @@ class AMGs(VirScan):
         utils.printSH(shell,cmd)
         return dmvdir,vbdir
         
-    def annotAMGs(self):
+    def annotAMGs(self,unrun=False):
         #step1 VS2
         cmd=[utils.selectENV('viral-id-sop')]
         tmp_cmd,vs2dir=self.virsorter(self.fasta,1)
@@ -76,5 +76,6 @@ class AMGs(VirScan):
         cmd.extend(self.mergeResults(dmvdir,vbdir))
         shell=f'{self.outdir}/{self.name}_call_amgs.sh'
         utils.printSH(shell,cmd)
-        results=utils.execute(cmd)
+        results=''
+        if not unrun: results=utils.execute(cmd)
         return results

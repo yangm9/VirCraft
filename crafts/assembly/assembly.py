@@ -92,7 +92,7 @@ class Assembly(Reads):
         elif steps==1:
             cmd.extend(['ln -s',tmp_scaf,final_scaf,'\n'])
         return cmd,final_scaf
-    def Assemble(self,process='sm',cutoff=5000):
+    def Assemble(self,process='sm',cutoff=5000,unrun=False):
         cmd=[self.envs]
         scafs=[]
         tmp_cmd,scaf=self.mixAsse(self.fastqs,process)
@@ -101,5 +101,6 @@ class Assembly(Reads):
         cmd.extend(FastA.statFA(cutoff))
         shell=f'{self.outdir}/{self.samp}_assembly.sh'
         utils.printSH(shell,cmd)
-        results=utils.execute(cmd)
+        results=''
+        if not unrun: results=utils.execute(cmd)
         return results

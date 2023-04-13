@@ -69,7 +69,7 @@ class VirScan(Seq):
             virus_posi_fna,'\n']
         )
         return cmd
-    def Identify(self):
+    def Identify(self,unrun=False):
         cmd=[utils.selectENV('viral-id-sop')]
         #Step 1 Run VirSorter2
         tmp_cmd,wkdir=self.virsorter(self.fasta,0)
@@ -90,5 +90,6 @@ class VirScan(Seq):
         #Generate shell and exeute it
         shell=f'{self.outdir}/{self.name}_find_vir.sh'
         utils.printSH(shell,cmd)
-        results=utils.execute(cmd)
+        results=''
+        if not unrun: results=utils.execute(cmd)
         return results

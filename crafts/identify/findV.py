@@ -13,7 +13,7 @@ class vIdentify(MultiTools):
         cmd=[utils.selectENV('VirCraft')]
         cmd.extend(['merge_ctg_list.py',self.outdir,'\n'])
         return cmd
-    def Identify(self,cutoff):
+    def Identify(self,cutoff=5000,unrun=False):
         #VirSorter2
         cmd=[utils.selectENV('viral-id-sop')]
         tmp_cmd,wkdir=self.virsorter(self.fasta,0)
@@ -73,5 +73,6 @@ class vIdentify(MultiTools):
         cmd.extend(tmp_cmd)
         shell=f'{self.outdir}/{self.name}_find_vir.sh'
         utils.printSH(shell,cmd)
-        results=0#utils.execute(cmd)
+        results=''
+        if not unrun: results=utils.execute(cmd)
         return results

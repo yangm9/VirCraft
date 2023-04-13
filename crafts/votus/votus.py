@@ -16,7 +16,7 @@ class VirRef(VirScan):
         cmd=['cd-hit-est','-i',self.fasta,'-o',votus,'-T',self.threads,
             '-c 0.95 -aS 0.85 -n 10 -d 0 -M 160000\n']
         return cmd,votus
-    def RmDup(self,cutoff=5000):
+    def RmDup(self,cutoff=5000,unrun=False):
         cmd=[self.envs]
         tmp_cmd,votus=self.cluster()
         cmd.extend(tmp_cmd)
@@ -26,5 +26,6 @@ class VirRef(VirScan):
         cmd.extend(tmp_cmd)
         shell=f'{self.outdir}/{self.name}_votu.sh'
         utils.printSH(shell,cmd)
-        #results=utils.execute(cmd)
-        return 0#results
+        results=''
+        if not unrun: results=utils.execute(cmd)
+        return results

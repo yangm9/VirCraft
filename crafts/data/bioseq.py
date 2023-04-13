@@ -44,7 +44,6 @@ class Seq(VirCfg):
         self.fasta=os.path.abspath(fasta)
         self.outdir=os.path.abspath(outdir)
         utils.mkdir(self.outdir)
-    @property
     def mkBwaIdx(self):
         "Make bwa index for votus."
         cmd=[utils.selectENV('assembly')]
@@ -52,8 +51,7 @@ class Seq(VirCfg):
         cmd.extend(['bwa index -a bwtsw',self.fasta,'-p',idx,'\n'])
         shell=f'{self.outdir}/{self.name}_bwaidx.sh'
         utils.printSH(shell,cmd)
-        results=utils.execute(cmd)
-        return idx,results
+        return cmd,idx
     def statFA(self,cutoff=5000):
         cmd=[self.envs]
         wkdir=f'{self.outdir}/stat'

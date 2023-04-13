@@ -56,7 +56,7 @@ class VirTaxa(Seq):
         taxa=f'{self.outdir}/{self.name}.votu.taxa.txt'
         cmd=['merge_taxa.pl',taxa1,taxa2,'>',taxa,'\n']
         return cmd
-    def Classify(self):
+    def Classify(self,unrun=False):
         cmd=[self.envs]
         tmp_cmd,orf_faa=self.genePred()
         cmd.extend(tmp_cmd)
@@ -67,5 +67,6 @@ class VirTaxa(Seq):
         cmd.extend(self.mergeTaxa(demovir_taxa,ncbi_taxa))
         shell=f'{self.outdir}/{self.name}_classify.sh'
         utils.printSH(shell,cmd)
-        results=utils.execute(cmd)
+        results=''
+        if not unrun: results=utils.execute(cmd)
         return results

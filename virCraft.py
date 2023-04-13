@@ -48,7 +48,8 @@ elif sys.argv[1]=='assembly':
     )
     Draft.Assemble(
         process=args.process,
-        cutoff=args.cutoff
+        cutoff=args.cutoff,
+        unrun=args.unrun
     )
     print('Reads assembly completed!!!')
 elif sys.argv[1]=='identify':
@@ -59,14 +60,19 @@ elif sys.argv[1]=='identify':
             outdir=args.outdir,
             threads=args.threads
         )
-        VirSeq.Identify()
+        VirSeq.Identify(
+            unrun=args.unrun
+        )
     else:
         VirSeq=findV.vIdentify(
             fasta=args.fasta,
             outdir=args.outdir,
             threads=args.threads
         )
-        VirSeq.Identify(args.cutoff)
+        VirSeq.Identify(
+            cutoff=args.cutoff,
+            unrun=args.unrun
+        )
     print('Config identification completed!!!')
 elif sys.argv[1]=='votus':
     print('Remove the redundancy')
@@ -75,7 +81,10 @@ elif sys.argv[1]=='votus':
         outdir=args.outdir,
         threads=args.threads
     )
-    vOTUs.RmDup(args.cutoff)
+    vOTUs.RmDup(
+        args.cutoff,
+        unrun=args.unrun
+    )
     print('vOTU cluster completed!!!')
 elif sys.argv[1]=='func_annot':
     print('Function annotation')
@@ -91,7 +100,9 @@ elif sys.argv[1]=='func_annot':
         outdir=args.outdir,
         threads=args.threads
     )
-    AMG.annotAMGs()
+    AMG.annotAMGs(
+        unrun=args.unrun
+    )
     print('Function annotation completed!!!')
 elif sys.argv[1]=='classify':
     print('Viral contig classification')
@@ -100,17 +111,21 @@ elif sys.argv[1]=='classify':
         outdir=args.outdir,
         threads=args.threads
     )
-    Taxa.Classify()
+    Taxa.Classify(
+        unrun=args.unrun
+    )
     print('Contigs classification completed!!!')
 elif sys.argv[1]=='compare':
     print('Viral contig comparasion')
     NWK=vCont.EnviComp(
-        orfs=args.fasta,
+        fasta=args.fasta,
         outdir=args.outdir,
         threads=args.threads,
         orfprefix=args.orfprefix
     ) #network
-    NWK.vContact()
+    NWK.CompSeq(
+        unrun=args.unrun
+    )
     print('Contigs comparasion completed!!!')
 elif sys.argv[1]=='vir_quant':
     print('Viral abundance and diversity analysis')
@@ -120,7 +135,12 @@ elif sys.argv[1]=='vir_quant':
         outdir=args.outdir,
         threads=args.threads
     )
-    VirQuant.QuantStat(args.taxa,args.checkv,args.batch_size)
+    VirQuant.QuantStat(
+        args.taxa,
+        args.checkv,
+        args.batch_size,
+        unrun=args.unrun
+    )
     print('Viral quantifications completed!!!')
 elif sys.argv[1]=='gene_quant':
     GeneQuant=geneQuantStat.GeneAbdStat(
@@ -129,7 +149,10 @@ elif sys.argv[1]=='gene_quant':
         outdir=args.outdir,
         threads=args.threads
     )
-    GeneQuant.QuantStat(args.batch_size)
+    GeneQuant.QuantStat(
+        args.batch_size,
+        unrun=args.unrun
+    )
     print('gene quantifications completed!!!')
 elif sys.argv[1]=='host_prid':
     print('Host prediction')
@@ -139,7 +162,9 @@ elif sys.argv[1]=='host_prid':
         outdir=args.outdir,
         threads=args.threads
     )
-    Hosts.PredHosts()
+    Hosts.PredHosts(
+        unrun=args.unrun
+    )
     print('Viral-host relationship prediction done!!!')
 else:
     ERROR=f'\nERROR: {sys.argv[1]} is not a module of VirCraft\n'

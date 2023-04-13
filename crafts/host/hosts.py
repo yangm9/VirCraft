@@ -30,7 +30,7 @@ class VirHost(VirRef):
             '--gtdbtk-in-dir',self.hostsdir,'-v',self.fasta,
             '-o',wkdir,'--threads',self.threads,'--python-aggregator']
         return cmd
-    def PredHosts(self):
+    def PredHosts(self,unrun=False):
         cmd=[utils.selectENV('gtdbtk')]
         tmp_cmd,tredir=self.magsTree()
         cmd.extend(tmp_cmd)
@@ -38,5 +38,6 @@ class VirHost(VirRef):
         cmd.extend(self.virmatch(tredir))
         shell=f'{self.outdir}/{self.name}_hosts.sh'
         utils.printSH(shell,cmd)
-        results=utils.execute(cmd)
+        results=''
+        if not unrun: results=utils.execute(cmd)
         return results

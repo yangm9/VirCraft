@@ -12,7 +12,7 @@ class multiVirCount(Seq):
         self.groups,self.sampDict=self.readSampInfo(self.samp_info)
         self.threads=str(threads)
     def virCountBySamp(self):
-        bwa_idx,_=self.mkBwaIdx
+        cmd,bwa_idx=self.mkBwaIdx()
         results=''
         for samp in self.sampDict.keys():
             cmd=[self.envs]
