@@ -8,7 +8,7 @@ VirCraft is an automatic viromic analysis pipeline.
 
 表1-1 VirCraft使用的软件
 |Tool|Version|Modules|Note|
-|:----|:----|:----|
+|:----|:----|:----|:----|
 |bedtools|2.30.0|identify|用于处理基因组信息分析的强大工具集合|
 |blast|2.13.0|classify|序列比对|
 |bowtie2|2.4.4|assembly|比对参考序列|
