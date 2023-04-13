@@ -47,7 +47,7 @@ class QualCtrl(Reads):
             '-1',fq1,'-2',fq2,'--un-conc',prefix,'\n',
             'mv',outfqs[0],fastqs[0],'\n','mv',outfqs[1],fastqs[1],'\n']
         return cmd,fastqs
-    def readqc(self,process='fuc'):
+    def readqc(self,process='fuc',unrun=False):
         cmd=[self.envs]
         fastqs=self.fastqs
         if 'f' in process:
@@ -67,5 +67,6 @@ class QualCtrl(Reads):
         )
         shell=f'{self.outdir}/{self.samp}_readsqc.sh'
         utils.printSH(shell,cmd)
-        results=utils.execute(cmd)
+        results=''
+        if not unrun: results=utils.execute(cmd)
         return results

@@ -16,7 +16,8 @@ class AMGs(VirScan):
         anno_tsv=f'{wkdir}/annotations.tsv'
         distill_dir=f'{wkdir}/distilled'
         cmd.extend(
-            ['DRAM-v.py annotate','--threads',self.threads,
+            ['rm -rf',wkdir,'\n',
+            'DRAM-v.py annotate','--threads',self.threads,
             '-i',vs2_dramv_fa,'-v',vs2_dramv_tab,'-o',wkdir,'\n',
             'DRAM-v.py distill','-i',anno_tsv,'-o',distill_dir,'\n']
         )

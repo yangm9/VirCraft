@@ -163,9 +163,14 @@ def addGlbArg(psr,batch=0): #Add global arguments
         help=ThreadsHelpDict[batch]
     )
     psr.add_argument(
+        '-u','--unrun',action='store_true',
+        dest='unrun',default=False,required=False,
+        help='This parameter is mainly used for debugging. If this parameter is set, the script will not run directly, but will generate scripts for each analysis step [default=False]'
+    )
+    psr.add_argument(
         '-o','--outdir',action='store',type=str,
         dest='outdir',metavar='STR',default=False,
-        required=True,help='output folder [default is the current folder]'
+        required=True,help='Output folder [default is the current folder]'
     )
     return psr
 

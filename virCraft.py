@@ -34,7 +34,10 @@ elif sys.argv[1]=='reads_qc':
         outdir=args.outdir,
         threads=args.threads
     )
-    Reads.readqc(args.process)
+    Reads.readqc(
+        process=args.process,
+        unrun=args.unrun
+    )
     print('Reads quality control completed!!!')
 elif sys.argv[1]=='assembly':
     print('VirCraft assembly...\n')

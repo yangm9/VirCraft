@@ -23,7 +23,9 @@ def insLable(file_name:str,label:str):
 def selectENV(env:str):
     bin_dir=os.path.abspath(sys.path[0]+'/bin')
     conda_path=isInstalled('conda')
-    condash_path='/'.join(conda_path.split('/')[0:-2])
+    conda_path_dirs=conda_path.split('/')
+    mc3_dir_idx=conda_path_dirs.index('miniconda3')
+    condash_path='/'.join(conda_path_dirs[0:mc3_dir_idx+1])
     condash_path+='/etc/profile.d/conda.sh'
     envs=''
     if os.path.exists(condash_path):

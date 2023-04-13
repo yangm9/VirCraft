@@ -14,6 +14,7 @@ $wkdir||=".";
 $postfix||=".sh";
 $parallel_number=2;
 
+#Search the scriptes in wkdir and with a postfix of XXX.
 my @scripts=glob("$wkdir/*$postfix");
 my $subsets_ref=&get_subset(\@scripts,$parallel_number);
 
