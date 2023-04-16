@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+import sys
 import pandas as pd
-from shutil import which
 
 PathDict={
-    'virsorter2'='vs2-pass1/final-viral-score.tsv',
-    'vibrant':'VIBRANT_scaffolds/VIBRANT_results_scaffolds/VIBRANT_machine_scaffolds.tsv',
-    'deepvirfinder'='deepvirfinder'
+    'virsorter2':'vs2-pass1/final-viral-score.tsv',
+    'vibrant':'VIBRANT_/VIBRANT_results_scaffolds/VIBRANT_machine_scaffolds.tsv',
+    'deepvirfinder':'deepvirfinder'
 }
 
 FiltDict={
@@ -26,18 +26,21 @@ FastaDict={
     'deepvirfinder':''
 }
 
-def vCtgFilt(tool,wkdir):
+def vCtgFilt(name,tool,wkdir):
     result=wkdir+'/'+PathDict[tool]
     if tool=='deepvirfinder':
         file_name=os.listdir(result)[0]
         result+='/'+file_name
+    elif tool=='vibrant':
+        pass
     df=pd.read_csv(result,sep='\t')
     df=df.query(FiltDict[tool])
     return df
 
 def vCtgMerge(wkdir):
     full_ctgs=[]
-    partial_ctgs=[]
+    vs2_partial_ctgs=[]
+    vb_partial_ctgs=[]
     for tool in FiltDict.keys():
         df=vCtgFilt(tool,wkdir)
         if tool=='virsorter2':
@@ -75,6 +78,6 @@ def ctgList(wkdir):
 
 if __name__=='__main__':
     if len(sys.argv)<2:
-        print(f'sys.argv[0] <viral_identify_wkdir>')
+        print(f'{sys.argv[0]} <viral_identify_wkdir>')
     else:
-        ctgList(wkdir)
+        ctgList(sys.argv[1])

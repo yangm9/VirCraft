@@ -99,16 +99,12 @@ def setOpts(name:str,subcmds:str,version:str):
     #subpsr=addAllFqArg(subpsr)
     subpsr=addSampArg(subpsr)
     subpsr=addFaArg(subpsr)
+    subpsr=addCheckVArg(subpsr)
     subpsr=addGlbArg(subpsr,1)
     subpsr.add_argument(
         '-x','--taxa',action='store',type=str,
         dest='taxa',metavar='STR',default=False,
         help='Taxonomic annotation file'
-    )
-    subpsr.add_argument(
-        '-c','--checkv',action='store',type=str,
-        dest='checkv',metavar='STR',default=False,
-        help='CheckV results directory'
     )
     
 #-----------------------gene_quant---------------------
@@ -127,6 +123,7 @@ def setOpts(name:str,subcmds:str,version:str):
         help='Gene annotation and quantification'
     )
     subpsr=addFaArg(subpsr)
+    subpsr=addCheckVArg(subpsr)
     subpsr=addGlbArg(subpsr)
 
 #-----------------------host_prid---------------------
@@ -226,7 +223,15 @@ def addSampArg(psr):
 def addCutoffArg(psr):
     psr.add_argument(
         '-l','--cutoff',action='store',type=int,
-        dest='cutoff',metavar='INT',default=False,
+        dest='cutoff',metavar='INT',default=5000,
         help='The minimal length of contigs/scaffolds. [default=5000]'
+    )
+    return psr
+
+def addCheckVArg(psr):
+    psr.add_argument(
+        '-c','--checkv',action='store',type=str,
+        dest='checkv',metavar='STR',default=False,
+        help='CheckV results directory'
     )
     return psr

@@ -18,16 +18,17 @@ $parallel_number=2;
 my @scripts=glob("$wkdir/*$postfix");
 my $subsets_ref=&get_subset(\@scripts,$parallel_number);
 
+#Batch processing batches
 for my $subset(@$subsets_ref){
     &run_scripts($subset);
 }
 print "All Done!!!\n";
 
+#Batch job submission
 sub run_scripts($){
     my ($scripts_ref)=@_;
     my @scripts=@$scripts_ref;
     my @threads;
-    
     foreach my $script(@scripts) {
         push(@threads, threads->create(sub {
             system("sh $script >$script.o 2>$script.e");
@@ -38,14 +39,14 @@ sub run_scripts($){
     }
     return 0;
 }
-
+#get the subset of array
 sub get_subset($$){
-    my ($array_ref, $n) = @_;
-    my @array = @$array_ref;
+    my ($array_ref,$n)=@_;
+    my @array=@$array_ref;
     my @result;
-    while (@array) {
-        my @subset = splice(@array, 0, $n);
-        push(@result, \@subset);
+    while(@array){
+        my @subset=splice(@array, 0, $n);
+        push(@result,\@subset);
     }
     return \@result;
 }
