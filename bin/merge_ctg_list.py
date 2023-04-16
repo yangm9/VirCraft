@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
+#author: yangm@idsse.com
+import os
 import sys
 import pandas as pd
+import linkTab
+
+FiltCondi="vs2_dsDNAphage>=0.9 or vb_prediction=='virus' or (dvf_score>=0.9 and dvf_pvalue<=0.1)"
 
 PathDict={
     'virsorter2':'vs2-pass1/final-viral-score.tsv',
-    'vibrant':'VIBRANT_/VIBRANT_results_scaffolds/VIBRANT_machine_scaffolds.tsv',
+    'vibrant':'VIBRANT_{0}/VIBRANT_results_{0}/VIBRANT_machine_{0}.tsv',
     'deepvirfinder':'deepvirfinder'
-}
-
-FiltDict={
-    'virsorter2':'dsDNAphage>=0.9',
-    'vibrant':"prediction=='virus'",
-    'deepvirfinder':'score > 0.9 and pvalue<=0.1'
 }
 
 NameDict={
@@ -26,29 +25,49 @@ FastaDict={
     'deepvirfinder':''
 }
 
-def vCtgFilt(name,tool,wkdir):
+CsvDict={
+    'virsorter2':'{}/vs2_viral_cfgs.xls',    
+    'vibrant':'{}/vb_viral_cfgs.xls',
+    'deepvirfinder':'{}/dvf_viral_cfgs.xls'
+}
+
+ColsDict={
+    'virsorter2':{
+        'dsDNAphage':'vs2_dsDNAphage','ssDNA':'vs2_ssDNA',
+        'max_score':'vs2_max_score','max_score_group':'vs2_max_score_group',
+        'hallmark':'vs2_hallmark','viral':'vs2_viral',
+        'cellular':'vs2_cellular'
+    },
+    'vibrant':{'prediction':'vb_prediction'},
+    'deepvirfinder':{'score':'dvf_score','pvalue':'dvf_pvalue'}
+}
+
+#Get the fullpath results table from deepvirfinder or vibrant or virsorter2
+def resultFile(tool,wkdir):
+    wkdir=wkdir.rstrip('/')
+    name=os.path.basename(wkdir)
     result=wkdir+'/'+PathDict[tool]
     if tool=='deepvirfinder':
         file_name=os.listdir(result)[0]
         result+='/'+file_name
     elif tool=='vibrant':
-        pass
-    df=pd.read_csv(result,sep='\t')
-    df=df.query(FiltDict[tool])
-    return df
+        result=result.format(name)
+    return result
 
 def vCtgMerge(wkdir):
     full_ctgs=[]
     vs2_partial_ctgs=[]
     vb_partial_ctgs=[]
-    for tool in FiltDict.keys():
-        df=vCtgFilt(tool,wkdir)
+    for tool in PathDict.keys():
+        result=resultFile(tool,wkdir)
+        df=pd.read_csv(result,sep='\t')
         if tool=='virsorter2':
-            df['seqname']=df['seqname'].apply(lambda x:x.rsplit('_',1)[0] if x.endswith('full') or x.endswith('lt2gene') else x)
-            full_tmps=df.query('not seqname.str.contains("partial")')['seqname'].tolist()
-            partial_tmps=df.query('seqname.str.contains("partial")')['seqname'].tolist()
+            df['seqname']=df['seqname'].apply(lambda x:x.rsplit('||',1)[0] if x.endswith('full') or x.endswith('lt2gene') else x)
+            full_tmps=df.query('not seqname.str.endswith("partial")')['seqname'].tolist()
+            partial_tmps=df.query('seqname.str.endswith("partial")')['seqname'].tolist()
             full_ctgs.extend(full_tmps)
             vs2_partial_ctgs.extend(partial_tmps)
+            df.drop(columns=['length'], inplace=True)
         elif tool=='vibrant':
             full_tmps=df.query('not scaffold.str.contains("fragment")')['scaffold']
             partial_tmps=df.query('scaffold.str.contains("fragment")')['scaffold']
@@ -56,8 +75,12 @@ def vCtgMerge(wkdir):
             vb_partial_ctgs.extend(partial_tmps)
         else:
             full_ctgs.extend(df[NameDict[tool]].tolist())
+            df.drop(columns=['len'], inplace=True)
+        df.rename(columns={NameDict[tool]:'Contig'},inplace=True)
+        df.rename(columns=ColsDict[tool],inplace=True)
+        csv_name=CsvDict[tool].format(wkdir)
+        df.to_csv(csv_name,index=False,sep='\t')
     full_ctgs=list(set(full_ctgs))
-    partial_ctgs=list(set(partial_ctgs))
     return full_ctgs,vs2_partial_ctgs,vb_partial_ctgs
 
 def listToFile(list_l,list_f):
@@ -66,14 +89,34 @@ def listToFile(list_l,list_f):
         LIST.write(f'{ctg}\n')
     return 0
 
+def filtCtgList(all_merged_ctgs):
+    df=pd.read_csv(all_merged_ctgs,sep='\t')
+    df=df.query(FiltCondi)
+    all_filt_ctgs=all_merged_ctgs.replace('.xls','.filt.xls')
+    df.to_csv(all_filt_ctgs,index=False,sep='\t')
+    return 0
+
 def ctgList(wkdir):
     full_ctgs,vs2_partial_ctgs,vb_partial_ctgs=vCtgMerge(wkdir)
-    full_ctgs_li=f'{wkdir}/full_viral_ctgs.list'
-    vs2_partial_ctgs_li=f'{wkdir}/vs2_partial_viral_ctgs.list'
-    vb_partial_ctgs_li=f'{wkdir}/vb_partial_viral_ctgs.list'
-    listToFile(full_ctgs,full_ctgs_li)
-    listToFile(vs2_partial_ctgs,vs2_partial_ctgs_li)
-    listToFile(vb_partial_ctgs,vb_partial_ctgs_li)
+    all_ctgs=['Contig']+full_ctgs+vs2_partial_ctgs+vb_partial_ctgs
+    all_ctgs_li=f'{wkdir}/all_viral_ctgs.list'
+    #full_ctgs_li=f'{wkdir}/full_viral_ctgs.list'
+    #vs2_partial_ctgs_li=f'{wkdir}/vs2_partial_viral_ctgs.list'
+    #vb_partial_ctgs_li=f'{wkdir}/vb_partial_viral_ctgs.list'
+    listToFile(all_ctgs,all_ctgs_li)
+    #listToFile(full_ctgs,full_ctgs_li)
+    #listToFile(vs2_partial_ctgs,vs2_partial_ctgs_li)
+    #listToFile(vb_partial_ctgs,vb_partial_ctgs_li)
+    mark=all_ctgs_li
+    for tool in CsvDict.keys():
+        csv_name=CsvDict[tool].format(wkdir)
+        merged_name=mark+'_'+tool
+        linkTab.merge(mark,csv_name,'left','Contig',merged_name)
+        os.remove(mark)
+        mark=merged_name
+    all_merged_ctgs=f'{wkdir}/all_viral_cfgs.xls'
+    os.rename(mark,all_merged_ctgs)
+    filtCtgList(all_merged_ctgs)
     return 0
 
 if __name__=='__main__':
