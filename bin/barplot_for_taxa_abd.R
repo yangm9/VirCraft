@@ -28,12 +28,20 @@ df_p$SampleID<-factor(
     levels=df_t$SampleID
 )
 #"#556B2F","#556B2F","#CD950C","#00688B","#8B795E","#458B74",
-color<-c(
-    "#9ACD32","#EECFA1","#4F94CD","#8B636C","#EE9A00",
-    "#FF00FF","#EECFA1","#0000FF","#BF3EFF","#00FFFF",
-    "#A52A2A","#FFFF00","#FF00FF","#00FF00","#BEBEBE",
-    "#FF0000","#EE9A00","#006400","#556B2F","#556B2F",
-    "#CD950C","#00688B","#8B795E","#458B74","#9ACDF2"
+#color<-c(
+#    "#9ACD32","#EECFA1","#4F94CD","#8B636C","#EE9A00",
+#    "#FF00FF","#EECFA1","#0000FF","#BF3EFF","#00FFFF",
+#    "#A52A2A","#FFFF00","#FF00FF","#00FF00","#BEBEBE",
+#    "#FF0000","#EE9A00","#006400","#556B2F","#556B2F",
+#    "#CD950C","#00688B","#8B795E","#458B74","#9ACDF2"
+#)
+
+color <- c(
+    "#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3",
+    "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd",
+    "#ccebc5", "#ffed6f", "#8C9EFF", "#9b9b9b", "#ffffe5",
+    "#fdb462", "#bebada", "#fb8072", "#80b1d3", "#ffffb3",
+    "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5"
 )
 
 plot<-ggplot(df_p,aes(fill=Type,y=Relative_Abundance,x=SampleID))+
