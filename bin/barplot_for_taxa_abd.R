@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript
 #coding:utf8
+#yangm@idsse.ac.cn
 
 if (!require("reshape2")) {install.packages("reshape2")}
 if (!require("ggplot2")) {install.packages("ggplot2")}
