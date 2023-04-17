@@ -45,6 +45,7 @@ class Assembly(Reads):
         other_paras=''
         wkdir=f'{self.outdir}/megahit'
         tmpdir=f'{self.outdir}/megahit.tmp'
+        utils.mkdir(tmpdir)
         if len(fastqs)==1:
             input_para=f'-r {fastqs[0]}'
         elif len(fastqs)==2:

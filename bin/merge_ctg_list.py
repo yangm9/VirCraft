@@ -62,7 +62,7 @@ def vCtgMerge(wkdir):
         result=resultFile(tool,wkdir)
         df=pd.read_csv(result,sep='\t')
         if tool=='virsorter2':
-            df['seqname']=df['seqname'].apply(lambda x:x.rsplit('||',1)[0] if x.endswith('full') or x.endswith('lt2gene') else x)
+            df['seqname']=df['seqname'].apply(lambda x:x.rsplit('_',1)[0] if x.endswith('full') or x.endswith('lt2gene') else x)
             full_tmps=df.query('not seqname.str.endswith("partial")')['seqname'].tolist()
             partial_tmps=df.query('seqname.str.endswith("partial")')['seqname'].tolist()
             full_ctgs.extend(full_tmps)
