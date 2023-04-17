@@ -670,9 +670,26 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 6.软件结构更新：data、general等模块。
 7.添加AMGs分析，暂定用dramv和vibrant分析，尚未整合。
 ```
+
+**VirCraft-v0.0.6**
 ```
-**VirCraft-v0.0.5**
+1.移植性问题解决方案：conda；
+2.添加VirSorter2, DeepVirFinder和VIBRANT分析流程（vs2-vb-dvf），并对其进行合并分析；
+3.采用DRAM-v结合VIBRANT合并分析AMGs；
+4.Classify配置NCBI RefSeq数据库，添加基于blastp分类功能，并将结果与Demovir整合
+5.所有模块均可直接运行，无需二次投递任务。
+```
+
+**VirCraft-v0.0.7**
+```
+1.所有模块添加'-u'参数用于调试；
+2.identify模块添加'-w'参数用于选择病毒序列判定分析流（viral-id-sop和vs2-vb-dvf）；
+3.病毒定量方式由TPM改为mean coverage；
+4.添加gene_quant (基因定量)分析模块。
+```
+
+**VirCraft-v0.0.8**
+```
 1.添加logging功能？？；
-2.完善README;
-3.编写install程序，解决移植性的问题；
+2.编写install程序，解决移植性的问题。
 ```
