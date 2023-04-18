@@ -39,13 +39,13 @@ sub run_scripts($){
     }
     return 0;
 }
-#get the subset of array
+#Split a array to m subsets and output them, each subsets contains $n elements
 sub get_subset($$){
     my ($array_ref,$n)=@_;
     my @array=@$array_ref;
     my @result;
     while(@array){
-        my @subset=splice(@array, 0, $n);
+        my @subset=splice(@array,0,$n);
         push(@result,\@subset);
     }
     return \@result;
