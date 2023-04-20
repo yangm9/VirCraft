@@ -1,1 +1,1 @@
-/home/yangming/VirCraft/bin/extract_name.py
+extract_name.py

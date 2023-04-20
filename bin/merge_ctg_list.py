@@ -62,7 +62,7 @@ def vCtgMerge(wkdir):
         result=resultFile(tool,wkdir)
         df=pd.read_csv(result,sep='\t')
         if tool=='virsorter2':
-            df['seqname']=df['seqname'].apply(lambda x:x.rsplit('_',1)[0] if x.endswith('full') or x.endswith('lt2gene') else x)
+            df['seqname']=df['seqname'].apply(lambda x:x.rsplit('||',1)[0] if x.endswith('full') or x.endswith('lt2gene') else x)
             full_tmps=df.query('not seqname.str.endswith("partial")')['seqname'].tolist()
             partial_tmps=df.query('seqname.str.endswith("partial")')['seqname'].tolist()
             full_ctgs.extend(full_tmps)
@@ -89,10 +89,19 @@ def listToFile(list_l,list_f):
         LIST.write(f'{ctg}\n')
     return 0
 
-def filtCtgList(all_merged_ctgs):
+def filtCtgList(all_merged_ctgs,filt_type):
     df=pd.read_csv(all_merged_ctgs,sep='\t')
-    df=df.query(FiltCondi)
-    all_filt_ctgs=all_merged_ctgs.replace('.xls','.filt.xls')
+    if filt_type=='tools':
+        df['vs2_dsDNAphage']=df['vs2_dsDNAphage'].apply(lambda x:1 if x>0.9 else 0)
+        df['vb_prediction']=df['vb_prediction'].apply(lambda x:1 if x=='virus' else 0)
+        df['dvf_prediction']=df.apply(lambda x:1 if x['dvf_score']>0.9 and x['dvf_pvalue']<0.1 else 0, axis=1)
+        df['evidences']=df['vs2_dsDNAphage']+df['vb_prediction']+df['dvf_prediction']
+    elif(filt_type=='cutoff'):
+        df=df.query(FiltCondi)
+    else:
+        pass
+    postfix=f'.{filt_type}.xls'
+    all_filt_ctgs=all_merged_ctgs.replace('.xls',postfix)
     df.to_csv(all_filt_ctgs,index=False,sep='\t')
     return 0
 
@@ -116,7 +125,8 @@ def ctgList(wkdir):
         mark=merged_name
     all_merged_ctgs=f'{wkdir}/all_viral_cfgs.xls'
     os.rename(mark,all_merged_ctgs)
-    filtCtgList(all_merged_ctgs)
+    filtCtgList(all_merged_ctgs,'tools')
+    filtCtgList(all_merged_ctgs,'cutoff')
     return 0
 
 if __name__=='__main__':

@@ -14,7 +14,7 @@ class VirScan(Seq):
         idx=str(n+1)
         wkdir=f'{self.outdir}/vs2-pass{idx}'
         utils.mkdir(wkdir)
-        cmd=['virsorter run',self.vs2_subcmds[n],'-i',in_fa,'-w',wkdir,
+        cmd=['virsorter run',self.vs2_subcmds[n],'-i',in_fa,
             '-d',self.confDict['Virsorter2DB'],'-w',wkdir,
             '--include-groups dsDNAphage,ssDNA','-j',self.threads,
             '--min-length 5000 --min-score 0.5 all\n']

@@ -10,7 +10,7 @@ else
     echo "The installation of conda is complete！"
 fi
 #reads_qc
-envs=(reads_qc assembly deepvirfinder gtdbtk vContact2 vibrant viral-id-sop VirCraft)
+envs=(reads_qc assembly deepvirfinder viral-id-sop vibrant gtdbtk vContact VirCraft kofamscan)
 
 for env in "${envs[@]}"
 do
@@ -21,4 +21,13 @@ do
         if 
     fi
 done
+
+if grep -q "DeepVirFinder" ../crafts/config/vircraft.cfg; then
+    line=grep -q "DeepVirFinder" ../crafts/config/vircraft.cfg
+
+else
+    git clone https://github.com/jessieren/DeepVirFinder
+    dvf_path="$(pwd)/DeepVirFinder/dvf.py"
+    echo "DeepVirFinder = ${dvf_path}" >> ../crafts/config/vircraft.cfg
+fi
 
