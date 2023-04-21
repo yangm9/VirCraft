@@ -11,7 +11,7 @@ class vIdentify(MultiTools):
         self.threads=str(threads)
     def vFilter(self):
         cmd=[utils.selectENV('VirCraft')]
-        cmd.extend(['merge_ctg_list.py',self.outdir,'\n'])
+        cmd.extend(['merge_ctg_list.py',self.name,self.outdir,'\n'])
         return cmd
     def Identify(self,cutoff=5000,unrun=False):
         #VirSorter2

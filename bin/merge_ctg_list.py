@@ -43,9 +43,9 @@ ColsDict={
 }
 
 #Get the fullpath results table from deepvirfinder or vibrant or virsorter2
-def resultFile(tool,wkdir):
+def resultFile(name,tool,wkdir):
     wkdir=wkdir.rstrip('/')
-    name=os.path.basename(wkdir)
+    #name=os.path.basename(wkdir)
     result=wkdir+'/'+PathDict[tool]
     if tool=='deepvirfinder':
         file_name=os.listdir(result)[0]
@@ -54,12 +54,12 @@ def resultFile(tool,wkdir):
         result=result.format(name)
     return result
 
-def vCtgMerge(wkdir):
+def vCtgMerge(name,wkdir):
     full_ctgs=[]
     vs2_partial_ctgs=[]
     vb_partial_ctgs=[]
     for tool in PathDict.keys():
-        result=resultFile(tool,wkdir)
+        result=resultFile(name,tool,wkdir)
         df=pd.read_csv(result,sep='\t')
         if tool=='virsorter2':
             df['seqname']=df['seqname'].apply(lambda x:x.rsplit('||',1)[0] if x.endswith('full') or x.endswith('lt2gene') else x)
@@ -105,8 +105,8 @@ def filtCtgList(all_merged_ctgs,filt_type):
     df.to_csv(all_filt_ctgs,index=False,sep='\t')
     return 0
 
-def ctgList(wkdir):
-    full_ctgs,vs2_partial_ctgs,vb_partial_ctgs=vCtgMerge(wkdir)
+def ctgList(name,wkdir):
+    full_ctgs,vs2_partial_ctgs,vb_partial_ctgs=vCtgMerge(name,wkdir)
     all_ctgs=['Contig']+full_ctgs+vs2_partial_ctgs+vb_partial_ctgs
     all_ctgs_li=f'{wkdir}/all_viral_ctgs.list'
     #full_ctgs_li=f'{wkdir}/full_viral_ctgs.list'
@@ -133,4 +133,4 @@ if __name__=='__main__':
     if len(sys.argv)<2:
         print(f'{sys.argv[0]} <viral_identify_wkdir>')
     else:
-        ctgList(sys.argv[1])
+        ctgList(sys.argv[1],sys.argv[2])
