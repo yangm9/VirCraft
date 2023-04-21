@@ -12,15 +12,15 @@ class GeneAbdStat(multiGeneCount):
         abd=f'{self.outdir}/all_merged_gene.sf'
         cmd=['merge_tpms.pl',self.samp_info,self.outdir,'tpm Gene\n']
         return cmd,abd
-    def QuantStat(self,batch_size):
+    def QuantStat(self):#,batch_size):
         self.geneCountBySamp()
         cmd=[self.envs]
         cmd.extend(
-            ['multithreads.pl',self.outdir,'gene_count.sh',batch_size,'\n']
+            ['multithreads.pl',self.outdir,'gene_count.sh 4\n']
         )
         tmp_cmd,abd=self.mergeAbd()
         cmd.extend(tmp_cmd)
-        cmd.append('rm -rf *_gene_count.sh*\n')
+        #cmd.append('rm -rf *_gene_count.sh*\n')
         shell=f'{self.outdir}/{self.name}_gene_quant.sh'
         utils.printSH(shell,cmd)
         results=utils.execute(cmd)

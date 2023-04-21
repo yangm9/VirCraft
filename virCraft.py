@@ -138,7 +138,6 @@ elif sys.argv[1]=='vir_quant':
     VirQuant.QuantStat(
         args.taxa,
         args.checkv,
-        args.batch_size,
         unrun=args.unrun
     )
     print('Viral quantifications completed!!!')
@@ -150,7 +149,6 @@ elif sys.argv[1]=='gene_quant':
         threads=args.threads
     )
     GeneQuant.QuantStat(
-        args.batch_size,
         unrun=args.unrun
     )
     print('gene quantifications completed!!!')

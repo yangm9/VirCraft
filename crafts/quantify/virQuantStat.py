@@ -54,12 +54,11 @@ class VirAbdStat(multiVirCount):
             'alpha_diversity.R',abd,alpha_diversity,'\n',
             'NMDS.R',abd,self.samp_info,self.outdir,'\n']
         return cmd
-    def QuantStat(self,taxa_anno=None,checkv_dir=None,batch_size=2,unrun=False):
-        batch_size=str(batch_size)
+    def QuantStat(self,taxa_anno=None,checkv_dir=None,unrun=False):
         self.virCountBySamp()
         cmd=[self.envs]
         cmd.extend(
-            ['multithreads.pl',self.outdir,'viral_count.sh',batch_size,'\n']
+            ['multithreads.pl',self.outdir,'viral_count.sh 4\n']
         )
         tmp_cmd,abd=self.mergeAbd()
         cmd.extend(tmp_cmd)

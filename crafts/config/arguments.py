@@ -100,7 +100,7 @@ def setOpts(name:str,subcmds:str,version:str):
     subpsr=addSampArg(subpsr)
     subpsr=addFaArg(subpsr)
     subpsr=addCheckVArg(subpsr)
-    subpsr=addGlbArg(subpsr,1)
+    subpsr=addGlbArg(subpsr)#,1)
     subpsr.add_argument(
         '-x','--taxa',action='store',type=str,
         dest='taxa',metavar='STR',default=False,
@@ -115,7 +115,7 @@ def setOpts(name:str,subcmds:str,version:str):
     #subpsr=addAllFqArg(subpsr)
     subpsr=addSampArg(subpsr)
     subpsr=addFaArg(subpsr)
-    subpsr=addGlbArg(subpsr,1)
+    subpsr=addGlbArg(subpsr)#,1)
 
 #-----------------------func_annot---------------------
     subpsr=subparsers.add_parser(
@@ -143,21 +143,21 @@ def setOpts(name:str,subcmds:str,version:str):
 
 
 #------------Functions for adding Arguments-----------
-def addGlbArg(psr,batch=0): #Add global arguments
+def addGlbArg(psr):#,batch=0): #Add global arguments
     ThreadsHelpDict={
         0:'Number of processes/threads to use [default=8]',
         1:'Number of processes/threads to use for each task in a batch [default=8]'
     }
-    if batch==1:
-        psr.add_argument(
-            '-b','--batch_size',action='store',type=str,
-            dest='batch_size',metavar='INT',default=5,
-            help='Set the task number in each run batch, namely batch size, [default=5]'
-        )
+#    if batch==1:
+#        psr.add_argument(
+#            '-b','--batch_size',action='store',type=str,
+#            dest='batch_size',metavar='INT',default=5,
+#            help='Set the task number in each run batch, namely batch size, [default=5]'
+#        )
     psr.add_argument(
         '-t','--threads',action='store',type=str,
         dest='threads',metavar='INT',default=8,
-        help=ThreadsHelpDict[batch]
+        help=ThreadsHelpDict[0]#batch]
     )
     psr.add_argument(
         '-u','--unrun',action='store_true',
