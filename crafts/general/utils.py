@@ -15,6 +15,11 @@ def printSH(sh_path:str,command:list):
     SHPATH.close()
     return 0
 
+def divide(a,b):
+    if b==0:
+        raise ValueError("'-b' should not be 0!")
+    return a//b
+
 def insLable(file_name:str,label:str):
     "Insert a label before the extension for a file name."
     prefix,extension=os.path.splitext(file_name)
