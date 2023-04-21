@@ -33,7 +33,8 @@ CsvDict={
 
 ColsDict={
     'virsorter2':{
-        'dsDNAphage':'vs2_dsDNAphage','ssDNA':'vs2_ssDNA',
+        'dsDNAphage':'vs2_dsDNAphage','ssDNA':'vs2_ssDNA','NCLDV':'vs2_NCLDV',
+        'RNA':'vs2_RNA','lavidaviridae':'vs2_lavidaviridae',
         'max_score':'vs2_max_score','max_score_group':'vs2_max_score_group',
         'hallmark':'vs2_hallmark','viral':'vs2_viral',
         'cellular':'vs2_cellular'

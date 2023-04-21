@@ -16,8 +16,8 @@ class VirScan(Seq):
         utils.mkdir(wkdir)
         cmd=['virsorter run',self.vs2_subcmds[n],'-i',in_fa,
             '-d',self.confDict['Virsorter2DB'],'-w',wkdir,
-            '--include-groups dsDNAphage,ssDNA','-j',self.threads,
-            '--min-length 5000 --min-score 0.5 all\n']
+            '--include-groups dsDNAphage,NCLDV,RNA,ssDNA,lavidaviridae',
+            '-j',self.threads,'--min-length 5000 --min-score 0.5 all\n']
         return cmd,wkdir
     def checkv(self,in_fa:str):
         wkdir=f'{self.outdir}/checkv'
