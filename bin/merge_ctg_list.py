@@ -5,7 +5,7 @@ import sys
 import pandas as pd
 import linkTab
 
-FiltCondi="vs2_dsDNAphage>=0.9 or vb_prediction=='virus' or (dvf_score>=0.9 and dvf_pvalue<=0.1)"
+FiltCondi="vs2_max_score>=0.9 or vb_prediction=='virus' or (dvf_score>=0.9 and dvf_pvalue<=0.1)"
 
 PathDict={
     'virsorter2':'vs2-pass1/final-viral-score.tsv',

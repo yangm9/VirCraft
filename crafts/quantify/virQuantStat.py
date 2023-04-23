@@ -58,7 +58,8 @@ class VirAbdStat(multiVirCount):
         self.virCountBySamp()
         cmd=[self.envs]
         cmd.extend(
-            ['multithreads.pl',self.outdir,'viral_count.sh 4\n']
+            ['multithreads.pl',self.outdir,'viral_count.sh',
+            self.BATCH_SIZE,'\n']
         )
         tmp_cmd,abd=self.mergeAbd()
         cmd.extend(tmp_cmd)

@@ -122,7 +122,7 @@ elif sys.argv[1]=='compare':
         outdir=args.outdir,
         threads=args.threads,
         orfprefix=args.orfprefix
-    ) #network
+    )
     NWK.CompSeq(
         unrun=args.unrun
     )
@@ -142,6 +142,7 @@ elif sys.argv[1]=='vir_quant':
     )
     print('Viral quantifications completed!!!')
 elif sys.argv[1]=='gene_quant':
+    print('gene abundance analysis')
     GeneQuant=geneQuantStat.GeneAbdStat(
         samp_info=args.samp_info,
         fasta=args.fasta,
