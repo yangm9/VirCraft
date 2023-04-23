@@ -99,7 +99,7 @@ git clone https://bitbucket.org/MAVERICLab/vcontact2
 cd vcontact2 && pip install .
 ```
 
-###### 1.2.5 
+###### 1.2.5 VirCraft 
 
 ```
 #安装VirCraft基本组件
