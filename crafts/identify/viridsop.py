@@ -10,14 +10,16 @@ class VirScan(Seq):
     def __init__(self,fasta='',outdir='',threads=8):
         super().__init__(fasta,outdir)
         self.threads=str(threads)
-    def virsorter(self,in_fa:str,n:int):
+    def virsorter(self,in_fa:str,n:int,min_length=5000):
         idx=str(n+1)
+        min_length=str(min_length)
         wkdir=f'{self.outdir}/vs2-pass{idx}'
         utils.mkdir(wkdir)
         cmd=['virsorter run',self.vs2_subcmds[n],'-i',in_fa,
             '-d',self.confDict['Virsorter2DB'],'-w',wkdir,
             '--include-groups dsDNAphage,NCLDV,RNA,ssDNA,lavidaviridae',
-            '-j',self.threads,'--min-length 5000 --min-score 0.5 all\n']
+            '-j',self.threads,'--min-length',min_length,
+            '--min-score 0.5 all\n']
         return cmd,wkdir
     def checkv(self,in_fa:str):
         wkdir=f'{self.outdir}/checkv'

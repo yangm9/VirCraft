@@ -16,7 +16,7 @@ class vIdentify(MultiTools):
     def Identify(self,cutoff=5000,unrun=False):
         #VirSorter2
         cmd=[utils.selectENV('viral-id-sop')]
-        tmp_cmd,wkdir=self.virsorter(self.fasta,0)
+        tmp_cmd,wkdir=self.virsorter(self.fasta,0,cutoff)
         cmd.extend(tmp_cmd)
         vs2_partial_ctgs=f'{wkdir}/final-viral-score.tsv'
         vs2_out_ctgs_fa=f'{wkdir}/vs2-pass1/final-viral-combined.fa'
@@ -70,7 +70,6 @@ class vIdentify(MultiTools):
             ['cat',full_ctgs_fa,vs2_partial_ctgs_fa,vb_partial_ctgs_fa,
             '>',all_viral_ctgs,'\n']
         )
-        cmd.extend(tmp_cmd)
         shell=f'{self.outdir}/{self.name}_find_vir.sh'
         utils.printSH(shell,cmd)
         results=''
