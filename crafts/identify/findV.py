@@ -63,8 +63,10 @@ fi
             'extrSeqByName.pl',tool_filt_ctgs_li,all_viral_ctgs,
             tool_filt_ctgs,'\n']
         )
+        tmp_cmd,checkv_fa=self.checkv(tool_filt_ctgs)
+        cmd.extend(tmp_cmd)
         return cmd
-    def Identify(self,cutoff=5000,unrun=False):
+    def Identify(self,cutoff=1500,unrun=False):
         #VirSorter2
         cmd=[utils.selectENV('viral-id-sop')]
         tmp_cmd,wkdir=self.virsorter(self.fasta,0,cutoff)

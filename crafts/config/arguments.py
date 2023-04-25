@@ -223,8 +223,8 @@ def addSampArg(psr):
 def addCutoffArg(psr):
     psr.add_argument(
         '-l','--cutoff',action='store',type=int,
-        dest='cutoff',metavar='INT',default=5000,
-        help='The minimal length of contigs/scaffolds. [default=5000]'
+        dest='cutoff',metavar='INT',default=1500,
+        help='The minimal length of contigs/scaffolds. [default=1500]'
     )
     return psr
 
