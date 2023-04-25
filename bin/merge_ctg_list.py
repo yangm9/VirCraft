@@ -71,7 +71,7 @@ def vCtgMerge(name,wkdir):
             df.drop(columns=['length'], inplace=True)
         elif tool=='vibrant':
             full_tmps=df.query('not scaffold.str.contains("fragment")')['scaffold']
-            partial_tmps=df.query('scaffold.str.contains("fragment")')['scaffold']
+            partial_tmps=df.query('scaffold.str.contains("fragment") and prediction=="virus"')['scaffold']
             full_ctgs.extend(full_tmps)
             vb_partial_ctgs.extend(partial_tmps)
         else:
@@ -92,11 +92,11 @@ def listToFile(list_l,list_f):
 
 def filtCtgList(all_merged_ctgs,filt_type):
     df=pd.read_csv(all_merged_ctgs,sep='\t')
-    if filt_type=='tools':
-        df['vs2_score']=df['vs2_max_score'].apply(lambda x:2 if x>=0.9 else (1 if x>0.7 else 0))
+    if filt_type=='score':
+        df['vs2_score']=df['vs2_max_score'].apply(lambda x:2 if x>=0.9 else (1 if x>=0.7 else 0))
         df['vb_score']=df['vb_prediction'].apply(lambda x:1 if x=='virus' else 0)
-        df['dvf_score']=df.apply(lambda x:1 if x['dvf_score']>=0.9 and x['dvf_pvalue']<=0.1 else 0, axis=1)
-        df['evidences']=df['vs2_score']+df['vb_score']+df['dvf_score']
+        df['dvf_scores']=df.apply(lambda x:1 if x['dvf_score']>=0.9 and x['dvf_pvalue']<=0.1 else 0, axis=1)
+        df['score']=df['vs2_score']+df['vb_score']+df['dvf_scores']
     elif(filt_type=='cutoff'):
         df=df.query(FiltCondi)
     else:
@@ -126,12 +126,12 @@ def ctgList(name,wkdir):
         mark=merged_name
     all_merged_ctgs=f'{wkdir}/all_viral_cfgs.xls'
     os.rename(mark,all_merged_ctgs)
-    filtCtgList(all_merged_ctgs,'tools')
+    filtCtgList(all_merged_ctgs,'score')
     filtCtgList(all_merged_ctgs,'cutoff')
     return 0
 
 if __name__=='__main__':
     if len(sys.argv)<2:
-        print(f'{sys.argv[0]} <viral_identify_wkdir>')
+        print(f'{sys.argv[0]} <metagenomic_name> <viral_identify_wkdir>')
     else:
         ctgList(sys.argv[1],sys.argv[2])

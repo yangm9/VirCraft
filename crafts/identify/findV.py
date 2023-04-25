@@ -14,13 +14,13 @@ class vIdentify(MultiTools):
         cmd=[utils.selectENV('VirCraft')]
         full_ctgs_li=f'{self.outdir}/full_viral_ctgs.list'
         full_ctgs_fa=f'{self.outdir}/full_viral_ctgs.fa'
-        tool_score_xls=f'{self.outdir}/all_viral_cfgs.tools.xls'
-        tool_filt_xls=utils.insLable(tool_score_xls,'gt2')
-        tool_filt_ctgs_li=f'{self.outdir}/tool_filt_ctgs.list'
+        score_xls=f'{self.outdir}/all_viral_cfgs.score.xls'
+        score_filt_xls=utils.insLable(score_xls,'gt2')
+        score_filt_ctgs_li=f'{self.outdir}/viral_ctgs_filt.list'
         cmd.extend(
             ['merge_ctg_list.py',self.name,self.outdir,'\n',
-            "awk 'NR==1 || $13>=2'" tool_score_xls,'>',tool_filt_xls,'\n',
-            'cut -f 1',tool_filt_xls,"|sed '1d' >",tool_filt_ctgs_li,'\n',
+            "awk 'NR==1 || $18>=2'",score_xls,'>',score_filt_xls,'\n',
+            'cut -f 1',score_filt_xls,"|sed '1d' >",score_filt_ctgs_li,'\n',
             'extrSeqByName.pl',full_ctgs_li,self.fasta,full_ctgs_fa,'\n']
         )
         #vs2 partial
@@ -60,7 +60,7 @@ fi
         cmd.extend(
             ['cat',full_ctgs_fa,vs2_partial_ctgs_fa,
             vb_partial_ctgs_fa,'>',all_viral_ctgs,'\n',
-            'extrSeqByName.pl',tool_filt_ctgs_li,all_viral_ctgs,
+            'extrSeqByName.pl',score_filt_ctgs_li,all_viral_ctgs,
             tool_filt_ctgs,'\n']
         )
         tmp_cmd,checkv_fa=self.checkv(tool_filt_ctgs)

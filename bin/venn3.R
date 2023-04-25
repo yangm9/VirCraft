@@ -1,4 +1,4 @@
-#setwd("F:\tech_docs\R\VennDiagram")
+#!/usr/bin/env Rscript
 if (!require("grid")) {install.packages("grid")}
 if (!require("VennDiagram")) {install.packages("VennDiagram")}
 library(grid)
