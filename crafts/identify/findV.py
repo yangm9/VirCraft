@@ -14,8 +14,13 @@ class vIdentify(MultiTools):
         cmd=[utils.selectENV('VirCraft')]
         full_ctgs_li=f'{self.outdir}/full_viral_ctgs.list'
         full_ctgs_fa=f'{self.outdir}/full_viral_ctgs.fa'
+        tool_score_xls=f'{self.outdir}/all_viral_cfgs.tools.xls'
+        tool_filt_xls=utils.insLable(tool_score_xls,'gt2')
+        tool_filt_ctgs_li=f'{self.outdir}/tool_filt_ctgs.list'
         cmd.extend(
             ['merge_ctg_list.py',self.name,self.outdir,'\n',
+            "awk 'NR==1 || $13>=2'" tool_score_xls,'>',tool_filt_xls,'\n',
+            'cut -f 1',tool_filt_xls,"|sed '1d' >",tool_filt_ctgs_li,'\n',
             'extrSeqByName.pl',full_ctgs_li,self.fasta,full_ctgs_fa,'\n']
         )
         #vs2 partial
@@ -51,9 +56,12 @@ fi
         )
         #cat all
         all_viral_ctgs=f'{self.outdir}/all_viral_ctgs.fa'
+        tool_filt_ctgs=f'{self.outdir}/all_viral_ctgs_tool_filt.fa'
         cmd.extend(
-            ['cat',full_ctgs_fa,vs2_partial_ctgs_fa,vb_partial_ctgs_fa,
-            '>',all_viral_ctgs,'\n']
+            ['cat',full_ctgs_fa,vs2_partial_ctgs_fa,
+            vb_partial_ctgs_fa,'>',all_viral_ctgs,'\n',
+            'extrSeqByName.pl',tool_filt_ctgs_li,all_viral_ctgs,
+            tool_filt_ctgs,'\n']
         )
         return cmd
     def Identify(self,cutoff=5000,unrun=False):
