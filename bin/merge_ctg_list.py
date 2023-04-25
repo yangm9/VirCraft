@@ -110,13 +110,13 @@ def ctgList(name,wkdir):
     full_ctgs,vs2_partial_ctgs,vb_partial_ctgs=vCtgMerge(name,wkdir)
     all_ctgs=['Contig']+full_ctgs+vs2_partial_ctgs+vb_partial_ctgs
     all_ctgs_li=f'{wkdir}/all_viral_ctgs.list'
-    #full_ctgs_li=f'{wkdir}/full_viral_ctgs.list'
-    #vs2_partial_ctgs_li=f'{wkdir}/vs2_partial_viral_ctgs.list'
-    #vb_partial_ctgs_li=f'{wkdir}/vb_partial_viral_ctgs.list'
+    full_ctgs_li=f'{wkdir}/full_viral_ctgs.list'
+    vs2_partial_ctgs_li=f'{wkdir}/vs2_partial_viral_ctgs.list'
+    vb_partial_ctgs_li=f'{wkdir}/vb_partial_viral_ctgs.list'
     listToFile(all_ctgs,all_ctgs_li)
-    #listToFile(full_ctgs,full_ctgs_li)
-    #listToFile(vs2_partial_ctgs,vs2_partial_ctgs_li)
-    #listToFile(vb_partial_ctgs,vb_partial_ctgs_li)
+    listToFile(full_ctgs,full_ctgs_li)
+    listToFile(vs2_partial_ctgs,vs2_partial_ctgs_li)
+    listToFile(vb_partial_ctgs,vb_partial_ctgs_li)
     mark=all_ctgs_li
     for tool in CsvDict.keys():
         csv_name=CsvDict[tool].format(wkdir)
