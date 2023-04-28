@@ -64,6 +64,7 @@ dependencies:
   - cookiecutter=2.1.1=pyh6c4a22f_0
   - coverm=0.6.1=h1535e20_5
   - cryptography=39.0.0=py39hd598818_0
+  - csvtk=0.25.0=h9ee0642_0
   - curl=7.86.0=h7bff187_1
   - cycler=0.11.0=pyhd8ed1ab_0
   - cython=0.29.33=py39h227be39_0
