@@ -19,7 +19,7 @@ class vIdentify(MultiTools):
         score_filt_ctgs_li=f'{self.outdir}/viral_ctgs_filt.list'
         cmd.extend(
             ['merge_ctg_list.py',self.name,self.outdir,'\n',
-            "awk 'NR==1 || $18>=2'",score_xls,'>',score_filt_xls,'\n',
+            "awk -F '\\t' 'NR==1 || $18>=2'",score_xls,'>',score_filt_xls,'\n',
             'cut -f 1',score_filt_xls,"|sed '1d' >",score_filt_ctgs_li,'\n',
             'extrSeqByName.pl',full_ctgs_li,self.fasta,full_ctgs_fa,'\n']
         )
@@ -56,7 +56,7 @@ fi
         )
         #cat all
         all_viral_ctgs=f'{self.outdir}/all_viral_ctgs.fa'
-        tool_filt_ctgs=f'{self.outdir}/all_viral_ctgs_tool_filt.fa'
+        tool_filt_ctgs=f'{self.outdir}/all_viral_ctgs_score_gt2.fa'
         cmd.extend(
             ['cat',full_ctgs_fa,vs2_partial_ctgs_fa,
             vb_partial_ctgs_fa,'>',all_viral_ctgs,'\n',
