@@ -20,9 +20,9 @@ df <- data.frame(table(dt[,argv[2]])) #Field
 colnames(df) <- c("Variable", "Count")
 df = df[order(df[,"Count"], decreasing = TRUE),] 
 myLabel = as.vector(df[,"Variable"]) 
-myLabel = paste(myLabel,
-                "(", round(df[,"Count"] / sum(df[,"Count"]) * 100, 2), 
-                "%)", sep = "") 
+myLabel = paste(myLabel,": ",df[,"Count"]," (",
+                round(df[,"Count"]/sum(df[,"Count"])*100,2),
+                "%)",sep = "")
 color <- c(
   "#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3",
   "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd",
@@ -32,12 +32,13 @@ color <- c(
 )
 
 pie_plot <- ggplot(df,aes(x = "", y = Count, fill = Variable)) + 
-  geom_bar(stat="identity", width = 1) + 
-  coord_polar(theta="y") + 
-  labs(x="", y="", title=paste(argv[2],"Pie Plot",sep=' ')) + 
-  theme(axis.ticks=element_blank()) + 
+    geom_bar(stat="identity", width = 1) + 
+    coord_polar(theta="y") + 
+    labs(x="", y="", title=paste(argv[2],"Pie Plot",sep=' ')) + 
+    theme(axis.ticks=element_blank()) + 
 #  theme(legend.title=element_blank(), legend.position = "top") + 
-  scale_fill_manual(values=color) + 
+#    scale_fill_manual(values=color) + 
+    scale_fill_manual(values=color,labels=myLabel) +
 #  geom_text(aes(y = Count/2 + c(0, cumsum(Count)[-length(Count)]), 
 #                x = sum(Count)/20, label = myLabel), 
 #                size = 3) + ## 在图中加上百分比：x 调节标签到圆心的距离, y 调节标签的左右位置 p
