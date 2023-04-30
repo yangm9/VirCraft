@@ -17,7 +17,7 @@ class GeneAbdStat(multiGeneCount):
         cmd=[self.envs]
         cmd.extend(
             ['multithreads.pl',self.outdir,'gene_count.sh',
-            self.BATCH_SIZE,'\n']
+            str(self.BATCH_SIZE),'\n']
         )
         tmp_cmd,abd=self.mergeAbd()
         cmd.extend(tmp_cmd)

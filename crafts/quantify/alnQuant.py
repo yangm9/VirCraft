@@ -12,7 +12,7 @@ class VirCount(Reads):
     #coverm_args='--min-read-percent-identity 0.95 --min-read-aligned-length 50 --min-covered-fraction 10 --proper-pairs-only -m mean'
     def __init__(self,fq1='',fq2='',outdir='',threads=8):
         super().__init__(fq1,fq2,outdir)
-        self.threads=str(threads)
+        self.threads=str(int(threads)//self.BATCH_SIZE)
     def bwa(self,samp:str,bwa_idx:str):
         '''
         Align the reads to the vOTUs for each sample.
@@ -34,7 +34,7 @@ class VirCount(Reads):
 class GeneCount(Reads):
     def __init__(self,fq1='',fq2='',outdir='',threads=8):
         super().__init__(fq1,fq2,outdir)
-        self.threads=str(threads)
+        self.threads=str(int(threads)//self.BATCH_SIZE)
     def salmon(self,samp:str,salmon_idx:str):
         wkdir=f'{self.outdir}/{samp}_gene_quant'
         cmd=['salmon quant --validateMappings','-i',salmon_idx,

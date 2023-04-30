@@ -8,7 +8,7 @@ class vIdentify(MultiTools):
     '''
     def __init__(self,fasta='',outdir='',threads=8):
         super().__init__(fasta,outdir)
-        self.threads=str(threads)
+        self.threads=str(int(threads)//self.BATCH_SIZE*2)
     def vFilter(self):
         #merge Contigs
         cmd=[utils.selectENV('VirCraft')]
@@ -72,6 +72,7 @@ fi
         tmp_cmd,wkdir=self.virsorter(self.fasta,0,cutoff)
         cmd.extend(tmp_cmd)
         #vibrant
+        self.threads=str(int(self.threads)//2)
         shell=f'{self.outdir}/{self.name}_vs2_ctg.sh'
         utils.printSH(shell,cmd)
         cmd,wkdir=self.vibrant()

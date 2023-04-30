@@ -4,6 +4,7 @@ from ..identify.viridsop import VirScan
 
 class MultiTools(VirScan):
     '''
+    Generate command for deepvirfinder and VIBRANT.
     '''
     def __init__(self,fasta='',outdir='',threads=8):
         super().__init__(fasta,outdir)

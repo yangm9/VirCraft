@@ -7,7 +7,7 @@ class VirCfg:
     '''
     Configure class.
     '''
-    BATCH_SIZE='4'
+    BATCH_SIZE=4
     config=f'{sys.path[0]}/crafts/config/vircraft.cfg'
     def __init__(self):
         self.confDict=self.getCfg
