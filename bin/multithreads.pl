@@ -12,7 +12,7 @@ unless(@ARGV>0){
 my ($wkdir,$postfix,$parallel_number)=@ARGV;
 $wkdir||=".";
 $postfix||=".sh";
-$parallel_number=2;
+$parallel_number||=2;
 
 #Search the scriptes in wkdir and with a postfix of XXX.
 my @scripts=glob("$wkdir/*$postfix");
