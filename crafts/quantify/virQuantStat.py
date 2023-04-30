@@ -55,8 +55,8 @@ class VirAbdStat(multiVirCount):
             'NMDS.R',abd,self.samp_info,self.outdir,'\n']
         return cmd
     def QuantStat(self,taxa_anno=None,checkv_dir=None,unrun=False):
-        self.virCountBySamp()
-        cmd=[self.envs]
+        cmd=self.virCountBySamp()
+        cmd.extend([self.envs])
         cmd.extend(
             ['multithreads.pl',self.outdir,'viral_count.sh',
             self.BATCH_SIZE,'\n']

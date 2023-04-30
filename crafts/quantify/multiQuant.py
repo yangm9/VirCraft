@@ -12,8 +12,7 @@ class multiVirCount(Seq):
         self.groups,self.sampDict=self.readSampInfo(self.samp_info)
         self.threads=str(threads)
     def virCountBySamp(self):
-        cmd,bwa_idx=self.mkBwaIdx()
-        results=''
+        idx_cmd,bwa_idx=self.mkBwaIdx()
         for samp in self.sampDict.keys():
             cmd=[self.envs]
             fq1,fq2=self.sampDict[samp][1].split(',')
@@ -22,8 +21,7 @@ class multiVirCount(Seq):
             cmd.extend(Count.coverm(samp))
             shell=f'{self.outdir}/{samp}_viral_count.sh'
             utils.printSH(shell,cmd)
-            #results+=utils.execute(cmd)
-        return results
+        return idx_cmd
 
 class multiGeneCount(CDS):
     def __init__(self,samp_info='',fasta='',outdir='',threads=8):
