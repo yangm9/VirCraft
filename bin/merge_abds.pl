@@ -13,6 +13,10 @@ $postfix||='tpm';
 $object||='Contig';
 my $topleft='Contig';
 $topleft='Name' if($object eq 'Gene');
+my %abd_hash=(
+    'tpm'=>'TPM',
+    'cov'=>'Mean'
+);
 
 # Define the variables
 my $samp_number=(split /\s+/,`wc -l $samp_info`)[0];
@@ -52,5 +56,5 @@ close IN;
 
 LABEL: `mv $wkdir/$samps_prefix.$postfix $wkdir/all_merged.$postfix`;
 `rm -f $wkdir/$merged_prefix*.$postfix`;
-`sed -i '1s/\.sort TPM//g' $wkdir/all_merged.$postfix` if($object eq 'Contig');
+`sed -i '1s/\.sort $abd_hash{$postfix}//g' $wkdir/all_merged.$postfix` if($object eq 'Contig');
 __END__

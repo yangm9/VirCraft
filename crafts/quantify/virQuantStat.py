@@ -1,3 +1,4 @@
+import os
 from .multiQuant import multiVirCount
 from ..general import utils
 from ..identify.viridsop import VirScan
@@ -19,6 +20,7 @@ class VirAbdStat(multiVirCount):
             VirSOP=VirScan(tmp_fa,tmp_dir,tmp_threads)
             cmd,__=VirSOP.checkv(tmp_fa)
             checkv_dir=f'{self.outdir}/checkv'
+        checkv_dir=os.path.abspath(checkv_dir)
         votu_qual=f'{checkv_dir}/quality_summary.tsv'
         sum_qual=f'{self.outdir}/sum_abd_qual.xls'
         cmd.extend(
@@ -33,6 +35,7 @@ class VirAbdStat(multiVirCount):
     def taxaAbd(self,abd:str,taxa_anno=None):
         if not taxa_anno:
             return ['pheatmap_for_abd.R',abd,self.samp_info,self.outdir,'\n']
+        taxa_anno=os.path.abspath(taxa_anno)
         m_taxa_anno=f'{self.outdir}/DemoVir_assignments.txt'
         abd_taxa=f'{self.outdir}/all_sum_abd_taxa.xls'
         m_abd_taxa=f'{self.outdir}/all_sum_abd_taxa.m.xls'
