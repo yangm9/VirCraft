@@ -10,5 +10,5 @@ df['Family']=df['Family'].astype('str')
 #df['Length']=df['Contig'].apply(lambda x:x.split('_')[4])
 df['Contig']=df['Contig'].apply(lambda x:re.sub(r'_length_\d+_cov_\d+\.\d*_\d*','',x))
 df['Contig']=df['Contig']+':'+df['Order']+';'+df['Family']
-df.drop(columns=['Order','Family','Percent_of_votes','Percent_of_votes.1'],inplace=True)
+df.drop(columns=['Order','Family'],inplace=True)
 df.to_csv(sys.argv[2],sep='\t',index=False)

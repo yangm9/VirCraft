@@ -21,7 +21,6 @@ unless(@ARGV==2){
 
 open DEMOVIR,$ARGV[0] or die $!;
 my $header=<DEMOVIR>;
-print $header;
 my %demovir=();
 while(<DEMOVIR>){
     chomp;
@@ -30,7 +29,8 @@ while(<DEMOVIR>){
 }
 close DEMOVIR;
 open BLASTTAX,$ARGV[1] or die $!;
-<BLASTTAX>;
+my $header=<BLASTTAX>;
+print $header;
 while(<BLASTTAX>){
     chomp;
     my @items=split /\t/,$_;

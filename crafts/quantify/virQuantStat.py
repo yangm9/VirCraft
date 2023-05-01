@@ -36,7 +36,7 @@ class VirAbdStat(multiVirCount):
         if not taxa_anno:
             return ['pheatmap_for_abd.R',abd,self.samp_info,self.outdir,'\n']
         taxa_anno=os.path.abspath(taxa_anno)
-        m_taxa_anno=f'{self.outdir}/DemoVir_assignments.txt'
+        m_taxa_anno=f'{self.outdir}/all_votu.taxa.txt'
         abd_taxa=f'{self.outdir}/all_sum_abd_taxa.xls'
         m_abd_taxa=f'{self.outdir}/all_sum_abd_taxa.m.xls'
         ctg_taxa_abd=f'{self.outdir}/all_ctg_abd_taxa.xls'
