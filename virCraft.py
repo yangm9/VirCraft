@@ -20,7 +20,7 @@ from crafts.host import hosts
 from crafts.func_annot import geneAnnot
 from crafts.func_annot import callAMGs
 
-version='0.0.6'
+version='0.0.8'
 args=arguments.setOpts(sys.argv[0],sys.argv[1],version)
 
 if sys.argv[1]=='setup':
