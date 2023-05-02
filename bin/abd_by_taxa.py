@@ -9,9 +9,9 @@ import pandas as pd
 #Contig\tSample1 Abundance\t...\tSampleN Abundance\n
 #Contig format: "contig_id_12345:Caudovirales;Myoviridae"
 #taxa:
-#taxonomic level, including Order, Family and All.
+#taxonomic level, including Order, Family and taxa.
 taxa_loc_dict={'Order':0,'Family':1}
-def idxAbd(taxa_abd:str,taxa:str='taxa',outdir:str):
+def idxAbd(taxa_abd:str,taxa:str,outdir:str):
     df=pd.read_csv(taxa_abd,sep='\t',header=0)
     samp_num=df.columns.size
     df=df.iloc[:,0:samp_num]
@@ -24,7 +24,7 @@ def idxAbd(taxa_abd:str,taxa:str='taxa',outdir:str):
     return df
 
 #Sum the abundance by Taxa for each sample.
-def sumAbds(df:str,taxa:str='taxa',outdir:str):
+def sumAbds(df:str,taxa:str,outdir:str):
     TaxaList=df['Contig'].unique().tolist()
     df=df.set_index('Contig')
     sumDF=pd.DataFrame()
