@@ -11,7 +11,7 @@ import pandas as pd
 #taxa:
 #taxonomic level, including Order, Family and All.
 taxa_loc_dict={'Order':0,'Family':1}
-def idxAbd(taxa_abd:str,taxa='taxa',outdir:str):
+def idxAbd(taxa_abd:str,taxa:str='taxa',outdir:str):
     df=pd.read_csv(taxa_abd,sep='\t',header=0)
     samp_num=df.columns.size
     df=df.iloc[:,0:samp_num]
@@ -24,7 +24,7 @@ def idxAbd(taxa_abd:str,taxa='taxa',outdir:str):
     return df
 
 #Sum the abundance by Taxa for each sample.
-def sumAbds(df:str,taxa='taxa',outdir:str)
+def sumAbds(df:str,taxa:str='taxa',outdir:str):
     TaxaList=df['Contig'].unique().tolist()
     df=df.set_index('Contig')
     sumDF=pd.DataFrame()
