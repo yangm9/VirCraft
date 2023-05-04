@@ -41,6 +41,8 @@ class VirAbdStat(multiVirCount):
         m_abd_taxa=f'{self.outdir}/all_sum_abd_taxa.m.xls'
         ctg_taxa_abd=f'{self.outdir}/all_ctg_abd_taxa.xls'
         taxa_sum_abd=f'{self.outdir}/all_taxa_sum_abd.xls'
+        order_sum_abd=f'{self.outdir}/all_Order_sum_abd.xls'
+        family_sum_abd=f'{self.outdir}/all_Family_sum_abd.xls'
         cmd=['echo "Heatmap for abundance"\n',
             "sed '1s/Sequence_ID/Contig/'",taxa_anno,'>',m_taxa_anno,'\n',
             'linkTab.py',abd,m_taxa_anno,'left Contig',abd_taxa,'\n',
@@ -49,7 +51,9 @@ class VirAbdStat(multiVirCount):
             'echo "Barplot for abundance by taxa"\n',
             'taxa_annot_abd.py',abd_taxa,ctg_taxa_abd,'\n',
             'sum_abd_by_taxa.py',ctg_taxa_abd,self.outdir,'\n',
-            'barplot_for_taxa_abd.R',taxa_sum_abd,self.outdir,'\n']
+            'barplot_for_taxa_abd.R',taxa_sum_abd,self.outdir,'\n',
+            'barplot_for_taxa_abd.R',order_sum_abd,self.outdir,'\n',
+            'barplot_for_taxa_abd.R',family_sum_abd,self.outdir,'\n']
         return cmd
     def diversity(self,abd:str):
         alpha_diversity=f'{self.outdir}/alpha_diversity.xls'
