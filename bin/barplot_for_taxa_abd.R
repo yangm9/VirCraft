@@ -2,9 +2,12 @@
 #coding:utf8
 #yangm@idsse.ac.cn
 
+if (!require("tools")) {install.packages("tools")}
 if (!require("reshape2")) {install.packages("reshape2")}
 if (!require("ggplot2")) {install.packages("ggplot2")}
 if (!require("RColorBrewer")) {install.packages("RColorBrewer")}
+
+library(tools)
 library(reshape2)
 library(ggplot2)
 library(RColorBrewer)
@@ -72,6 +75,7 @@ plot<-ggplot(df_p,aes(fill=Type,y=Relative_Abundance,x=SampleID))+
         axis.text.x=element_text(angle=90,hjust=0.5,vjust=0.5),
         axis.title=element_text(size=10),
         axis.text=element_text(size=10))
-pdf(paste(argv[2],"/taxa_relative_abundance_barplot.pdf",sep=""),width=10,height=8)
+outprefix=file_path_sans_ext(argv[2])
+pdf(paste(argv[2],"/",outprefix,".barplot.pdf",sep=""),width=10,height=8)
 plot
 dev.off()
