@@ -692,4 +692,5 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 ```
 1.添加logging功能？？；
 2.编写install程序，解决移植性的问题。
+3.将病毒的Family和Order分开统计并绘制累积式柱状图。
 ```

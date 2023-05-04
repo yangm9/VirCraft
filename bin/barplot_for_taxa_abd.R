@@ -75,7 +75,7 @@ plot<-ggplot(df_p,aes(fill=Type,y=Relative_Abundance,x=SampleID))+
         axis.text.x=element_text(angle=90,hjust=0.5,vjust=0.5),
         axis.title=element_text(size=10),
         axis.text=element_text(size=10))
-outprefix=file_path_sans_ext(argv[2])
+outprefix=file_path_sans_ext(basename(argv[1]))
 pdf(paste(argv[2],"/",outprefix,".barplot.pdf",sep=""),width=10,height=8)
 plot
 dev.off()
