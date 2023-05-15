@@ -8,8 +8,8 @@ def extrSeq(sequence, start, end):
 def getSubfaByBed(fasta_file,bed_file,subfa_file):
     fasta_sequences = SeqIO.parse(open(fasta_file),'fasta')
     #output_file=os.path.splitext(fasta_file)[0]
-    SUBFA=open(output_file,"w")
-    with open(bed_file, "r") as f:
+    SUBFA=open(subfa_file,"w")
+    with open(bed_file,"r") as f:
         for line in f:
             fields = line.strip().split("\t")
             chrom = fields[0]
