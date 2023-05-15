@@ -1,3 +1,4 @@
+#!/usr/bin/env pythn3
 import sys
 from Bio import SeqIO
 
