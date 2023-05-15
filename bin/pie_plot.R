@@ -18,7 +18,6 @@ dt <- read.table(argv[1],header=T,sep="\t",
 
 df <- data.frame(table(dt[,argv[2]])) #Field
 colnames(df) <- c("Variable", "Count")
-df = df[order(df[,"Count"], decreasing = TRUE),] 
 myLabel = as.vector(df[,"Variable"]) 
 myLabel = paste(myLabel,": ",df[,"Count"]," (",
                 round(df[,"Count"]/sum(df[,"Count"])*100,2),
