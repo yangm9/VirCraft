@@ -24,11 +24,13 @@ myLabel = paste(myLabel,": ",df[,"Count"]," (",
                 round(df[,"Count"]/sum(df[,"Count"])*100,2),
                 "%)",sep = "")
 color <- c(
-  "#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3",
-  "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd",
-  "#ccebc5", "#ffed6f", "#8C9EFF", "#9b9b9b", "#ffffe5",
-  "#fdb462", "#bebada", "#fb8072", "#80b1d3", "#ffffb3",
-  "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5"
+    "#8dd3c7", "#fdb462", "#b3de69", "#82c1a8", "#d9d9d9",
+    "#9ac73f", "#c34b48", "#a163ad", "#ff1493", "#00c1ff",
+    "#a87c00", "#619cff", "#f8766d", "#008000", "#964500",
+    "#f6b3c3", "#5b8cb2", "#d2d28e", "#b297c9", "#ccebc5",
+    "#cc3a21", "#00ba38", "#a15d98", "#004a7f", "#ffc0cb",
+    "#848482", "#00ffff", "#ffed6f", "#9b9b9b", "#ffffe5",
+    "#bebada", "#fb8072", "#e6a141", "#80b1d3", "#f63200"
 )
 
 pie_plot <- ggplot(df,aes(x = "", y = Count, fill = Variable)) + 

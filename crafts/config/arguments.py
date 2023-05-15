@@ -138,6 +138,11 @@ def setOpts(name:str,subcmds:str,version:str):
         dest='hostsdir',metavar='STR',default=False,required=True,
         help='A directory stored the MAGs of hosts'
     )
+    subpsr.add_argument(
+        '-g','--gtdbtk',action='store',type=str,
+        dest='gtdbtkdir',metavar='STR',default=None,
+        help='A directory stored the MAGs of hosts'
+    )
     args=parser.parse_args()
     return args
 

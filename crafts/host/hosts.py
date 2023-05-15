@@ -16,9 +16,10 @@ class VirHost(VirRef):
         '''
         wkdir=f'{self.outdir}/classify_wf'
         utils.mkdir(wkdir)
-        cmd=['gtdbtk classify_wf','--genome_dir',self.hostsdir,
+        cmd=[utils.selectENV('gtdbtk')]
+        cmd.extend(['gtdbtk classify_wf','--genome_dir',self.hostsdir,
             '--out_dir',wkdir,'--pplacer_cpus',self.threads,
-            '--extension fasta\n']
+            '--extension fasta\n'])
         return cmd,wkdir
     def virmatch(self,tredir):
         '''
@@ -30,12 +31,13 @@ class VirHost(VirRef):
             '--gtdbtk-in-dir',self.hostsdir,'-v',self.fasta,
             '-o',wkdir,'--threads',self.threads,'--python-aggregator']
         return cmd
-    def PredHosts(self,unrun=False):
-        cmd=[utils.selectENV('gtdbtk')]
-        tmp_cmd,tredir=self.magsTree()
-        cmd.extend(tmp_cmd)
+    def PredHosts(self,gtdbtk=None,unrun=False):
+        cmd=[]
+        if not gtdbtk:
+            tmp_cmd,tredir=self.magsTree()
+            cmd.extend(tmp_cmd)
         cmd.extend([self.envs])
-        cmd.extend(self.virmatch(tredir))
+        cmd.extend(self.virmatch(gtdbtk))
         shell=f'{self.outdir}/{self.name}_hosts.sh'
         utils.printSH(shell,cmd)
         results=''

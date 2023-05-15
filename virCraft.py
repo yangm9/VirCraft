@@ -162,6 +162,7 @@ elif sys.argv[1]=='host_prid':
         threads=args.threads
     )
     Hosts.PredHosts(
+        gtdbtk=args.gtdbtkdir,
         unrun=args.unrun
     )
     print('Viral-host relationship prediction done!!!')
