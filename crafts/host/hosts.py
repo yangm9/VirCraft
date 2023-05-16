@@ -31,7 +31,7 @@ class VirHost(VirRef):
             '--gtdbtk-in-dir',self.hostsdir,'-v',self.fasta,
             '-o',wkdir,'--threads',self.threads,'--python-aggregator']
         return cmd
-    def PredHosts(self,gtdbtk=None,unrun=False):
+    def PredHosts(self,gtdbtk=None,taxa=None,unrun=False):
         cmd=[]
         if not gtdbtk:
             tmp_cmd,tredir=self.magsTree()
