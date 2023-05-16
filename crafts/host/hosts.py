@@ -31,13 +31,26 @@ class VirHost(VirRef):
             '--gtdbtk-in-dir',self.hostsdir,'-v',self.fasta,
             '-o',wkdir,'--threads',self.threads,'--python-aggregator']
         return cmd
-    def PredHosts(self,gtdbtk=None,taxa=None,unrun=False):
+    def virTaxa(self,taxa_anno=None):
+        '''
+        Add the viral taxonomic annotation for host pridiction results.
+        '''
+        if not taxa_anno: return []
+        wkdir=f'{self.outdir}/virmatcher'
+        m_taxa_anno=f'{self.outdir}/all_votu.taxa.txt'
+        vh_pred=f'{wkdir}/VirMatcher_Summary_Predictions.tsv'
+        vh_vtaxa=f'{self.outdir}/VirMatcher_Summary_Predictions.vtaxa.tsv'
+        cmd=["sed '1s/Sequence_ID/Contig/'",taxa_anno,'>',m_taxa_anno,'\n',
+            'linkTab.py',vh_pred,m_taxa_anno,'left Contig',vh_vtaxa,'\n']
+        return cmd
+    def PredHosts(self,gtdbtk=None,taxa_anno=None,unrun=False):
         cmd=[]
         if not gtdbtk:
             tmp_cmd,tredir=self.magsTree()
             cmd.extend(tmp_cmd)
         cmd.extend([self.envs])
         cmd.extend(self.virmatch(gtdbtk))
+        cmd.extend(self.virTaxa(taxa_anno))
         shell=f'{self.outdir}/{self.name}_hosts.sh'
         utils.printSH(shell,cmd)
         results=''
