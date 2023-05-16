@@ -237,7 +237,7 @@ def addCheckVArg(psr):
     )
     return psr
 
-def addTaxaArg(psr)
+def addTaxaArg(psr):
     psr.add_argument(
         '-x','--taxa',action='store',type=str,
         dest='taxa',metavar='STR',default=None,
