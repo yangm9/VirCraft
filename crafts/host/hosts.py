@@ -29,7 +29,7 @@ class VirHost(VirRef):
         utils.mkdir(wkdir)
         cmd=['VirMatcher --preparer','--gtdbtk-out-dir',tredir,
             '--gtdbtk-in-dir',self.hostsdir,'-v',self.fasta,
-            '-o',wkdir,'--threads',self.threads,'--python-aggregator']
+            '-o',wkdir,'--threads',self.threads,'--python-aggregator\n']
         return cmd
     def virTaxa(self,taxa_anno=None):
         '''
