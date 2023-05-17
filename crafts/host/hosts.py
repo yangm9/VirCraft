@@ -39,6 +39,7 @@ class VirHost(VirRef):
         wkdir=f'{self.outdir}/virmatcher'
         m_taxa_anno=f'{self.outdir}/all_votu.taxa.txt'
         vh_pred=f'{wkdir}/VirMatcher_Summary_Predictions.tsv'
+        taxa_anno=os.path.abspath(taxa_anno)
         vh_vtaxa=f'{self.outdir}/VirMatcher_Summary_Predictions.vtaxa.tsv'
         cmd=["sed '1s/Sequence_ID/Contig/'",taxa_anno,'>',m_taxa_anno,'\n',
             'linkTab.py',vh_pred,m_taxa_anno,'left Contig',vh_vtaxa,'\n']
