@@ -14,7 +14,7 @@ def setOpts(name:str,subcmds:str,version:str):
         description='VirCraft is an flexible pipeline for metaviromic data analysis.',
         usage=f'''
         {name} {subcmds} [<options>] -o <outdir>
-        subcommands: an optional functional module, including reads_qc, assembly, identify, votus, classify, compare, vir_quant, func_annot, gene_quant and host_prid.
+        subcommands: an optional functional module, including reads_qc, assembly, identify, votus, classify, compare, vir_quant, func_annot, gene_quant and host_pred.
         options: options described below in the section of Options.
         outdir: output folder.
     ''',
@@ -122,9 +122,9 @@ def setOpts(name:str,subcmds:str,version:str):
     subpsr=addCheckVArg(subpsr)
     subpsr=addGlbArg(subpsr)
 
-#-----------------------host_prid---------------------
+#-----------------------host_pred---------------------
     subpsr=subparsers.add_parser(
-        'host_prid',
+        'host_pred',
         help='Predict the hosts of virus'
     )
     subpsr=addFaArg(subpsr)
@@ -133,12 +133,12 @@ def setOpts(name:str,subcmds:str,version:str):
     subpsr.add_argument(
         '-m','--mags',action='store',type=str,
         dest='hostsdir',metavar='STR',default=False,required=True,
-        help='A directory stored the MAGs of hosts'
+        help='A directory stored the MAGs of hosts. [required!]'
     )
     subpsr.add_argument(
         '-g','--gtdbtk',action='store',type=str,
         dest='gtdbtkdir',metavar='STR',default=None,
-        help='A directory stored the MAGs of hosts'
+        help='The gtdbtk results directory which performed based on host contigs. [default=None]'
     )
     args=parser.parse_args()
     return args

@@ -1,6 +1,7 @@
 import sys
 from ..general import utils
 from ..data.bioseq import Seq
+from .vCont import EnviComp
 
 class VirTaxa(Seq):
     '''
@@ -65,6 +66,12 @@ class VirTaxa(Seq):
         tmp_cmd,demovir_taxa=self.demovir()
         cmd.extend(tmp_cmd)
         cmd.extend(self.mergeTaxa(demovir_taxa,ncbi_taxa))
+        Comp=EnviComp(
+            fasta=orf_faa,
+            outdir=self.outdir,
+            threads=self.threads
+        )
+        cmd.extend(Comp.vContact())
         shell=f'{self.outdir}/{self.name}_classify.sh'
         utils.printSH(shell,cmd)
         results=''

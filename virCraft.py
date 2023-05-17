@@ -153,7 +153,7 @@ elif sys.argv[1]=='gene_quant':
         unrun=args.unrun
     )
     print('gene quantifications completed!!!')
-elif sys.argv[1]=='host_prid':
+elif sys.argv[1]=='host_pred':
     print('Host prediction')
     Hosts=hosts.VirHost(
         fasta=args.fasta,
@@ -163,7 +163,7 @@ elif sys.argv[1]=='host_prid':
     )
     Hosts.PredHosts(
         gtdbtk=args.gtdbtkdir,
-        taxa=args.taxa,
+        taxa_anno=args.taxa,
         unrun=args.unrun
     )
     print('Viral-host relationship prediction done!!!')
