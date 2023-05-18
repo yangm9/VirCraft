@@ -23,5 +23,4 @@ def classify(blast_sp_f):
         MatchedFamilies=df[df['Contig']==ctg]['Family'].tolist()
         family=mostFreqRate(MatchedFamilies)
         print('{ctg}\t\t{family}\n')
-
-
+    return 0

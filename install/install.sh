@@ -15,7 +15,7 @@ envs=(reads_qc assembly deepvirfinder viral-id-sop vibrant gtdbtk vContact VirCr
 for env in "${envs[@]}"
 do
     if conda env list | grep -q $env; then
-        echo "reads_qc exists!"
+        echo "$env exists!"
     else
         conda env create -f $env.yaml
         if 
@@ -23,11 +23,11 @@ do
 done
 
 if grep -q "DeepVirFinder" ../crafts/config/vircraft.cfg; then
-    line=grep -q "DeepVirFinder" ../crafts/config/vircraft.cfg
+    line=`grep -P "DeepVirFinder\s*=\s*" ../crafts/config/vircraft.cfg`
+    if [ -e $line ]; then
 
 else
     git clone https://github.com/jessieren/DeepVirFinder
     dvf_path="$(pwd)/DeepVirFinder/dvf.py"
     echo "DeepVirFinder = ${dvf_path}" >> ../crafts/config/vircraft.cfg
 fi
-
