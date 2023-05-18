@@ -9,15 +9,29 @@ if(length(argv)<3){
 if(!require("pheatmap")){install.packages("pheatmap")}
 library(pheatmap)
 
-source("utils.R")
-source("color_set.R")
-
 #类似于拉链功能，生成命令向量
 generate_named_vector <- function(keys, values) {
     n <- length(keys)
     named_vector <- setNames(values[1:n], keys)
     return(named_vector)
 }
+grp_color <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+               "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf",
+               "#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5",
+               "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5")
+
+source_color <- c("#8dd3c7", "#fdb462", "#b3de69", "#00688b", "#d9d9d9",
+                  "#c34b48", "#fffac8", "#a163ad", "#ff1493", "#00c1ff",
+                  "#a87c00", "#619cff", "#f8766d", "#008000", "#964500",
+                  "#f6b3c3", "#5b8cb2", "#d2d28e", "#b297c9", "#ccebc5",
+                  "#cc3a21", "#00ba38", "#a15d98", "#004a7f", "#ffc0cb",
+                  "#848482", "#00ffff", "#ffed6f", "#9b9b9b", "#ffffe5",
+                  "#bebada", "#fb8072", "#e6a141", "#80b1d3", "#f63200",
+                  "#fccde5", "#bc80bd", "#5da5b3", "#ff00ff", "#556b2f",
+                  "#008080", "#b41e00", "#6c7c32", "#cc8899", "#8f00ff",
+                  "#ffa500", "#3b3b3b", "#ff0000", "#006400", "#00a3a3",
+                  "#cd950c", "#00688b", "#8b795e", "#458b74", "#9acdf2",
+                  "#ee9a00", "#00ff00", "#bebebe", "#9ac73f", "#beaed4")
 
 df<-read.table(
     argv[1],header=T,sep="\t",
@@ -41,7 +55,7 @@ if('Source' %in% colnames(df)){
     Uniq_Source=unique(df$Source)
     annotation_row<-data.frame(Source=factor(df$Source))
     ann_colors <- list(ann_colors,
-                       Source=generate_named_vector(Uniq_Source,src_color))
+                       Source=generate_named_vector(Uniq_Source,source_color))
     rownames(annotation_row)<-RowNames
 }else{
     annotation_row<-NA
