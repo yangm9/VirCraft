@@ -56,9 +56,8 @@ class VirAbdStat(multiVirCount):
             'barplot_for_taxa_abd.R',family_sum_abd,self.outdir,'\n']
         return cmd
     def diversity(self,abd:str):
-        alpha_diversity=f'{self.outdir}/alpha_diversity.xls'
         cmd=['echo "Alpha and Beta Diversity"\n',
-            'alpha_diversity.R',abd,alpha_diversity,'\n',
+            'alpha_diversity.R',abd,self.samp_info,self.outdir,'\n',
             'NMDS.R',abd,self.samp_info,self.outdir,'\n']
         return cmd
     def QuantStat(self,taxa_anno=None,checkv_dir=None,unrun=False):

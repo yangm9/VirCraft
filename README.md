@@ -698,3 +698,12 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 2.编写install程序，解决移植性的问题。
 3.将病毒的Family和Order分开统计并绘制累积式柱状图。
 ```
+
+**VirCraft-v0.0.9**
+```
+1.DRAM-v数据库移植新服务器后的配置问题，mag_annotator中的CONFIG文件需要修改；
+2.vir_quant模块：Alpha多样性分析的组间计较分析，并绘制盒须图（boxplot）；
+3.classify模块：将vContact2的结果整合到最终结果中。
+```
+
+

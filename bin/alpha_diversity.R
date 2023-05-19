@@ -31,7 +31,9 @@ alpha_df<-as.data.frame(alpha_df)
 alpha_df$Sample<-rownames(alpha_df)
 rownames(alpha_df)<-NULL
 alpha_df<-alpha_df[,c(ncol(alpha_df),1:(ncol(alpha_df)-1))] #最后Index列移动到第一列
-write.table(alpha_df,argv[2],sep='\t',row.names=TRUE)
+outprefix=file_path_sans_ext(basename(argv[1]))
+alpha_tab=paste(argv[3],'/',outprefix,'.alpha_diversity.xls',sep='')
+write.table(alpha_df,alpha_tab,sep='\t',row.names=TRUE)
 
 samp_group_df<-read.table(argv[2],header=T,sep="\t", #samp.info.xls
                           check.names=F,quote="")
@@ -67,7 +69,6 @@ p4<-ggplot(alpha_df,aes(x=Group,y=Pielou)) +
           panel.background=element_rect(fill='transparent',color='black')) +
     labs(x='',y='Pielou')
 
-outprefix=file_path_sans_ext(basename(argv[1]))
 pdf(paste(argv[3],'/',outprefix,'.alpha_diversity.boxplot.pdf',sep=''),width=10,height=8)
 p1+p2+p3+p4
 dev.off()
