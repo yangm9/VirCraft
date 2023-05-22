@@ -110,7 +110,7 @@ def setOpts(name:str,subcmds:str,version:str):
     )
     #subpsr=addAllFqArg(subpsr)
     subpsr=addSampArg(subpsr)
-    subpsr=addFaArg(subpsr)
+    subpsr=addFaArg(subpsr,'gene')
     subpsr=addGlbArg(subpsr)#,1)
 
 #-----------------------func_annot---------------------
@@ -173,14 +173,14 @@ def addGlbArg(psr):#,batch=0): #Add global arguments
     return psr
 
 def addProcArg(psr,dflt:str):
-    helpDict={
+    HelpDict={
         'fuc' : 'Select the optional analysis process of read_qc (f, u, and/or c), i.e. "-p fuc". Among these, "f" means filter, "u" means removing the duplications and get the unique reads, and "c" refers to the process of remove the contamination from a customized reference database [default="fuc"]',   
         'sm'  : 'Select the optional analysis process of assembly (s and/or c), i.e. "-p sm". Among these, "s" or "m" represent the assembly tool of SPAdes or megahit. i.e. "sm" refer to the process as follows: 1) assemble the reads to metagenome using SPAdes, 2) map all reads to the assembled contigs and get the unmapped reads, 3) assemble the unmapped reads with megahit, and 4) merge the assembly results from 2) and 3) [default="sm"]'
     }
     psr.add_argument(
         '-p','--process',action='store',type=str,
         dest='process',metavar='STR',default=dflt,
-        help=helpDict[dflt]
+        help=HelpDict[dflt]
     )
     return psr
 
@@ -205,11 +205,16 @@ def addAllFqArg(psr):
     )
     return psr
 
-def addFaArg(psr):
+def addFaArg(psr,seq_type='ctg'):
+    HelpDict={
+        'ctg' : 'The absolute or relative path to a FastA file containing viral configs or vOTUs sequences. e.g., viral_positive_contigs.fsa',
+        'gene' : 'The absolute or relative path to a FastA file containing gene sequences. e.g., viral_positive_contigs.ffn'.
+        'prot' : 'The absolute or relative path to a FastA file containing protein sequences. e.g., viral_positive_contigs.faa'.
+    }
     psr.add_argument(
         '-a','--fasta',action='store',type=str,
         dest='fasta',metavar='STR',default=False,
-        help='The absolute/relative path of a vOTUs FastA file'
+        help=HelpDict[seq_type]
     )
     return psr
 

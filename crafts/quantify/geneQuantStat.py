@@ -6,7 +6,7 @@ class GeneAbdStat(multiGeneCount):
     Gene abundance main class.
     '''
     def __init__(self,samp_info='',fasta='',outdir='',threads=8):
-        "The FastA file should be coding sequence file."
+        "The FastA file should be coding sequence file (*.ffn)."
         super().__init__(samp_info,fasta,outdir,threads)
     def mergeAbd(self):
         abd=f'{self.outdir}/all_merged_gene.sf'
