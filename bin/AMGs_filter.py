@@ -8,6 +8,7 @@ import linkTab
 #version: 0.0.1 2023-4-12 14:51
 
 #Get the consensus protein id for DRAM-v and VIBRANT
+#e.g., contig_id:start_end
 def get_common_gene_id(gff,tool):
     geneidDict={}
     GFF=open(gff)

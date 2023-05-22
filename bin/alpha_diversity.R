@@ -47,25 +47,29 @@ color4<-c("#f7b6d2", "#17becf", "#dbdb8d", "#c7c7c7")
 
 p1<-ggplot(alpha_df,aes(x=Group,y=specN)) +
     geom_boxplot(outlier.size=1,fill=color1) +
-    theme(panel.grid=element_blank(),
+    theme(axis.text.x = element_text(angle = 0, hjust = 0.5, vjust = 0.5),
+          panel.grid=element_blank(),
           panel.background=element_rect(fill='transparent',color='black')) +
     labs(x='',y='specN')
 
 p2<-ggplot(alpha_df,aes(x=Group,y=Shannon)) +
     geom_boxplot(outlier.size=1,fill = color1) +
-    theme(panel.grid=element_blank(),
+    theme(axis.text.x = element_text(angle = 0, hjust = 0.5, vjust = 0.5),
+          panel.grid=element_blank(),
           panel.background=element_rect(fill='transparent',color='black')) +
     labs(x='', y ='Shannon')
 
 p3<-ggplot(alpha_df, aes(x=Group, y=Simpson)) +
     geom_boxplot(outlier.size = 1, fill = color1) +
-    theme(panel.grid=element_blank(),
+    theme(axis.text.x = element_text(angle = 0, hjust = 0.5, vjust = 0.5),
+          panel.grid=element_blank(),
           panel.background=element_rect(fill='transparent',color='black')) +
     labs(x='', y ='Simpson')
 
 p4<-ggplot(alpha_df,aes(x=Group,y=Pielou)) +
     geom_boxplot(outlier.size=1,fill=color1) +
-    theme(panel.grid=element_blank(),
+    theme(axis.text.x = element_text(angle = 0, hjust = 0.5, vjust = 0.5),
+          panel.grid=element_blank(),
           panel.background=element_rect(fill='transparent',color='black')) +
     labs(x='',y='Pielou')
 
