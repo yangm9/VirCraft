@@ -14,7 +14,7 @@ class GeneAbdStat(multiGeneCount):
         return cmd,abd
     def QuantStat(self,unrun=False):#,batch_size):
         cmd=self.geneCountBySamp()
-        cmd=[self.envs]
+        cmd.extend([self.envs])
         cmd.extend(
             ['multithreads.pl',self.outdir,'gene_count.sh',
             str(self.BATCH_SIZE),'\n']
