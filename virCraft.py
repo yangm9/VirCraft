@@ -5,7 +5,7 @@
 import os
 import sys
 sys.path.append(sys.path[0]+'/crafts')
-from crafts.install import install
+#from crafts.install import install
 from crafts.data import fastqc
 from crafts.assembly import assembly
 from crafts.identify import viridsop
