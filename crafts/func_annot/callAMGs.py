@@ -58,7 +58,7 @@ class AMGs(VirScan):
     def annotAMGs(self,checkv_dir=None,unrun=False):
         #step1 VS2
         cmd=[utils.selectENV('viral-id-sop')]
-        tmp_cmd,vs2dir=self.virsorter(self.fasta,1)
+        tmp_cmd,vs2dir=self.virsorter(self.fasta,1,min_score=0,min_length=1500)
         cmd.extend(tmp_cmd)
         #step2 for DRAM-v and VIBRANT 
         vs2_dramv_fa=f'{vs2dir}/for-dramv/final-viral-combined-for-dramv.fa'
