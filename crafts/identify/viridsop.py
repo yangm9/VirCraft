@@ -12,6 +12,7 @@ class VirScan(Seq):
         self.threads=str(threads)
     def virsorter(self,in_fa:str,n:int,min_score=0.5,min_length=5000):
         idx=str(n+1)
+        min_score=str(min_score)
         min_length=str(min_length)
         wkdir=f'{self.outdir}/vs2-pass{idx}'
         utils.mkdir(wkdir)
