@@ -705,5 +705,3 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 2.vir_quant模块：Alpha多样性分析的组间计较分析，并绘制盒须图（boxplot）；
 3.classify模块：将vContact2的结果整合到最终结果中。
 ```
-
-
