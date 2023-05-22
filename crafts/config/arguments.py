@@ -208,8 +208,8 @@ def addAllFqArg(psr):
 def addFaArg(psr,seq_type='ctg'):
     HelpDict={
         'ctg' : 'The absolute or relative path to a FastA file containing viral configs or vOTUs sequences. e.g., viral_positive_contigs.fsa',
-        'gene' : 'The absolute or relative path to a FastA file containing gene sequences. e.g., viral_positive_contigs.ffn'.
-        'prot' : 'The absolute or relative path to a FastA file containing protein sequences. e.g., viral_positive_contigs.faa'.
+        'gene' : 'The absolute or relative path to a FastA file containing gene sequences. e.g., viral_positive_contigs.ffn',
+        'prot' : 'The absolute or relative path to a FastA file containing protein sequences. e.g., viral_positive_contigs.faa'
     }
     psr.add_argument(
         '-a','--fasta',action='store',type=str,
