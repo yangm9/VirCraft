@@ -5,6 +5,7 @@
 import os
 import sys
 sys.path.append(sys.path[0]+'/crafts')
+from crafts.install import install
 from crafts.data import fastqc
 from crafts.assembly import assembly
 from crafts.identify import viridsop
@@ -24,8 +25,8 @@ version='0.0.9'
 args=arguments.setOpts(sys.argv[0],sys.argv[1],version)
 
 if sys.argv[1]=='setup':
-    print('Preparing the environments for VirCraft...\n')
-    #Sets=install.
+    print('Install the environments for VirCraft...\n')
+    #Setup=
     print('VirCraft environments Done!!!\n')
 elif sys.argv[1]=='reads_qc':
     print('VirCraft data QC...\n')

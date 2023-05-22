@@ -1,7 +1,3 @@
-#!/usr/bin/env python3
-
-import os
-import sys
 from ..general import utils
 from ..data.bioseq import Reads
 from ..data.bioseq import Seq

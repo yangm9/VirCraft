@@ -703,5 +703,6 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 ```
 1.DRAM-v数据库移植新服务器后的配置问题，mag_annotator中的CONFIG文件需要修改；
 2.vir_quant模块：Alpha多样性分析的组间计较分析，并绘制盒须图（boxplot）；
-3.classify模块：将vContact2的结果整合到最终结果中。
+3.classify模块：将vContact2的结果整合到最终结果中；
+4.编写install模块，用于自动下载、安装和配置相关软件和数据库。
 ```

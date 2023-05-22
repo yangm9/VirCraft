@@ -5,7 +5,7 @@ use strict;
 Name:
     merge_taxa.pl
 Purpose:
-    Merge the classification results of NCBI BLAST and DemoVir.
+    Merge the viral classification results of NCBI BLAST and DemoVir.
 Usage:
     perl merge_taxa.pl <DemoVir_Taxa> <NCBI_BLAST_Taxa> > <Merged_Taxa>
 Author:
