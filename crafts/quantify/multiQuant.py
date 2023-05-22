@@ -31,8 +31,7 @@ class multiGeneCount(CDS):
         self.threads=str(threads)
     def geneCountBySamp(self):
         cmd=[self.envs] 
-        cmd,salmon_idx=self.mkSalmonIdx
-        results=''
+        idx_cmd,salmon_idx=self.mkSalmonIdx
         for samp in self.sampDict.keys():
             cmd=[self.envs]
             fq1,fq2=self.sampDict[samp][1].split(',')
@@ -40,5 +39,4 @@ class multiGeneCount(CDS):
             cmd.extend(Count.salmon(samp,salmon_idx))
             shell=f'{self.outdir}/{samp}_gene_count.sh'
             utils.printSH(shell,cmd)
-            #results+=utils.execute(cmd)
-        return results
+        return idx_cmd 
