@@ -37,7 +37,7 @@ class VirRef(VirScan):
         cmd.extend(tmp_cmd)
         cmd.extend(self.votuQC(votus,cutoff))
         MT=MultiTools(
-            fasta=vs2_dramv_fa,
+            fasta=votus,
             outdir=self.outdir,
             threads=self.threads
         )
