@@ -54,7 +54,6 @@ class AMGs(VirScan):
         shell=f'{self.outdir}/{self.name}_vibrant_amg.sh'
         utils.printSH(shell,cmd)
         return dmvdir,vbdir
-        
     def annotAMGs(self,checkv_dir=None,unrun=False):
         #step1 VS2
         cmd=[utils.selectENV('viral-id-sop')]

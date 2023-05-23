@@ -1,6 +1,7 @@
 from os import path
 from ..general import utils
 from ..identify.viridsop import VirScan
+from ..identify.multiFind import MultiTools
 
 class VirRef(VirScan):
     '''
@@ -30,14 +31,20 @@ class VirRef(VirScan):
         cmd.extend(self.statFA(cutoff))
         cmd.extend(tmp_cmd)
         return cmd
-        
     def RmDup(self,cutoff=1500,unrun=False):
         cmd=[self.envs]
         tmp_cmd,votus=self.cluster()
         cmd.extend(tmp_cmd)
         cmd.extend(self.votuQC(votus,cutoff))
+        MT=MultiTools(
+            fasta=vs2_dramv_fa,
+            outdir=self.outdir,
+            threads=self.threads
+        )
+        tmp_cmd,vbdir=MT.vibrant()
+        cmd.extend(tmp_cmd)
         shell=f'{self.outdir}/{self.name}_votu.sh'
         utils.printSH(shell,cmd)
         results=''
-        if not unrun: results=utils.execute(cmd)
+        if not unrun:results=utils.execute(cmd)
         return results
