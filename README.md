@@ -527,7 +527,7 @@ virCraft.py classify -a scaffolds.votu.fa -t 8 -o classify_out
 └── scaffolds_taxonomy.txt #最终物种注释结果 
 ```
 
-#### 3.6 病毒物种丰度分析
+#### 3.6 序列丰度分析
 
 vir_quant模块用于病毒物种丰度和多样性分析。主要步骤如下：
 1. 使用BWA分别将各个样本的reads比对到vOTUs。

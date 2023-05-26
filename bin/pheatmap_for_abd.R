@@ -9,7 +9,7 @@ if(length(argv)<3){
 if(!require("pheatmap")){install.packages("pheatmap")}
 library(pheatmap)
 
-#类似于拉链功能，生成命令向量
+#类似于拉链功能，生成命名向量
 generate_named_vector <- function(keys, values) {
     n <- length(keys)
     named_vector <- setNames(values[1:n], keys)

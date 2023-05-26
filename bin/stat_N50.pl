@@ -72,8 +72,8 @@ my %cN=stalen(\@con_len,$total_clen);	### statistic
 open OUT,">$output" || die "Fail to open output file: N50.xls\n";
 print OUT "\tscaffold\t\tcontig\n";
 print OUT "\tlength(bp)\tnumber\tlength(bp)\tnumber\n";
-print OUT "max_len\t$smax_len\t\t$cmax_len\n";
-for (my $i=1;$i<=9;$i++){
+print OUT "max_len\t$smax_len\t-\t$cmax_len\t-\n";
+for(my $i=1;$i<=9;$i++){
 	print OUT "N$i"."0\t$sN{$i}{l}\t$sN{$i}{n}\t$cN{$i}{l}\t$cN{$i}{n}\n";
 }
 print OUT "Total_length\t$total_slen\t-\t$total_clen\t-\n";
@@ -82,7 +82,6 @@ print OUT "number>=2000bp\t-\t$sca2000\t-\t$con2000\n";
 print OUT "number>=5000bp\t-\t$sca5000\t-\t$con5000\n";
 print OUT "number>=10000bp\t-\t$sca10000\t-\t$con10000\n";
 print OUT "GC_rate\t$sca_gc_rate\t-\t$con_gc_rate\t-\n";
-
 close OUT;
 
 #===================================================================
@@ -94,7 +93,6 @@ sub stalen{
 	foreach (@$this_len){
 		$num_temp++;
 		$len_temp+=$_;
-
 		if (!exists $this_hash{1} && $len_temp>=$this_total*0.1){
 			$this_hash{1}{'l'}=$_;
 			$this_hash{1}{'n'}=$num_temp;
