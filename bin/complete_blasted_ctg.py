@@ -20,8 +20,7 @@ def complete_contigs(votu_f,blast_taxa_f):
     outdir=os.path.dirname(blast_taxa_f)
     votu_list=f'{outdir}/temp_votu_id.list'
     ctg_df.to_csv(votu_list,sep='\t',index=False)
-    out_prefix=os.path.splitext(blast_taxa_f)[0]
-    out_f=f'{out_prefix}/{name}.taxa.txt'
+    out_f=f'{outdir}/{name}.taxa.txt'
     linkTab.merge(votu_list,blast_taxa_f,'left','Sequence_ID',out_f)
     return 0
 
