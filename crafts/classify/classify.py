@@ -32,7 +32,7 @@ class VirTaxa(Seq):
             'sed',sed_cmd,filt_blast,'>',filt_h_blast,'\n',
             "csvtk join -t -f 'NCBI_ID,NCBI_ID'",
             filt_h_blast,taxadb,'>',gene_taxa_blast,'\n',
-            'viruse_tax.py',orf_f,gene_taxa_blast,'>',votu_taxa,'\n']
+            'virus_tax.py',orf_f,gene_taxa_blast,'>',votu_taxa,'\n']
         return cmd,votu_taxa
     def demovir(self):
         '''
