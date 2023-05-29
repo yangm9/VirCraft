@@ -9,17 +9,17 @@ import sys
 from collections import defaultdict
 from collections import Counter
 
-contig_dict = defaultdict(list)
-contig_family = defaultdict(list)
-contig_class = defaultdict(list)
+contig_dict=defaultdict(list)
+contig_family=defaultdict(list)
+contig_class=defaultdict(list)
 
 ## get the dictionary of contig:[gene1,gene2...]
 # with open('/data_backup/zhouyl/Project/1.Mariana/3.virus/2.Annotation/5.checkV/tmp/CD_viral.faa','r') as f:
 with open(sys.argv[1],'r') as f:
     for i in f.readlines():
         if i.startswith('>'):
-            gene = i.strip().strip('>')
-            contig = gene.rsplit('_',1)[0]
+            gene=i.strip().strip('>')
+            contig=gene.rsplit('_',1)[0]
             contig_dict[contig].append(gene)
 
 ## get the dictionary of contig:[class,family]
@@ -49,9 +49,9 @@ for contig in contig_dict.keys():
                 line= contig + '\t' + class_level
                 break
         if class_rate <0.5:
-            line = contig + '\tUnassigned'
+            line=contig+'\tUnassigned'
     else:
-        line = contig + '\tUnassigned'
+        line=contig+'\tUnassigned'
 
     if contig in contig_family.keys():
         family_static = Counter(contig_family[contig])

@@ -7,7 +7,7 @@ Name:
 Purpose:
     Merge the viral classification results of NCBI BLAST and DemoVir.
 Usage:
-    perl merge_taxa.pl <DemoVir_Taxa> <NCBI_BLAST_Taxa> > <Merged_Taxa>
+    perl merge_taxa.pl <> <DemoVir_Taxa> <NCBI_BLAST_Taxa> > <Merged_Taxa>
 Author:
     Ming Yang yangm@idsse.ac.cn
 Vwesion:
@@ -19,6 +19,8 @@ unless(@ARGV==2){
     exit 0;
 }
 
+#Read demovir results, and the format is as follwing.
+#Sequence_ID\tOrder\tPercent_of_votes\tFamily\tPercent_of_votes\n
 open DEMOVIR,$ARGV[0] or die $!;
 my $header=<DEMOVIR>;
 my %demovir=();
@@ -28,6 +30,7 @@ while(<DEMOVIR>){
     $demovir{$items[0]}=[$items[1],$items[3]]
 }
 close DEMOVIR;
+
 open BLASTTAX,$ARGV[1] or die $!;
 my $header=<BLASTTAX>;
 print $header;
