@@ -52,7 +52,6 @@ for contig in contig_dict.keys():
             line=contig+'\tUnassigned'
     else:
         line=contig+'\tUnassigned'
-
     if contig in contig_family.keys():
         family_static = Counter(contig_family[contig])
         for family in family_static.keys():
@@ -64,6 +63,4 @@ for contig in contig_dict.keys():
             line = line +'\tUnassigned'
     else:
         line = line + '\tUnassigned'
-
     print(line)
-
