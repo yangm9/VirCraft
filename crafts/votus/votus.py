@@ -30,12 +30,6 @@ class VirRef(VirScan):
         tmp_cmd=self.statFA(cutoff)
         cmd.extend(self.statFA(cutoff))
         cmd.extend(tmp_cmd)
-        return cmd
-    def RmDup(self,cutoff=1500,unrun=False):
-        cmd=[self.envs]
-        tmp_cmd,votus=self.cluster()
-        cmd.extend(tmp_cmd)
-        cmd.extend(self.votuQC(votus,cutoff))
         MT=MultiTools(
             fasta=votus,
             outdir=self.outdir,
@@ -43,6 +37,22 @@ class VirRef(VirScan):
         )
         tmp_cmd,vbdir=MT.vibrant()
         cmd.extend(tmp_cmd)
+        votus_prefix=f'{self.name}_votus'
+        vb_vir_type=f'{self.outdir}/VIBRANT_{votus_prefix}/VIBRANT_results_{votus_prefix}/VIBRANT_genome_quality_{votus_prefix}.tsv'
+        vb_vir_type_m=f'{self.outdir}/vb_genome_type.tsv'
+        vb_ckv_xls=f'{self.outdir}/vb_ckv_qual_type.xls'
+        cmd.extend(
+            ["sed '1s/scaffold/contig_id/'",vb_vir_type,vb_vir_type_m,'\n',
+            'linkTab.py',checkv_qual,vb_vir_type_m,
+            'left contig_id',vb_ckv_xls,'\n',
+            'stacked_multi_bar_plot.R',vb_ckv_xls,wkdir,'\n']
+        )
+        return cmd
+    def RmDup(self,cutoff=1500,unrun=False):
+        cmd=[self.envs]
+        tmp_cmd,votus=self.cluster()
+        cmd.extend(tmp_cmd)
+        cmd.extend(self.votuQC(votus,cutoff))
         shell=f'{self.outdir}/{self.name}_votu.sh'
         utils.printSH(shell,cmd)
         results=''
