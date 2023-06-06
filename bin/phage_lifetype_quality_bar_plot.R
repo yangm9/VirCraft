@@ -4,7 +4,7 @@
 
 argv<-commandArgs(T)
 
-if(length(argv)<3){
+if(length(argv)<2){
     stop("inputs: <merged_tpm_xls> <samp_group_xls> <heatmap_dir>\n")
 }
 
