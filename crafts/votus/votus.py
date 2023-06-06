@@ -23,7 +23,7 @@ class VirRef(VirScan):
         cmd.extend(tmp_cmd)
         wkdir=f'{self.outdir}/stat'
         ckdir=f'{self.outdir}/checkv'
-        checkv_qual=f'{ckdir}/checkv/quality_summary.tsv'
+        checkv_qual=f'{ckdir}/quality_summary.tsv'
         cmd.extend(['pie_plot.R',checkv_qual,'checkv_quality',wkdir])
         cmd.extend(['pie_plot.R',checkv_qual,'provirus',wkdir])
         cmd.extend(['pie_plot.R',checkv_qual,'miuvig_quality',wkdir])
