@@ -5,7 +5,7 @@
 argv<-commandArgs(T)
 
 if(length(argv)<2){
-    stop("inputs: <merged_tpm_xls> <samp_group_xls> <heatmap_dir>\n")
+    stop("inputs: <viral_lifetype_quality_xls> <barplot_dir>\n")
 }
 
 library(ggplot2)
@@ -29,22 +29,26 @@ quality_df<-data.frame(table(dt[,"checkv_quality"]))
 
 colnames(type_df) <- c("LifeStyle","count")
 colnames(quality_df) <- c("Quality","count")
+
 # 计算百分比
 type_df<-transform(type_df,percentage=count/sum(count)*100)
 quality_df<-transform(quality_df,percentage=count/sum(count)*100)
+
 # 从小到大排序
 type_df<-type_df[order(type_df[,"percentage"]),]
 quality_df<-quality_df[order(quality_df[,"percentage"]),]
+
 # 颜色顺序
 #sorted_Quality<-c("Complete","High-quality","Medium-quality","Low-quality","Not-determined")
 sorted_Quality<-quality_df$Quality
 #sorted_LifeStyle<-c("lysogenic","lytic","Undetermined")
 sorted_LifeStyle<-type_df$LifeStyle
+
 # 颜色设置
 color_Quality<-generate_named_vector(sorted_Quality,brewer.pal(9,"Reds")[c(1,3,5,7,9)])
 color_LifeStyle<-generate_named_vector(sorted_LifeStyle,brewer.pal(9,"Blues")[c(3,6,9)])
-# 绘制堆叠条形图
 
+# 绘制堆叠条形图
 barplot<-ggplot() +
   geom_bar(data=type_df,aes(x="LifeStyle",y=percentage,fill=factor(LifeStyle,levels=sorted_LifeStyle)),
            stat="identity",alpha=0.7,position = "fill") +
