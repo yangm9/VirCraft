@@ -45,7 +45,7 @@ class VirRef(VirScan):
             ["sed '1s/scaffold/contig_id/'",vb_vir_type,vb_vir_type_m,'\n',
             'linkTab.py',checkv_qual,vb_vir_type_m,
             'left contig_id',vb_ckv_xls,'\n',
-            'stacked_multi_bar_plot.R',vb_ckv_xls,wkdir,'\n']
+            'phage_lifetype_quality_bar_plot.R',vb_ckv_xls,wkdir,'\n']
         )
         return cmd
     def RmDup(self,cutoff=1500,unrun=False):
