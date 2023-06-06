@@ -24,6 +24,8 @@ dt<-read.table(
   argv[1],header=TRUE,sep="\t",
   row.names=1,check.names=F,quote=""
 )
+dt$type[dt$type == "" | is.na(dt$type)] <- "Undetermined"
+
 type_df<-data.frame(table(dt[,"type"]))
 quality_df<-data.frame(table(dt[,"checkv_quality"]))
 
