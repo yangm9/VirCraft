@@ -66,5 +66,5 @@ barplot<-ggplot() +
     axis.line.y = element_line(colour = "black")
   )
 pdf(paste(argv[2],'/phage_lifetype_quality_bar_plot.pdf',sep=''),width=10,height=8)
-plot
+barplot
 dev.off()
