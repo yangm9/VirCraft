@@ -42,7 +42,7 @@ class VirRef(VirScan):
         vb_vir_type_m=f'{self.outdir}/vb_genome_type.tsv'
         vb_ckv_xls=f'{self.outdir}/vb_ckv_qual_type.xls'
         cmd.extend(
-            ["sed '1s/scaffold/contig_id/'",vb_vir_type,vb_vir_type_m,'\n',
+            ["sed '1s/scaffold/contig_id/'",vb_vir_type,'>',vb_vir_type_m,'\n',
             'linkTab.py',checkv_qual,vb_vir_type_m,
             'left contig_id',vb_ckv_xls,'\n',
             'phage_lifetype_quality_bar_plot.R',vb_ckv_xls,wkdir,'\n']
