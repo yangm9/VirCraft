@@ -706,4 +706,5 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 3.classify模块：将vContact2的结果整合到最终结果中；
 4.编写install模块，用于自动下载、安装和配置相关软件和数据库。
 5.增加GO和KEGG注释分级统计功能(https://github.com/youngDouble/GO_KEGG_annotation)。
+6.votus模块：新增病毒基因组质量和生活方式堆叠柱状图功能。
 ```
