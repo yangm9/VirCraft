@@ -55,6 +55,6 @@ while(<IN>){
 close IN;
 
 LABEL: `mv $wkdir/$samps_prefix.$postfix $wkdir/all_merged.$postfix`;
-`rm -f $wkdir/$merged_prefix*.$postfix`;
+#`rm -f $wkdir/$merged_prefix*.$postfix`;
 `sed -i '1s/\.sort $abd_hash{$postfix}//g' $wkdir/all_merged.$postfix` if($object eq 'Contig');
 __END__
