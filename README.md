@@ -345,9 +345,10 @@ virCraft.py reads_qc -1 Sample01_1.fq -2 Sample01_2.fq -t 8 -o dataqc -p fu -o r
 #### 3.2 宏基因组组装
 
 assembly模块主要功能是将高质量reads进行组装成宏基因组。
+
 ###### 3.2.1 宏基因组组装步骤
 
-1. 首先用SPAdes/megahit对高质量reads进行组装。
+1. 首先用SPAdes/MEGAHIT对高质量reads进行组装。
 2. 然后使用bwa将reads比对组装结果，收集未比对上的reads(Unmapped reads)。
 3. Unmapped reads采用megahit/SPAdes再次进行组装。最后合并两次组装结果。
 
@@ -362,6 +363,8 @@ assembly模块主要功能是将高质量reads进行组装成宏基因组。
 -2 输入文件FastQ2  
 -o 输出结果的目录  
 -p 选择分析步骤(s和/或m)。例如，"-p sm"。其中，"s"和"m"分别表示选择用SPAdes和megahit进行组装。"sm"表示先用SPAdes组装，然后用所有reads比对组装结果获得unmapped reads，unmapped reads用megahit组装，最后整合所有组装结果。  
+
+需要注意的是，有时候SPAdes组装消耗的内存资源过大，因此建议选择"-p ms"或者"-p m"进行组装。
 
 ###### 3.1.3 assembly结果文件说明
 
