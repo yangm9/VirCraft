@@ -20,7 +20,7 @@ class QualCtrl(Reads):
         if 'f' in process:
             cmd=['fastp','-i',self.fastqs[0],'-o',out_fq1,
                 '-I',self.fastqs[1],'-O',out_fq2,
-                '-w 16 -q 20 -u 20 -g -c -W 5 -3 -l 50','-h',filt_rpts,'\n',
+                self.confDict['FastpOpts'],'-h',filt_rpts,'\n',
                 'ls',out_fq1,out_fq2,'>',out_fq_list,'\n']
             out_fastqs=[out_fq1,out_fq2]
         else:

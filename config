@@ -1,3 +1,11 @@
+# Software
+## Options for fastp
+FastpOpts = -w 16 -q 20 -u 20 -g -c -W 5 -3 -l 50
+
+## Full path pf DeepVirFinder
+DeepVirFinder = /data_backup/software/biotools/DeepVirFinder/dvf.py
+
+# Databases
 ## Path to Virsorter2 database
 Virsorter2DB = /data_backup/database/virsorter2DB/db-vs2
 
@@ -22,5 +30,3 @@ CompDataSet =
 ## NCBI viral RefSeq database
 NCBIvRefProtDB = /data_backup/database/NCBI_refseq/viral/
 
-## Full path pf DeepVirFinder
-DeepVirFinder = /data_backup/software/biotools/DeepVirFinder/dvf.py
