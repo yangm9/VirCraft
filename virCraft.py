@@ -37,7 +37,8 @@ elif sys.argv[1]=='reads_qc':
     )
     Reads.readqc(
         process=args.process,
-        unrun=args.unrun
+        unrun=args.unrun,
+        clear=args.clear
     )
     print('Reads quality control completed!!!')
 elif sys.argv[1]=='assembly':

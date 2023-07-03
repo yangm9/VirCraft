@@ -1,6 +1,6 @@
 # Software
 ## Options for fastp
-FastpOpts = -w 16 -q 20 -u 20 -g -c -W 5 -3 -l 50
+FastpOpts = -w 16 -q 20 -u 20 -g -c -W 5 -3 -l 50 -f 10 -F 10
 
 ## Full path pf DeepVirFinder
 DeepVirFinder = /data_backup/software/biotools/DeepVirFinder/dvf.py

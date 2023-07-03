@@ -12,7 +12,8 @@ class Reads(VirCfg):
     postfixes=[
         '_1.fastq','_1.fastq.gz','_1.fq','_1.fq.gz',
         '_R1.fastq','_R1.fastq.gz','_R1.fq','_R1.fq.gz',
-        '.R1.fastq','.R1.fastq.gz','.R1.fq','.R1.fq.gz'
+        '.R1.fastq','.R1.fastq.gz','.R1.fq','.R1.fq.gz',
+        '_1.clean.fq.gz'
     ]
     def __init__(self,fq1='',fq2='',outdir='',*args,**kwargs):
         super().__init__()

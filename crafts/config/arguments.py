@@ -166,6 +166,11 @@ def addGlbArg(psr):#,batch=0): #Add global arguments
         help='This parameter is mainly used for debugging. If this parameter is set, the script will not run directly, but will generate scripts for each analysis step [default=False]'
     )
     psr.add_argument(
+        '-r','--clear',action='store_true',
+        dest='clear',default=False,required=False,
+        help='Remove intermediate result files generated during program execution to save storage space [default=False]'
+)
+    psr.add_argument(
         '-o','--outdir',action='store',type=str,
         dest='outdir',metavar='STR',default=False,
         required=True,help='Output folder [default is the current folder]'

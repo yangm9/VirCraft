@@ -710,4 +710,6 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 4.编写install模块，用于自动下载、安装和配置相关软件和数据库。
 5.增加GO和KEGG注释分级统计功能(https://github.com/youngDouble/GO_KEGG_annotation)。
 6.votus模块：新增病毒基因组质量和生活方式堆叠柱状图功能。
+7.config文件放到主目录便于设置参数。
+8.reads_qc模块：添加clean参数，用于可选择性地删除中间结果文件。
 ```

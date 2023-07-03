@@ -44,27 +44,36 @@ class QualCtrl(Reads):
         outfqs=[f'{prefix}.1',f'{prefix}.2']
         fastqs=[f'{prefix}_1.fq',f'{prefix}_2.fq']
         cmd=['bowtie2','-p',self.threads,'-N 1','-x',contam_db,
-            '-1',fq1,'-2',fq2,'--un-conc',prefix,'\n',
+            '-1',fq1,'-2',fq2,'--un-conc',prefix,'>/dev/null\n',
             'mv',outfqs[0],fastqs[0],'\n','mv',outfqs[1],fastqs[1],'\n']
         return cmd,fastqs
-    def readqc(self,process='fuc',unrun=False):
+    def readqc(self,process='fuc',unrun=False,clear=False):
         cmd=[self.envs]
         fastqs=self.fastqs
+        unused_fqs=[]
         if 'f' in process:
             tmp_cmd,fastqs,fq_list=self.filtReads(process)
             cmd.extend(tmp_cmd)
+            unused_fqs.extend(fastqs)
         if 'u' in process:
             tmp_cmd,fastqs=self.fastUniq(fq_list)
             cmd.extend(tmp_cmd)
+            unused_fqs.extend(fastqs)
         if 'c' in process:
             tmp_cmd,fastqs=self.decontaminate(fastqs[0],fastqs[1])
             cmd.extend(tmp_cmd)
+            unused_fqs.extend(fastqs)
         lnk_fq1=os.path.basename(fastqs[0])
         lnk_fq2=os.path.basename(fastqs[1])
         cmd.extend(
             [f'ln -s {fastqs[0]} {self.outdir}/{lnk_fq1}\n',
             f'ln -s {fastqs[1]} {self.outdir}/{lnk_fq2}\n']
         )
+        if clear:
+            unused_fqs.remove(fastqs[0])
+            unused_fqs.remove(fastqs[1])
+            unused_fqs_str=' '.join(unused_fqs)
+            cmd.extend(['rm -f',unused_fqs_str,'\n'])
         shell=f'{self.outdir}/{self.samp}_readsqc.sh'
         utils.printSH(shell,cmd)
         results=''
