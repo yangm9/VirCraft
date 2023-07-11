@@ -28,8 +28,7 @@ class Assembly(Reads):
         else:
             pass
         cmd.extend(
-            ['-t',self.threads,'-o',wkdir,
-            '--careful -m 1300 -k 21,33,55,77,99,127','\n']
+            ['-t',self.threads,'-o',wkdir,self.confDict['MegahitOpts'],'\n']
         )
         scaf=f'{wkdir}/scaffolds.fasta'
         return cmd,scaf
@@ -50,7 +49,7 @@ class Assembly(Reads):
         else:
             pass
         cmd=['megahit',input_para,'-o',wkdir,
-            '-t',self.threads,'-m','80000000000',
+            '-t',self.threads,self.confDict['MegahitOpts'],
             '--tmp-dir',tmpdir,other_paras,'\n']
         scaf=f'{wkdir}/final.contigs.fa'
         return cmd,scaf

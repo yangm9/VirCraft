@@ -22,7 +22,8 @@ class VirCount(Reads):
         cmd=['bwa mem','-t',self.threads,bwa_idx,
             self.fastqs[0],self.fastqs[1],
             '|samtools view','-o',raw_bam,'-@ 28 -b -S\n',
-            'samtools sort',raw_bam,'-o',sort_bam,'-@ 28\n']
+            'samtools sort',raw_bam,'-o',sort_bam,'-@ 28\n',
+            'samtools index',sort_bam,'\n']
         return cmd
     def coverm(self,samp:str):
         cov=f'{self.outdir}/{samp}.cov'
