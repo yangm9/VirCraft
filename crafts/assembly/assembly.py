@@ -28,7 +28,7 @@ class Assembly(Reads):
         else:
             pass
         cmd.extend(
-            ['-t',self.threads,'-o',wkdir,self.confDict['MegahitOpts'],'\n']
+            ['-t',self.threads,'-o',wkdir,self.confDict['SPAdesOpts'],'\n']
         )
         scaf=f'{wkdir}/scaffolds.fasta'
         return cmd,scaf
