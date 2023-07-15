@@ -1,4 +1,5 @@
 #!/usr/bin/env perl
+#yangm@idsse.ac.cn
 use strict;
 $/=">";
 open FA,$ARGV[0] or die $!;
