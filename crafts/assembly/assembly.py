@@ -88,13 +88,18 @@ class Assembly(Reads):
         elif steps==1:
             cmd.extend(['ln -s',tmp_scaf,final_scaf,'\n'])
         return cmd,final_scaf
-    def Assemble(self,process='sm',cutoff=5000,unrun=False):
+    def Assemble(self,process='sm',cutoff=1500,unrun=False,clear=False):
         cmd=[self.envs]
         scafs=[]
         tmp_cmd,scaf=self.mixAsse(self.fastqs,process)
         cmd.extend(tmp_cmd)
         FastA=Seq(scaf,self.outdir)
         cmd.extend(FastA.statFA(cutoff))
+        if clear and len(process)==2:
+            alndir=f'{self.outdir}/alignment'
+            unused_sam=f'{alndir}/unused_reads.sam'
+            scafIdx=f'{alndir}/scaffoldsIDX*'
+            cmd.extend(['rm -f',unused_sam,scafIdx,'\n'])
         shell=f'{self.outdir}/{self.samp}_assembly.sh'
         utils.printSH(shell,cmd)
         results=''
