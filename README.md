@@ -712,4 +712,10 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 6.votus模块：新增病毒基因组质量和生活方式堆叠柱状图功能。
 7.config文件放到主目录便于设置参数。
 8.reads_qc模块：添加clean参数，用于可选择性地删除中间结果文件。
+9.病毒判定打分方式调整 (Pratama, et al. PeerJ, 2021)
+```
+
+**VirCraft-v0.0.10**
+```
+1.病毒判定打分方式不太科学，于是重新调回原样。
 ```
