@@ -21,7 +21,7 @@ NameDict={
 
 FastaDict={
     'virsorter2':'vs2-pass1/final-viral-combined.fa',
-    'vibrant':'',
+    'vibrant':'VIBRANT_{0}/VIBRANT_phages_{0}/{0}.phages_combined.fna',
     'deepvirfinder':''
 }
 
