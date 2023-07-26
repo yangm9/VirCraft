@@ -717,5 +717,6 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 
 **VirCraft-v0.0.10**
 ```
-1.病毒判定打分方式不太科学，于是重新调回原样。
+1.identify模块：merge_ctg_list.py病毒判定打分方式不太科学，于是重新调回原样。
+2.identify模块：merge_ctg_list.py程序重构，更加简洁。
 ```
