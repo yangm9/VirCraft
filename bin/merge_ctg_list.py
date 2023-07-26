@@ -93,9 +93,12 @@ def listToFile(list_l,list_f):
 def filtCtgList(all_merged_ctgs,filt_type):
     df=pd.read_csv(all_merged_ctgs,sep='\t')
     if filt_type=='score':
-        df['vs2_score']=df['vs2_max_score'].apply(lambda x:3 if x>=0.9 else (2 if x>=0.7 else (1 if x>=0.5 else 0)))
-        df['vb_score']=df['vb_prediction'].apply(lambda x:1 if x=='virus' else (-1 if x in ['organism','plasmid'] else 0))
-        df['dvf_scores']=df.apply(lambda x:3 if x['dvf_score']>=0.95 and x['dvf_pvalue']<=0.1 else (2 if x['dvf_score']>=0.9 and x['dvf_pvalue']<=0.1 else (1 if x['dvf_score']>=0.7 and x['dvf_pvalue']<=0.1 else 0)),axis=1)
+        df['vs2_score']=df['vs2_max_score'].apply(lambda x:2 if x>=0.9 else (1 if x>=0.7 else 0))
+        df['vb_score']=df['vb_prediction'].apply(lambda x:1 if x=='virus' else 0)
+        df['dvf_scores']=df.apply(lambda x:1 if x['dvf_score']>=0.9 and x['dvf_pvalue']<=0.1 else 0, axis=1)
+        #df['vs2_score']=df['vs2_max_score'].apply(lambda x:3 if x>=0.9 else (2 if x>=0.7 else (1 if x>=0.5 else 0)))
+        #df['vb_score']=df['vb_prediction'].apply(lambda x:1 if x=='virus' else (-1 if x in ['organism','plasmid'] else 0))
+        #df['dvf_scores']=df.apply(lambda x:3 if x['dvf_score']>=0.95 and x['dvf_pvalue']<=0.1 else (2 if x['dvf_score']>=0.9 and x['dvf_pvalue']<=0.1 else (1 if x['dvf_score']>=0.7 and x['dvf_pvalue']<=0.1 else 0)),axis=1)
         df['score']=df['vs2_score']+df['vb_score']+df['dvf_scores']
     elif(filt_type=='cutoff'):
         df=df.query(FiltCondi)
