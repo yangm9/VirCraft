@@ -74,6 +74,10 @@ def vCtgMerge(name,wkdir):
             df['seqname']=df['seqname'].apply(lambda x:x.rsplit('||',1)[0])
             df.drop(columns=['length'], inplace=True)
         elif tool=='vibrant':
+            phage_txt=FastaDict[tool].format(name).replace('.fna','.txt')
+            phage_df=pd.read_csv(phage_txt,sep='\t',header=None)
+            phage_list=phage_df[0].tolist()
+            df['isPhage']=df['scaffold'].isin(phage_list).astype(int)
             df['scaffold']=df['scaffold'].apply(lambda x:x.rsplit('_fragment_',1)[0])
         else:
             df.drop(columns=['len'], inplace=True)
