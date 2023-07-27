@@ -12,7 +12,6 @@ $seq=~s/\s+//g;
 my $seqlen=length($seq);
 my $name=(split /\s+/,$info,2)[0];
 $fa{$name}=$seq;
-$n++;
 while(<FA>){
     chomp;
     my($info,$seq)=split /\n/,$_,2;
@@ -21,11 +20,11 @@ while(<FA>){
     my $nextlen=length($seq);
     die "Some sequence have different lengths!" unless($nextlen==$seqlen);
     $fa{$name}=$seq;
-    $n++;
 }
 $/="\n";
 close FA;
 
+my $n=keys %fa;
 open PHY,">$ARGV[1]" or die $!;
 print PHY "$n $seqlen\n";
 foreach my $name(keys %fa){
