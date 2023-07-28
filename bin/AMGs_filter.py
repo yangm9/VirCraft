@@ -66,7 +66,8 @@ def get_common_gene_id_for_vibrant(faa):
 #Output the private protein ID and its corresponding consensus protein ID
 def list_common_gene_id(dm_gff,vb_gff,wkdir):
     dm_geneidDict=get_common_gene_id_from_gff(dm_gff,'dram')
-    vb_geneidDict=get_common_gene_id_from_gff(vb_gff,'vibrant')
+    #vb_geneidDict=get_common_gene_id_from_gff(vb_gff,'vibrant')
+    vb_geneidDict=get_common_gene_id_for_vibrant(vb_faa)
     dm_gene_id_list=f'{wkdir}/dram_id.xls'
     DMGI=open(dm_gene_id_list,'w')
     DMGI.write('protein_id\tcommon_protein_id\n')
