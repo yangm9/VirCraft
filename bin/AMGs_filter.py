@@ -76,7 +76,7 @@ def list_common_gene_id(dm_gff,vb_gff,wkdir):
 def combine_amgs_of_dramv_and_vibrant(dmdir,vbdir,wkdir='.'):
     vbdir.strip('/')
     seq_name=os.path.basename(vbdir).split('_',1)[1]
-    vb_gff=f'{vbdir}/VIBRANT_phages_{seq_name}/{seq_name}.phages_combined.gff'
+    vb_gff=f'{vbdir}/{seq_name}.prodigal.gff'
     dm_gff=f'{dmdir}/genes.gff'
     #Get the common gene ID list of dramv and vibrant base on respective gff.
     dm_gene_id_list,vb_gene_id_list=list_common_gene_id(dm_gff,vb_gff,wkdir)
