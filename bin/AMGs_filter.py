@@ -64,7 +64,7 @@ def get_common_gene_id_for_vibrant(faa):
     return geneidDict
 
 #Output the private protein ID and its corresponding consensus protein ID
-def list_common_gene_id(dm_gff,vb_gff,wkdir):
+def list_common_gene_id(dm_gff,vb_faa,wkdir):
     dm_geneidDict=get_common_gene_id_from_gff(dm_gff,'dram')
     #vb_geneidDict=get_common_gene_id_from_gff(vb_gff,'vibrant')
     vb_geneidDict=get_common_gene_id_for_vibrant(vb_faa)
@@ -89,10 +89,11 @@ def list_common_gene_id(dm_gff,vb_gff,wkdir):
 def combine_amgs_of_dramv_and_vibrant(dmdir,vbdir,wkdir='.'):
     vbdir.strip('/')
     seq_name=os.path.basename(vbdir).split('_',1)[1]
-    vb_gff=f'{vbdir}/{seq_name}.prodigal.gff'
+    vb_faa=f'{vbdir}/VIBRANT_phages_{seq_name}/{seq_name}.phages_combined.faa'
+    #vb_gff=f'{vbdir}/{seq_name}.prodigal.gff'
     dm_gff=f'{dmdir}/genes.gff'
     #Get the common gene ID list of dramv and vibrant base on respective gff.
-    dm_gene_id_list,vb_gene_id_list=list_common_gene_id(dm_gff,vb_gff,wkdir)
+    dm_gene_id_list,vb_gene_id_list=list_common_gene_id(dm_gff,vb_faa,wkdir)
     dm_annot=f'{dmdir}/annotations.tsv'
     dm_annot_c1=f'{wkdir}/annotations_c1.xls'
     #add the 1st column name for dramv
