@@ -9,6 +9,18 @@ import linkTab
 #version: 0.0.1 2023-04-12 14:51
 #version: 0.0.2 2023-07-27 22:33
 
+#Add the 1st columns name for a dramv annotation file
+def add_1st_column_name(anno_f,column_1st_name,anno_c1_f):
+    with open(anno_f) as f:
+        lines=f.readlines()
+    if len(lines)>0:
+        lines[0]=column_1st_name+lines[0]
+    else:
+        print(f'Error: {anno_f} is an empty file')
+    with open(anno_c1_f,'w') as f:
+        f.writelines(lines)
+    return 0
+
 #Get the dictionary of consensus protein id for DRAM-v and VIBRANT
 #e.g., geneid:contig_id:start_end
 def get_common_gene_id_from_gff(gff,tool):
