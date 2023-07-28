@@ -135,14 +135,14 @@ def generate_amgs_table(dm_vb_merged_annot):
     amg_criteria="(not (auxiliary_score>3 or 'T' in amg_flags or 'B' in amg_flags)) and AMG=='AMG'"
     df=pd.read_csv(dm_vb_merged_annot,sep='\t',low_memory=False)
     #Put the common_protein_id column to 1st
-    cols = df.columns.tolist()
+    cols=df.columns.tolist()
     cols.remove('common_protein_id')
     cols.insert(0,'common_protein_id')
     df=df.reindex(columns=cols)
     df=df.drop('fasta', axis=1)
     df=df.rename(columns=rename_columns_dict)
     wkdir=os.path.dirname(dm_vb_merged_annot)
-    all_merged_annot=f'{wkdir}/all_merged_amg.xls'
+    all_merged_annot=f'{wkdir}/all_merged_annotation.xls'
     df.to_csv(all_merged_annot,sep='\t',index=False)
     df=df.query(amg_criteria)
     filt_merged_annot=f'{wkdir}/filted_merged_amg.xls'
@@ -152,3 +152,4 @@ def generate_amgs_table(dm_vb_merged_annot):
 if __name__=='__main__':
     dm_vb_merged_annot=combine_amgs_of_dramv_and_vibrant(sys.argv[1],sys.argv[2],sys.argv[3])
     generate_amgs_table(dm_vb_merged_annot)
+    os.remove(dm_vb_merged_annot)
