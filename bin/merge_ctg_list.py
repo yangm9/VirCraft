@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-#author: yangm@idsse.com
+#author:   yangm@idsse.com
+#versions: 0.0.1
+#versions: 0.0.2 2023-07-26 22:42
+
 import os
 import sys
 import re

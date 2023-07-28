@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
 import os
 import sys
-import re
 import pandas as pd
 import linkTab
 
 #author: yangm@idsse.ac.cn
-#version: 0.0.1 2023-04-12 14:51
-#version: 0.0.2 2023-07-27 22:33
+#version: 0.0.1 2023-4-12 14:51
 
-#Get the dictionary of consensus protein id for DRAM-v and VIBRANT
-#e.g., geneid:contig_id:start_end
-def get_common_gene_id_from_gff(gff,tool):
+#Get the consensus protein id for DRAM-v and VIBRANT
+#e.g., contig_id:start_end
+def get_common_gene_id(gff,tool):
     geneidDict={}
     GFF=open(gff)
     for line in GFF:
@@ -27,7 +25,7 @@ def get_common_gene_id_from_gff(gff,tool):
             gene_id=f'{contig_id}_{gene_id}'
         else:
             print('Error: tool must be dram or vibrant')
-        comm_gene_id=f'{contig_id}:{items[3]}{items[6]}{items[4]}'
+        comm_gene_id=f'{contig_id}:{items[3]}_{items[4]}'
         geneidDict[gene_id]=comm_gene_id
     GFF.close()
     return geneidDict
@@ -52,9 +50,9 @@ def get_common_gene_id_for_vibrant(faa):
     return geneidDict
 
 #Output the private protein ID and its corresponding consensus protein ID
-def list_common_gene_id(dm_gff,vb_gff,wkdir):
-    dm_geneidDict=get_common_gene_id_from_gff(dm_gff,'dram')
-    vb_geneidDict=get_common_gene_id_from_gff(vb_gff,'vibrant')
+def list_common_gene_id(dm_gff,vb_faa,wkdir):
+    dm_geneidDict=get_common_gene_id(dm_gff,'dram')
+    vb_geneidDict=get_common_gene_id_for_vibrant(vb_faa)
     dm_gene_id_list=f'{wkdir}/dram_id.xls'
     DMGI=open(dm_gene_id_list,'w')
     DMGI.write('protein_id\tcommon_protein_id\n')
@@ -66,20 +64,31 @@ def list_common_gene_id(dm_gff,vb_gff,wkdir):
     VBGI=open(vb_gene_id_list,'w')
     VBGI.write('protein\tcommon_protein_id\n')
     for gene_id in vb_geneidDict.keys():
-        pattern=r'_fragment_\d+'
-        common_prot_id=re.sub(pattern,'',vb_geneidDict[gene_id])
-        line=f'{gene_id}\t{common_prot_id}\n'
+        line=f'{gene_id}\t{vb_geneidDict[gene_id]}\n'
         VBGI.write(line)
     VBGI.close()
     return dm_gene_id_list,vb_gene_id_list
 
+#Add the 1st columns name for a dramv annotation file
+def add_1st_column_name(anno_f,column_1st_name,anno_c1_f):
+    with open(anno_f) as f:
+        lines=f.readlines()
+    if len(lines)>0:
+        lines[0]=column_1st_name+lines[0]
+    else:
+        print(f'Error: {anno_f} is an empty file')
+    with open(anno_c1_f,'w') as f:
+        f.writelines(lines)
+    return 0
+
+#Merge the annotation file of dramv and vibrant by common gene id
 def combine_amgs_of_dramv_and_vibrant(dmdir,vbdir,wkdir='.'):
     vbdir.strip('/')
     seq_name=os.path.basename(vbdir).split('_',1)[1]
-    vb_gff=f'{vbdir}/VIBRANT_phages_{seq_name}/{seq_name}.phages_combined.gff'
+    vb_faa=f'{vbdir}/VIBRANT_phages_{seq_name}/{seq_name}.phages_combined.faa'
     dm_gff=f'{dmdir}/genes.gff'
     #Get the common gene ID list of dramv and vibrant base on respective gff.
-    dm_gene_id_list,vb_gene_id_list=list_common_gene_id(dm_gff,vb_gff,wkdir)
+    dm_gene_id_list,vb_gene_id_list=list_common_gene_id(dm_gff,vb_faa,wkdir)
     dm_annot=f'{dmdir}/annotations.tsv'
     dm_annot_c1=f'{wkdir}/annotations_c1.xls'
     #add the 1st column name for dramv
