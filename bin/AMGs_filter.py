@@ -58,7 +58,11 @@ def get_common_gene_id_for_vibrant(faa):
         start,end=items[1].split('..')
         start=start.replace('(','')
         end=end.replace(')','')
-        comm_gene_id=f'{contig_id}:{start}_{end}'
+        if items[2]=='1':
+            strand='+'
+        else:
+            strand='-'
+        comm_gene_id=f'{contig_id}:{start}{strand}{end}'
         geneidDict[gene_id]=comm_gene_id
     FAA.close()
     return geneidDict
