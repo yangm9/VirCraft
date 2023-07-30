@@ -14,7 +14,7 @@ class vIdentify(MultiTools):
         cmd=[utils.selectENV('VirCraft')]
         full_ctgs_li=f'{self.outdir}/full_viral_ctgs.list'
         full_ctgs_fa=f'{self.outdir}/full_viral_ctgs.fa'
-        score_xls=f'{self.outdir}/all_viral_cfgs.score.xls'
+        score_xls=f'{self.outdir}/all_viral_ctgs.score.xls'
         score_filt_xls=utils.insLable(score_xls,'gt2')
         score_filt_ctgs_li=f'{self.outdir}/viral_ctgs_filt.list'
         cmd.extend(
