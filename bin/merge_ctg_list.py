@@ -80,7 +80,7 @@ def vCtgMerge(name,wkdir):
             phage_txt=FastaDict[tool].format(name).replace('.fna','.txt')
             phage_df=pd.read_csv(phage_txt,sep='\t',header=None)
             phage_list=phage_df[0].tolist()
-            df['isPhage']=df['scaffold'].isin(phage_list).astype(int)
+            df['vb_isPhage']=df['scaffold'].isin(phage_list).astype(int)
             df['scaffold']=df['scaffold'].apply(lambda x:x.rsplit('_fragment_',1)[0])
         else:
             df.drop(columns=['len'], inplace=True)
@@ -94,7 +94,7 @@ def filtCtgList(all_merged_ctgs,filt_type):
     df=pd.read_csv(all_merged_ctgs,sep='\t')
     if filt_type=='score':
         df['vs2_score']=df['vs2_max_score'].apply(lambda x:2 if x>=0.9 else (1 if x>=0.7 else 0))
-        df['vb_score']=df['vb_prediction'].apply(lambda x:1 if x=='virus' else 0)
+        df['vb_score']=df['vb_isPhage'].apply(lambda x:1 if x=='virus' else 0)
         df['dvf_scores']=df.apply(lambda x:1 if x['dvf_score']>=0.9 and x['dvf_pvalue']<=0.1 else 0, axis=1)
         df['score']=df['vs2_score']+df['vb_score']+df['dvf_scores']
     elif(filt_type=='cutoff'):
