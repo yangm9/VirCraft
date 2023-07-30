@@ -22,7 +22,7 @@ class vIdentify(MultiTools):
             'cut -f 1',score_filt_xls,"|sed '1d' >",filt_ctgs_li,'\n',
             'extrSeqByName.pl',filt_ctgs_li,self.fasta,filt_viral_ctgs,'\n']
         )
-        tmp_cmd,checkv_fa=self.checkv(tool_filt_ctgs)
+        tmp_cmd,checkv_fa=self.checkv(filt_viral_ctgs)
         cmd.extend(tmp_cmd)
         return cmd
     def Identify(self,cutoff=1500,unrun=False):
