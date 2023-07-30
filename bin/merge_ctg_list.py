@@ -113,7 +113,6 @@ def ctgList(name,wkdir):
         linkTab.merge(mark,csv_name,'left','Contig',merged_name)
         if mark!=all_ctgs_li: os.remove(mark)
         mark=merged_name
-        print(mark)
     all_merged_ctgs=f'{wkdir}/all_viral_ctgs.xls'
     os.rename(mark,all_merged_ctgs)
     calcCtgScore(all_merged_ctgs)
