@@ -68,7 +68,7 @@ def getFullness(all_ctgs_li):
     df=pd.read_csv(all_ctgs_li,sep='\t')
     df[['Contig','Fullness']]=df['Contig'].str.split(r'\|\||_frag',expand=True)
     df['Fullness']=df['Fullness'].fillna('full')
-    df['Fullness']=df['Fullness'].str.replace('ment','fragment')
+    df['Fullness']=df['Fullness'].str.replace('ment_','fragment_')
     df=df.groupby('Contig').agg({'Fullness':','.join}).reset_index()
     wkdir=os.path.dirname(all_ctgs_li)
     all_ctgs_info=all_ctgs_li.replace('.list','.info')
@@ -91,7 +91,7 @@ def vCtgMerge(name,wkdir):
             phage_list=phage_df[0].tolist()
             df['vb_isPhage']=df['scaffold'].isin(phage_list).astype(int)
             df[['scaffold','vb_partial']]=df['scaffold'].str.split(r'_frag',expand=True)
-            df['vb_partial']=df['vb_partial'].str.replace('ment','fragment')
+            df['vb_partial']=df['vb_partial'].str.replace('ment_','fragment_')
         else:
             df.drop(columns=['len'], inplace=True)
         df.rename(columns={NameDict[tool]:'Contig'},inplace=True)
@@ -103,7 +103,7 @@ def vCtgMerge(name,wkdir):
 def calcCtgScore(all_merged_ctgs):
     df=pd.read_csv(all_merged_ctgs,sep='\t')
     df['vs2_score']=df['vs2_max_score'].apply(lambda x:2 if x>=0.9 else (1 if x>=0.7 else 0))
-    df['vb_score']=df['vb_isPhage'].apply(lambda x:1 if x=='virus' else 0)
+    df['vb_score']=df['vb_isPhage']
     df['dvf_scores']=df.apply(lambda x:1 if x['dvf_score']>=0.9 and x['dvf_pvalue']<=0.1 else 0, axis=1)
     df['score']=df['vs2_score']+df['vb_score']+df['dvf_scores']
     postfix=f'.score.xls'
