@@ -105,7 +105,6 @@ def ctgList(name,wkdir):
     all_ctgs=['Contig']+all_nh_ctgs
     all_ctgs_li=f'{wkdir}/all_viral_ctgs.list'
     listToFile(all_ctgs,all_ctgs_li)
-    all_ctgs_li=getFullness(all_ctgs_li)
     mark=all_ctgs_li
     for tool in CsvDict.keys():
         csv_name=CsvDict[tool].format(wkdir) #{vb}_viral_cfgs.xls
