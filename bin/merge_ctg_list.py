@@ -84,6 +84,7 @@ def vCtgMerge(name,wkdir):
             df.drop(columns=['len'], inplace=True)
         df.rename(columns={NameDict[tool]:'Contig'},inplace=True)
         all_ctgs.extend(df['Contig'].tolist())
+        all_ctgs=list(set(all_ctgs))
         df.rename(columns=ColsDict[tool],inplace=True)
         csv_name=CsvDict[tool].format(wkdir)
         df.to_csv(csv_name,index=False,sep='\t')
