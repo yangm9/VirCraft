@@ -9,8 +9,6 @@ import re
 import pandas as pd
 import linkTab
 
-FiltCondi="vs2_max_score>=0.9 or vb_prediction=='virus' or (dvf_score>=0.9 and dvf_pvalue<=0.1)"
-
 PathDict={
     'virsorter2':'vs2-pass1/final-viral-score.tsv',
     'vibrant':'VIBRANT_{0}/VIBRANT_results_{0}/VIBRANT_machine_{0}.tsv',
@@ -66,6 +64,17 @@ def resultFile(name,tool,wkdir):
         result=result.format(name)
     return result
 
+def getFullness(all_ctgs_li):    
+    df=pd.read_csv(all_ctgs_li,sep='\t')
+    df[['Contig','Fullness']]=df['Contig'].str.split(r'\|\||_frag',expand=True)
+    df['Fullness']=df['Fullness'].fillna('full')
+    df['Fullness']=df['Fullness'].str.replace('ment','fragment')
+    df=df.groupby('Contig').agg({'Fullness':','.join}).reset_index()
+    wkdir=os.path.dirname(all_ctgs_li)
+    all_ctgs_info=all_ctgs_li.replace('.list','.info')
+    df.to_csv(all_ctgs_info,index=False,sep='\t')
+    return all_ctgs_info
+
 #Extract a list of full and partial contigs from the results of dvf, vb and vs2 tools, meanwhile output key information for each tools.
 def vCtgMerge(name,wkdir):
     all_ctgs=[]
@@ -74,14 +83,15 @@ def vCtgMerge(name,wkdir):
         df=pd.read_csv(result,sep='\t')
         all_ctgs.extend(df[NameDict[tool]].tolist())
         if tool=='virsorter2':
-            df['seqname']=df['seqname'].apply(lambda x:x.rsplit('||',1)[0])
+            df[['seqname','vs2_partial']]=df['seqname'].str.split(r'\|\|',expand=True)
             df.drop(columns=['length'], inplace=True)
         elif tool=='vibrant':
             phage_txt=FastaDict[tool].format(name).replace('.fna','.txt')
             phage_df=pd.read_csv(phage_txt,sep='\t',header=None)
             phage_list=phage_df[0].tolist()
             df['vb_isPhage']=df['scaffold'].isin(phage_list).astype(int)
-            df['scaffold']=df['scaffold'].apply(lambda x:x.rsplit('_fragment_',1)[0])
+            df[['scaffold','vb_partial']]=df['seqname'].str.split(r'_frag',expand=True)
+            df['vb_partial']=df['vb_partial'].str.replace('ment','fragment')
         else:
             df.drop(columns=['len'], inplace=True)
         df.rename(columns={NameDict[tool]:'Contig'},inplace=True)
@@ -90,31 +100,16 @@ def vCtgMerge(name,wkdir):
         df.to_csv(csv_name,index=False,sep='\t')
     return all_ctgs
 
-def filtCtgList(all_merged_ctgs,filt_type):
+def calcCtgScore(all_merged_ctgs):
     df=pd.read_csv(all_merged_ctgs,sep='\t')
-    if filt_type=='score':
-        df['vs2_score']=df['vs2_max_score'].apply(lambda x:2 if x>=0.9 else (1 if x>=0.7 else 0))
-        df['vb_score']=df['vb_isPhage'].apply(lambda x:1 if x=='virus' else 0)
-        df['dvf_scores']=df.apply(lambda x:1 if x['dvf_score']>=0.9 and x['dvf_pvalue']<=0.1 else 0, axis=1)
-        df['score']=df['vs2_score']+df['vb_score']+df['dvf_scores']
-    elif(filt_type=='cutoff'):
-        df=df.query(FiltCondi)
-    else:
-        pass
-    postfix=f'.{filt_type}.xls'
+    df['vs2_score']=df['vs2_max_score'].apply(lambda x:2 if x>=0.9 else (1 if x>=0.7 else 0))
+    df['vb_score']=df['vb_isPhage'].apply(lambda x:1 if x=='virus' else 0)
+    df['dvf_scores']=df.apply(lambda x:1 if x['dvf_score']>=0.9 and x['dvf_pvalue']<=0.1 else 0, axis=1)
+    df['score']=df['vs2_score']+df['vb_score']+df['dvf_scores']
+    postfix=f'.score.xls'
     all_filt_ctgs=all_merged_ctgs.replace('.xls',postfix)
     df.to_csv(all_filt_ctgs,index=False,sep='\t')
     return 0
-def getFullness(all_ctgs_li):    
-    df=pd.read_csv(all_ctgs_li,sep='\t')
-    df[['Contig','Fullness']]=df['Contig'].str.split(r'\|\||_frag', expand=True)
-    df['Fullness']=df['Fullness'].fillna('full')
-    df['Fullness']=df['Fullness'].str.replace('ment', 'fragment')
-    df=df.groupby('Contig').agg({'Fullness':','.join}).reset_index()
-    wkdir=os.path.dirname(all_ctgs_li)
-    all_ctgs_info=all_ctgs_li.replace('.list','.info')
-    df.to_csv(all_ctgs_info,index=False,sep='\t')
-    return all_ctgs_info
 
 def ctgList(name,wkdir):
     all_nh_ctgs=vCtgMerge(name,wkdir)
@@ -131,8 +126,7 @@ def ctgList(name,wkdir):
         mark=merged_name
     all_merged_ctgs=f'{wkdir}/all_viral_ctgs.xls'
     os.rename(mark,all_merged_ctgs)
-    filtCtgList(all_merged_ctgs,'score')
-    filtCtgList(all_merged_ctgs,'cutoff')
+    calcCtgScore(all_merged_ctgs)
     return 0
 
 if __name__=='__main__':
