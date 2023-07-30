@@ -45,6 +45,7 @@ class vIdentify(MultiTools):
         #multiple run
         cmd=[utils.selectENV('')]
         cmd.extend(['multithreads.pl',self.outdir,'ctg.sh 3\n'])
+        self.threads=str(int(self.threads)*4)
         cmd.extend(self.vFilter())
         shell=f'{self.outdir}/{self.name}_find_vir.sh'
         utils.printSH(shell,cmd)
