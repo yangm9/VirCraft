@@ -90,7 +90,7 @@ def vCtgMerge(name,wkdir):
             phage_df=pd.read_csv(phage_txt,sep='\t',header=None)
             phage_list=phage_df[0].tolist()
             df['vb_isPhage']=df['scaffold'].isin(phage_list).astype(int)
-            df[['scaffold','vb_partial']]=df['seqname'].str.split(r'_frag',expand=True)
+            df[['scaffold','vb_partial']]=df['scaffold'].str.split(r'_frag',expand=True)
             df['vb_partial']=df['vb_partial'].str.replace('ment','fragment')
         else:
             df.drop(columns=['len'], inplace=True)
