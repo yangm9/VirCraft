@@ -92,7 +92,7 @@ def vCtgMerge(name,wkdir):
 def calcCtgScore(all_merged_ctgs):
     df=pd.read_csv(all_merged_ctgs,sep='\t')
     df['vs2_score']=df['vs2_max_score'].apply(lambda x:2 if x>=0.9 else (1 if x>=0.7 else 0))
-    df['vb_score']=df['vb_isPhage']
+    df['vb_score']=df['vb_isPhage'].apply(lambda x:1 if x==1 else 0))
     df['dvf_scores']=df.apply(lambda x:1 if x['dvf_score']>=0.9 and x['dvf_pvalue']<=0.1 else 0, axis=1)
     df['score']=df['vs2_score']+df['vb_score']+df['dvf_scores']
     postfix=f'.score.xls'
