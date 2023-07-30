@@ -64,24 +64,12 @@ def resultFile(name,tool,wkdir):
         result=result.format(name)
     return result
 
-def getFullness(all_ctgs_li):    
-    df=pd.read_csv(all_ctgs_li,sep='\t')
-    df[['Contig','Fullness']]=df['Contig'].str.split(r'\|\||_frag',expand=True)
-    df['Fullness']=df['Fullness'].fillna('full')
-    df['Fullness']=df['Fullness'].str.replace('ment_','fragment_')
-    df=df.groupby('Contig').agg({'Fullness':','.join}).reset_index()
-    wkdir=os.path.dirname(all_ctgs_li)
-    all_ctgs_info=all_ctgs_li.replace('.list','.info')
-    df.to_csv(all_ctgs_info,index=False,sep='\t')
-    return all_ctgs_info
-
 #Extract a list of full and partial contigs from the results of dvf, vb and vs2 tools, meanwhile output key information for each tools.
 def vCtgMerge(name,wkdir):
     all_ctgs=[]
     for tool in PathDict.keys():
         result=resultFile(name,tool,wkdir)
         df=pd.read_csv(result,sep='\t')
-        all_ctgs.extend(df[NameDict[tool]].tolist())
         if tool=='virsorter2':
             df[['seqname','vs2_partial']]=df['seqname'].str.split(r'\|\|',expand=True)
             df.drop(columns=['length'], inplace=True)
@@ -95,6 +83,7 @@ def vCtgMerge(name,wkdir):
         else:
             df.drop(columns=['len'], inplace=True)
         df.rename(columns={NameDict[tool]:'Contig'},inplace=True)
+        all_ctgs.extend(df['Contig'].tolist())
         df.rename(columns=ColsDict[tool],inplace=True)
         csv_name=CsvDict[tool].format(wkdir)
         df.to_csv(csv_name,index=False,sep='\t')
@@ -116,13 +105,13 @@ def ctgList(name,wkdir):
     all_ctgs=['Contig']+all_nh_ctgs
     all_ctgs_li=f'{wkdir}/all_viral_ctgs.list'
     listToFile(all_ctgs,all_ctgs_li)
-    all_ctgs_info=getFullness(all_ctgs_li)
-    mark=all_ctgs_info
+    all_ctgs_li=getFullness(all_ctgs_li)
+    mark=all_ctgs_li
     for tool in CsvDict.keys():
         csv_name=CsvDict[tool].format(wkdir) #{vb}_viral_cfgs.xls
         merged_name=mark+'_'+tool
         linkTab.merge(mark,csv_name,'left','Contig',merged_name)
-        if mark!=all_ctgs_info: os.remove(mark)
+        if mark!=all_ctgs_li: os.remove(mark)
         mark=merged_name
     all_merged_ctgs=f'{wkdir}/all_viral_ctgs.xls'
     os.rename(mark,all_merged_ctgs)
