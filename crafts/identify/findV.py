@@ -24,6 +24,13 @@ class vIdentify(MultiTools):
         )
         tmp_cmd,checkv_fa=self.checkv(filt_viral_ctgs)
         cmd.extend(tmp_cmd)
+        checkv_dir=os.path.dirname(checkv_fa)
+        filt_fna_files=f'{checkv_dir}/*.filt.fna'
+        filt_checkv_fa=f'{self.outdir}/viral_positive_ctgs.fna')
+        cmd.extend(
+            ['vir_qual_filt.py',checkv_dir,'\n',
+            'cat',filt_fna_files,'>',filt_checkv_fa,'\n']
+        )
         return cmd
     def Identify(self,cutoff=1500,unrun=False):
         #VirSorter2
