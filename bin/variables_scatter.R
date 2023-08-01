@@ -34,7 +34,7 @@ plot<-ggplot(df,
             shape=df[,Variables[4]]
         )
     )+
-    labs(x=paste("log(",Variables[1],")",sep=""),y=Variables[2],
+    labs(x=paste("log10(",Variables[1],")",sep=""),y=Variables[2],
         color=Variables[3],shape=Variables[4]
     )+ #坐标轴和图例命名
     geom_point()+
