@@ -43,7 +43,7 @@ class VirRef(VirScan):
         cmd.extend(
             [
             'votus_lifetype_quality.py',checkv_qual,vb_vir_info,vb_ckv_xls,'\n',
-            'phage_lifetype_quality_bar_plot.R',vb_ckv_xls,wkdir,'\n']
+            'votus_lifetype_quality_barplot.R',vb_ckv_xls,wkdir,'\n']
         )
         return cmd
     def RmDup(self,cutoff=1500,unrun=False):
