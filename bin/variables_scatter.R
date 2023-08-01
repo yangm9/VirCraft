@@ -14,8 +14,8 @@ df=read.table(
 )
 
 Variables=strsplit(argv[2],"~")[[1]]
-X_Val=log(df[,Variables[1]])
-Y_Val=log(df[,Variables[2]])
+X_Val=df[,Variables[1]]
+Y_Val=df[,Variables[2]]
 n=0
 if(is.na(Variables[3])){
     Variables[3]="Colour"
