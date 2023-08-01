@@ -14,7 +14,7 @@ df=read.table(
 )
 
 Variables=strsplit(argv[2],"~")[[1]]
-X_Val=df[,Variables[1]]
+X_Val=log(df[,Variables[1]])/log(10)
 Y_Val=df[,Variables[2]]
 n=0
 if(is.na(Variables[3])){
@@ -34,7 +34,7 @@ plot<-ggplot(df,
             shape=df[,Variables[4]]
         )
     )+
-    labs(x=Variables[1],y=Variables[2],
+    labs(x=paste("log(",Variables[1],")",sep=""),y=Variables[2],
         color=Variables[3],shape=Variables[4]
     )+ #坐标轴和图例命名
     geom_point()+
