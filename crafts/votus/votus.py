@@ -39,15 +39,10 @@ class VirRef(VirScan):
         cmd.extend(tmp_cmd)
         votus_prefix=f'{self.name}_votus'
         vb_vir_info=f'{self.outdir}/VIBRANT_{votus_prefix}/VIBRANT_results_{votus_prefix}/VIBRANT_genome_quality_{votus_prefix}.tsv'
-        vb_lifetype=f'{wkdir}/vb_lifetype.tsv'
-        vb_lifetype_u=utils.insLable(vb_lifetype,'uniq')
-        vb_ckv_xls=f'{wkdir}/vb_ckv_qual_type.xls'
+        vb_ckv_xls=f'{wkdir}/votus_lifetype_quality.xls'
         cmd.extend(
-            ['cut -f 1,2',vb_vir_info,'>',vb_lifetype,'\n',
-            '(head -1',vb_lifetype,'&& (tail -n +2',vb_lifetype,
-            "|sort -u))|sed '1s/scaffold/contig_id/'>",vb_lifetype_u,'\n',
-            'linkTab.py',checkv_qual,vb_lifetype_u,
-            'left contig_id',vb_ckv_xls,'\n',
+            [
+            'votus_lifetype_quality.py',checkv_qual,vb_vir_info,vb_ckv_xls,'\n',
             'phage_lifetype_quality_bar_plot.R',vb_ckv_xls,wkdir,'\n']
         )
         return cmd
