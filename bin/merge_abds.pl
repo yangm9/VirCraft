@@ -48,13 +48,13 @@ while(<IN>){
         #print "$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left $topleft $wkdir/${samps_prefix}${n}.$postfix\n";
         `$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left $topleft $wkdir/${samps_prefix}${n}.$postfix`;
         $samps_prefix.=$n;
-        `rm -f $wkdir/$samp_name.$postfix`;
+        #`rm -f $wkdir/$samp_name.$postfix`;
     }
     $n++;
 }
 close IN;
 
 LABEL: `mv $wkdir/$samps_prefix.$postfix $wkdir/all_merged.$postfix`;
-#`rm -f $wkdir/$merged_prefix*.$postfix`;
+`rm -f $wkdir/$merged_prefix*.$postfix`;
 `sed -i '1s/\.sort $abd_hash{$postfix}//g' $wkdir/all_merged.$postfix` if($object eq 'Contig');
 __END__
