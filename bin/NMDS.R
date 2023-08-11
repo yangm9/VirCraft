@@ -36,7 +36,7 @@ group<-read.table(argv[2],sep='\t',header=T)
 group<-group[,0:2]
 colnames(group)<-c("sample","group")
 df<-merge(df_points,group,by="sample")
-color<-c("#1597A5","#FFC24B","#85B22E","#FEB3AE","#5F80B4")#颜色变量
+color<-c("#1597A5","#FFC24B","#85B22E","#FEB3AE","#5F80B4","#964500","#619cff","#8f00ff")#颜色变量
 
 plt<-ggplot(data=df,aes(x=NMDS1,y=NMDS2))+#指定数据、X轴、Y轴，颜色
     theme_bw()+#主题设置
