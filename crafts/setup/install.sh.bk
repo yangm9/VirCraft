@@ -27,6 +27,7 @@ conda install -y -c bioconda coverm=0.6.1 crass=1.0.1 minced=0.4.2 trnascan-se=2
 conda install -y -c conda-forge r-base=4.1.3 r-ggplot2=3.4.1 r-venndiagram=1.7.3 r-pheatmap=1.0.12 r-reshape2=1.4.4 r-ggnewscale r-tidyr r-reshape2
 conda install -c conda-forge scikit-learn-intelex
 conda install -c bioconda megan
+conda install -c conda-forge imagemagick #使用convert
 pip install -r requirements.txt
 pip install biopython=1.81
 pip install DRAM-bio
