@@ -6,6 +6,8 @@ import os
 import sys
 sys.path.append(sys.path[0]+'/crafts')
 #from crafts.install import install
+from crafts.setup import installENV
+from crafts.setup import deployDB
 from crafts.data import fastqc
 from crafts.assembly import assembly
 from crafts.identify import viridsop
@@ -25,8 +27,24 @@ version='0.0.9'
 args=arguments.setOpts(sys.argv[0],sys.argv[1],version)
 
 if sys.argv[1]=='setup':
-    print('Install the environments for VirCraft...\n')
-    #Setup=
+    if sys.argv[2]=='env':
+        print('Install the environments for VirCraft...\n')
+        ENV=installENV.condaENV(
+            outdir=args.outdir,
+            threads=args.threads
+        )
+        ENV.install(
+            unrun=args.unrun    
+        )
+        print('VirCraft environments Done!!!\n')
+    elif sys.argv[2]=='db':
+        DB=deployDB.Databases(
+            outdir=args.outdir,
+            threads=args.threads
+        )
+        DB.deploy(
+            unrun=args.unrun    
+        )
     print('VirCraft environments Done!!!\n')
 elif sys.argv[1]=='reads_qc':
     print('VirCraft data QC...\n')
@@ -89,7 +107,7 @@ elif sys.argv[1]=='votus':
     )
     print('vOTU cluster completed!!!')
 elif sys.argv[1]=='func_annot':
-    print('Function annotation')
+    #print('Function annotation')
     #VirGene=geneAnnot.GeneFunc(
     #    fasta=args.fasta,
     #    outdir=args.outdir,

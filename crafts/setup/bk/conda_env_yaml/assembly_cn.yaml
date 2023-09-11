@@ -1,0 +1,41 @@
+name: VC-Assembly
+channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/linux-64
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/linux-64
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/linux-64
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/linux-64
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/linux-64
+dependencies:
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=2_gnu
+  - _sysroot_linux-64_curr_repodata_hack=3=h5bd9786_13
+  - bwa=0.7.17=h7132678_9
+  - bzip2=1.0.8=h7f98852_4
+  - ca-certificates=2022.12.7=ha878542_0
+  - kernel-headers_linux-64=3.10.0=h4a8ded7_13
+  - ld_impl_linux-64=2.40=h41732ed_0
+  - libffi=3.4.2=h7f98852_5
+  - libgcc-ng=12.2.0=h65d4601_19
+  - libgomp=12.2.0=h65d4601_19
+  - libnsl=2.0.0=h7f98852_0
+  - libsqlite=3.40.0=h753d276_0
+  - libstdcxx-ng=12.2.0=h46fd767_19
+  - libuuid=2.38.1=h0b41bf4_0
+  - libzlib=1.2.13=h166bdaf_4
+  - llvm-meta=7.0.0=0
+  - megahit=1.2.9=h5b5514e_2
+  - ncurses=6.3=h27087fc_1
+  - openmp=7.0.0=h2d50403_0
+  - openssl=3.1.0=h0b41bf4_0
+  - perl=5.32.1=2_h7f98852_perl5
+  - pip=23.0.1=pyhd8ed1ab_0
+  - python=3.8.16=he550d4f_1_cpython
+  - readline=8.2=h8228510_1
+  - setuptools=67.6.1=pyhd8ed1ab_0
+  - spades=3.15.4=h95f258a_0
+  - sysroot_linux-64=2.17=h4a8ded7_13
+  - tk=8.6.12=h27826a3_0
+  - wheel=0.40.0=pyhd8ed1ab_0
+  - xz=5.2.6=h166bdaf_0
+  - zlib=1.2.13=h166bdaf_4
+prefix: /backup/software/miniconda3/envs/assembly
