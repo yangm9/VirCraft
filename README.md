@@ -615,6 +615,7 @@ virCraft.py func_annot -a scaffolds.votu.fa -t 8 -o func_annot_out
 #### 3.8 病毒宿主分析
 
 host_prid模块用于对病毒-宿主关系进行分析。使用集成工具VirMatcher预测病毒的宿主。
+
 ###### 3.6.1 host_prid使用方法
 
 ```
