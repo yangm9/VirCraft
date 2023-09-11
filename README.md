@@ -723,6 +723,7 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 3.func_annot模块：AMG_filter.py修复无法合并VIBRANT结果中的fragment序列的bug
 4.identify模块：添加vir_qual_filt.py程序，用于基于checkv结果中的长度和质量过滤病毒contigs
 5.setup模块：添加数据库和conda环境自动部署功能
+6.identify模块：线程分配机制调试，把总线程数分为8份，DeepVirFinder和VIBRANT各1份，其余的全部分给VirSorter2
 ```
 
 **VirCraft-v0.0.11**
