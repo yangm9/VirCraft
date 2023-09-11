@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 from ..general import utils
-from . import dburl
+from . import URL
 
 class DB:
     '''
@@ -39,12 +39,12 @@ class DB:
         vir_sp_taxa=vir_pid_sp.replace('_pid_sp','_sp_taxa')
         vir_pid_sp_h=vir_pid_sp.replace('.txt','.h.txt')
         vir_full_taxa=vir_pid_sp.replace('_pid_sp','_full_taxnomomy')
-        cmd=['wget','-c',dburl.NCBI_VIR_PROT_URL,'-O',vir_prot_gz,
+        cmd=['wget','-c',URL.NCBI_VIR_PROT_URL,'-O',vir_prot_gz,
             '--no-check-certificate\n','gzip -d',vir_prot_gz,'\n',
-            'wget','-c',dburl.NCBI_RELEASE_NUMBER_URL,'-O',vir_prot,
+            'wget','-c',URL.NCBI_RELEASE_NUMBER_URL,'-O',vir_prot,
             '--no-check-certificate\n','makeblastdb -in',vir_prot_gunzip,
             '-parse_seqids -hash_index','-out',vir_prot_prefix,'-dbtype prot\n',
-            'wget','-c',dburl.NCBI_TAXDUMP_URL,'-O',taxdump_tgz,'--no-check-certificate\n',
+            'wget','-c',URL.NCBI_TAXDUMP_URL,'-O',taxdump_tgz,'--no-check-certificate\n',
             'mkdir ~/.taxonkit && tar xzf',taxdump_tgz,'-c ~/.taxonkit\n',
             'extract_name.py',vir_prot,'>',vir_pid_sp,'\n',
             'cut -f 2',vir_pid_sp,"|uniq|taxonkit name2taxid|sed '1ispecies\ttaxid'>",vir_name_taxaid,'\n',
@@ -62,9 +62,9 @@ class DB:
         utils.mkdir(wkdir)
         ko_list_gz=f'{wkdir}/ko_list.gz'
         profiles_tgz=f'{wkdir}/profiles.tar.gz'
-        cmd=['wget -c',dburl.KO_LIST_URL,'-O',ko_list_gz'\n',
+        cmd=['wget -c',URL.KO_LIST_URL,'-O',ko_list_gz'\n',
             'gunzip',ko_list_gz,'\n',
-            'wget -c',dburl.KO_PROFILES_URL,'-O',profiles_gz'\n',
+            'wget -c',URL.KO_PROFILES_URL,'-O',profiles_gz'\n',
             'tar xzf',profiles_tgz,'-C',wkdir,'\n']
         return cmd
     def dl_dramv_db(self):
@@ -78,9 +78,9 @@ class DB:
         utils.mkdir(wkdir)
         eggnog_db_gz=f'{wkdir}/eggnog.db.gz'
         eggnog_dmnd_gz=f'{wkdir}/eggnog_proteins.dmnd.gz'
-        cmd=['wget -c',dburl.EGGNOG_DB_URL,'-O',eggnog_db_gz,
+        cmd=['wget -c',URL.EGGNOG_DB_URL,'-O',eggnog_db_gz,
         '&& gunzip',eggnog_db_gz,'\n',
-        'wget -c',dburl.EGGNOG_DMND_URL,'-O',eggnog_dmnd_gz,
+        'wget -c',URL.EGGNOG_DMND_URL,'-O',eggnog_dmnd_gz,
         '&& gunzip',eggnog_dmnd_gz,'\n']
         return cmd
     def deployDB(self):
