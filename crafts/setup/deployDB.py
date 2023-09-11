@@ -83,10 +83,23 @@ class DB:
         'wget -c',URL.EGGNOG_DMND_URL,'-O',eggnog_dmnd_gz,
         '&& gunzip',eggnog_dmnd_gz,'\n']
         return cmd
-    def deployDB(self):
+    def Deploy(self,unrun=False):
         cmd=self.dl_virsorter2_db()
-        cmd.extend(self.dl_vibrant_db())
-        cmd.extend(self.dl_checkv_db())
-        cmd.extend(self.dl_refseq_viral_prot())
-        cmd.extend(self.dl_dramv_db())
-        
+        shell=f'{self.outdir}/virsorter2_db_deploy.sh'
+        utils.printSH(shell,cmd)
+        cmd=self.dl_vibrant_db()
+        shell=f'{self.outdir}/vibrant_db_deploy.sh'
+        utils.printSH(shell,cmd)
+        cmd=self.dl_checkv_db()
+        shell=f'{self.outdir}/checkv_db_deploy.sh'
+        utils.printSH(shell,cmd)
+        cmd=self.dl_refseq_viral_prot()
+        shell=f'{self.outdir}/ncbirefseq_db_deploy.sh'
+        utils.printSH(shell,cmd)
+        cmd=self.dl_dramv_db()
+        shell=f'{self.outdir}/dramv_db_deploy.sh'
+        utils.printSH(shell,cmd)
+        cmd.extend(['multithreads.pl',self.outdir,'db_deploy.sh 2\n'])
+        results=''
+        if not unrun: results=utils.execute(cmd)
+        return results
