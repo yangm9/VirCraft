@@ -36,7 +36,7 @@ class vIdentify(MultiTools):
         return cmd
     def Identify(self,cutoff=1500,unrun=False):
         try:
-            if int(self.threads)<8:
+            if int(self.allthreads)<8:
                 raise ValueError('The threads number must not be less than 8!!!')
         except ValueError as e:
             print(f'ERROR: {e}')
