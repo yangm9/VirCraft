@@ -9,8 +9,8 @@ class vIdentify(MultiTools):
     self.BATCH_SIZE initialized as 4 in VirCfg class will be used to divide the input threads into 2*self.BATCH_SIZE portions, with 2 allocated to VirSorter2, and the other 2 allocated to VIBRANT and DeepVirFinder respectively.'''
     def __init__(self,fasta='',outdir='',threads=8):
         super().__init__(fasta,outdir)
-        self.allthreads=str(int(threads))
-        self.threads=str(int(threads)//(self.BATCH_SIZE*2))
+        self.allthreads=threads
+        self.threads=int(threads)//(self.BATCH_SIZE*2)
     def vFilter(self):
         #merge Contigs
         cmd=[utils.selectENV('VirCraft')]
