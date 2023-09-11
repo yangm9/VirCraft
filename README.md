@@ -718,10 +718,11 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 
 **VirCraft-v0.0.10**
 ```
-1.identify模块：merge_ctg_list.py病毒判定打分方式不太科学，于是重新调回原样。
-2.identify模块：merge_ctg_list.py程序重构，更加简洁。
-3.func_annot模块：AMG_filter.py修复无法合并VIBRANT结果中的fragment序列的bug。
-4.identify模块：添加vir_qual_filt.py程序，用于基于checkv结果中的长度和质量过滤病毒contigs。
+1.identify模块：merge_ctg_list.py病毒判定打分方式不太科学，于是重新调回原样
+2.identify模块：merge_ctg_list.py程序重构，更加简洁
+3.func_annot模块：AMG_filter.py修复无法合并VIBRANT结果中的fragment序列的bug
+4.identify模块：添加vir_qual_filt.py程序，用于基于checkv结果中的长度和质量过滤病毒contigs
+5.setup模块：添加数据库和conda环境自动部署功能
 ```
 
 **VirCraft-v0.0.11**
