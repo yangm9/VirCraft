@@ -42,6 +42,7 @@ class vIdentify(MultiTools):
             print(f'ERROR: {e}')
             exit(1)
         cutoff=str(cutoff)
+        self.threads=str(self.threads)
         #vibrant
         cmd,wkdir=self.vibrant(cutoff)
         shell=f'{self.outdir}/{self.name}_vb_ctg.sh'
@@ -51,7 +52,7 @@ class vIdentify(MultiTools):
         shell=f'{self.outdir}/{self.name}_dvf_ctg.sh'
         utils.printSH(shell,cmd)
         #VirSorter2
-        self.threads=self.allthreads-(self.threads*2)
+        self.threads=str(self.allthreads-(self.threads*2))
         cmd=[utils.selectENV('viral-id-sop')]
         tmp_cmd,wkdir=self.virsorter(self.fasta,0,cutoff)
         cmd.extend(tmp_cmd)
