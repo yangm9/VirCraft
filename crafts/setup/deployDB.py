@@ -62,9 +62,9 @@ class DB:
         utils.mkdir(wkdir)
         ko_list_gz=f'{wkdir}/ko_list.gz'
         profiles_tgz=f'{wkdir}/profiles.tar.gz'
-        cmd=['wget -c',URL.KO_LIST_URL,'-O',ko_list_gz'\n',
+        cmd=['wget -c',URL.KO_LIST_URL,'-O',ko_list_gz,'\n',
             'gunzip',ko_list_gz,'\n',
-            'wget -c',URL.KO_PROFILES_URL,'-O',profiles_gz'\n',
+            'wget -c',URL.KO_PROFILES_URL,'-O',profiles_gz,'\n',
             'tar xzf',profiles_tgz,'-C',wkdir,'\n']
         return cmd
     def dl_dramv_db(self):

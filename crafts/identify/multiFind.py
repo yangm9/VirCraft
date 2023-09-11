@@ -20,11 +20,11 @@ class MultiTools(VirScan):
             '-c',self.threads,'-l',cutoff,'\n']
         )
         return cmd,wkdir
-    def vibrant(self):
+    def vibrant(self,cutoff:str):
         cmd=[utils.selectENV('vibrant')]
         wkdir=f'{self.outdir}/VIBRANT_{self.name}'
         cmd.extend(
-            ['VIBRANT_run.py','-i',self.fasta,
+            ['VIBRANT_run.py','-i',self.fasta,'-l',cutoff,
             '-t',self.threads,'-folder',self.outdir,'\n']
         )
         return cmd,wkdir

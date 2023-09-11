@@ -1,14 +1,16 @@
 import os
+import sys
 from ..general import utils
 from ..identify.multiFind import MultiTools
 
 class vIdentify(MultiTools):
     '''
-    Main Scripts
-    '''
+    Main Scripts of identify module.
+    self.BATCH_SIZE initialized as 4 in VirCfg class will be used to divide the input threads into 2*self.BATCH_SIZE portions, with 2 allocated to VirSorter2, and the other 2 allocated to VIBRANT and DeepVirFinder respectively.'''
     def __init__(self,fasta='',outdir='',threads=8):
         super().__init__(fasta,outdir)
-        self.threads=str(int(threads)//self.BATCH_SIZE*2)
+        self.allthreads=str(int(threads))
+        self.threads=str(int(threads)//(self.BATCH_SIZE*2))
     def vFilter(self):
         #merge Contigs
         cmd=[utils.selectENV('VirCraft')]
@@ -33,26 +35,32 @@ class vIdentify(MultiTools):
         )
         return cmd
     def Identify(self,cutoff=1500,unrun=False):
-        #VirSorter2
-        cmd=[utils.selectENV('viral-id-sop')]
-        tmp_cmd,wkdir=self.virsorter(self.fasta,0,cutoff)
-        cmd.extend(tmp_cmd)
+        try:
+            if int(self.threads)<8:
+                raise ValueError('The threads number must not be less than 8!!!')
+        except ValueError as e:
+            print(f'ERROR: {e}')
+            exit(1)
+        cutoff=str(cutoff)
         #vibrant
-        self.threads=str(int(self.threads)//2)
-        shell=f'{self.outdir}/{self.name}_vs2_ctg.sh'
-        utils.printSH(shell,cmd)
-        cmd,wkdir=self.vibrant()
+        cmd,wkdir=self.vibrant(cutoff)
         shell=f'{self.outdir}/{self.name}_vb_ctg.sh'
         utils.printSH(shell,cmd)
         #deepvirfinder
-        cutoff=str(cutoff)
         cmd,wkdir=self.deepvirfinder(cutoff)
         shell=f'{self.outdir}/{self.name}_dvf_ctg.sh'
+        utils.printSH(shell,cmd)
+        #VirSorter2
+        self.threads=self.allthreads-(self.threads*2)
+        cmd=[utils.selectENV('viral-id-sop')]
+        tmp_cmd,wkdir=self.virsorter(self.fasta,0,cutoff)
+        cmd.extend(tmp_cmd)
+        shell=f'{self.outdir}/{self.name}_vs2_ctg.sh'
         utils.printSH(shell,cmd)
         #multiple run
         cmd=[utils.selectENV('')]
         cmd.extend(['multithreads.pl',self.outdir,'ctg.sh 3\n'])
-        self.threads=str(int(self.threads)*4)
+        self.threads=str(int(self.threads)*8)
         cmd.extend(self.vFilter())
         shell=f'{self.outdir}/{self.name}_find_vir.sh'
         utils.printSH(shell,cmd)

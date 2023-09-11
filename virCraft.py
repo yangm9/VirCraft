@@ -27,24 +27,22 @@ version='0.0.10'
 args=arguments.setOpts(sys.argv[0],sys.argv[1],version)
 
 if sys.argv[1]=='setup':
-    if sys.argv[2]=='env':
-        print('Install the environments for VirCraft...\n')
-        ENV=installENV.condaENV(
-            outdir=args.outdir,
-            threads=args.threads
-        )
-        ENV.install(
-            unrun=args.unrun    
-        )
-        print('VirCraft environments Done!!!\n')
-    elif sys.argv[2]=='db':
-        DB=deployDB.Databases(
-            outdir=args.outdir,
-            threads=args.threads
-        )
-        DB.deploy(
-            unrun=args.unrun    
-        )
+    print('Install the environments for VirCraft...\n')
+    ENV=installENV.condaENV(
+        outdir=args.outdir,
+        threads=args.threads
+    )
+    ENV.install(
+        unrun=args.unrun    
+    )
+    print('VirCraft environments Done!!!\n')
+    DB=deployDB.Databases(
+        outdir=args.outdir,
+        threads=args.threads
+    )
+    DB.deploy(
+        unrun=args.unrun    
+    )
     print('VirCraft environments Done!!!\n')
 elif sys.argv[1]=='reads_qc':
     print('VirCraft data QC...\n')
