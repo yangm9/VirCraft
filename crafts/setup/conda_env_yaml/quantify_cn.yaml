@@ -1,11 +1,18 @@
-name: VC-KofamScan
+name: VC-Quantify
 channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/linux-64
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/linux-64
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/linux-64
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r/linux-64
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/linux-64
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/linux-64
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r/linux-64
+  - bioconda
+  - conda-forge
+  - r
+  - defaults
 dependencies:
-  - hmmer=3.3.2
-  - kofamscan=1.3.0
+  - bwa=0.7.17
+  - coverm=0.6.1
+  - python=3.9
+  - salmon=0.14.2
+  - samtools=1.16.1

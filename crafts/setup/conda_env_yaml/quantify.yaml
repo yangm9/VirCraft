@@ -1,0 +1,12 @@
+name: VC-Quantify
+channels:
+  - bioconda
+  - conda-forge
+  - r
+  - defaults
+dependencies:
+  - bwa=0.7.17
+  - coverm=0.6.1
+  - python=3.9
+  - salmon=0.14.2
+  - samtools=1.16.1

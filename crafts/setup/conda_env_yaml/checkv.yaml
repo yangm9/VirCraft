@@ -1,0 +1,11 @@
+name: VC-CheckV
+channels:
+  - bioconda
+  - conda-forge
+  - r
+  - defaults
+dependencies:
+  - python=3.9
+  - diamond=2.0.15
+  - hmmer=3.3.2
+  - checkv=1.0.1

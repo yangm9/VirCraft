@@ -1,0 +1,11 @@
+name: VC-ViralIdSOP
+channels:
+  - bioconda
+  - conda-forge
+  - r
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy=1.25.2
+  - virsorter=2.2.4
+prefix: /backup/software/miniconda3/envs/viral-id-sop

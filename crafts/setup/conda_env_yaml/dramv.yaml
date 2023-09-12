@@ -1,9 +1,9 @@
-name: VC-GTDBTk
+name: VC-DRAMv
 channels:
   - bioconda
   - conda-forge
   - r
   - defaults
 dependencies:
-  - gtdbtk=2.1.1
-  - numpy=1.25.2
+  - prodigal=2.6.3
+  - dram=1.4.6

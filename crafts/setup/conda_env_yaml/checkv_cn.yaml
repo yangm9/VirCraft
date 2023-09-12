@@ -14,4 +14,3 @@ dependencies:
   - diamond=2.0.15
   - hmmer=3.3.2
   - checkv=1.0.1
-#prefix: /backup/software/miniconda3/envs/viral-id-sop
