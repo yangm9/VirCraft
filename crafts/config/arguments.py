@@ -27,13 +27,19 @@ def setOpts(name:str,subcmds:str,version:str):
         description='valid subcommands',
         help=''
     )
-#----------------------setup-----------------------
+#----------------------setup_env-----------------------
     subpsr=subparsers.add_parser(
-        'setup',
-        help='Install the environment and databases for VirCraft.'
+        'setup_env',
+        help='Install the environments for VirCraft.'
     )
     subpsr=addGlbArg(subpsr)
-    
+
+#----------------------setup_db-----------------------
+    subpsr=subparsers.add_parser(
+        'setup_db',
+        help='Prepare the databases for VirCraft.'
+    )
+    subpsr=addGlbArg(subpsr)
 
 #----------------------reads_qc-----------------------
     subpsr=subparsers.add_parser(

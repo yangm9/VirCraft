@@ -26,7 +26,7 @@ from crafts.func_annot import callAMGs
 version='0.0.10'
 args=arguments.setOpts(sys.argv[0],sys.argv[1],version)
 
-if sys.argv[1]=='setup':
+if sys.argv[1]=='setup_env':
     print('Install the environments for VirCraft...\n')
     ENV=installENV.condaENV(
         outdir=args.outdir,
@@ -35,12 +35,13 @@ if sys.argv[1]=='setup':
     ENV.install(
         unrun=args.unrun    
     )
+elif sys.argv[1]=='setup_db':
     print('VirCraft environments Done!!!\n')
     DB=deployDB.Databases(
         outdir=args.outdir,
         threads=args.threads
     )
-    DB.deploy(
+    DB.Deploy(
         unrun=args.unrun    
     )
     print('VirCraft environments Done!!!\n')

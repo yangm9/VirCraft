@@ -1,4 +1,3 @@
-import os
 from datetime import datetime
 from ..general import utils
 from . import URL
@@ -83,7 +82,7 @@ class DB:
         'wget -c',URL.EGGNOG_DMND_URL,'-O',eggnog_dmnd_gz,
         '&& gunzip',eggnog_dmnd_gz,'\n']
         return cmd
-    def Deploy(self,unrun=False):
+    def Deploy(self,unrun=False,clear=False):
         cmd=self.dl_virsorter2_db()
         shell=f'{self.outdir}/virsorter2_db_deploy.sh'
         utils.printSH(shell,cmd)
