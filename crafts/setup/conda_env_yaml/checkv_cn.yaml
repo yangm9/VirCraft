@@ -1,0 +1,17 @@
+name: VC-CheckV
+channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/linux-64
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/linux-64
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/linux-64
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/linux-64
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/linux-64
+  - bioconda
+  - conda-forge
+  - r
+  - defaults
+dependencies:
+  - python=3.9
+  - diamond=2.0.15
+  - hmmer=3.3.2
+  - checkv=1.0.1
+prefix: /backup/software/miniconda3/envs/viral-id-sop
