@@ -8,5 +8,6 @@ dependencies:
   - python=3.7.12
   - scikit-learn=0.21.3
   - scipy=1.5.3
+  - prodigal=2.6.3
   - vibrant=1.2.1
 prefix: /data_backup/software/miniconda3/envs/vibrant
