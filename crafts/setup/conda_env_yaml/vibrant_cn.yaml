@@ -7,6 +7,10 @@ channels:
   - https://mirrors.ustc.edu.cn/anaconda/cloud/bioconda/linux-64
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/linux-64
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r/linux-64
+  - bioconda
+  - conda-forge
+  - r
+  - defaults
 dependencies:
   - python=3.7.12
   - scikit-learn=0.21.3
