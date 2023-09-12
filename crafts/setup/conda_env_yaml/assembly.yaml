@@ -5,5 +5,5 @@ channels:
   - defaults
 dependencies:
   - bwa=0.7.17
-  - megahit=1.2.9=h5b5514e_2
-  - spades=3.15.4=h95f258a_0
+  - megahit=1.2.9
+  - spades=3.15.4

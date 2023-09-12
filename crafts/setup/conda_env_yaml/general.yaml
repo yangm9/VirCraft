@@ -12,6 +12,7 @@ channels:
   - defaults
 dependencies:
   - biopython=1.81
+  - blast=2.14.1
   - cd-hit=4.8.1
   - csvtk=0.25.0
   - diamond=2.0.15
