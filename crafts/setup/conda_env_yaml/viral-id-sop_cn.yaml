@@ -16,8 +16,4 @@ dependencies:
   - prodigal=2.6.3
   - trnascan-se=2.0.9
   - virsorter=2.2.4
-  - pip:
-      - joblib==1.2.0
-      - numpy==1.19.5
-      - scikit-learn==1.2.2
 prefix: /backup/software/miniconda3/envs/viral-id-sop
