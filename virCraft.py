@@ -5,7 +5,6 @@
 import os
 import sys
 sys.path.append(sys.path[0]+'/crafts')
-#from crafts.install import install
 from crafts.setup import installENV
 from crafts.setup import deployDB
 from crafts.data import fastqc
@@ -13,7 +12,6 @@ from crafts.assembly import assembly
 from crafts.identify import viridsop
 from crafts.identify import findV
 from crafts.config import arguments
-#from crafts.config import install
 from crafts.votus import votus
 from crafts.classify import classify
 from crafts.classify import vCont
@@ -23,7 +21,7 @@ from crafts.host import hosts
 from crafts.func_annot import geneAnnot
 from crafts.func_annot import callAMGs
 
-version='0.0.10'
+version='0.0.11'
 args=arguments.setOpts(sys.argv[0],sys.argv[1],version)
 
 if sys.argv[1]=='setup_env':
