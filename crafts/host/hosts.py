@@ -16,7 +16,7 @@ class VirHost(VirRef):
         '''
         wkdir=f'{self.outdir}/classify_wf'
         utils.mkdir(wkdir)
-        cmd=[utils.selectENV('gtdbtk')]
+        cmd=[utils.selectENV('VC-GTDBTk')]
         cmd.extend(['gtdbtk classify_wf','--genome_dir',self.hostsdir,
             '--out_dir',wkdir,'--pplacer_cpus',self.threads,
             '--extension fasta\n'])
@@ -27,9 +27,12 @@ class VirHost(VirRef):
         '''
         wkdir=f'{self.outdir}/virmatcher'
         utils.mkdir(wkdir)
-        cmd=['VirMatcher --preparer','--gtdbtk-out-dir',tredir,
+        cmd=[utils.selectENV('VC-General')]
+        cmd.extend(
+            ['VirMatcher --preparer','--gtdbtk-out-dir',tredir,
             '--gtdbtk-in-dir',self.hostsdir,'-v',self.fasta,
             '-o',wkdir,'--threads',self.threads,'--python-aggregator\n']
+        )
         return cmd
     def virTaxa(self,taxa_anno=None):
         '''
@@ -41,18 +44,21 @@ class VirHost(VirRef):
         vh_pred=f'{wkdir}/VirMatcher_Summary_Predictions.tsv'
         taxa_anno=os.path.abspath(taxa_anno)
         vh_vtaxa=f'{self.outdir}/VirMatcher_Summary_Predictions.vtaxa.tsv'
-        cmd=["sed -i '1s/ /_/'",vh_pred,'\n',
+        cmd=[utils.selectENV('VC-General')]
+        cmd.extend(
+            ["sed -i '1s/ /_/'",vh_pred,'\n',
             "sed '1s/Sequence_ID/Original_Viral_population/'",
             taxa_anno,'>',m_taxa_anno,'\n',
             'linkTab.py',vh_pred,m_taxa_anno,'left Original_Viral_population',
             vh_vtaxa,'\n']
+        )
         return cmd
     def PredHosts(self,gtdbtk=None,taxa_anno=None,unrun=False):
         cmd=[]
         if not gtdbtk:
             tmp_cmd,tredir=self.magsTree()
             cmd.extend(tmp_cmd)
-        cmd.extend([self.envs])
+        cmd.append(utils.selectENV('VC-General'))
         cmd.extend(self.virmatch(gtdbtk))
         cmd.extend(self.virTaxa(taxa_anno))
         shell=f'{self.outdir}/{self.name}_hosts.sh'

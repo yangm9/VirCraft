@@ -14,11 +14,12 @@ class VirRef(VirScan):
         Cluster the sequence and remove redundancy for FastA file.
         '''
         votus=f'{self.outdir}/{self.name}_votus.fa'
+        cmd=[utils.selectENV('VC-General')]
         cmd=['cd-hit-est','-i',self.fasta,'-o',votus,'-T',self.threads,
             '-c 0.95 -aS 0.85 -n 10 -d 0 -M 160000\n']
         return cmd,votus
     def votuQC(self,votus,cutoff=1500):
-        cmd=[utils.selectENV('viral-id-sop')]
+        cmd=[utils.selectENV('VC-General')]
         tmp_cmd,__=self.checkv(votus)
         cmd.extend(tmp_cmd)
         wkdir=f'{self.outdir}/stat'
@@ -41,8 +42,7 @@ class VirRef(VirScan):
         vb_vir_info=f'{self.outdir}/VIBRANT_{votus_prefix}/VIBRANT_results_{votus_prefix}/VIBRANT_genome_quality_{votus_prefix}.tsv'
         vb_ckv_xls=f'{wkdir}/votus_lifetype_quality.xls'
         cmd.extend(
-            [
-            'votus_lifetype_quality.py',checkv_qual,vb_vir_info,vb_ckv_xls,'\n',
+            ['votus_lifetype_quality.py',checkv_qual,vb_vir_info,vb_ckv_xls,'\n',
             'votus_lifetype_quality_barplot.R',vb_ckv_xls,wkdir,'\n']
         )
         return cmd

@@ -18,13 +18,16 @@ class GeneFunc(Seq):
         eggout=f'{wkdir}/{self.name}_eggout'
         eggout_xls=f'{eggout}/.emapper.annotations'
         eggnog_db=self.confDict['EggNOGDB']
-        cmd=['emapper.py -m diamond --no_annot --no_file_comments',
+        cmd=[utils.selectENV('VC-General')]
+        cmd.extend(
+            ['emapper.py -m diamond --no_annot --no_file_comments',
             '--cpu',self.threads,'-i',orfs_faa,
             '-o',anno_prefix,'--data_dir',eggnog_db,'\n',
             'emapper.py','--annotate_hits_table',seed_orth,
             '--no_file_comments','-o',eggout,'--cpu',self.threads,
             '--data_dir',eggnog_db,'--override\n',
             'cd',wkdir,'&& GO_anno_from_tab.py','-i',eggout_xls,'&& cd -\n']
+        )
         return cmd
     def keggAnno(self,orfs_faa):
         wkdir=f'{self.outdir}/kegg'
@@ -36,7 +39,9 @@ class GeneFunc(Seq):
         exec_anno_detail=f'{wkdir}/{self.name}.exec_annotation.detail.xls'
         kegg_stat=f'{wkdir}/{self.name}.exec_annotation.kegg_pathway_stata.xls'
         kegg_lv2_stat=f'{wkdir}/kegg_lv2_stat.xls'
-        cmd=['exec_annotation -f mapper','--cpu',self.threads,
+        cmd=[utils.selectENV('VC-General')]
+        cmd.extend(
+            ['exec_annotation -f mapper','--cpu',self.threads,
             '-p',ko_prof,'-k',ko_list,'-o',exec_anno,orfs_faa,'\n',
             'exec_annotation -f detail','--cpu',self.threads,
             '-p',ko_prof,'-k',ko_list,'-o',exec_anno_detail,orfs_faa,'\n',
@@ -44,14 +49,13 @@ class GeneFunc(Seq):
             exec_anno,'&& cd -\n',
             'kegg_lv2_stat.py',kegg_stat,'>',kegg_lv2_stat,'\n',
             'kegg_lv2_stat.R',kegg_lv2_stat,wkdir,'\n']
+        )
         return cmd
     def FuncAnnot(self):
-        cmd=[self.envs]
         tmp_cmd,orfs_faa=self.genePred()
         cmd.extend(tmp_cmd)
-        #cmd.append(utils.selectENV('emapper'))
         cmd.extend(self.eggnogAnno(orfs_faa))
-        cmd.append(utils.selectENV('kofamscan'))
+        cmd.append(utils.selectENV('VC-General'))
         cmd.extend(self.keggAnno(orfs_faa))
         shell=f'{self.outdir}/{self.name}_gene_annot.sh'
         utils.printSH(shell,cmd)

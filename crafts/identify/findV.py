@@ -13,11 +13,11 @@ class vIdentify(MultiTools):
         self.threads=int(threads)//(self.BATCH_SIZE*2)
     def vFilter(self):
         #merge Contigs
-        cmd=[utils.selectENV('VirCraft')]
         score_xls=f'{self.outdir}/all_viral_ctgs.score.xls'
         score_filt_xls=utils.insLable(score_xls,'gt2')
         filt_ctgs_li=f'{self.outdir}/viral_ctgs_filt.list'
         filt_viral_ctgs=f'{self.outdir}/filted_viral_ctgs.fa'
+        cmd=[utils.selectENV('VC-General')]
         cmd.extend(
             ['merge_ctg_list.py',self.name,self.outdir,'\n',
             "awk -F '\\t' 'NR==1 || $21>=2'",score_xls,'>',score_filt_xls,'\n',
@@ -53,13 +53,13 @@ class vIdentify(MultiTools):
         utils.printSH(shell,cmd)
         #VirSorter2
         self.threads=str(int(self.allthreads)-(int(self.threads)*2))
-        cmd=[utils.selectENV('viral-id-sop')]
+        cmd=[utils.selectENV('VC-VirSorter2')]
         tmp_cmd,wkdir=self.virsorter(self.fasta,0,cutoff)
         cmd.extend(tmp_cmd)
         shell=f'{self.outdir}/{self.name}_vs2_ctg.sh'
         utils.printSH(shell,cmd)
         #multiple run
-        cmd=[utils.selectENV('')]
+        cmd=[utils.selectENV('VC-General')]
         cmd.extend(['multithreads.pl',self.outdir,'ctg.sh 3\n'])
         self.threads=str(int(self.threads)*8)
         cmd.extend(self.vFilter())

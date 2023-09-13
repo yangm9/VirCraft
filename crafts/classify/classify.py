@@ -25,7 +25,9 @@ class VirTaxa(Seq):
         gene_taxa_blast=utils.insLable(filt_h_blast,'sp')
         votu_taxa=f'{wkdir}/{self.name}.votu.taxa.txt'
         sed_cmd="'1i\QueryID\\tNCBI_ID\\tIdentity\\tAlnLen\\tMismatches\\tGap\\tQstart\\tQend\\tSstart\\tSend\\tEValue\\tBitScore'"
-        cmd=['blastp','-query',orf_f,'-out',blast_resu,
+        cmd=[utils.selectENV('VC-General')]
+        cmd.extend(
+            ['blastp','-query',orf_f,'-out',blast_resu,
             '-db',refdb,'-num_threads',self.threads,
             '-outfmt 6 -evalue 1e-3 -max_target_seqs 1\n',
             "awk '$12>=50'",blast_resu,'>',filt_blast,'\n',
@@ -33,6 +35,7 @@ class VirTaxa(Seq):
             "csvtk join -t -f 'NCBI_ID,NCBI_ID'",
             filt_h_blast,taxadb,'>',gene_taxa_blast,'\n',
             'virus_tax.py',orf_f,gene_taxa_blast,'>',votu_taxa,'\n']
+        )
         return cmd,votu_taxa
     def demovir(self):
         '''
@@ -40,7 +43,8 @@ class VirTaxa(Seq):
         '''
         wkdir=f'{self.outdir}/demovir'
         utils.mkdir(wkdir)
-        cmd=['cd',wkdir,'\n']
+        cmd=[utils.selectENV('VC-General')]
+        cmd.extend(['cd',wkdir,'\n'])
         demovir_db=self.confDict['DemovirDB']
         TrEMBL_viral_taxa=f'{demovir_db}/TrEMBL_viral_taxa.RDS'
         cmd.extend(['ln -s',TrEMBL_viral_taxa,'\n'])
@@ -55,7 +59,8 @@ class VirTaxa(Seq):
         return cmd,votu_taxa
     def mergeTaxa(self,taxa1,taxa2):
         taxa=f'{self.outdir}/{self.name}.votu.taxa.txt'
-        cmd=['merge_taxa.pl',taxa1,taxa2,'>',taxa,'\n']
+        cmd=[utils.selectENV('VC-General')]
+        cmd.extend(['merge_taxa.pl',taxa1,taxa2,'>',taxa,'\n'])
         return cmd
     def Classify(self,unrun=False):
         cmd=[self.envs]

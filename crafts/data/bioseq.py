@@ -8,7 +8,7 @@ class Reads(VirCfg):
     '''
     FastQ processing class.
     '''
-    envs=utils.selectENV('VirCraft')
+    envs=utils.selectENV('VC-General')
     postfixes=[
         '_1.fastq','_1.fastq.gz','_1.fq','_1.fq.gz',
         '_R1.fastq','_R1.fastq.gz','_R1.fq','_R1.fq.gz',
@@ -37,7 +37,7 @@ class Seq(VirCfg):
     '''
     Fasta processing class.
     '''
-    envs=utils.selectENV('VirCraft')
+    envs=utils.selectENV('VC-General')
     def __init__(self,fasta='',outdir='',*args,**kwargs):
         super().__init__()
         basename_fa=os.path.basename(fasta)
@@ -47,7 +47,7 @@ class Seq(VirCfg):
         utils.mkdir(self.outdir)
     def mkBwaIdx(self):
         "Make bwa index for votus."
-        cmd=[utils.selectENV('assembly')]
+        cmd=[utils.selectENV('VC-Quantify')]
         idx=f'{self.outdir}/{self.name}BWAIDX'
         cmd.extend(['bwa index -a bwtsw',self.fasta,'-p',idx,'\n'])
         shell=f'{self.outdir}/{self.name}_bwaidx.sh'
@@ -89,7 +89,7 @@ class Seq(VirCfg):
         return cmd,orf_faa
 
 class VirSeq(Seq):
-    envs=utils.selectENV('viral-id-sop')
+    envs=utils.selectENV('VC-CheckV')
     def __init__(self,fasta='',outdir='',*args,**kwargs):
         super().__init__(fasta,outdir,*args,**kwargs)
     def checkv(self):
@@ -106,7 +106,7 @@ class VirSeq(Seq):
         return cmd,merged_fa
 
 class CDS(Seq):
-    envs=utils.selectENV('VirCraft')
+    envs=utils.selectENV('VC-Quantify')
     def __init__(self,fasta='',outdir='',*args,**kwargs):
         super().__init__(fasta,outdir,*args,**kwargs)
     @property
@@ -123,6 +123,7 @@ class CDS(Seq):
         return cmd,idx
 
 class ORF(Seq):
+    envs=utils.selectENV('VC-General')
     def __init__(self,fasta='',outdir='',*args,**kwargs):
         super().__init__(fasta,outdir,*args,**kwargs)
     def eggnogAnno(self):

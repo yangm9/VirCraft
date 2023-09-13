@@ -6,7 +6,7 @@ from . import URL
 class ENV:
     '''
     Install the environments of VirCraft
-    '''\
+    '''
     CONDAENVDIR=f'{sys.path[0]}/crafts/setup/conda_env_yaml'
     ENVLIST=['reads_qc','assembly','viral-id-sop','vibrant','deepvirfinder',
             'vcontact','kofamscan','gtdbtk','kofamscan','vircraft']

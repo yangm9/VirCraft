@@ -16,18 +16,24 @@ class VirScan(Seq):
         min_length=str(min_length)
         wkdir=f'{self.outdir}/vs2-pass{idx}'
         utils.mkdir(wkdir)
-        cmd=['virsorter run',self.vs2_subcmds[n],'-i',in_fa,
+        cmd=[utils.selectENV('VC-VirSorter2')]
+        cmd.extend(
+            ['virsorter run',self.vs2_subcmds[n],'-i',in_fa,
             '-d',self.confDict['Virsorter2DB'],'-w',wkdir,
             '--include-groups dsDNAphage,NCLDV,RNA,ssDNA,lavidaviridae',
             '-j',self.threads,'--min-length',min_length,
             '--min-score',min_score,'all\n']
+        )
         return cmd,wkdir
     def checkv(self,in_fa:str):
         wkdir=f'{self.outdir}/checkv'
         utils.mkdir(wkdir)
-        cmd=['checkv','end_to_end',in_fa,wkdir,
-             '-d',self.confDict['CheckvDB'],
-             '-t',self.threads,'\n']
+        cmd=[utils.selectENV('VC-VirSorter2')]
+        cmd.extend(
+            ['checkv','end_to_end',in_fa,wkdir,
+            '-d',self.confDict['CheckvDB'],
+            '-t',self.threads,'\n']
+        )
         provir_fna=f'{wkdir}/proviruses.fna'
         vir_fna=f'{wkdir}/viruses.fna'
         out_fa=f'{wkdir}/combined.fna'
@@ -39,8 +45,12 @@ class VirScan(Seq):
         vs2_fa=f'{indir}/for-dramv/final-viral-combined-for-dramv.fa'
         vs2_tab=f'{indir}/for-dramv/viral-affi-contigs-for-dramv.tab'
         wkdir=f'{self.outdir}/dramv-annotate'
-        cmd=['DRAM-v.py annotate','-i',vs2_fa,'-v',vs2_tab,'-o',wkdir,
-            '--threads',self.threads,'--skip_trnascan --min_contig_size 1000\n']
+        cmd=[utils.selectENV('VC-DRAMv')]
+        cmd.extend(
+            ['DRAM-v.py annotate','-i',vs2_fa,'-v',vs2_tab,
+            '-o',wkdir,'--threads',self.threads,
+            '--skip_trnascan --min_contig_size 1000\n']
+        )
         dramv_annot=f'{wkdir}/annotations.tsv'
         wkdir=f'{self.outdir}/dramv-distill'
         cmd.extend(['DRAM-v.py distill','-i',dramv_annot,'-o',wkdir,'\n'])
@@ -52,8 +62,11 @@ class VirScan(Seq):
         vir_score=f'{self.outdir}/vs2-pass1/final-viral-score.tsv'
         curation_score=f'{wkdir}/final-viral-score.tsv'
         contamination=f'{checkv_dir}/contamination.tsv'
-        cmd=["sed '1s/seqname/contig_id/'",vir_score,'>',curation_score,'\n']
+        cmd.extend(
+            ["sed '1s/seqname/contig_id/'",vir_score,'>',curation_score,'\n']
+        )
         cura_vs2_chkv=f'{wkdir}/curation_vs2_checkv.tsv'
+        cmd=[utils.selectENV('VC-General')]
         cmd.extend(
             ['linkTab.py',curation_score,contamination,
             'left contig_id',cura_vs2_chkv,'\n',
@@ -73,7 +86,6 @@ class VirScan(Seq):
         )
         return cmd
     def Identify(self,unrun=False):
-        cmd=[utils.selectENV('viral-id-sop')]
         #Step 1 Run VirSorter2
         tmp_cmd,wkdir=self.virsorter(self.fasta,0)
         cmd.extend(tmp_cmd)

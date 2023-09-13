@@ -10,11 +10,12 @@ class GeneAbdStat(multiGeneCount):
         super().__init__(samp_info,fasta,outdir,threads)
     def mergeAbd(self):
         abd=f'{self.outdir}/all_merged_gene.sf'
-        cmd=['merge_abds.pl',self.samp_info,self.outdir,'sf Gene\n']
+        cmd=[utils.selectENV('VC-General')]
+        cmd.extend(['merge_abds.pl',self.samp_info,self.outdir,'sf Gene\n'])
         return cmd,abd
     def QuantStat(self,unrun=False):#,batch_size):
         cmd=self.geneCountBySamp()
-        cmd.extend([self.envs])
+        cmd.extend([utils.selectENV('VC-General')])
         cmd.extend(
             ['multithreads.pl',self.outdir,'gene_count.sh',
             str(self.BATCH_SIZE),'\n']

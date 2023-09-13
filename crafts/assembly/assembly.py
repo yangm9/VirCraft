@@ -6,13 +6,13 @@ class Assembly(Reads):
     '''
     Assembly the clean reads combined spades and megahit.
     '''
+    envs=utils.selectENV('VC-Assembly')
     def __init__(self,fq1='',fq2='',outdir='',threads=8):
         super().__init__(fq1,fq2,outdir)
-        self.envs=utils.selectENV('assembly')
         self.threads=str(threads)
         self.methDict={
-            's':self.spades,
-            'm':self.megahit
+            'm':self.megahit,
+            's':self.spades
         }
     def spades(self,fastqs:list):
         '''
@@ -67,7 +67,7 @@ class Assembly(Reads):
             '|grep -v NM:i:>',unused_sam,'\n',
             'sam_to_fastq.py',unused_sam,'>',unused_fq,'\n']
         return cmd,unused_fq
-    def mixAsse(self,fastqs,process='sm'):
+    def mixAsse(self,fastqs,process='m'):
         '''
         Analysis the Assembly process accordding to the process set.
         '''
@@ -88,7 +88,7 @@ class Assembly(Reads):
         elif steps==1:
             cmd.extend(['ln -s',tmp_scaf,final_scaf,'\n'])
         return cmd,final_scaf
-    def Assemble(self,process='sm',cutoff=1500,unrun=False,clear=False):
+    def Assemble(self,process='m',cutoff=1500,unrun=False,clear=False):
         cmd=[self.envs]
         scafs=[]
         tmp_cmd,scaf=self.mixAsse(self.fastqs,process)

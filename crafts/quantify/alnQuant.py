@@ -19,17 +19,23 @@ class VirCount(Reads):
         '''
         raw_bam=f'{self.outdir}/{samp}.raw.bam'
         sort_bam=f'{self.outdir}/{samp}.sort.bam'
-        cmd=['bwa mem','-t',self.threads,bwa_idx,
+        cmd=[utils.selectENV('VC-Quantify')]
+        cmd.extend(
+            ['bwa mem','-t',self.threads,bwa_idx,
             self.fastqs[0],self.fastqs[1],
             '|samtools view','-o',raw_bam,'-@ 28 -b -S\n',
             'samtools sort',raw_bam,'-o',sort_bam,'-@ 28\n',
             'samtools index',sort_bam,'\n']
+        )
         return cmd
     def coverm(self,samp:str):
         cov=f'{self.outdir}/{samp}.cov'
         sort_bam=f'{self.outdir}/{samp}.sort.bam'
-        cmd=['coverm contig','-b',sort_bam,'-t',self.threads,
+        cmd=[utils.selectENV('VC-Quantify')]
+        cmd.extend(
+            ['coverm contig','-b',sort_bam,'-t',self.threads,
             self.coverm_args,'>',cov,'\n']
+        )
         return cmd
 
 class GeneCount(Reads):
@@ -38,7 +44,10 @@ class GeneCount(Reads):
         self.threads=str(int(threads)//self.BATCH_SIZE)
     def salmon(self,samp:str,salmon_idx:str):
         wkdir=f'{self.outdir}/{samp}_gene_quant'
-        cmd=['salmon quant --validateMappings','-i',salmon_idx,
+        cmd=[utils.selectENV('VC-Quantify')]
+        cmd.extend(
+            ['salmon quant --validateMappings','-i',salmon_idx,
             '-l A','-p',self.threads,'--meta',
             '-1',self.fastqs[0],'-2',self.fastqs[1],'-o',wkdir,'\n']
+        )
         return cmd

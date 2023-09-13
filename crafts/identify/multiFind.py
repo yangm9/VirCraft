@@ -10,7 +10,7 @@ class MultiTools(VirScan):
         super().__init__(fasta,outdir)
         self.threads=str(threads)
     def deepvirfinder(self,cutoff:str):
-        cmd=[utils.selectENV('deepvirfinder')]
+        cmd=[utils.selectENV('VC-DeepVirFinder')]
         wkdir=f'{self.outdir}/deepvirfinder'
         utils.mkdir(wkdir)
         dvf=self.confDict['DeepVirFinder']
@@ -21,7 +21,7 @@ class MultiTools(VirScan):
         )
         return cmd,wkdir
     def vibrant(self,cutoff:str):
-        cmd=[utils.selectENV('vibrant')]
+        cmd=[utils.selectENV('VC-VIBRANT')]
         wkdir=f'{self.outdir}/VIBRANT_{self.name}'
         cmd.extend(
             ['VIBRANT_run.py','-i',self.fasta,'-l',cutoff,

@@ -18,7 +18,7 @@ class EnviComp(ORF):
     def prodigal(self):
         return 0
     def vContact(self):
-        cmd=[utils.selectENV('vContact2')]
+        cmd=[utils.selectENV('VC-vContact2')]
         wkdir=f'{self.outdir}/vContact2'
         utils.mkdir(wkdir)
         #OtherORFs=self.confDict['OtherDataSetFAA']
