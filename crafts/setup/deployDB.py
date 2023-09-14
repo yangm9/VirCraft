@@ -54,7 +54,7 @@ class DB:
             ['wget','-c',URL.NCBI_VIR_PROT_URL,'-O',vir_prot_gz,
             '--no-check-certificate\n','gzip -d',vir_prot_gz,'\n',
             'wget','-c',URL.NCBI_RELEASE_NUMBER_URL,'-O',vir_prot,
-            '--no-check-certificate\n','makeblastdb -in',vir_prot_gunzip,
+            '--no-check-certificate\n','makeblastdb -in',vir_prot_gz,
             '-parse_seqids -hash_index','-out',vir_prot_prefix,'-dbtype prot\n',
             'wget','-c',URL.NCBI_TAXDUMP_URL,'-O',taxdump_tgz,'--no-check-certificate\n',
             'mkdir ~/.taxonkit && tar xzf',taxdump_tgz,'-c ~/.taxonkit\n',
