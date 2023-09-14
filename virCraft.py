@@ -26,11 +26,11 @@ args=arguments.setOpts(sys.argv[0],sys.argv[1],version)
 
 if sys.argv[1]=='setup_env':
     print('Install the environments for VirCraft...\n')
-    ENV=installENV.Install(
+    ENV=installENV.ENV(
         outdir=args.outdir,
         threads=args.threads
     )
-    ENV.install(
+    ENV.Install(
         unrun=args.unrun    
     )
 elif sys.argv[1]=='setup_db':
