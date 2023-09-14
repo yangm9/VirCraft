@@ -35,7 +35,7 @@ if sys.argv[1]=='setup_env':
     )
 elif sys.argv[1]=='setup_db':
     print('VirCraft environments Done!!!\n')
-    DB=deployDB.Databases(
+    DB=deployDB.DB(
         outdir=args.outdir,
         threads=args.threads
     )
