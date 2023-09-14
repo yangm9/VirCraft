@@ -103,7 +103,7 @@ class DB:
         sed_cmd=f"sed -i 's/\/data_backup\/database/{self.outdir}/'"
         config_file=f'{sys.path[0]}/config'
         cmd.extend(
-            ['multithreads.pl',self.outdir,'db_deploy.sh 2\n'
+            ['multithreads.pl',self.outdir,'db_deploy.sh 2\n',
             sed_cmd,config_file,'\n']
         )
         results=''
