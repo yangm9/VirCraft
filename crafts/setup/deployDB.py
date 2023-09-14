@@ -61,7 +61,7 @@ class DB:
             '--no-check-certificate\n','makeblastdb -in',vir_prot,
             '-parse_seqids -hash_index','-out',vir_prot_prefix,'-dbtype prot\n',
             'wget','-c',URL.NCBI_TAXDUMP_URL,'-O',taxdump_tgz,'--no-check-certificate\n',
-            '''if [ ! -d "~/.taxonkit" ]; then
+            '''if [ ! -d ~/.taxonkit ]; then
     mkdir ~/.taxonkit
 fi
 if [ -z "$(ls -A ~/.taxonkit)" ]; then
