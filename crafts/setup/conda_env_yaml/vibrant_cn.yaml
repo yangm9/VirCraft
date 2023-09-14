@@ -13,6 +13,6 @@ channels:
   - defaults
 dependencies:
   - python=3.7
+  - numpy=1.17.0
   - scikit-learn=0.21.3
   - vibrant=1.2.1
-prefix: /data_backup/software/miniconda3/envs/vibrant
