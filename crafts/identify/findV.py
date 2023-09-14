@@ -29,6 +29,7 @@ class vIdentify(MultiTools):
         checkv_dir=os.path.dirname(checkv_fa)
         filt_fna_files=f'{checkv_dir}/*.filt.fna'
         filt_checkv_fa=f'{self.outdir}/viral_positive_ctgs.fna'
+        cmd=[utils.selectENV('VC-General')]
         cmd.extend(
             ['vir_qual_filt.py',checkv_dir,'\n',
             'cat',filt_fna_files,'>',filt_checkv_fa,'\n']
