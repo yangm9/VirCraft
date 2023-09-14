@@ -29,7 +29,7 @@ class DB:
         which_dvf_cmd='conda run -n VC-DeepVirFinder which dvf.py'
         models_dir=os.path.dirname(os.popen(which_dvf_cmd).read().strip())
         models_dir=models_dir.replace('VC-DeepVirFinder/bin','VC-DeepVirFinder/share/deepvirfinder/models')
-        cmd=['mv',module_dir,wkdir,'\n']
+        cmd=['mv',models_dir,wkdir,'\n']
         return cmd
     def dl_checkv_db(self):
         wkdir=f'{self.outdir}/VC-CheckVDB'
