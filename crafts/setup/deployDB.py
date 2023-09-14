@@ -103,6 +103,9 @@ class DB:
         cmd=self.dl_vibrant_db()
         shell=f'{self.outdir}/vibrant_db_deploy.sh'
         utils.printSH(shell,cmd)
+        cmd=self.dl_deepvirfinder_db()
+        shell=f'{self.outdir}/deepvirfinder_db_deploy.sh'
+        utils.printSH(shell,cmd)
         cmd=self.dl_checkv_db()
         shell=f'{self.outdir}/checkv_db_deploy.sh'
         utils.printSH(shell,cmd)
