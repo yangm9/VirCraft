@@ -23,8 +23,11 @@ class MultiTools(VirScan):
     def vibrant(self,cutoff:str):
         cmd=[utils.selectENV('VC-VIBRANT')]
         wkdir=f'{self.outdir}/VIBRANT_{self.name}'
+        VIBRANT_DB_databases=self.confDict['VIBRANTDB']+'/databases'
+        VIBRANT_DB_files=self.confDict['VIBRANTDB']+'/files'
         cmd.extend(
             ['VIBRANT_run.py','-i',self.fasta,'-l',cutoff,
-            '-t',self.threads,'-folder',self.outdir,'\n']
+            '-t',self.threads,'-folder',self.outdir,
+            '-d',VIBRANT_DB_databases,'-m',VIBRANT_DB_files,'\n']
         )
         return cmd,wkdir
