@@ -26,7 +26,7 @@ args=arguments.setOpts(sys.argv[0],sys.argv[1],version)
 
 if sys.argv[1]=='setup_env':
     print('Install the environments for VirCraft...\n')
-    ENV=installENV.condaENV(
+    ENV=installENV.Install(
         outdir=args.outdir,
         threads=args.threads
     )
