@@ -28,7 +28,7 @@ class VirScan(Seq):
     def checkv(self,in_fa:str):
         wkdir=f'{self.outdir}/checkv'
         utils.mkdir(wkdir)
-        cmd=[utils.selectENV('VC-VirSorter2')]
+        cmd=[utils.selectENV('VC-CheckV')]
         cmd.extend(
             ['checkv','end_to_end',in_fa,wkdir,
             '-d',self.confDict['CheckvDB'],
