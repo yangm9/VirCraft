@@ -11,7 +11,7 @@ DeepVirFinder = /data_backup/software/biotools/DeepVirFinder/dvf.py
 
 # Databases
 ## Path to Virsorter2 database
-Virsorter2DB = /data_backup/database/virsorter2DB/db-vs2
+VirSorter2DB = /data_backup/database/virsorter2DB/db-vs2
 
 ## Path to VIBRANT database
 VIBRANTDB = /data_backup/database/vibrantDB

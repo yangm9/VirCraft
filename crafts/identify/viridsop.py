@@ -19,7 +19,7 @@ class VirScan(Seq):
         cmd=[utils.selectENV('VC-VirSorter2')]
         cmd.extend(
             ['virsorter run',self.vs2_subcmds[n],'-i',in_fa,
-            '-d',self.confDict['Virsorter2DB'],'-w',wkdir,
+            '-d',self.confDict['VirSorter2DB'],'-w',wkdir,
             '--include-groups dsDNAphage,NCLDV,RNA,ssDNA,lavidaviridae',
             '-j',self.threads,'--min-length',min_length,
             '--min-score',min_score,'all\n']

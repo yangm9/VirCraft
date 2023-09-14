@@ -29,12 +29,15 @@ class DB:
         which_dvf_cmd='conda run -n VC-DeepVirFinder which dvf.py'
         models_dir=os.path.dirname(os.popen(which_dvf_cmd).read().strip())
         models_dir=models_dir.replace('VC-DeepVirFinder/bin','VC-DeepVirFinder/share/deepvirfinder/models')
-        cmd=['mv',models_dir,wkdir,'\n']
+        cmd=['cp -r',models_dir,wkdir,'\n']
         return cmd
     def dl_checkv_db(self):
         wkdir=f'{self.outdir}/VC-CheckVDB'
+        db_dir=f'{wkdir}/checkv-db-v*'
+        db_files=db_dir+'/*'
         utils.mkdir(wkdir)
-        cmd=['conda run -n VC-CheckV checkv download_database',wkdir,'\n']
+        cmd=['conda run -n VC-CheckV checkv download_database',self.outdir,'\n'
+            'mv',db_files,wkdir,'&& rmdir db_dir\n']
         return cmd
     def dl_refseq_viral_prot(self):
         wkdir=f'{self.outdir}/VC-ViralRefSeqDB'
@@ -43,6 +46,7 @@ class DB:
         vir_prot_prefix=f'{wkdir}/viral.1.protein'
         vir_prot=vir_prot_prefix+'.faa'
         vir_prot_gz=vir_prot+'.gz'
+        vir_prot_gz=f'{wkdir}/RELEASE_NUMBER'
         vir_pid_sp=f'{wkdir}/NCBI_viral_pid_sp.txt'
         vir_name_taxaid=vir_pid_sp.replace('_pid_sp','_name_taxid')
         vir_pid_taxa=vir_pid_sp.replace('_pid_sp','_taxnomomy')
@@ -54,13 +58,13 @@ class DB:
             ['wget','-c',URL.NCBI_VIR_PROT_URL,'-O',vir_prot_gz,
             '--no-check-certificate\n','gzip -d',vir_prot_gz,'\n',
             'wget','-c',URL.NCBI_RELEASE_NUMBER_URL,'-O',vir_prot,
-            '--no-check-certificate\n','makeblastdb -in',vir_prot_gz,
+            '--no-check-certificate\n','makeblastdb -in',vir_prot,
             '-parse_seqids -hash_index','-out',vir_prot_prefix,'-dbtype prot\n',
             'wget','-c',URL.NCBI_TAXDUMP_URL,'-O',taxdump_tgz,'--no-check-certificate\n',
-            'mkdir ~/.taxonkit && tar xzf',taxdump_tgz,'-c ~/.taxonkit\n',
+            'if [ ! -d "~/.taxonkit" ]; then\nmkdir ~/.taxonkit && tar xzf',taxdump_tgz,'-C ~/.taxonkit\nfi\n',
             'extract_name.py',vir_prot,'>',vir_pid_sp,'\n',
-            'cut -f 2',vir_pid_sp,"|uniq|taxonkit name2taxid|sed '1ispecies\ttaxid'>",vir_name_taxaid,'\n',
-            'cut -f 2',vir_pid_sp,"|uniq|taxonkit name2taxid|cut -f 2|taxonkit lineage|taxonkit reformat -r 'Unassigned'|cut -f 1,3|sed '1itaxid\ttaxonomy'>",vir_pid_taxa,'\n',
+            'cut -f 2',vir_pid_sp,"|uniq|taxonkit name2taxid|sed '1ispecies\\ttaxid'>",vir_name_taxaid,'\n',
+            'cut -f 2',vir_pid_sp,"|uniq|taxonkit name2taxid|cut -f 2|taxonkit lineage|taxonkit reformat -r 'Unassigned'|cut -f 1,3|sed '1itaxid\\ttaxonomy'>",vir_pid_taxa,'\n',
             "csvtk join -t -f 'taxid;taxid'",vir_name_taxaid,vir_pid_taxa,
             '|uniq>',vir_sp_taxa,'\n',
             'csvtk add-header -t -n NCBI_ID,species',vir_pid_sp,
