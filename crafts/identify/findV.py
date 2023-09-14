@@ -53,8 +53,7 @@ class vIdentify(MultiTools):
         utils.printSH(shell,cmd)
         #VirSorter2
         self.threads=str(int(self.allthreads)-(int(self.threads)*2))
-        tmp_cmd,wkdir=self.virsorter(self.fasta,0,cutoff)
-        cmd.extend(tmp_cmd)
+        cmd,wkdir=self.virsorter(self.fasta,0,cutoff)
         shell=f'{self.outdir}/{self.name}_vs2_ctg.sh'
         utils.printSH(shell,cmd)
         #multiple run
