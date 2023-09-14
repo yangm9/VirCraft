@@ -1,4 +1,6 @@
+import os
 import sys
+import shutil
 from datetime import datetime
 from ..general import utils
 from . import URL
@@ -13,18 +15,26 @@ class DB:
     def dl_virsorter2_db(self):
         wkdir=f'{self.outdir}/VC-VirSorter2DB'
         utils.mkdir(wkdir)
-        cmd=['conda run -n viral-id-sop virsorter setup',
+        cmd=['conda run -n VC-VirSorter2 virsorter setup',
              '-d',wkdir,'-j',self.threads,'\n']
         return cmd
     def dl_vibrant_db(self):
         wkdir=f'{self.outdir}/VC-VIBRANTDB'
         utils.mkdir(wkdir)
-        cmd=['conda run -n vibrant download-db.sh',wkdir,'\n']
+        cmd=['conda run -n VC-VIBRANT download-db.sh',wkdir,'\n']
+        return cmd
+    def dl_deepvirfinder_db(self):
+        wkdir=f'{self.outdir}/VC-DeepVirFinder'
+        utils.mkdir(wkdir)
+        which_dvf_cmd='conda run -n VC-DeepVirFinder which dvf.py'
+        models_dir=os.path.dirname(os.popen(which_dvf_cmd).read().strip())
+        models_dir=models_dir.replace('VC-DeepVirFinder/bin','VC-DeepVirFinder/share/deepvirfinder/models')
+        cmd=['mv',module_dir,wkdir,'\n']
         return cmd
     def dl_checkv_db(self):
         wkdir=f'{self.outdir}/VC-CheckVDB'
         utils.mkdir(wkdir)
-        cmd=['conda run -n viral-id-sop checkv download_database',wkdir,'\n']
+        cmd=['conda run -n VC-CheckV checkv download_database',wkdir,'\n']
         return cmd
     def dl_refseq_viral_prot(self):
         wkdir=f'{self.outdir}/VC-ViralRefSeqDB'
@@ -39,7 +49,9 @@ class DB:
         vir_sp_taxa=vir_pid_sp.replace('_pid_sp','_sp_taxa')
         vir_pid_sp_h=vir_pid_sp.replace('.txt','.h.txt')
         vir_full_taxa=vir_pid_sp.replace('_pid_sp','_full_taxnomomy')
-        cmd=['wget','-c',URL.NCBI_VIR_PROT_URL,'-O',vir_prot_gz,
+        cmd=[utils.selectENV('VC-General')]
+        cmd.extend(
+            ['wget','-c',URL.NCBI_VIR_PROT_URL,'-O',vir_prot_gz,
             '--no-check-certificate\n','gzip -d',vir_prot_gz,'\n',
             'wget','-c',URL.NCBI_RELEASE_NUMBER_URL,'-O',vir_prot,
             '--no-check-certificate\n','makeblastdb -in',vir_prot_gunzip,
@@ -56,6 +68,7 @@ class DB:
             "csvtk join -t -f 'species;species'",vir_sp_taxa,vir_pid_sp_h,
             '>',vir_full_taxa,'\n',
             'rm -f',vir_pid_sp,vir_name_taxaid,vir_pid_taxa,vir_sp_taxa,vir_pid_sp_h,'\n']
+        )
         return cmd
     def dl_kofamscan_db(self):
         wkdir=f'{self.outdir}/VC-KofamScanDB'
@@ -70,7 +83,7 @@ class DB:
     def dl_dramv_db(self):
         wkdir=f'{self.outdir}/VC-DRAMvDB'
         utils.mkdir(wkdir)
-        cmd=['conda run -n viral-id-sop DRAM-setup.py prepare_databases',
+        cmd=['conda run -n VC-DRAMv DRAM-setup.py prepare_databases',
              '--skip_uniref','--output_dir',wkdir,'\n']
         return cmd
     def dl_eggnog_db(self):

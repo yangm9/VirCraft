@@ -1,3 +1,6 @@
+#DeepVirFinder
+DEEPVIRFINDER_URL='https://github.com/jessieren/DeepVirFinder.git'
+
 #NCBI Viral RefSeq and Taxonomy
 NCBI_VIR_PROT_URL='https://ftp.ncbi.nlm.nih.gov/refseq/release/viral/viral.1.protein.faa.gz'
 NCBI_RELEASE_NUMBER_URL='https://ftp.ncbi.nlm.nih.gov/refseq/release/RELEASE_NUMBER'
