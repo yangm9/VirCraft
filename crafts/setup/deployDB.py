@@ -77,7 +77,8 @@ fi
             '>',vir_pid_sp_h,'\n',
             "csvtk join -t -f 'species;species'",vir_sp_taxa,vir_pid_sp_h,
             '>',vir_full_taxa,'\n',
-            'rm -f',vir_pid_sp,vir_name_taxaid,vir_pid_taxa,vir_sp_taxa,vir_pid_sp_h,'\n']
+            'rm -f',taxdump_tgz,vir_pid_sp,vir_name_taxaid,
+            vir_pid_taxa,vir_sp_taxa,vir_pid_sp_h,'\n']
         )
         return cmd
     def dl_kofamscan_db(self):
