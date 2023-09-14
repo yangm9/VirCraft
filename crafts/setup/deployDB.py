@@ -64,7 +64,7 @@ class DB:
             '''if [ ! -d "~/.taxonkit" ]; then
     mkdir ~/.taxonkit
 fi
-if [ -z "$(ls -A "~/.taxonkit")" ]; then
+if [ -z "$(ls -A ~/.taxonkit)" ]; then
     tar xzf''',taxdump_tgz,'''-C ~/.taxonkit
 fi
 '''
