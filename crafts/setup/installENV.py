@@ -19,7 +19,7 @@ class ENV:
         env_yaml=f'{self.CONDAENVDIR}/{name}{net}.yaml'
         cmd=['conda env create','-f',env_yaml,'\n']
         return cmd
-    def Install(self,in_wall=False):
+    def Install(self,in_wall=False,unrun=False):
         for env in self.ENVLIST:
             cmd=self.setup_env(env,in_wall)
             shell=f'{self.outdir}/{env}_install.sh'
