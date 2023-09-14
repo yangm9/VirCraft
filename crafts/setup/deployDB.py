@@ -62,10 +62,10 @@ class DB:
             '-parse_seqids -hash_index','-out',vir_prot_prefix,'-dbtype prot\n',
             'wget','-c',URL.NCBI_TAXDUMP_URL,'-O',taxdump_tgz,'--no-check-certificate\n',
             '''if [ ! -d "~/.taxonkit" ]; then
-    mkdir ~/.taxonkit && tar xzf',taxdump_tgz,'-C ~/.taxonkit
+    mkdir ~/.taxonkit && tar xzf''',taxdump_tgz,'''-C ~/.taxonkit
 else
     if [ -z "$(ls -A "~/.taxonkit")" ]; then
-        tar xzf',taxdump_tgz,'-C ~/.taxonkit
+        tar xzf''',taxdump_tgz,'''-C ~/.taxonkit
     fi
 fi
 '''
