@@ -1,3 +1,4 @@
+import sys
 from datetime import datetime
 from ..general import utils
 from . import URL
@@ -98,7 +99,13 @@ class DB:
         cmd=self.dl_dramv_db()
         shell=f'{self.outdir}/dramv_db_deploy.sh'
         utils.printSH(shell,cmd)
-        cmd.extend(['multithreads.pl',self.outdir,'db_deploy.sh 2\n'])
+        cmd=[utils.selectENV('VC-VIBRANT')]
+        sed_cmd=f"sed -i 's/\/data_backup\/database/{self.outdir}/'"
+        config_file=f'{sys.path[0]}/config'
+        cmd.extend(
+            ['multithreads.pl',self.outdir,'db_deploy.sh 2\n'
+            sed_cmd,config_file,'\n']
+        )
         results=''
         if not unrun: results=utils.execute(cmd)
         return results

@@ -7,7 +7,6 @@ FastpOpts = -q 20 -u 20 -g -c -W 5 -3 -l 50 -f 10 -F 10
 MegahitOpts = --min-contig-len 300 -m 0.9 --k-list 21,33,55,77,99,127
 SPAdesOpts = --careful -m 1300 -k 21,33,55,77,99,127
 
-
 #Database
 
 # Databases
@@ -36,5 +35,5 @@ KofamscanDB = /data_backup/database/kofamscanDB
 CompDataSet =
 
 ## NCBI viral RefSeq database
-NCBIvRefProtDB = /data_backup/database/NCBI_refseq/viral/
+NCBIvRefProtDB = /data_backup/database/NCBI_refseq/viral
 
