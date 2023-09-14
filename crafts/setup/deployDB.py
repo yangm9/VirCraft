@@ -61,7 +61,14 @@ class DB:
             '--no-check-certificate\n','makeblastdb -in',vir_prot,
             '-parse_seqids -hash_index','-out',vir_prot_prefix,'-dbtype prot\n',
             'wget','-c',URL.NCBI_TAXDUMP_URL,'-O',taxdump_tgz,'--no-check-certificate\n',
-            'if [ ! -d "~/.taxonkit" ]; then\nmkdir ~/.taxonkit && tar xzf',taxdump_tgz,'-C ~/.taxonkit\nfi\n',
+            '''if [ ! -d "~/.taxonkit" ]; then
+    mkdir ~/.taxonkit && tar xzf',taxdump_tgz,'-C ~/.taxonkit
+else
+    if [ -z "$(ls -A "~/.taxonkit")" ]; then
+        tar xzf',taxdump_tgz,'-C ~/.taxonkit
+    fi
+fi
+'''
             'extract_name.py',vir_prot,'>',vir_pid_sp,'\n',
             'cut -f 2',vir_pid_sp,"|uniq|taxonkit name2taxid|sed '1ispecies\\ttaxid'>",vir_name_taxaid,'\n',
             'cut -f 2',vir_pid_sp,"|uniq|taxonkit name2taxid|cut -f 2|taxonkit lineage|taxonkit reformat -r 'Unassigned'|cut -f 1,3|sed '1itaxid\\ttaxonomy'>",vir_pid_taxa,'\n',
