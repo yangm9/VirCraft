@@ -13,10 +13,9 @@ class MultiTools(VirScan):
         cmd=[utils.selectENV('VC-DeepVirFinder')]
         wkdir=f'{self.outdir}/deepvirfinder'
         utils.mkdir(wkdir)
-        models=os.path.dirname(dvf)+'/models'
         cmd.extend(
-            ['dvf.py','-i',self.fasta,'-m',models,'-o',wkdir,
-            '-c',self.threads,'-l',cutoff,'\n']
+            ['dvf.py','-i',self.fasta,'-m',self.confDict['DeepVirFinderDB'],
+            '-o',wkdir,'-c',self.threads,'-l',cutoff,'\n']
         )
         return cmd,wkdir
     def vibrant(self,cutoff:str):
