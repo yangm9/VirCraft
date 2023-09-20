@@ -31,7 +31,8 @@ if sys.argv[1]=='setup_env':
         threads=args.threads
     )
     ENV.Install(
-        unrun=args.unrun    
+        unrun=args.unrun,
+        in_wall=args.in_wall
     )
 elif sys.argv[1]=='setup_db':
     print('VirCraft environments Done!!!\n')

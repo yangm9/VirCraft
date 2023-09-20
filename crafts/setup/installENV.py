@@ -13,6 +13,7 @@ class ENV:
     def __init__(self,outdir='',threads=8):
         self.outdir=outdir
         self.threads=str(threads)
+        utils.mkdir(self.outdir)
     def setup_env(self,name,in_wall=False):
         net=''
         if in_wall: net='_cn'

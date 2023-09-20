@@ -33,6 +33,11 @@ def setOpts(name:str,subcmds:str,version:str):
         help='Install the environments for VirCraft.'
     )
     subpsr=addGlbArg(subpsr)
+    subpsr.add_argument(
+        '-w','--in-wall',action='store_true',
+        dest='in_wall',default=False,required=False,
+        help='Is the network of your server within the Great Wall? [default=False]'
+    )
 
 #----------------------setup_db-----------------------
     subpsr=subparsers.add_parser(

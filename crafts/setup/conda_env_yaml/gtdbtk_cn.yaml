@@ -11,5 +11,4 @@ channels:
   - r
   - defaults
 dependencies:
-  - gtdbtk=2.1.1
-  - numpy=1.25.2
+  - gtdbtk=2.3.2
