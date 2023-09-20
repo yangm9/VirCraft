@@ -730,4 +730,5 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 ```
 1. setup模块：自动化环境安装和数据库部署功能已经初步完成。
 2. setup模块：environment.yaml简化，只安装必须的软件，环境相关的内容不固定版本，因为版本经常会更新导致以前的版本无法下载。
+3. AMG需要check启动子 
 ```
