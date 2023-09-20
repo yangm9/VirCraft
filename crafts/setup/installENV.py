@@ -17,7 +17,7 @@ class ENV:
         net=''
         if in_wall: net='_cn'
         env_yaml=f'{self.CONDAENVDIR}/{name}{net}.yaml'
-        cmd=['conda env create','-f',env_yaml,'\n']
+        cmd=['mamba env create','-f',env_yaml,'\n']
         return cmd
     def Install(self,in_wall=False,unrun=False):
         for env in self.ENVLIST:
