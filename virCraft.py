@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 #coding=utf-8
-#yangm@idsse.ac.cn
+#author: yangming, yangm@idsse.ac.cn
+#Created on Fri Dec 18 18:17:58 2022
 
 import os
 import sys
@@ -22,6 +23,14 @@ from crafts.func_annot import geneAnnot
 from crafts.func_annot import callAMGs
 
 version='0.0.11'
+try:
+    if len(sys.argv)<2:
+        raise ValueError('''Insufficient parameters provided.
+Please use -h or --help for assistance!''')
+except ValueError as e:
+    print(f'ERROR: {e}')
+    exit(1)
+
 args=arguments.setOpts(sys.argv[0],sys.argv[1],version)
 
 if sys.argv[1]=='setup_env':
