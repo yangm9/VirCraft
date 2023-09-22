@@ -36,7 +36,7 @@ class DB:
         db_dir=f'{wkdir}/checkv-db-v*'
         db_files=db_dir+'/*'
         utils.mkdir(wkdir)
-        cmd=['conda run -n VC-CheckV checkv download_database',self.outdir,'\n'
+        cmd=['conda run -n VC-CheckV checkv download_database',wkdir,'\n'
             'mv',db_files,wkdir,'&& rmdir db_dir\n']
         return cmd
     def dl_refseq_viral_prot(self):
@@ -133,6 +133,7 @@ fi
             ['multithreads.pl',self.outdir,'db_deploy.sh 2\n',
             sed_cmd,config_file,'\n']
         )
+        utils.printSH(shell,cmd)
         results=''
         if not unrun: results=utils.execute(cmd)
         return results

@@ -23,15 +23,14 @@ from crafts.func_annot import geneAnnot
 from crafts.func_annot import callAMGs
 
 version='0.0.11'
-try:
-    if len(sys.argv)<2:
-        raise ValueError('''Insufficient parameters provided.
-Please use -h or --help for assistance!''')
-except ValueError as e:
-    print(f'ERROR: {e}')
-    exit(1)
-
-args=arguments.setOpts(sys.argv[0],sys.argv[1],version)
+#try:
+#    if len(sys.argv)<2:
+#        raise ValueError('''Insufficient parameters provided.
+#Please use "virCraft.py -h" or "virCraft.py --help" for assistance!''')
+#except ValueError as e:
+#    print(f'ERROR: {e}')
+#    exit(1)
+args=arguments.setOpts(sys.argv[0],version)
 
 if sys.argv[1]=='setup_env':
     print('Install the environments for VirCraft...\n')
