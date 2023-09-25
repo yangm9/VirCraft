@@ -10,7 +10,7 @@ class DB:
     Deploy the databases of VirCraft
     '''
     def __init__(self,outdir='',threads=8):
-        self.outdir=outdir
+        self.outdir=os.path.abspath(outdir)
         self.threads=str(threads)
     def dl_virsorter2_db(self):
         wkdir=f'{self.outdir}/VC-VirSorter2DB'
@@ -107,6 +107,24 @@ fi
         'wget -c',URL.EGGNOG_DMND_URL,'-O',eggnog_dmnd_gz,
         '&& gunzip',eggnog_dmnd_gz,'\n']
         return cmd
+    def dl_gtdbtk_db(self):
+        wkdir=f'{self.outdir}/VC-GTDBTkDB'
+        gtdbtk_db_gz=os.path.basename(URL.GTDBTK_DB_URL)
+        gtdbtk_db_gz=os.path.join(wkdir,gtdbtk_db_gz)
+        db_virsion_dir=gtdbtk_db_gz.replace('_data.tar.gz','')
+        db_virsion_dir=db_virsion_dir.replace('gtdbtk_r','')
+        db_virsion_dir=wkdir+'/release'+db_virsion_dir
+        dbdir=wkdir+'/GTDBTkDB'
+        cmd=['wget -c',URL.GTDBTK_DB_URL,'-O',gtdbtk_db_gz,
+        '--no-check-certificate\n',
+        'tar xzf',gtdbtk_db_gz,'-C',wkdir,'\n',
+        'mv',db_virsion_dir,dbdir,'\n',
+        'rm -f',gtdbtk_db_gz,'\n']
+        gtdbtk_data_path=f'GTDBTK_DATA_PATH={dbdir}'
+        cmd.extend(
+            ['conda env config vars set',gtdbtk_data_path,'-n VC-GTDBTkDB\n']
+        )
+        return cmd
     def Deploy(self,unrun=False,clear=False):
         cmd=self.dl_virsorter2_db()
         shell=f'{self.outdir}/virsorter2_db_deploy.sh'
@@ -125,6 +143,9 @@ fi
         utils.printSH(shell,cmd)
         cmd=self.dl_dramv_db()
         shell=f'{self.outdir}/dramv_db_deploy.sh'
+        utils.printSH(shell,cmd)
+        cmd=self.dl_gtdbtk_db()
+        shell=f'{self.outdir}/gtdbtk_db_deploy.sh'
         utils.printSH(shell,cmd)
         cmd=[utils.selectENV('VC-VIBRANT')]
         sed_cmd=f"sed -i 's/\/data_backup\/database/{self.outdir}/'"

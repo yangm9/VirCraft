@@ -13,3 +13,6 @@ KO_PROFILES_URL='ftp://ftp.genome.jp/pub/db/kofam/profiles.tar.gz'
 #eggNOG Database
 EGGNOG_DB_URL='http://eggnog6.embl.de/download/emapperdb-5.0.2/eggnog.db.gz'
 EGGNOG_DMND_URL='http://eggnog6.embl.de/download/emapperdb-5.0.2/eggnog_proteins.dmnd.gz'
+
+#GTDBTk Database
+GTDBTK_DB_URL='https://data.gtdb.ecogenomic.org/releases/release214/214.0/auxillary_files/gtdbtk_r214_data.tar.gz'
