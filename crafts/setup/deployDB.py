@@ -154,6 +154,7 @@ fi
             ['multithreads.pl',self.outdir,'db_deploy.sh 2\n',
             sed_cmd,config_file,'\n']
         )
+        shell=f'{self.outdir}/all_database_deploy.sh'
         utils.printSH(shell,cmd)
         results=''
         if not unrun: results=utils.execute(cmd)
