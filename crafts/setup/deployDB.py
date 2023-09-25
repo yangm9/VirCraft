@@ -112,9 +112,9 @@ fi
         utils.mkdir(wkdir)
         gtdbtk_db_gz=os.path.basename(URL.GTDBTK_DB_URL)
         gtdbtk_db_gz=os.path.join(wkdir,gtdbtk_db_gz)
-        db_virsion_dir=gtdbtk_db_gz.replace('_data.tar.gz','')
-        db_virsion_dir=db_virsion_dir.replace('gtdbtk_r','')
-        db_virsion_dir=wkdir+'/release'+db_virsion_dir
+        virsion=gtdbtk_db_gz.replace('_data.tar.gz','')
+        virsion=virsion.replace('gtdbtk_r','')
+        db_virsion_dir=wkdir+'/release'+virsion
         dbdir=wkdir+'/GTDBTkDB'
         cmd=['wget -c',URL.GTDBTK_DB_URL,'-O',gtdbtk_db_gz,
         '--no-check-certificate\n',
