@@ -113,9 +113,9 @@ fi
         gtdbtk_db_gz=os.path.basename(URL.GTDBTK_DB_URL)
         virsion=gtdbtk_db_gz.replace('_data.tar.gz','')
         virsion=virsion.replace('gtdbtk_r','')
-        print(virsion)
         db_virsion_dir=wkdir+'/release'+virsion
         dbdir=wkdir+'/GTDBTkDB'
+        gtdbtk_db_gz=os.path.join(wkdir,gtdbtk_db_gz)
         cmd=['wget -c',URL.GTDBTK_DB_URL,'-O',gtdbtk_db_gz,
         '--no-check-certificate\n',
         'tar xzf',gtdbtk_db_gz,'-C',wkdir,'\n',
