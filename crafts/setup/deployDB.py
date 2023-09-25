@@ -111,7 +111,6 @@ fi
         wkdir=f'{self.outdir}/VC-GTDBTkDB'
         utils.mkdir(wkdir)
         gtdbtk_db_gz=os.path.basename(URL.GTDBTK_DB_URL)
-        gtdbtk_db_gz=os.path.join(wkdir,gtdbtk_db_gz)
         virsion=gtdbtk_db_gz.replace('_data.tar.gz','')
         virsion=virsion.replace('gtdbtk_r','')
         db_virsion_dir=wkdir+'/release'+virsion
