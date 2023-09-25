@@ -109,6 +109,7 @@ fi
         return cmd
     def dl_gtdbtk_db(self):
         wkdir=f'{self.outdir}/VC-GTDBTkDB'
+        utils.mkdir(wkdir)
         gtdbtk_db_gz=os.path.basename(URL.GTDBTK_DB_URL)
         gtdbtk_db_gz=os.path.join(wkdir,gtdbtk_db_gz)
         db_virsion_dir=gtdbtk_db_gz.replace('_data.tar.gz','')
