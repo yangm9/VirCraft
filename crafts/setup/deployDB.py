@@ -46,7 +46,7 @@ class DB:
         vir_prot_prefix=f'{wkdir}/viral.1.protein'
         vir_prot=vir_prot_prefix+'.faa'
         vir_prot_gz=vir_prot+'.gz'
-        vir_prot_gz=f'{wkdir}/RELEASE_NUMBER'
+        vir_version=f'{wkdir}/RELEASE_NUMBER'
         vir_pid_sp=f'{wkdir}/NCBI_viral_pid_sp.txt'
         vir_name_taxaid=vir_pid_sp.replace('_pid_sp','_name_taxid')
         vir_pid_taxa=vir_pid_sp.replace('_pid_sp','_taxnomomy')
@@ -57,7 +57,7 @@ class DB:
         cmd.extend(
             ['wget','-c',URL.NCBI_VIR_PROT_URL,'-O',vir_prot_gz,
             '--no-check-certificate\n','gzip -d',vir_prot_gz,'\n',
-            'wget','-c',URL.NCBI_RELEASE_NUMBER_URL,'-O',vir_prot,
+            'wget','-c',URL.NCBI_RELEASE_NUMBER_URL,'-O',vir_version,
             '--no-check-certificate\n','makeblastdb -in',vir_prot,
             '-parse_seqids -hash_index','-out',vir_prot_prefix,'-dbtype prot\n',
             'wget','-c',URL.NCBI_TAXDUMP_URL,'-O',taxdump_tgz,'--no-check-certificate\n',
