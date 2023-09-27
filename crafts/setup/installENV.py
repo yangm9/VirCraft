@@ -45,7 +45,7 @@ class ENV:
         for env in self.ENVDICT.keys():
             is_env=self.is_conda_env(self.ENVDICT[env])
             if is_env:
-                print(f'{env} is already installed, so skipping!')
+                print(f'{self.ENVDICT[env]} is already installed, skipping!')
                 continue
             cmd=self.setup_env(env,in_wall)
             shell=f'{self.outdir}/{env}_install.sh'
