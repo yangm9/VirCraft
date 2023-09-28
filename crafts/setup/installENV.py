@@ -1,3 +1,4 @@
+import os
 import sys
 import subprocess
 from datetime import datetime
@@ -16,7 +17,7 @@ class ENV:
              'gtdbtk':'VC-GTDBTk','quantify':'VC-Quantify',
              'vhmatcher':'VC-VHMatcher','general':'VC-General'}
     def __init__(self,outdir='',threads=8):
-        self.outdir=outdir
+        self.outdir=os.path.abspath(outdir)
         self.threads=str(threads)
         utils.mkdir(self.outdir)
     def is_conda_env(self,env_name):
@@ -42,20 +43,31 @@ class ENV:
         cmd=['mamba env create','-f',env_yaml,'\n']
         return cmd
     def Install(self,in_wall=False,unrun=False):
+        results=''
         for env in self.ENVDICT.keys():
             is_env=self.is_conda_env(self.ENVDICT[env])
-            if is_env:
-                print(f'{self.ENVDICT[env]} is already installed, skipping!')
-                continue
             cmd=self.setup_env(env,in_wall)
-            if env=='':
-                wishdir=''
+            if env=='vhmatcher':
+                tmp_wishdir=f'{self.outdir}/WIsH'
+                vhmatcher_bin_dir=utils.get_conda_env_dir(self.ENVDICT[env])+'/bin'
                 cmd.extend(
-                    ['git clone',URL.WISH_URL,'cd',wishdir,
-                    '&& cmake . && make && chmod +x WIsH && cp WIsH',]
+                    ['mkdir',tmp_wishdir,
+                    '&& git clone',URL.WISH_URL,tmp_wishdir,
+                    '&& cd',tmp_wishdir,
+                    '&& cmake . && make && chmod +x WIsH',
+                    '&& cp WIsH',vhmatcher_bin_dir,'\n']
+                )
+                tmp_virmatcherdir=f'{self.outdir}/VirMatcher'
+                cmd.extend(
+                    ['mkdir',tmp_virmatcherdir,
+                    '&& git clone',URL.VIRMATCHER_URL,tmp_virmatcherdir,
+                    '&& cd',tmp_virmatcherdir,'&& conda run -n',
+                    self.ENVDICT[env],'pip install . --no-deps\n']
                 )
             shell=f'{self.outdir}/{env}_install.sh'
             utils.printSH(shell,cmd)
-            results=''
+            if is_env:
+                print(f'{self.ENVDICT[env]} is already installed, skipping!')
+                continue
             if not unrun: results+=utils.execute(cmd)
         return results

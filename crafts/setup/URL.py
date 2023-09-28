@@ -1,6 +1,3 @@
-#WIsH
-WISH_URL='https://github.com/soedinglab/WIsH.git'
-
 #DeepVirFinder
 DEEPVIRFINDER_URL='https://github.com/jessieren/DeepVirFinder.git'
 
@@ -19,3 +16,8 @@ EGGNOG_DMND_URL='http://eggnog6.embl.de/download/emapperdb-5.0.2/eggnog_proteins
 
 #GTDBTk Database
 GTDBTK_DB_URL='https://data.gtdb.ecogenomic.org/releases/release214/214.0/auxillary_files/gtdbtk_r214_data.tar.gz'
+
+# VC-VHMatcher
+## WIsH
+WISH_URL='https://github.com/soedinglab/WIsH.git'
+VIRMATCHER_URL='https://bitbucket.org/MAVERICLab/virmatcher'

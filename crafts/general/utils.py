@@ -3,8 +3,7 @@ import sys
 import importlib
 import subprocess
 import logging
-from datetime import datetime
-from conda.base.context import context
+from datetime import datetime 
 
 def mkdir(name:str):
     if not os.path.exists(name):
@@ -82,7 +81,7 @@ def show_cmd(cmd):
 
 def install_module(module_name):
     try:
-        module = importlib.import_module(module_name)
+        module=importlib.import_module(module_name)
         print(f"Module '{module_name}' is already installed.")
         return module
     except ImportError:
@@ -101,7 +100,21 @@ def install_module(module_name):
             print(f"Module '{module_name}' was installed but cannot be imported.")
             return None
 
+try:
+    import warnings
+    from conda.base.context import context
+    warnings.filterwarnings("ignore")
+except ImportError as e:
+    print("Module 'conda.base.context' not found. Activating Conda environment...")
+    try:
+        subprocess.run(['conda','activate','base'],shell=True)
+        from conda.base.context import context
+    except Exception as activation_error:
+        print("Failed to activate Conda environment.")
+        print(str(activation_error))
+    #install_module('conda')
+
 def get_conda_env_dir(env_name):
-    envs_dir = os.path.join(context.root_prefix, 'envs')
-    env_dir = os.path.join(envs_dir, env_name)
+    envs_dir=os.path.join(context.root_prefix,'envs')
+    env_dir=os.path.join(envs_dir,env_name)
     return env_dir
