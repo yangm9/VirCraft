@@ -49,7 +49,8 @@ class ENV:
             cmd=self.setup_env(env,in_wall)
             if env=='vhmatcher':
                 tmp_wishdir=f'{self.outdir}/WIsH'
-                vhmatcher_bin_dir=utils.get_conda_env_dir(self.ENVDICT[env])+'/bin'
+                vhmatcher_bin_dir=utils.get_conda_env_dir(self.ENVDICT[env])
+                vhmatcher_bin_dir+='/bin'
                 cmd.extend(
                     ['mkdir',tmp_wishdir,
                     '&& git clone',URL.WISH_URL,tmp_wishdir,
@@ -61,7 +62,9 @@ class ENV:
                 cmd.extend(
                     ['mkdir',tmp_virmatcherdir,
                     '&& git clone',URL.VIRMATCHER_URL,tmp_virmatcherdir,
-                    '&& cd',tmp_virmatcherdir,'&& conda run -n',
+                    '&& cd',tmp_virmatcherdir,
+                    "&& sed -i 's/4.2_5/4/' setup.py",
+                    '&& conda run -n',
                     self.ENVDICT[env],'pip install . --no-deps\n']
                 )
             shell=f'{self.outdir}/{env}_install.sh'
