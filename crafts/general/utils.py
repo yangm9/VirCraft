@@ -105,14 +105,16 @@ try:
     from conda.base.context import context
     warnings.filterwarnings("ignore")
 except ImportError as e:
-    print("Module 'conda.base.context' not found. Activating Conda environment...")
-    try:
-        subprocess.run(['conda','activate','base'],shell=True)
-        from conda.base.context import context
-    except Exception as activation_error:
-        print("Failed to activate Conda environment.")
-        print(str(activation_error))
-    #install_module('conda')
+    print(f'''ImportError: {e}
+Please activate conda base environment using `conda activate` command...''')
+    exit(1)
+#    try:
+#        subprocess.run(['conda','activate','base'],shell=True)
+#        from conda.base.context import context
+#    except Exception as activation_error:
+#        print("Failed to activate Conda environment.")
+#        print(str(activation_error))
+#    #install_module('conda')
 
 def get_conda_env_dir(env_name):
     envs_dir=os.path.join(context.root_prefix,'envs')
