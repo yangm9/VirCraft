@@ -14,7 +14,7 @@ class ENV:
              'deepvirfinder':'VC-DeepVirFinder','checkv':'VC-CheckV',
              'dramv':'VC-DRAMv','vcontact':'VC-vContact2',
              'gtdbtk':'VC-GTDBTk','quantify':'VC-Quantify',
-             'general':'VC-General'}
+             'vhmatcher':'VC-VHMatcher','general':'VC-General'}
     def __init__(self,outdir='',threads=8):
         self.outdir=outdir
         self.threads=str(threads)
@@ -48,6 +48,12 @@ class ENV:
                 print(f'{self.ENVDICT[env]} is already installed, skipping!')
                 continue
             cmd=self.setup_env(env,in_wall)
+            if env=='':
+                wishdir=''
+                cmd.extend(
+                    ['git clone',URL.WISH_URL,'cd',wishdir,
+                    '&& cmake . && make && chmod +x WIsH && cp WIsH',]
+                )
             shell=f'{self.outdir}/{env}_install.sh'
             utils.printSH(shell,cmd)
             results=''

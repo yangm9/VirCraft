@@ -1,3 +1,6 @@
+#WIsH
+WISH_URL='https://github.com/soedinglab/WIsH.git'
+
 #DeepVirFinder
 DEEPVIRFINDER_URL='https://github.com/jessieren/DeepVirFinder.git'
 

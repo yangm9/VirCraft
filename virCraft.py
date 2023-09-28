@@ -33,7 +33,7 @@ version='0.0.11'
 args=arguments.setOpts(sys.argv[0],version)
 
 if sys.argv[1]=='setup_env':
-    print('Install the environments for VirCraft...\n')
+    print('Installing all environments for VirCraft...\n')
     ENV=installENV.ENV(
         outdir=args.outdir,
         threads=args.threads
@@ -42,8 +42,9 @@ if sys.argv[1]=='setup_env':
         unrun=args.unrun,
         in_wall=args.in_wall
     )
-elif sys.argv[1]=='setup_db':
     print('VirCraft environments Done!!!\n')
+elif sys.argv[1]=='setup_db':
+    print('Deploying all databases for VirCraft...\n')
     DB=deployDB.DB(
         outdir=args.outdir,
         threads=args.threads
@@ -51,7 +52,7 @@ elif sys.argv[1]=='setup_db':
     DB.Deploy(
         unrun=args.unrun    
     )
-    print('VirCraft environments Done!!!\n')
+    print('VirCraft databases Done!!!\n')
 elif sys.argv[1]=='reads_qc':
     print('VirCraft data QC...\n')
     Reads=fastqc.QualCtrl(

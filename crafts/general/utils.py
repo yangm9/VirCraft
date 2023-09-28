@@ -1,8 +1,10 @@
 import os
 import sys
+import importlib
 import subprocess
 import logging
 from datetime import datetime
+from conda.base.context import context
 
 def mkdir(name:str):
     if not os.path.exists(name):
@@ -47,10 +49,10 @@ def isInstalled(name:str):
 
 def run(cmd:list, silent=False):
     '''
-    :ref: virmatcher, https://github.com/bolduc/kb_virmatcher
-    :param command: Command suitable for running in subprocess, must use a ['ls', '-l'] format
-    :param silent: Run silently
-    :return: Response from command
+    ref: virmatcher, https://github.com/bolduc/kb_virmatcher
+    param command: Command suitable for running in subprocess, must use a ['ls', '-l'] format
+    param silent: Run silently
+    return: Response from command
     '''
     cmd_txt=' '.join(cmd).replace('\n ','\n')
     cmd_txt=cmd_txt.replace(' \n ','\n')
@@ -69,11 +71,37 @@ def execute(cmd):
     cmd_txt=' '.join(cmd).replace('\n ','\n')
     cmd_txt=cmd_txt.replace(' \n ','\n')
     print(f'Running command:\n{cmd_txt}')
-    results=os.system(cmd_txt)
+    results=str(os.system(cmd_txt))
     return results
 
 def show_cmd(cmd):
     cmd_txt=' '.join(cmd).replace('\n ','\n')
     cmd_txt=cmd_txt.replace(' \n ','\n')
     print(f'Pending command:\n{cmd_txt}')
-    return 0 
+    return 0
+
+def install_module(module_name):
+    try:
+        module = importlib.import_module(module_name)
+        print(f"Module '{module_name}' is already installed.")
+        return module
+    except ImportError:
+        print(f"Module '{module_name}' is not installed. Attempting to install...")
+        try:
+            subprocess.check_call(['pip3', 'install', module_name])
+            print(f"Module '{module_name}' installed successfully.")
+        except subprocess.CalledProcessError:
+            print(f"Failed to install module '{module_name}'.")
+            return None
+        try:
+            module = importlib.import_module(module_name)
+            print(f"Module '{module_name}' is now installed and imported.")
+            return module
+        except ImportError:
+            print(f"Module '{module_name}' was installed but cannot be imported.")
+            return None
+
+def get_conda_env_dir(env_name):
+    envs_dir = os.path.join(context.root_prefix, 'envs')
+    env_dir = os.path.join(envs_dir, env_name)
+    return env_dir
