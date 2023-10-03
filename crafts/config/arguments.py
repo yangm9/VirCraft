@@ -161,7 +161,8 @@ Usage: {name} <subcommand> [options] -o <outdir>
         help='The gtdbtk results directory which performed based on host contigs. [default=None]'
     )
     args=parser.parse_args()
-    return args
+    helps=parser.print_help()
+    return args,helps
 
 #------------Functions for adding Arguments-----------
 def addGlbArg(psr):#,batch=0): #Add global arguments

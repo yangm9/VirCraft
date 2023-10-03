@@ -30,7 +30,10 @@ version='0.0.11'
 #except ValueError as e:
 #    print(f'ERROR: {e}')
 #    exit(1)
-args=arguments.setOpts(sys.argv[0],version)
+args,helps=arguments.setOpts(sys.argv[0],version)
+if len(sys.argv)==1: 
+    helps
+    exit(0)
 
 if sys.argv[1]=='setup_env':
     print('Installing all environments for VirCraft...\n')
@@ -194,7 +197,5 @@ elif sys.argv[1]=='host_pred':
         unrun=args.unrun
     )
     print('\nViral-host relationship prediction done!!!')
-else:
-    ERROR=f'\nERROR: {sys.argv[1]} is not a module of VirCraft\n'
-    print(ERROR)
+else: 
     exit(0)
