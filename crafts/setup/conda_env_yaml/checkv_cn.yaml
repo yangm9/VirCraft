@@ -10,7 +10,7 @@ channels:
   - r
   - defaults
 dependencies:
-  - python=3.9
+  - python=3.8
   - diamond=2.0.15
   - hmmer=3.3.2
   - checkv=1.0.1
