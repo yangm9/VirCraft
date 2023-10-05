@@ -7,7 +7,7 @@ SPAdesOpts = --careful -m 1300 -k 21,33,55,77,99,127
 
 #Database
 ## Full path pf DeepVirFinder
-DeepVirFinderDB = /backup/database/DeepVirFinderDB/models
+DeepVirFinderDB = /data_backup/database/DeepVirFinderDB/models
 
 # Databases
 ## Path to Virsorter2 database
