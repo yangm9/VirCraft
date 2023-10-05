@@ -30,9 +30,10 @@ version='0.0.11'
 #except ValueError as e:
 #    print(f'ERROR: {e}')
 #    exit(1)
-args,helps=arguments.setOpts(sys.argv[0],version)
+parser=arguments.setOpts(sys.argv[0],version)
+args=parser.parse_args()
 if len(sys.argv)==1: 
-    helps
+    parser.print_help()
     exit(0)
 
 if sys.argv[1]=='setup_env':
@@ -57,7 +58,7 @@ elif sys.argv[1]=='setup_db':
     )
     print('\nVirCraft databases Done!!!')
 elif sys.argv[1]=='reads_qc':
-    print('VirCraft data QC...\n')
+    print('VirCraft reads QC...\n')
     Reads=fastqc.QualCtrl(
         fq1=args.fq1,fq2=args.fq2,
         outdir=args.outdir,

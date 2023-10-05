@@ -65,9 +65,11 @@ class QualCtrl(Reads):
             unused_fqs.extend(fastqs)
         lnk_fq1=os.path.basename(fastqs[0])
         lnk_fq2=os.path.basename(fastqs[1])
+        wkdir=f'{self.outdir}/result'
+        utils.mkdir(wkdir)
         cmd.extend(
-            [f'ln -s {fastqs[0]} {self.outdir}/{lnk_fq1}\n',
-            f'ln -s {fastqs[1]} {self.outdir}/{lnk_fq2}\n']
+            [f'ln -s {fastqs[0]} {self.outdir}/result/{lnk_fq1}\n',
+            f'ln -s {fastqs[1]} {self.outdir}/result/{lnk_fq2}\n']
         )
         if clear:
             unused_fqs.remove(fastqs[0])
