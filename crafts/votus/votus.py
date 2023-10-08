@@ -19,12 +19,11 @@ class VirRef(VirScan):
             '-c 0.95 -aS 0.85 -n 10 -d 0 -M 160000\n']
         return cmd,votus
     def votuQC(self,votus,cutoff=1500):
-        cmd=[utils.selectENV('VC-General')]
-        tmp_cmd,__=self.checkv(votus)
-        cmd.extend(tmp_cmd)
+        cmd,__=self.checkv(votus)
         wkdir=f'{self.outdir}/stat'
         ckdir=f'{self.outdir}/checkv'
         checkv_qual=f'{ckdir}/quality_summary.tsv'
+        cmd.append(utils.selectENV('VC-General'))
         cmd.extend(['pie_plot.R',checkv_qual,'checkv_quality',wkdir])
         cmd.extend(['pie_plot.R',checkv_qual,'provirus',wkdir])
         cmd.extend(['pie_plot.R',checkv_qual,'miuvig_quality',wkdir])
@@ -41,6 +40,7 @@ class VirRef(VirScan):
         votus_prefix=f'{self.name}_votus'
         vb_vir_info=f'{self.outdir}/VIBRANT_{votus_prefix}/VIBRANT_results_{votus_prefix}/VIBRANT_genome_quality_{votus_prefix}.tsv'
         vb_ckv_xls=f'{wkdir}/votus_lifetype_quality.xls'
+        cmd.append(utils.selectENV('VC-General'))
         cmd.extend(
             ['votus_lifetype_quality.py',checkv_qual,vb_vir_info,vb_ckv_xls,'\n',
             'votus_lifetype_quality_barplot.R',vb_ckv_xls,wkdir,'\n']
