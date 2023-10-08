@@ -24,9 +24,9 @@ class VirRef(VirScan):
         ckdir=f'{self.outdir}/checkv'
         checkv_qual=f'{ckdir}/quality_summary.tsv'
         cmd.append(utils.selectENV('VC-General'))
-        cmd.extend(['pie_plot.R',checkv_qual,'checkv_quality',wkdir])
-        cmd.extend(['pie_plot.R',checkv_qual,'provirus',wkdir])
-        cmd.extend(['pie_plot.R',checkv_qual,'miuvig_quality',wkdir])
+        cmd.extend(['pie_plot.R',checkv_qual,'checkv_quality',wkdir,'\n'])
+        cmd.extend(['pie_plot.R',checkv_qual,'provirus',wkdir,'\n'])
+        cmd.extend(['pie_plot.R',checkv_qual,'miuvig_quality',wkdir,'\n'])
         tmp_cmd=self.statFA(cutoff)
         cmd.extend(self.statFA(cutoff))
         cmd.extend(tmp_cmd)
