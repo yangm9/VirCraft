@@ -36,7 +36,7 @@ class VirRef(VirScan):
             outdir=self.outdir,
             threads=self.threads
         )
-        tmp_cmd,vbdir=MT.vibrant()
+        tmp_cmd,vbdir=MT.vibrant(cutoff)
         cmd.extend(tmp_cmd)
         votus_prefix=f'{self.name}_votus'
         vb_vir_info=f'{self.outdir}/VIBRANT_{votus_prefix}/VIBRANT_results_{votus_prefix}/VIBRANT_genome_quality_{votus_prefix}.tsv'
