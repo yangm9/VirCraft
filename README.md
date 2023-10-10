@@ -50,7 +50,7 @@ conda env create -f install/assembly.yaml
 
 模块identify鉴定病毒contigs主要依赖VirSorter2、VIBRANT和DeepVirFinder三种软件。
 
-1) VirSorter2的
+1) VirSorter2
 ```
 #安装viral-id-sop所需软件
 conda env create -f install/viral-id-sop.yaml
