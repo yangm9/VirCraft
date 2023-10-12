@@ -6,6 +6,9 @@ NCBI_VIR_PROT_URL='https://ftp.ncbi.nlm.nih.gov/refseq/release/viral/viral.1.pro
 NCBI_RELEASE_NUMBER_URL='https://ftp.ncbi.nlm.nih.gov/refseq/release/RELEASE_NUMBER'
 NCBI_TAXDUMP_URL='ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz'
 
+#Demovir Database
+DemovirDB_URL='https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/10442241/nr.95.fasta.bz2'
+
 #KofamScan Database
 KO_LIST_URL='ftp://ftp.genome.jp/pub/db/kofam/ko_list.gz'
 KO_PROFILES_URL='ftp://ftp.genome.jp/pub/db/kofam/profiles.tar.gz'

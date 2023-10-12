@@ -37,7 +37,21 @@ class DB:
         db_files=db_dir+'/*'
         utils.mkdir(wkdir)
         cmd=['conda run -n VC-CheckV checkv download_database',wkdir,'\n'
-            'mv',db_files,wkdir,'&& rmdir db_dir\n']
+            'mv',db_files,wkdir,'&& rmdir',db_dir,'\n']
+        return cmd
+    def dl_demovir_db(self):
+        wkdir=f'{self.outdir}/VC-DemovirDB'
+        utils.mkdir(wkdir)
+        nr95_bz2=f'{wkdir}/nr.95.fasta.bz2'
+        uniprot_udb=f'{wkdir}/uniprot_trembl.viral.udb'
+        nr95_fa=nr95_bz2.replace('nr.95.fasta.bz2','nr.95.fasta')
+        cmd=[utils.selectENV('VC-General')]
+        cmd.extend(
+            ['wget','-c',URL.DemovirDB_URL,'-O',nr95_bz2,
+            '&& cd',wkdir,'&& bzip2',nr95_bz2,'\n',
+            'usearch','-makeudb_ublast',nr95_fa,'-output',uniprot_udb,
+            '&> usearch_database.log\n']
+        )
         return cmd
     def dl_refseq_viral_prot(self):
         wkdir=f'{self.outdir}/VC-ViralRefSeqDB'
@@ -81,6 +95,16 @@ fi
             vir_pid_taxa,vir_sp_taxa,vir_pid_sp_h,'\n']
         )
         return cmd
+    def dl_eggnog_db(self):
+        wkdir=f'{self.outdir}/VC-eggNOGDB'
+        utils.mkdir(wkdir)
+        eggnog_db_gz=f'{wkdir}/eggnog.db.gz'
+        eggnog_dmnd_gz=f'{wkdir}/eggnog_proteins.dmnd.gz'
+        cmd=['wget -c',URL.EGGNOG_DB_URL,'-O',eggnog_db_gz,
+        '&& gunzip',eggnog_db_gz,'\n',
+        'wget -c',URL.EGGNOG_DMND_URL,'-O',eggnog_dmnd_gz,
+        '&& gunzip',eggnog_dmnd_gz,'\n']
+        return cmd
     def dl_kofamscan_db(self):
         wkdir=f'{self.outdir}/VC-KofamScanDB'
         utils.mkdir(wkdir)
@@ -96,16 +120,6 @@ fi
         utils.mkdir(wkdir)
         cmd=['conda run -n VC-DRAMv DRAM-setup.py prepare_databases',
              '--skip_uniref','--output_dir',wkdir,'\n']
-        return cmd
-    def dl_eggnog_db(self):
-        wkdir=f'{self.outdir}/VC-eggNOGDB'
-        utils.mkdir(wkdir)
-        eggnog_db_gz=f'{wkdir}/eggnog.db.gz'
-        eggnog_dmnd_gz=f'{wkdir}/eggnog_proteins.dmnd.gz'
-        cmd=['wget -c',URL.EGGNOG_DB_URL,'-O',eggnog_db_gz,
-        '&& gunzip',eggnog_db_gz,'\n',
-        'wget -c',URL.EGGNOG_DMND_URL,'-O',eggnog_dmnd_gz,
-        '&& gunzip',eggnog_dmnd_gz,'\n']
         return cmd
     def dl_gtdbtk_db(self):
         wkdir=f'{self.outdir}/VC-GTDBTkDB'
@@ -141,6 +155,15 @@ fi
         utils.printSH(shell,cmd)
         cmd=self.dl_refseq_viral_prot()
         shell=f'{self.outdir}/ncbirefseq_db_deploy.sh'
+        utils.printSH(shell,cmd)
+        cmd=self.dl_demovir_db()
+        shell=f'{self.outdir}/demovir_db_deploy.sh'
+        utils.printSH(shell,cmd)
+        cmd=self.dl_eggnog_db()
+        shell=f'{self.outdir}/eggnog_db_deploy.sh'
+        utils.printSH(shell,cmd)
+        cmd=self.dl_kofamscan_db()
+        shell=f'{self.outdir}/kegg_db_deploy.sh'
         utils.printSH(shell,cmd)
         cmd=self.dl_dramv_db()
         shell=f'{self.outdir}/dramv_db_deploy.sh'
