@@ -7,6 +7,7 @@ NCBI_RELEASE_NUMBER_URL='https://ftp.ncbi.nlm.nih.gov/refseq/release/RELEASE_NUM
 NCBI_TAXDUMP_URL='ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz'
 
 #Demovir Database
+Demovir_URL='https://raw.githubusercontent.com/feargalr/Demovir/master/TrEMBL_viral_taxa.RDS'
 DemovirDB_URL='https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/10442241/nr.95.fasta.bz2'
 
 #KofamScan Database

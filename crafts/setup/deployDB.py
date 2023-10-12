@@ -39,20 +39,6 @@ class DB:
         cmd=['conda run -n VC-CheckV checkv download_database',wkdir,'\n'
             'mv',db_files,wkdir,'&& rmdir',db_dir,'\n']
         return cmd
-    def dl_demovir_db(self):
-        wkdir=f'{self.outdir}/VC-DemovirDB'
-        utils.mkdir(wkdir)
-        nr95_bz2=f'{wkdir}/nr.95.fasta.bz2'
-        uniprot_udb=f'{wkdir}/uniprot_trembl.viral.udb'
-        nr95_fa=nr95_bz2.replace('nr.95.fasta.bz2','nr.95.fasta')
-        cmd=[utils.selectENV('VC-General')]
-        cmd.extend(
-            ['wget','-c',URL.DemovirDB_URL,'-O',nr95_bz2,
-            '&& cd',wkdir,'&& bzip2',nr95_bz2,'\n',
-            'usearch','-makeudb_ublast',nr95_fa,'-output',uniprot_udb,
-            '&> usearch_database.log\n']
-        )
-        return cmd
     def dl_refseq_viral_prot(self):
         wkdir=f'{self.outdir}/VC-ViralRefSeqDB'
         utils.mkdir(wkdir)
@@ -95,6 +81,22 @@ fi
             vir_pid_taxa,vir_sp_taxa,vir_pid_sp_h,'\n']
         )
         return cmd
+    def dl_demovir_db(self):
+        wkdir=f'{self.outdir}/VC-DemovirDB'
+        utils.mkdir(wkdir)
+        TrEMBL_viral_taxa_rds=f'{wkdir}/TrEMBL_viral_taxa.RDS'
+        nr95_bz2=f'{wkdir}/nr.95.fasta.bz2'
+        uniprot_udb=f'{wkdir}/uniprot_trembl.viral.udb'
+        nr95_fa=nr95_bz2.replace('nr.95.fasta.bz2','nr.95.fasta')
+        cmd=[utils.selectENV('VC-General')]
+        cmd.extend(
+            ['wget','-c',URL.Demovir_URL,'-O',TrEMBL_viral_taxa_rds,'\n',
+            'wget','-c',URL.DemovirDB_URL,'-O',nr95_bz2,
+            '&& cd',wkdir,'&& bzip2 -d',nr95_bz2,'\n',
+            'usearch','-makeudb_ublast',nr95_fa,'-output',uniprot_udb,
+            '> usearch_database.log\n']
+        )
+        return cmd
     def dl_eggnog_db(self):
         wkdir=f'{self.outdir}/VC-eggNOGDB'
         utils.mkdir(wkdir)
@@ -112,7 +114,7 @@ fi
         profiles_tgz=f'{wkdir}/profiles.tar.gz'
         cmd=['wget -c',URL.KO_LIST_URL,'-O',ko_list_gz,'\n',
             'gunzip',ko_list_gz,'\n',
-            'wget -c',URL.KO_PROFILES_URL,'-O',profiles_gz,'\n',
+            'wget -c',URL.KO_PROFILES_URL,'-O',profiles_tgz,'\n',
             'tar xzf',profiles_tgz,'-C',wkdir,'\n']
         return cmd
     def dl_dramv_db(self):
