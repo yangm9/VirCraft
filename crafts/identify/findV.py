@@ -42,6 +42,7 @@ class vIdentify(MultiTools):
         except ValueError as e:
             print(f'ERROR: {e}')
             exit(1)
+        results=''
         cutoff=str(cutoff)
         self.threads=str(self.threads)
         #vibrant
@@ -60,11 +61,12 @@ class vIdentify(MultiTools):
         #multiple run
         cmd=[utils.selectENV('VC-General')]
         cmd.extend(['multithreads.pl',self.outdir,'ctg.sh 3\n'])
-        results=''
-        if not unrun: results=utils.execute(cmd)
+        shell=f'{self.outdir}/{self.name}_multi_find.sh'
+        utils.printSH(shell,cmd)
+        if not unrun: results=utils.execute(cmd) 
         self.threads=str(int(self.allthreads))
         cmd=self.vFilter()
-        shell=f'{self.outdir}/{self.name}_find_vir.sh'
+        shell=f'{self.outdir}/{self.name}_merge_vir.sh'
         utils.printSH(shell,cmd)
         if not unrun: results+=utils.execute(cmd)
         return results
