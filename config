@@ -6,6 +6,9 @@ MegahitOpts = --min-contig-len 300 -m 0.9 --k-list 21,33,55,77,99,127
 SPAdesOpts = --careful -m 1300 -k 21,33,55,77,99,127
 
 #Database
+
+ContamDB=/data_backup/database/contaminations/contaminations
+
 ## Full path pf DeepVirFinder
 DeepVirFinderDB = /data_backup/database/DeepVirFinderDB/models
 

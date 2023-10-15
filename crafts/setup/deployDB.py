@@ -68,7 +68,7 @@ if [ -z "$(ls -A ~/.taxonkit)" ]; then
     tar xzf''',taxdump_tgz,'''-C ~/.taxonkit
 fi
 '''
-            'extract_name.py',vir_prot,'>',vir_pid_sp,'\n',
+            'extract_pid_sp_from_faa.py',vir_prot,'>',vir_pid_sp,'\n',
             'cut -f 2',vir_pid_sp,"|uniq|taxonkit name2taxid|sed '1ispecies\\ttaxid'>",vir_name_taxaid,'\n',
             'cut -f 2',vir_pid_sp,"|uniq|taxonkit name2taxid|cut -f 2|taxonkit lineage|taxonkit reformat -r 'Unassigned'|cut -f 1,3|sed '1itaxid\\ttaxonomy'>",vir_pid_taxa,'\n',
             "csvtk join -t -f 'taxid;taxid'",vir_name_taxaid,vir_pid_taxa,

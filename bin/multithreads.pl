@@ -24,7 +24,7 @@ my $subsets_ref=&get_subset(\@scripts,$parallel_number);
 for my $subset(@$subsets_ref){
     &run_scripts($subset);
 }
-print "All Done!!!\n";
+print "All threads finished!!!\n";
 
 #Batch job submission
 sub run_scripts($){
@@ -33,7 +33,7 @@ sub run_scripts($){
     my @threads;
     foreach my $script(@scripts) {
         push(@threads, threads->create(sub {
-            system("sh $script >$script.o 2>$script.e");
+            system("sh $script >$script.log 2>$script.error");
         }));
     }
     foreach my $thread (@threads) {
