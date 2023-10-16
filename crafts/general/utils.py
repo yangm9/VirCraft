@@ -46,7 +46,7 @@ def isInstalled(name:str):
     from shutil import which
     return which(name)
 
-def run(cmd:list,silent=False):
+def run(cmd:list,sh_file:str,silent=False):
     cmd_txt = ' '.join(cmd).replace('\n ','\n')
     cmd_txt = cmd_txt.replace(' \n ','\n')
     print(f'Running command:\n{cmd_txt}') 
