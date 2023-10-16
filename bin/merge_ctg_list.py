@@ -75,6 +75,7 @@ def vCtgMerge(name,wkdir):
             df.drop(columns=['length'], inplace=True)
         elif tool=='vibrant':
             phage_txt=FastaDict[tool].format(name).replace('.fna','.txt')
+            phage_txt=f'{wkdir}/{phage_txt}'
             phage_df=pd.read_csv(phage_txt,sep='\t',header=None)
             phage_list=phage_df[0].tolist()
             df['vb_isPhage']=df['scaffold'].isin(phage_list).astype(int)

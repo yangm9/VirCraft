@@ -46,25 +46,18 @@ def isInstalled(name:str):
     from shutil import which
     return which(name)
 
-def run(cmd:list, silent=False):
-    '''
-    ref: virmatcher, https://github.com/bolduc/kb_virmatcher
-    param command: Command suitable for running in subprocess, must use a ['ls', '-l'] format
-    param silent: Run silently
-    return: Response from command
-    '''
-    cmd_txt=' '.join(cmd).replace('\n ','\n')
-    cmd_txt=cmd_txt.replace(' \n ','\n')
+def run(cmd:list,silent=False):
+    cmd_txt = ' '.join(cmd).replace('\n ','\n')
+    cmd_txt = cmd_txt.replace(' \n ','\n')
     print(f'Running command:\n{cmd_txt}') 
-    if silent:
-        results=subprocess.run(cmd,shell=False,encoding='utf-8',check=True,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
+    if not silent:
+        result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     else:
-        results=subprocess.run(cmd,shell=False,encoding='utf-8',check=True)
-    
-    if results.returncode != 0:
-        print(f'Error running command: {cmd_txt}. The error message was:\n{results.stderr}')
+        result = subprocess.run(cmd, shell=False, check=True)
+    if result.returncode != 0:
+        print(f'Error running command: {cmd_txt}. The error message was: \n{result.stderr}')
         exit(1)
-    return results
+    return result
 
 def execute(cmd):
     cmd_txt=' '.join(cmd).replace('\n ','\n')
