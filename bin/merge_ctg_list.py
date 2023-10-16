@@ -9,30 +9,35 @@ import re
 import pandas as pd
 import linkTab
 
+#The relative path to the final result table for viral identify tool, and it need to transform to the full path in this program.
 PathDict={
     'virsorter2':'vs2-pass1/final-viral-score.tsv',
     'vibrant':'VIBRANT_{0}/VIBRANT_results_{0}/VIBRANT_machine_{0}.tsv',
     'deepvirfinder':'deepvirfinder'
 }
 
+#The first columns name (Contig name) for final result table of each tool.
 NameDict={
     'virsorter2':'seqname',
     'vibrant':'scaffold',
     'deepvirfinder':'name'
 }
 
+#The Final output FastA file from each tool.
 FastaDict={
     'virsorter2':'vs2-pass1/final-viral-combined.fa',
     'vibrant':'VIBRANT_{0}/VIBRANT_phages_{0}/{0}.phages_combined.fna',
     'deepvirfinder':''
 }
 
+#The intermediate output from this program for each tool.
 CsvDict={
     'virsorter2':'{}/vs2_viral_info.xls',    
     'vibrant':'{}/vb_viral_info.xls',
     'deepvirfinder':'{}/dvf_viral_info.xls'
 }
 
+#The column dictionary for each tool, and this will be used to rename the column names for the file named "all_viral_ctgs.score.xls:".
 ColsDict={
     'virsorter2':{
         'dsDNAphage':'vs2_dsDNAphage','ssDNA':'vs2_ssDNA','NCLDV':'vs2_NCLDV',
@@ -79,8 +84,11 @@ def vCtgMerge(name,wkdir):
             phage_df=pd.read_csv(phage_txt,sep='\t',header=None)
             phage_list=phage_df[0].tolist()
             df['vb_isPhage']=df['scaffold'].isin(phage_list).astype(int)
-            df[['scaffold','vb_partial']]=df['scaffold'].str.split(r'_frag',expand=True)
-            df['vb_partial']=df['vb_partial'].str.replace('ment_','fragment_')
+            try: #In case the VIBRANT doesn't output fragment results
+                df[['scaffold','vb_partial']]=df['scaffold'].str.split(r'_frag',expand=True)
+                df['vb_partial']=df['vb_partial'].str.replace('ment_','fragment_')
+            except ValueError:
+                df['vb_partial'] = ''
         else:
             df.drop(columns=['len'], inplace=True)
         df.rename(columns={NameDict[tool]:'Contig'},inplace=True)
@@ -91,6 +99,7 @@ def vCtgMerge(name,wkdir):
         df.to_csv(csv_name,index=False,sep='\t')
     return all_ctgs
 
+#Calculate the final score according to all results.
 def calcCtgScore(all_merged_ctgs):
     df=pd.read_csv(all_merged_ctgs,sep='\t')
     df['vs2_score']=df['vs2_max_score'].apply(lambda x:2 if x>=0.9 else (1 if x>=0.7 else 0))
@@ -102,6 +111,7 @@ def calcCtgScore(all_merged_ctgs):
     df.to_csv(all_filt_ctgs,index=False,sep='\t')
     return 0
 
+#Main Function
 def ctgList(name,wkdir):
     all_nh_ctgs=vCtgMerge(name,wkdir)
     all_ctgs=['Contig']+all_nh_ctgs
