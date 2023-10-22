@@ -27,7 +27,7 @@ class VirHost(VirRef):
         '''
         wkdir=f'{self.outdir}/virmatcher'
         utils.mkdir(wkdir)
-        cmd=[utils.selectENV('VC-General')]
+        cmd=[utils.selectENV('VC-VHMatcher')]
         cmd.extend(
             ['VirMatcher --preparer','--gtdbtk-out-dir',tredir,
             '--gtdbtk-in-dir',self.hostsdir,'-v',self.fasta,

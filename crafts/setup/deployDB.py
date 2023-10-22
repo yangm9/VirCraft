@@ -23,14 +23,14 @@ class DB:
         utils.mkdir(wkdir)
         cmd=['conda run -n VC-VIBRANT download-db.sh',wkdir,'\n']
         return cmd
-    def dl_deepvirfinder_db(self):
-        wkdir=f'{self.outdir}/VC-DeepVirFinder'
-        utils.mkdir(wkdir)
-        which_dvf_cmd='conda run -n VC-DeepVirFinder which dvf.py'
-        models_dir=os.path.dirname(os.popen(which_dvf_cmd).read().strip())
-        models_dir=models_dir.replace('VC-DeepVirFinder/bin','VC-DeepVirFinder/share/deepvirfinder/models')
-        cmd=['cp -r',models_dir,wkdir,'\n']
-        return cmd
+#    def dl_deepvirfinder_db(self):
+#        wkdir=f'{self.outdir}/VC-DeepVirFinder'
+#        utils.mkdir(wkdir)
+#        which_dvf_cmd='conda run -n VC-DeepVirFinder which dvf.py'
+#        models_dir=os.path.dirname(os.popen(which_dvf_cmd).read().strip())
+#        models_dir=models_dir.replace('VC-DeepVirFinder/bin','VC-DeepVirFinder/share/deepvirfinder/models')
+#        cmd=['cp -r',models_dir,wkdir,'\n']
+#        return cmd
     def dl_checkv_db(self):
         wkdir=f'{self.outdir}/VC-CheckVDB'
         db_dir=f'{wkdir}/checkv-db-v*'
@@ -149,9 +149,9 @@ fi
         cmd=self.dl_vibrant_db()
         shell=f'{self.outdir}/vibrant_db_deploy.sh'
         utils.printSH(shell,cmd)
-        cmd=self.dl_deepvirfinder_db()
-        shell=f'{self.outdir}/deepvirfinder_db_deploy.sh'
-        utils.printSH(shell,cmd)
+ #       cmd=self.dl_deepvirfinder_db()
+ #       shell=f'{self.outdir}/deepvirfinder_db_deploy.sh'
+ #       utils.printSH(shell,cmd)
         cmd=self.dl_checkv_db()
         shell=f'{self.outdir}/checkv_db_deploy.sh'
         utils.printSH(shell,cmd)

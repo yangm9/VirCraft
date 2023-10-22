@@ -13,6 +13,7 @@ channels:
 dependencies:
   - biopython=1.81
   - blast=2.13.0
+  - cmake=3.6.2
   - minced=0.4.2
   - pandas=1.5.3
   - psutil=5.9.5
@@ -21,4 +22,5 @@ dependencies:
   - r-here=1.0.1
   - r-seqinr=4.2_23
   - r-stringr=1.5.0
+  - tqdm==4.65.0
   - trnascan-se=2.0.12

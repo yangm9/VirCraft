@@ -45,17 +45,13 @@ class ENV:
             tmp_wishdir=f'{self.outdir}/WIsH'
             vhmatcher_bin_dir=utils.get_conda_env_dir(self.ENVDICT[name])
             vhmatcher_bin_dir+='/bin'
-            if in_wall:
-                wish=f'{sys.path[0]}/bin/WIsH'
-                cmd.extend(['cp',wish,vhmatcher_bin_dir,'\n'])
-            else:
-                cmd.extend(
-                    ['mkdir',tmp_wishdir,
-                    '&& git clone',URL.WISH_URL,tmp_wishdir,
-                    '&& cd',tmp_wishdir,
-                    '&& cmake . && make && chmod +x WIsH',
-                    '&& cp WIsH',vhmatcher_bin_dir,'\n']
-                )
+            cmd.extend(
+                ['mkdir',tmp_wishdir,
+                '&& git clone',URL.WISH_URL,tmp_wishdir,
+                '&& cd',tmp_wishdir,
+                '&& cmake . && make && chmod +x WIsH',
+                '&& cp WIsH',vhmatcher_bin_dir,'\n']
+            )
             tmp_virmatcherdir=f'{self.outdir}/VirMatcher'
             cmd.extend(
                 ['mkdir',tmp_virmatcherdir,
