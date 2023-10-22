@@ -26,6 +26,7 @@ class VirHost(VirRef):
         Predict the hosts for viral contigs using VirMatcher.
         '''
         wkdir=f'{self.outdir}/virmatcher'
+        tredir=os.path.abspath(tredir)
         utils.mkdir(wkdir)
         cmd=[utils.selectENV('VC-VHMatcher')]
         cmd.extend(

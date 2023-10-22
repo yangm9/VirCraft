@@ -13,7 +13,6 @@ channels:
 dependencies:
   - biopython=1.81
   - blast=2.13.0
-  - cmake=3.6.2
   - minced=0.4.2
   - pandas=1.5.3
   - psutil=5.9.5
