@@ -59,7 +59,6 @@ class VirHost(VirRef):
         if not gtdbtk:
             tmp_cmd,gtdbtk=self.magsTree()
             cmd.extend(tmp_cmd)
-        cmd.append(utils.selectENV('VC-General'))
         cmd.extend(self.virmatch(gtdbtk))
         cmd.extend(self.virTaxa(taxa_anno))
         shell=f'{self.outdir}/{self.name}_hosts.sh'
