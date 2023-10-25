@@ -22,7 +22,8 @@ source /root/.bashrc && \
 git clone https://gitee.com/brightyoung/VirCraft.git && \ #1.4G 2s
 export PATH="/opt/VirCraft:/opt/VirCraft/bin":$PATH && \ 
 cd /opt/VirCraft && \
-virCraft.py setup_env -w -o envs
+virCraft.py setup_env -w -o envs && \
+
 #
 
 EXPOSE 315

@@ -57,7 +57,7 @@ class VirHost(VirRef):
     def PredHosts(self,gtdbtk=None,taxa_anno=None,unrun=False):
         cmd=[]
         if not gtdbtk:
-            tmp_cmd,tredir=self.magsTree()
+            tmp_cmd,gtdbtk=self.magsTree()
             cmd.extend(tmp_cmd)
         cmd.append(utils.selectENV('VC-General'))
         cmd.extend(self.virmatch(gtdbtk))
