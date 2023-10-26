@@ -58,6 +58,7 @@ class ENV:
                 '&& git clone',URL.VIRMATCHER_URL,tmp_virmatcherdir,
                 '&& cd',tmp_virmatcherdir,
                 "&& sed -i 's/4.2_5/4/' setup.py",
+                "&& sed -i 's/ar122/ar53/' bin/VirMatcher",
                 '&& conda run -n',
                 self.ENVDICT[name],'pip install . --no-deps\n']
             )
