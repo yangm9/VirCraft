@@ -59,6 +59,8 @@ class ENV:
                 '&& cd',tmp_virmatcherdir,
                 "&& sed -i 's/4.2_5/4/' setup.py",
                 "&& sed -i 's/ar122/ar53/' bin/VirMatcher",
+                "&& sed -i -E 's/^indexes = set\(\).union\(\*indices_to_use\)/indexes = list(set().union(*indices_to_use))/' bin/ResultsAggregator.py"
+                "&& sed -i -E 's/^columns = set\(\).union\(\*columns_to_use\)/columns = list(set().union(*columns_to_use))/' bin/ResultsAggregator.py"
                 '&& conda run -n',
                 self.ENVDICT[name],'pip install . --no-deps\n']
             )
