@@ -39,20 +39,35 @@ class VirHost(VirRef):
         '''
         Add the viral taxonomic annotation for host pridiction results.
         '''
-        if not taxa_anno: return []
         wkdir=f'{self.outdir}/virmatcher'
         m_taxa_anno=f'{self.outdir}/all_votu.taxa.txt'
         vh_pred=f'{wkdir}/VirMatcher_Summary_Predictions.tsv'
         taxa_anno=os.path.abspath(taxa_anno)
         vh_vtaxa=f'{self.outdir}/VirMatcher_Summary_Predictions.vtaxa.tsv'
+        if not taxa_anno: return ['ln -s',vh_pred,vh_vtaxa,'\n']
         cmd=[utils.selectENV('VC-General')]
         cmd.extend(
-            ["sed -i '1s/ /_/'",vh_pred,'\n',
+            ["sed -i '1s/ /_/g'",vh_pred,'\n',
             "sed '1s/Sequence_ID/Original_Viral_population/'",
             taxa_anno,'>',m_taxa_anno,'\n',
             'linkTab.py',vh_pred,m_taxa_anno,'left Original_Viral_population',
             vh_vtaxa,'\n']
         )
+        return cmd
+    def hostTaxa(self,tredir):
+        gtdbtk_arc=f'{tredir}/gtdbtk.ar53.summary.tsv'
+        gtdbtk_bac=f'{tredir}/gtdbtk.bac120.summary.tsv'
+        gtdbtk_bac_tmp=gtdbtk_bac+'.tmp'
+        gtdbtk_hosts=f'{self.outdir}/gtdbtk.hosts.taxa.tsv'
+        vh_vtaxa=f'{self.outdir}/VirMatcher_Summary_Predictions.vtaxa.tsv'
+        vh_vhtaxa=vh_vtaxa.replace('vtaxa','vhtaxa')
+        cmd=[utils.selectENV('VC-General')]
+        cmd.extend(['sed 1d',gtdbtk_bac,'>',gtdbtk_bac_tmp,'\n',
+            'cat',gtdbtk_arc,gtdbtk_bac_tmp,
+            "|cut -f 1,2|sed '1s/user_genome/Original_Host/' >",
+            gtdbtk_hosts,'\n',
+            'linkTab.py',vh_vtaxa,gtdbtk_hosts,'left Original_Host',
+            vh_vhtaxa,'\n'])
         return cmd
     def PredHosts(self,gtdbtk=None,taxa_anno=None,unrun=False):
         cmd=[]
