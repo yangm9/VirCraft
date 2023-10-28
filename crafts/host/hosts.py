@@ -63,7 +63,7 @@ class VirHost(VirRef):
         vh_vtaxa=f'{self.outdir}/VirMatcher_Summary_Predictions.vtaxa.tsv'
         vh_vhtaxa=vh_vtaxa.replace('vtaxa','vhtaxa')
         cmd=[utils.selectENV('VC-General')]
-        cmd.extend(['sed 1d',gtdbtk_bac,'>',gtdbtk_bac_tmp,'\n',
+        cmd.extend(["sed '1d'",gtdbtk_bac,'>',gtdbtk_bac_tmp,'\n',
             'cat',gtdbtk_arc,gtdbtk_bac_tmp,
             "|cut -f 1,2|sed '1s/user_genome/Original_Host/' >",
             gtdbtk_hosts,'\n',
