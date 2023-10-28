@@ -76,6 +76,7 @@ class VirHost(VirRef):
             cmd.extend(tmp_cmd)
         cmd.extend(self.virmatch(gtdbtk))
         cmd.extend(self.virTaxa(taxa_anno))
+        cmd.extend(self.hostTaxa(gtdbtk))
         shell=f'{self.outdir}/{self.name}_hosts.sh'
         utils.printSH(shell,cmd)
         results=''
