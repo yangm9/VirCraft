@@ -55,6 +55,7 @@ class VirHost(VirRef):
         )
         return cmd
     def hostTaxa(self,tredir):
+        tredir=os.path.abspath(tredir)
         gtdbtk_arc=f'{tredir}/gtdbtk.ar53.summary.tsv'
         gtdbtk_bac=f'{tredir}/gtdbtk.bac120.summary.tsv'
         gtdbtk_bac_tmp=gtdbtk_bac+'.tmp'
