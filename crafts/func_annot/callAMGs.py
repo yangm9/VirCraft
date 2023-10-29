@@ -54,7 +54,6 @@ class AMGs(VirScan):
         return dmvdir,vbdir
     def annotAMGs(self,checkv_dir=None,unrun=False):
         #step1 VS2
-        cmd=[utils.selectENV('VC-VirSorter2')]
         tmp_cmd,vs2dir=self.virsorter(self.fasta,1,min_score=0,min_length=1500)
         cmd.extend(tmp_cmd)
         #step2 for DRAM-v and VIBRANT 
