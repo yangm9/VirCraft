@@ -3,6 +3,7 @@
 import os
 import sys
 import glob
+from ..general import utils
 from ..data.bioseq import Reads
 from ..data.bioseq import Seq
 from ..identify.viridsop import VirScan

@@ -44,9 +44,12 @@ while(<IN>){
     if($n==1){
         $samps_prefix=$samp_name;
         $merged_prefix=$samp_name;
+    }elsif($n==2){
+	`$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left $topleft $wkdir/${samps_prefix}${n}.tmp`;
+	$samps_prefix.=$n;
     }else{
         #print "$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left $topleft $wkdir/${samps_prefix}${n}.$postfix\n";
-        `$Bin/linkTab.py $wkdir/$samps_prefix.$postfix $wkdir/$samp_name.$postfix left $topleft $wkdir/${samps_prefix}${n}.$postfix`;
+        `$Bin/linkTab.py $wkdir/$samps_prefix.tmp $wkdir/$samp_name.$postfix left $topleft $wkdir/${samps_prefix}${n}.tmp`;
         $samps_prefix.=$n;
         #`rm -f $wkdir/$samp_name.$postfix`;
     }
@@ -54,7 +57,8 @@ while(<IN>){
 }
 close IN;
 
-LABEL: `mv $wkdir/$samps_prefix.$postfix $wkdir/all_merged.$postfix`;
-`rm -f $wkdir/$merged_prefix*.$postfix`;
+LABEL: `mv $wkdir/$samps_prefix.tmp $wkdir/all_merged.$postfix`;
+`rm -f $wkdir/$merged_prefix*.tmp`;
+print "sed -i '1s/\.sort $abd_hash{$postfix}//g' $wkdir/all_merged.$postfix";
 `sed -i '1s/\.sort $abd_hash{$postfix}//g' $wkdir/all_merged.$postfix` if($object eq 'Contig');
 __END__
