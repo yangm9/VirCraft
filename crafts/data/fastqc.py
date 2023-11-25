@@ -12,6 +12,7 @@ class QualCtrl(Reads):
         wkdir=f'{self.outdir}/fastp'
         out_fq1=f'{wkdir}/{self.basename_fq1}'.replace('.gz','')
         out_fq2=f'{wkdir}/{self.basename_fq2}'.replace('.gz','')
+        fastp_json=f'{wkdir}/fastp.json'
         filt_rpts=f'{wkdir}/{self.samp}_report.html'
         out_fq_list=f'{wkdir}/{self.samp}_list.txt'
         utils.mkdir(wkdir)
@@ -20,7 +21,7 @@ class QualCtrl(Reads):
         if 'f' in process:
             cmd=['fastp','-i',self.fastqs[0],'-o',out_fq1,
                 '-I',self.fastqs[1],'-O',out_fq2,'-w',self.threads,
-                self.confDict['FastpOpts'],'-h',filt_rpts,'\n',
+                self.confDict['FastpOpts'],'-j',fastp_json,'-h',filt_rpts,'\n',
                 'ls',out_fq1,out_fq2,'>',out_fq_list,'\n']
             out_fastqs=[out_fq1,out_fq2]
         else:
