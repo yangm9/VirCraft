@@ -1,8 +1,9 @@
 #!/usr/bin/perl -w
-### zhushilin@genomics.org.sn
-### 2011-05-20
+## zhushilin@genomics.org.sn 2011-05-20
+## yangm@idsse.ac.cn 2023-11-25 
+
 use strict;
-die "$0  <scaffold.fa> <output>  <cutoff>\n" if(@ARGV <2);
+die "$0 <scaffold.fa> <output> <cutoff>\n" if(@ARGV <2);
 
 my ($fasta,$output,$cutoff)=@ARGV;
 $cutoff=100 if (!defined $cutoff);

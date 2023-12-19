@@ -46,6 +46,11 @@ class VirRef(VirScan):
             'votus_lifetype_quality_barplot.R',vb_ckv_xls,wkdir,'\n']
         )
         return cmd
+    def binning():
+        cmd=[utils.selectENV('VC-General')]
+        wkdir=f'{self.outdir}'
+        
+        return cmd
     def RmDup(self,cutoff=1500,unrun=False):
         cmd=[self.envs]
         tmp_cmd,votus=self.cluster()
