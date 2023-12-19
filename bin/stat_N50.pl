@@ -13,6 +13,7 @@ my ($sca_gc,$con_gc)=(0,0);
 my ($sca100,$con100)=(0,0);		### number (>=cutoff)
 my ($sca500,$con500)=(0,0);		### number (>=500)
 my ($sca1000,$con1000)=(0,0);		### number (>=1000)
+my ($sca1500,$con1500)=(0,0);		### number (>=1500)
 my ($sca2000,$con2000)=(0,0);		### number (>=2000)
 my ($sca5000,$con5000)=(0,0);		### number (>=5000)
 my ($sca10000,$con10000)=(0,0);		### number (>=10000)
@@ -36,6 +37,7 @@ while (<FILE>){
 		$sca100++ if $sl>=$cutoff;
 		$sca500++ if $sl>=500;
 		$sca1000++ if $sl>=1000;
+		$sca1500++ if $sl>=1500;
 		$sca2000++ if $sl>=2000;
 		$sca5000++ if $sl>=5000;
 		$sca10000++ if $sl>=10000;
@@ -52,6 +54,7 @@ while (<FILE>){
 			$con100++ if $cl>=$cutoff;
 			$con500++ if $cl>=500;
 		    $con1000++ if $sl>=1000;
+		    $con1500++ if $sl>=1500;
 			$con2000++ if $cl>=2000;
 			$con5000++ if $cl>=5000;
 			$con10000++ if $cl>=10000;
@@ -86,6 +89,7 @@ print OUT "Total_length\t$total_slen\t-\t$total_clen\t-\n";
 print OUT "number>=$cutoff"."bp\t-\t$sca100\t-\t$con100\n";
 print OUT "number>=500bp\t-\t$sca500\t-\t$con500\n";
 print OUT "number>=1000bp\t-\t$sca1000\t-\t$con1000\n";
+print OUT "number>=1500bp\t-\t$sca1000\t-\t$con1500\n";
 print OUT "number>=2000bp\t-\t$sca2000\t-\t$con2000\n";
 print OUT "number>=5000bp\t-\t$sca5000\t-\t$con5000\n";
 print OUT "number>=10000bp\t-\t$sca10000\t-\t$con10000\n";

@@ -44,6 +44,11 @@ color1<-c("#ff7f0e", "#2ca02c", "#d62728", "#9467bd","#5F80B4")
 color2<-c("#e377c2", "#7f7f7f", "#bcbd22", "#9edae5","#85B22E")
 color3<-c("#aec7e8", "#ffbb78", "#98df8a", "#ff9896","#B15928")
 color4<-c("#f7b6d2", "#17becf", "#dbdb8d", "#c7c7c7","#33A02C")
+group_number<-length(unique(samp_group_df$Group))
+color1<-color1[1:group_number]
+color2<-color2[1:group_number]
+color3<-color3[1:group_number]
+color4<-color4[1:group_number]
 
 p1<-ggplot(alpha_df,aes(x=Group,y=specN)) +
     geom_boxplot(outlier.size=1,fill=color1) +
