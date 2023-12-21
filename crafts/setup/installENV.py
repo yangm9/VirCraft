@@ -13,9 +13,10 @@ class ENV:
     ENVDICT={'reads_qc':'VC-ReadsQC','assembly':'VC-Assembly',
              'virsorter2':'VC-VirSorter2','vibrant':'VC-VIBRANT',
              'deepvirfinder':'VC-DeepVirFinder','checkv':'VC-CheckV',
-             'dramv':'VC-DRAMv','vcontact':'VC-vContact2',
-             'gtdbtk':'VC-GTDBTk','quantify':'VC-Quantify',
-             'vhmatcher':'VC-VHMatcher','general':'VC-General'}
+             'vrhyme':'VC-vRhyme','dramv':'VC-DRAMv',
+             'vcontact':'VC-vContact2','gtdbtk':'VC-GTDBTk',
+             'quantify':'VC-Quantify','vhmatcher':'VC-VHMatcher',
+             'general':'VC-General'}
     def __init__(self,outdir='',threads=8):
         self.outdir=os.path.abspath(outdir)
         self.threads=str(threads)
