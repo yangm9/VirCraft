@@ -21,7 +21,6 @@ class EnviComp(ORF):
         cmd=[utils.selectENV('VC-vContact2')]
         wkdir=f'{self.outdir}/vContact2'
         utils.mkdir(wkdir)
-        #OtherORFs=self.confDict['OtherDataSetFAA']
         vContDB="'ProkaryoticViralRefSeq94-Merged'"
         orfs_info=f'{self.outdir}/all_merged_orfs.csv'
         cmd.extend(

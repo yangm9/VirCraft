@@ -7,8 +7,6 @@ SPAdesOpts = --careful -m 1300 -k 21,33,55,77,99,127
 
 #Database
 
-ContamDB=/data_backup/database/contaminations/contaminations
-
 ## Full path pf DeepVirFinder
 DeepVirFinderDB = /data_backup/database/DeepVirFinderDB/models
 
@@ -33,9 +31,6 @@ EggNOGDB = /data_backup/database/eggnog-mapper
 
 ## Path to kofamscan database
 KofamscanDB = /data_backup/database/kofamscanDB
-
-## Datasets for compararion
-CompDataSet =
 
 ## NCBI viral RefSeq database
 NCBIvRefProtDB = /data_backup/database/NCBI_refseq/viral
