@@ -103,7 +103,7 @@ Usage: {name} <subcommand> [options] -o <outdir>
         'compare',
          help='Compare the virus protein sequence by vContact2'
     )
-    subpsr=addFaArg(subpsr,prot)
+    subpsr=addFaArg(subpsr,'prot')
     subpsr=addGlbArg(subpsr)
     subpsr.add_argument(
         '-e','--prefix',action='store',type=str,
@@ -246,7 +246,7 @@ def addSampArg(psr):
     psr.add_argument(
         '-s','--sampinfo',action='store',type=str,
         dest='samp_info',metavar='STR',default=False,required=True,
-        help='Sample information file with the header of \"#Sample\\tGroup\\tDataPath\n\", and the format of each line in the text is \"sample name\\tgroup name\\tfull path of fastq1, full path of fastq2\\n\"'
+        help='Sample information file with the header of \"#Sample\\tGroup\\tDataPath\\n\", and the format of each line in the text is \"sample name\\tgroup name\\tfull path of fastq1, full path of fastq2\\n\"'
     )
     return psr 
 
