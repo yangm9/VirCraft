@@ -3,14 +3,15 @@
 #author: yangming, yangm@idsse.ac.cn
 #Created on Tus Jan 2 15:38:37 2024
 import os
-import argparse
+import sys
+from crafts.config import arguments
 from crafts.config import config
 
-parser = argparse.ArgumentParser(description='Process sample information')
-parser.add_argument('--info', required=True, help='Path to sample_info.xls')
-parser.add_argument('--outdir', required=True, help='Output directory for results')
-
-args = parser.parse_args()
+version='0.0.11'
+parser=arguments.autOpts(sys.argv[0],version)
+args=parser.parse_args()
+if len(sys.argv)==1:
+    parser.print_help()
 
 samp_info = args.info
 outdir = args.outdir
@@ -19,3 +20,4 @@ if not os.path.exists(outdir): os.makedirs(outdir)
 
 CONFIG=config.VirCfg()
 CONFIG.readSampInfo()
+'''

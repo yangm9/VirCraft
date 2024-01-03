@@ -8,6 +8,30 @@ Created on Fri Dec 18 18:17:58 2022
 
 import argparse
 
+def autOpts(name:str,version:str):
+    parser=argparse.ArgumentParser(
+        prog=name,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        usage=name,
+        description=f'''autoVirCraft {version} -- A automatic program for VirCraft
+Usage: {name} <subcommand> [options]
+    subcommand:
+        exec: Execute the VirCraft pipeline automatically
+        setup: Setup the conda environments and databases for VirCraft automatically
+        clear: remove all useless files from the results to save storage space
+'''
+    )
+    subparsers=parser.add_subparsers(
+        help=''
+    )
+    subpsr=subparsers.add_parser(
+        'exec',
+        help='Execute the VirCraft pipeline automatically'
+    )
+    subpsr=addSampArg(subpsr)
+    subpsr=addFaArg(subpsr,'ctg')
+    return parser
+
 def setOpts(name:str,version:str):
     parser=argparse.ArgumentParser(
         prog=name,
