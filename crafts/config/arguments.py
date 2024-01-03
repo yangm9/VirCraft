@@ -103,7 +103,7 @@ Usage: {name} <subcommand> [options] -o <outdir>
         'compare',
          help='Compare the virus protein sequence by vContact2'
     )
-    subpsr=addFaArg(subpsr)
+    subpsr=addFaArg(subpsr,prot)
     subpsr=addGlbArg(subpsr)
     subpsr.add_argument(
         '-e','--prefix',action='store',type=str,
