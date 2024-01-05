@@ -15,10 +15,6 @@ def autOpts(name:str,version:str):
         usage=name,
         description=f'''autoVirCraft {version} -- A automatic program for VirCraft
 Usage: {name} <subcommand> [options]
-    subcommand:
-        exec: Execute the VirCraft pipeline automatically
-        setup: Setup the conda environments and databases for VirCraft automatically
-        clear: remove all useless files from the results to save storage space
 '''
     )
     subparsers=parser.add_subparsers(
@@ -30,6 +26,21 @@ Usage: {name} <subcommand> [options]
     )
     subpsr=addSampArg(subpsr)
     subpsr=addFaArg(subpsr,'ctg')
+    subpsr.add_argument(
+        '-p','--steps',action='store',type=str,
+        dest='steps',metavar='STR',default='123456789',required=False,
+        help='the steps selected for viromic analysis, [default=123456789]'
+    )
+    
+    subpsr=subparsers.add_parser(
+        'setup',
+        help='Setup the conda environments and databases for VirCraft automatically'
+    )
+    
+    subpsr=subparsers.add_parser(
+        'clear',
+        help='Remove all useless files from the results to save storage space'
+    )
     return parser
 
 def setOpts(name:str,version:str):

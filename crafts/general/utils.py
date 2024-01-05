@@ -46,20 +46,24 @@ def isInstalled(name:str):
     from shutil import which
     return which(name)
 
-def run(cmd:list,sh_file:str,silent=False):
-    cmd_txt = ' '.join(cmd).replace('\n ','\n')
-    cmd_txt = cmd_txt.replace(' \n ','\n')
-    print(f'Running command:\n{cmd_txt}') 
-    if not silent:
-        result = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    else:
-        result = subprocess.run(cmd, shell=False, check=True)
-    if result.returncode != 0:
-        print(f'Error running command: {cmd_txt}. The error message was: \n{result.stderr}')
-        exit(1)
-    return result
+def execute(sh_file:str):
+    sh_name=os.path.splitext(os.path.basename(sh_file))[0]
+    log_file=f'{sh_name}.log'
+    error_file=f'{sh_name}.error'
+    try:
+        result=subprocess.run(['bash', script_path],
+                              capture_output=True,
+                              text=True)
+        with open(log_file,'w') as log_file:
+            log_file.write(result.stdout)
+        with open(error_file,'w') as error_file:
+            error_file.write(result.stderr)
+        return result.returncode
+    except Exception as e:
+        print(f'Error: {e}')
+        return 1
 
-def execute(cmd):
+def run(cmd):
     cmd_txt=' '.join(cmd).replace('\n ','\n')
     cmd_txt=cmd_txt.replace(' \n ','\n')
     print(f'Running command:\n{cmd_txt}')
