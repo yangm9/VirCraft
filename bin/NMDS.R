@@ -38,7 +38,7 @@ colnames(group)<-c("sample","group")
 df<-merge(df_points,group,by="sample")
 color<-c("#1597A5","#FFC24B","#85B22E","#FEB3AE","#5F80B4","#964500","#619cff","#8f00ff")#颜色变量
 
-plt<-ggplot(data=df,aes(x=NMDS1,y=NMDS2))+#指定数据、X轴、Y轴，颜色
+nmds_plt<-ggplot(data=df,aes(x=NMDS1,y=NMDS2))+#指定数据、X轴、Y轴，颜色
     theme_bw()+#主题设置
     geom_point(aes(color=group),shape=19,size=3)+#绘制点图并设定大小
     theme(panel.grid=element_blank())+
@@ -63,5 +63,20 @@ plt<-ggplot(data=df,aes(x=NMDS1,y=NMDS2))+#指定数据、X轴、Y轴，颜色
     ggtitle(paste('Stress=',round(df_nmds_stress,3)))#添加应力函数值
 
 pdf(paste(argv[3],'/NMDS.pdf',sep=''),width=10,height=8)
-plt
+nmds_plt
+dev.off()
+
+#ADONIS分析
+group_list<-df$group
+adonis_df<-adonis2(otu_t~group_list,method="bray",perm=999)
+adonis_df<-cbind(ADONIS=row.names(adonis_df),adonis_df)
+adonis_tab<-paste(argv[3],'/ADONIS.xls',sep='')
+write.table(adonis_df,adonis_tab,sep='\t')
+
+#ANOSIM分析
+otu_t.dist<-vegdist(otu_t)
+otu_t.ano<-with(group, anosim(otu_t.dist, group))
+pdf(paste(argv[3],'/ANOSIM.pdf',sep=''),width=10,height=8)
+anosim_plt<-plot(otu_t.ano)
+anosim_plt
 dev.off()
