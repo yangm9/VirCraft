@@ -77,6 +77,6 @@ write.table(adonis_df,adonis_tab,sep='\t')
 otu_t.dist<-vegdist(otu_t)
 otu_t.ano<-with(group, anosim(otu_t.dist, group))
 pdf(paste(argv[3],'/ANOSIM.pdf',sep=''),width=10,height=8)
-anosim_plt<-plot(otu_t.ano)
+anosim_plt<-plot(otu_t.ano,xlab="Groups",ylab="Dissimilarity Rank Value")
 anosim_plt
 dev.off()
