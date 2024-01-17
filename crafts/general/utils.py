@@ -51,7 +51,7 @@ def execute(sh_file:str):
     log_file=f'{sh_name}.log'
     error_file=f'{sh_name}.error'
     try:
-        result=subprocess.run(['bash', script_path],
+        result=subprocess.run(['bash', sh_file],
                               capture_output=True,
                               text=True)
         with open(log_file,'w') as log_file:
