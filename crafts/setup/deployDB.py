@@ -183,5 +183,5 @@ fi
         shell=f'{self.outdir}/all_database_deploy.sh'
         utils.printSH(shell,cmd)
         results=''
-        if not unrun: results=utils.execute(cmd)
+        if not unrun: results=utils.execute(shell)
         return results

@@ -59,5 +59,5 @@ class GeneFunc(Seq):
         cmd.extend(self.keggAnno(orfs_faa))
         shell=f'{self.outdir}/{self.name}_gene_annot.sh'
         utils.printSH(shell,cmd)
-        results=utils.execute(cmd)
+        results=utils.execute(shell)
         return results

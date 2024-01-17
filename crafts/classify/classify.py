@@ -80,5 +80,5 @@ class VirTaxa(Seq):
         shell=f'{self.outdir}/{self.name}_classify.sh'
         utils.printSH(shell,cmd)
         results=''
-        if not unrun: results=utils.execute(cmd)
+        if not unrun: results=utils.execute(shell)
         return results

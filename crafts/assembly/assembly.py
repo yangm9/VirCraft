@@ -103,5 +103,5 @@ class Assembly(Reads):
         shell=f'{self.outdir}/{self.samp}_assembly.sh'
         utils.printSH(shell,cmd)
         results=''
-        if not unrun: results=utils.execute(cmd)
+        if not unrun: results=utils.execute(shell)
         return results

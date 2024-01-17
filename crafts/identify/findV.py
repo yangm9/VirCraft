@@ -63,10 +63,10 @@ class vIdentify(MultiTools):
         cmd.extend(['multithreads.pl',self.outdir,'ctg.sh 3\n'])
         shell=f'{self.outdir}/{self.name}_multi_find.sh'
         utils.printSH(shell,cmd)
-        if not unrun: results=utils.execute(cmd) 
+        if not unrun: results=utils.execute(shell) 
         self.threads=str(int(self.allthreads))
         cmd=self.vFilter()
         shell=f'{self.outdir}/{self.name}_merge_vir.sh'
         utils.printSH(shell,cmd)
-        if not unrun: results+=utils.execute(cmd)
+        if not unrun: results+=utils.execute(shell)
         return results

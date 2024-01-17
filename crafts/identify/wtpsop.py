@@ -66,5 +66,5 @@ class posiWTP(VirSeq):
         #Generate shell and exeute it
         shell=f'{self.outdir}/{self.name}_find_vir.sh'
         utils.printSH(shell,cmd)
-        results=utils.execute(cmd)
+        results=utils.execute(shell)
         return results

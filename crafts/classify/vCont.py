@@ -42,5 +42,5 @@ class EnviComp(ORF):
         shell=f'{self.outdir}/v_compare.sh'
         utils.printSH(shell,cmd)
         results=''
-        if not unrun: results=utils.execute(cmd)
+        if not unrun: results=utils.execute(shell)
         return results

@@ -106,5 +106,5 @@ class VirScan(Seq):
         shell=f'{self.outdir}/{self.name}_find_vir.sh'
         utils.printSH(shell,cmd)
         results=''
-        if not unrun: results=utils.execute(cmd)
+        if not unrun: results=utils.execute(shell)
         return results

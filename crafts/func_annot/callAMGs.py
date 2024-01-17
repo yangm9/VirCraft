@@ -73,5 +73,5 @@ class AMGs(VirScan):
         shell=f'{self.outdir}/{self.name}_call_amgs.sh'
         utils.printSH(shell,cmd)
         results=''
-        if not unrun: results=utils.execute(cmd)
+        if not unrun: results=utils.execute(shell)
         return results

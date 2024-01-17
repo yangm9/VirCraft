@@ -26,5 +26,5 @@ class GeneAbdStat(multiGeneCount):
         shell=f'{self.outdir}/{self.name}_gene_quant.sh'
         results=''
         utils.printSH(shell,cmd)
-        if not unrun: results=utils.execute(cmd)
+        if not unrun: results=utils.execute(shell)
         return results
