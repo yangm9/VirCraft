@@ -70,7 +70,7 @@ dev.off()
 group_list<-df$group
 adonis_df<-adonis2(otu_t~group_list,method="bray",perm=999)
 adonis_df<-cbind(ADONIS=row.names(adonis_df),adonis_df)
-adonis_tab<-paste(argv[3],'/ADONIS.xls',sep='',col.names=TRUE,row.names=FALSE)
+adonis_tab<-paste(argv[3],'/ADONIS.xls',sep='')#,col.names=TRUE,row.names=FALSE)
 write.table(adonis_df,adonis_tab,sep='\t')
 
 #ANOSIM分析
