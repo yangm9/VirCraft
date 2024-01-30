@@ -14,9 +14,9 @@ Purpose:
 Usage:
     perl renameMergeSeq.pl -i <FastA_dir> [options] -o <merged.fa>
         -i <FastA_dir>: stored the FastA files with the postfix of ".fa"
-        -o <merged.fa>: the output FastA file in which the sequence has been renamed.
-        -p <postfix>: the postfix of FastA file, i.e. fa, fasta, fna or faa, etc.
-        -t <seqtype>: the format of name, MAG or SEQ.
+        -o <merged.fa>: the output FastA file in which the sequence has been renamed
+        -p <postfix>: the postfix of FastA file, i.e. fa, fasta, fna or faa, etc [default='fa']
+        -t <seqtype>: the format of name, MAG or Seq, [default='Seq']
 Author:
     Ming Yang yangm@idsse.ac.cn
 Vwesion:
