@@ -47,13 +47,10 @@ def isInstalled(name:str):
     return which(name)
 
 def execute(sh_file:str):
-    sh_name=os.path.splitext(os.path.basename(sh_file))[0]
-    log_file=f'{sh_name}.log'
-    error_file=f'{sh_name}.error'
+    log_file=f'{sh_file}.log'
+    error_file=f'{sh_file}.error'
     try:
-        result=subprocess.run(['bash', sh_file],
-                              capture_output=True,
-                              text=True)
+        result=subprocess.run(['bash', sh_file],capture_output=True,text=True)
         with open(log_file,'w') as log_file:
             log_file.write(result.stdout)
         with open(error_file,'w') as error_file:
