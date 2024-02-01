@@ -69,7 +69,7 @@ class VirAbdStat(multiVirCount):
             'NMDS.R',abd,self.samp_info,self.outdir,'\n']
         )
         return cmd
-    def QuantStat(self,taxa_anno=None,checkv_dir=None,unrun=False):
+    def QuantStat(self,taxa_anno=None,checkv_dir=None,unrun=False,clear=False):
         cmd=self.virCountBySamp()
         cmd.extend([utils.selectENV('VC-General')])
         cmd.extend(

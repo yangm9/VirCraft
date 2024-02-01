@@ -26,6 +26,7 @@ class VirCount(Reads):
             self.fastqs[0],self.fastqs[1],
             '|samtools view','-o',raw_bam,'-@ 28 -b -S\n',
             'samtools sort',raw_bam,'-o',sort_bam,'-@ 28\n',
+            'rm -f raw_bam\n',
             'samtools index',sort_bam,'\n']
         )
         return cmd

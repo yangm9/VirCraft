@@ -5,6 +5,8 @@ from ..data.bioseq import CDS
 from .alnQuant import VirCount
 from .alnQuant import GeneCount
 
+#Running virus or gene abundance analysis in batch
+
 class multiVirCount(Seq):
     def __init__(self,samp_info='',fasta='',outdir='',threads=8):
         super().__init__(fasta,outdir)
