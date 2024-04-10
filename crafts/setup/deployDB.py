@@ -139,7 +139,7 @@ fi
         'rm -f',gtdbtk_db_gz,'\n']
         gtdbtk_data_path=f'GTDBTK_DATA_PATH={dbdir}'
         cmd.extend(
-            ['conda env config vars set',gtdbtk_data_path,'-n VC-GTDBTkDB\n']
+            ['conda env config vars set',gtdbtk_data_path,'-n VC-GTDBTk\n']
         )
         return cmd
     def Deploy(self,unrun=False,clear=False):
