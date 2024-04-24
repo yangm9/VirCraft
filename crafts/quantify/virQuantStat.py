@@ -3,6 +3,7 @@ from .multiQuant import multiVirCount
 from ..general import utils
 from ..identify.viridsop import VirScan
 
+#Main Class
 class VirAbdStat(multiVirCount):
     def __init__(self,samp_info='',fasta='',outdir='',threads=8):
         super().__init__(samp_info,fasta,outdir,threads)
@@ -70,10 +71,11 @@ class VirAbdStat(multiVirCount):
         )
         return cmd
     def QuantStat(self,taxa_anno=None,checkv_dir=None,unrun=False,clear=False):
+        "Main Function"
         cmd=self.virCountBySamp()
         cmd.extend([utils.selectENV('VC-General')])
         cmd.extend(
-            ['multithreads.pl',self.outdir,'viral_count.sh',
+            ['multithreads.pl',self.shelldir,'viral_count.sh',
             str(self.BATCH_SIZE),'\n']
         )
         tmp_cmd,abd=self.mergeAbd()
@@ -81,7 +83,7 @@ class VirAbdStat(multiVirCount):
         cmd.extend(self.sizeAbdPlot(abd,checkv_dir))
         cmd.extend(self.taxaAbd(abd,taxa_anno))
         cmd.extend(self.diversity(abd))
-        shell=f'{self.outdir}/{self.name}_vir_count.sh'
+        shell=f'{self.shelldir}/{self.name}_vir_count.sh'
         utils.printSH(shell,cmd)
         results=''
         if not unrun: results=utils.execute(shell)

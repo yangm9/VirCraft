@@ -114,3 +114,11 @@ def get_conda_env_dir(env_name):
     envs_dir=os.path.join(context.root_prefix,'envs')
     env_dir=os.path.join(envs_dir,env_name)
     return env_dir
+
+def is_file_exist(file_name):
+    try:
+        with open(file_name, 'r') as f:
+            return 0
+    except FileNotFoundError as e:
+        print(f'FileNotFoundError: {e}')
+        exit(1)

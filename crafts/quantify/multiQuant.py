@@ -18,10 +18,10 @@ class multiVirCount(Seq):
         for samp in self.sampDict.keys():
             cmd=[utils.selectENV('VC-General')]
             fq1,fq2=self.sampDict[samp][1].split(',')
-            Count=VirCount(fq1,fq2,self.outdir,self.threads)
+            Count=VirCount(fq1,fq2,self.wkdir,self.threads)
             cmd.extend(Count.bwa(samp,bwa_idx))
             cmd.extend(Count.coverm(samp))
-            shell=f'{self.outdir}/{samp}_viral_count.sh'
+            shell=f'{self.shelldir}/{samp}_viral_count.sh'
             utils.printSH(shell,cmd)
         return idx_cmd
 

@@ -38,35 +38,40 @@ class Seq(VirCfg):
     Fasta processing class.
     '''
     envs=utils.selectENV('VC-General')
-    def __init__(self,fasta='',outdir='',*args,**kwargs):
+    def __init__(self,fasta=None,outdir=None,*args,**kwargs):
         super().__init__()
         basename_fa=os.path.basename(fasta)
         self.name=os.path.splitext(basename_fa)[0]
         self.fasta=os.path.abspath(fasta)
+        utils.is_file_exist(self.fasta)
         self.outdir=os.path.abspath(outdir)
         utils.mkdir(self.outdir)
+        self.shelldir=f'{self.outdir}/shell'
+        utils.mkdir(self.shelldir)
+        self.wkdir=f'{self.outdir}/work_files'
+        utils.mkdir(self.wkdir)
+        self.wkdir=f'{self.outdir}/stat'
+        utils.mkdir(self.wkdir)
     def mkBwaIdx(self):
         "Make bwa index for votus."
         cmd=[utils.selectENV('VC-Quantify')]
-        idx=f'{self.outdir}/{self.name}BWAIDX'
-        cmd.extend(['bwa index -a bwtsw',self.fasta,'-p',idx,'\n'])
-        shell=f'{self.outdir}/{self.name}_bwaidx.sh'
+        bwa_idx=f'{self.wkdir}/{self.name}.BWAIDX'
+        cmd.extend(['bwa index -a bwtsw',self.fasta,'-p',bwa_idx,'\n'])
+        shell=f'{self.shelldir}/{self.name}_bwaidx.sh'
         utils.printSH(shell,cmd)
-        return cmd,idx
+        return cmd,bwa_idx
     def statFA(self,cutoff=5000):
         cmd=[self.envs]
-        wkdir=f'{self.outdir}/stat'
-        utils.mkdir(wkdir)
-        size_dist=f'{wkdir}/fasta_size_distribution.pdf'
-        len_gc_stat=f'{wkdir}/fasta_size_gc_stat.xls'
-        n50_stat1=f'{wkdir}/fasta_n50_stat1.xls'
-        n50_stat2=f'{wkdir}/fasta_n50_stat2.xls'
+        size_dist=f'{self.wkdir}/fasta_size_distribution.pdf'
+        len_gc_stat=f'{self.wkdir}/fasta_size_gc_stat.xls'
+        n50_stat1=f'{self.wkdir}/fasta_n50_stat1.xls'
+        n50_stat2=f'{self.wkdir}/fasta_n50_stat2.xls'
         filt_prefix=f'{self.outdir}/{self.name}.filt'
         cmd.extend(
             ['fasta_size_distribution_plot.py',self.fasta,'-o',size_dist,
             '-s 2000 -g 10 -t "Sequence Size Distribution"\n',
             'fasta_size_gc.py',self.fasta,'>',len_gc_stat,'\n',
-            'variables_scatter.R',len_gc_stat,'Length~GC',wkdir,'\n',
+            'variables_scatter.R',len_gc_stat,'Length~GC',self.kdir,'\n',
             'stat_N50.pl',self.fasta,n50_stat1,'\n'
             'assemb_stat.pl',self.fasta,self.fasta,'>',n50_stat2,'\n',
             'SeqLenCutoff.pl',self.fasta,filt_prefix,str(cutoff),'\n']
@@ -90,7 +95,7 @@ class Seq(VirCfg):
 
 class VirSeq(Seq):
     envs=utils.selectENV('VC-CheckV')
-    def __init__(self,fasta='',outdir='',*args,**kwargs):
+    def __init__(self,fasta=None,outdir=None,*args,**kwargs):
         super().__init__(fasta,outdir,*args,**kwargs)
     def checkv(self):
         cmd=[self.envs]
@@ -107,7 +112,7 @@ class VirSeq(Seq):
 
 class CDS(Seq):
     envs=utils.selectENV('VC-Quantify')
-    def __init__(self,fasta='',outdir='',*args,**kwargs):
+    def __init__(self,fasta=None,outdir=None,*args,**kwargs):
         super().__init__(fasta,outdir,*args,**kwargs)
     @property
     def mkSalmonIdx(self):
@@ -124,7 +129,7 @@ class CDS(Seq):
 
 class ORF(Seq):
     envs=utils.selectENV('VC-General')
-    def __init__(self,fasta='',outdir='',*args,**kwargs):
+    def __init__(self,fasta=None,outdir=None,*args,**kwargs):
         super().__init__(fasta,outdir,*args,**kwargs)
     def eggnogAnno(self):
         wkdir=f'{self.outdir}/eggnog'
