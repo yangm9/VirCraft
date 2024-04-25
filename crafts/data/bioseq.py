@@ -25,6 +25,12 @@ class Reads(VirCfg):
         self.outdir=os.path.abspath(outdir)
         self.samp=self.getSampName
         utils.mkdir(self.outdir)
+        self.shelldir=f'{self.outdir}/shell'
+        utils.mkdir(self.shelldir)
+        self.wkdir=f'{self.outdir}/work_files'
+        utils.mkdir(self.wkdir)
+        self.statdir=f'{self.outdir}/stat'
+        utils.mkdir(self.statdir)
     @property
     def getSampName(self):
         samp=''
@@ -43,15 +49,14 @@ class Seq(VirCfg):
         basename_fa=os.path.basename(fasta)
         self.name=os.path.splitext(basename_fa)[0]
         self.fasta=os.path.abspath(fasta)
-        utils.is_file_exist(self.fasta)
         self.outdir=os.path.abspath(outdir)
         utils.mkdir(self.outdir)
         self.shelldir=f'{self.outdir}/shell'
         utils.mkdir(self.shelldir)
         self.wkdir=f'{self.outdir}/work_files'
         utils.mkdir(self.wkdir)
-        self.wkdir=f'{self.outdir}/stat'
-        utils.mkdir(self.wkdir)
+        self.statdir=f'{self.outdir}/stat'
+        utils.mkdir(self.statdir)
     def mkBwaIdx(self):
         "Make bwa index for votus."
         cmd=[utils.selectENV('VC-Quantify')]
@@ -62,16 +67,16 @@ class Seq(VirCfg):
         return cmd,bwa_idx
     def statFA(self,cutoff=5000):
         cmd=[self.envs]
-        size_dist=f'{self.wkdir}/fasta_size_distribution.pdf'
-        len_gc_stat=f'{self.wkdir}/fasta_size_gc_stat.xls'
-        n50_stat1=f'{self.wkdir}/fasta_n50_stat1.xls'
-        n50_stat2=f'{self.wkdir}/fasta_n50_stat2.xls'
+        size_dist=f'{self.statdir}/fasta_size_distribution.pdf'
+        len_gc_stat=f'{self.statdir}/fasta_size_gc_stat.xls'
+        n50_stat1=f'{self.statdir}/fasta_n50_stat1.xls'
+        n50_stat2=f'{self.statdir}/fasta_n50_stat2.xls'
         filt_prefix=f'{self.outdir}/{self.name}.filt'
         cmd.extend(
             ['fasta_size_distribution_plot.py',self.fasta,'-o',size_dist,
             '-s 2000 -g 10 -t "Sequence Size Distribution"\n',
             'fasta_size_gc.py',self.fasta,'>',len_gc_stat,'\n',
-            'variables_scatter.R',len_gc_stat,'Length~GC',self.kdir,'\n',
+            'variables_scatter.R',len_gc_stat,'Length~GC',self.statdir,'\n',
             'stat_N50.pl',self.fasta,n50_stat1,'\n'
             'assemb_stat.pl',self.fasta,self.fasta,'>',n50_stat2,'\n',
             'SeqLenCutoff.pl',self.fasta,filt_prefix,str(cutoff),'\n']
@@ -117,13 +122,13 @@ class CDS(Seq):
     @property
     def mkSalmonIdx(self):
         cmd=[self.envs]
-        wkdir=f'{self.outdir}/salmonidx'
+        wkdir=f'{self.wkdir}/salmonidx'
         utils.mkdir(wkdir)
         idx=f'{wkdir}' # A directory
         cmd.extend(
             ['salmon index','-p 8 -k 31','-t',self.fasta,'-i',wkdir,'\n']
         )
-        shell=f'{self.outdir}/{self.name}_salmonidx.sh'
+        shell=f'{self.shelldir}/{self.name}_salmonidx.sh'
         utils.printSH(shell,cmd)
         return cmd,idx
 

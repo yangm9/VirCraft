@@ -18,7 +18,7 @@ class Assembly(Reads):
         '''
         Assemble metagenome by SPAdes.
         '''
-        wkdir=f'{self.outdir}/spades'
+        wkdir=f'{self.wkdir}/spades'
         utils.mkdir(wkdir)
         cmd=[]
         if len(fastqs)==1:
@@ -38,8 +38,8 @@ class Assembly(Reads):
         '''
         input_para=''
         other_paras=''
-        wkdir=f'{self.outdir}/megahit'
-        tmpdir=f'{self.outdir}/megahit.tmp'
+        wkdir=f'{self.wkdir}/megahit'
+        tmpdir=f'{self.wkdir}/megahit.tmp'
         utils.mkdir(tmpdir)
         if len(fastqs)==1:
             input_para=f'-r {fastqs[0]}'
@@ -57,7 +57,7 @@ class Assembly(Reads):
         '''
         Align the FastQs back to Assembled Contigs.
         '''
-        wkdir=f'{self.outdir}/alignment'
+        wkdir=f'{self.wkdir}/alignment'
         utils.mkdir(wkdir)
         bwa_idx=f'{wkdir}/scaffoldsIDX'
         unused_sam=f'{wkdir}/unused_reads.sam'
@@ -96,11 +96,11 @@ class Assembly(Reads):
         FastA=Seq(scaf,self.outdir)
         cmd.extend(FastA.statFA(cutoff))
         if clear and len(process)==2:
-            alndir=f'{self.outdir}/alignment'
+            alndir=f'{self.wkdir}/alignment'
             unused_sam=f'{alndir}/unused_reads.sam'
             scafIdx=f'{alndir}/scaffoldsIDX*'
             cmd.extend(['rm -f',unused_sam,scafIdx,'\n'])
-        shell=f'{self.outdir}/{self.samp}_assembly.sh'
+        shell=f'{self.shelldir}/{self.samp}_assembly.sh'
         utils.printSH(shell,cmd)
         results=''
         if not unrun: results=utils.execute(shell)
