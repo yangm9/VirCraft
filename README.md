@@ -733,3 +733,15 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 3. AMG需要check启动子
 4. host_pred模块：添加hosts的物种注释。
 ```
+
+**VirCraft-v0.0.12**
+```
+1. 删除了一些不必要的文件，代码更简洁.
+2. 增加了脚本报错(xxx.sh.error)输出(xxx.sh.log)等内容
+```
+
+**VirCraft-v0.0.13**
+```
+1. 整理所有模块的结果文件夹，使其输出更为规范化。
+2. 增加vContact2结果绘制venn图的功能，正在进行中……
+```
