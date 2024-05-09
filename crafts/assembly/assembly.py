@@ -20,16 +20,15 @@ class Assembly(Reads):
         '''
         wkdir=f'{self.wkdir}/spades'
         utils.mkdir(wkdir)
-        cmd=[]
         if len(fastqs)==1:
-            cmd=['spades.py','-s',fastqs[0]]
+            input_para=f'-s {fastqs[0]}'
         elif len(fastqs)==2:
-            cmd=['spades.py','--pe1-1',fastqs[0],'--pe1-2',fastqs[1]]
+            input_para=f'--pe1-1 {fastqs[0]} --pe1-2 {fastqs[1]}'
+        elif len(fastqs)==3:
+            input_para=f'--pe1-1 {fastqs[0]} --pe1-2 {fastqs[1]} -s {fastqs[2]}'
         else:
             pass
-        cmd.extend(
-            ['-t',self.threads,'-o',wkdir,self.confDict['SPAdesOpts'],'\n']
-        )
+        cmd=['spades.py',input_para,'-t',self.threads,'-o',wkdir,self.confDict['SPAdesOpts'],'\n']
         scaf=f'{wkdir}/scaffolds.fasta'
         return cmd,scaf
     def megahit(self,fastqs:list):
@@ -46,6 +45,9 @@ class Assembly(Reads):
         elif len(fastqs)==2:
             input_para=f'-1 {fastqs[0]} -2 {fastqs[1]}'
             other_paras='--continue'
+        elif len(fastqs)==3:
+            input_para=f'-1 {fastqs[0]} -2 {fastqs[1]} -r {fastqs[2]}'
+            other_paras='--continue'
         else:
             pass
         cmd=['megahit',input_para,'-o',wkdir,
@@ -60,12 +62,15 @@ class Assembly(Reads):
         wkdir=f'{self.wkdir}/alignment'
         utils.mkdir(wkdir)
         bwa_idx=f'{wkdir}/scaffoldsIDX'
-        unused_sam=f'{wkdir}/unused_reads.sam'
-        unused_fq=f'{wkdir}/unused_reads.fq'
+        unused_bam=f'{wkdir}/unused_reads.bam'
+        unused_fq_1=f'{wkdir}/unused_reads_1.fq'
+        unused_fq_2=f'{wkdir}/unused_reads_2.fq'
+        unused_fq_s=f'{wkdir}/unused_reads_s.fq'
         cmd=['bwa index -a bwtsw',scaf,'-p',bwa_idx,'\n',
             'bwa mem','-t',self.threads,bwa_idx,self.fastqs[0],self.fastqs[1],
-            '|grep -v NM:i:>',unused_sam,'\n',
-            'sam_to_fastq.py',unused_sam,'>',unused_fq,'\n']
+            '|samtools view -bf 4>',unused_bam,'\n',
+            'samtools fastq -N',unused_bam,'-1',unused_fq_1,'-2',unused_fq_2,
+            '-s',unused_fq_s,'\n']
         return cmd,unused_fq
     def mixAsse(self,fastqs,process='m'):
         '''

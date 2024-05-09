@@ -3,34 +3,34 @@
 FastpOpts = -q 20 -u 20 -g -c -W 5 -3 -l 50 -f 10 -F 10
 MegahitOpts = --min-contig-len 300 -m 0.9 --k-list 21,33,55,77,99,127
 SPAdesOpts = --careful -m 1300 -k 21,33,55,77,99,127
-#
+
 # Databases
 ## Path to blank control for the decontaminate in reads_qc module
 ContamDB = /mnt/data/database/VC-db/VC-ContaminantsDB
-#
+
 ## Full path pf DeepVirFinder for identify module
 DeepVirFinderDB = /mnt/data/database/VC-db/VC-DeepVirFinder/models
-#
+
 ## Path to Virsorter2 database for identify module
 VirSorter2DB = /mnt/data/database/VC-db/VC-VirSorter2DB
-#
+
 ## Path to VIBRANT database for identify and func_annot module
 VIBRANTDB = /mnt/data/database/VC-db/VC-VIBRANTDB
-#
+
 ## Path to CheckV database for identify and votus module
 CheckvDB = /mnt/data/database/VC-db/VC-CheckVDB
-#
+
 ## NCBI viral RefSeq database and database for classify module
 NCBIvRefProtDB = /mnt/data/database/VC-db/VC-ViralRefSeqDB
-#
+
 ## Full path to Demovir database for classify module
 DemovirDB = /mnt/data/database/VC-db/VC-DemovirDB
-#
+
 ## Full path to EggNOG database func_annot module
 EggNOGDB = /mnt/data/database/VC-db/VC-eggNOGDB
-#
+
 ## Full path to kofamscan database for func_annot module
 KofamscanDB = /mnt/data/database/VC-db/VC-KofamScanDB
-#
+
 ## Datasets for compararion
 CompDataSet =
