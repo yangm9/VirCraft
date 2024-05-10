@@ -71,7 +71,8 @@ class Assembly(Reads):
             '|samtools view -bf 4>',unused_bam,'\n',
             'samtools fastq -N',unused_bam,'-1',unused_fq_1,'-2',unused_fq_2,
             '-s',unused_fq_s,'\n']
-        return cmd,unused_fq
+        unused_fqs=[unused_fq_1,unused_fq_2,unused_fq_s]
+        return cmd,unused_fqs
     def mixAsse(self,fastqs,process='m'):
         '''
         Analysis the Assembly process accordding to the process set.
@@ -84,9 +85,9 @@ class Assembly(Reads):
         final_scaf=f'{self.outdir}/final_assembly.fasta'
         steps=len(process)
         if steps==2:
-            tmp_cmd,unused_fq=self.unmapReads(tmp_scaf)
+            tmp_cmd,unused_fqs=self.unmapReads(tmp_scaf)
             cmd.extend(tmp_cmd)
-            tmp_cmd,tmp_scaf=self.methDict[process[1]]([unused_fq])
+            tmp_cmd,tmp_scaf=self.methDict[process[1]](unused_fqs)
             cmd.extend(tmp_cmd)
             scafs.append(tmp_scaf)
             cmd.extend(['cat',scafs[0],scafs[1],'>',final_scaf,'\n'])
