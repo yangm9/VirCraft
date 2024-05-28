@@ -49,9 +49,3 @@ if(n==2){
     plot
 }
 dev.off()
-  #scale_color_manual(values=c('#E00303','#03E0B6','#E0BF03',"#EE9A00","#006400"))+
-  #geom_point(
-    #shape=21,
-    #size=4,
-    #stroke =1.5
-  #z
