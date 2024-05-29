@@ -1,4 +1,4 @@
-name: VC-VIBRANT
+name: VC-vRhyme
 channels:
   - bioconda
   - conda-forge
