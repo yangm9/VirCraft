@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 use strict;
+
+die "$0 <checkv_quality_file> <vOTU_fasta> <fasta_for_binning>\n" if(@ARGV<3);
+
 open QUAL, $ARGV[0] or die $!;
 <QUAL>;
 my %complete=();
