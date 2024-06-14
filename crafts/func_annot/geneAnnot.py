@@ -47,7 +47,7 @@ class GeneFunc(Seq):
             '-p',ko_prof,'-k',ko_list,'-o',exec_anno_detail,orfs_faa,'\n',
             'cd',wkdir,'&& kaas_kofam2pathwayAnalysis.py',
             exec_anno,'&& cd -\n',
-            'kegg_lv2_stat.py',kegg_stat,'>',kegg_lv2_stat,'\n',
+            'kegg_lv_stat.py',kegg_stat,'Level2 >',kegg_lv2_stat,'\n',
             'kegg_lv2_stat.R',kegg_lv2_stat,wkdir,'\n']
         )
         return cmd
