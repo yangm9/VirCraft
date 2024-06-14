@@ -37,7 +37,7 @@ class GeneFunc(Seq):
         ko_list=f'{kegg_db}/ko_list'
         exec_anno=f'{wkdir}/{self.name}.exec_annotation.xls'
         exec_anno_detail=f'{wkdir}/{self.name}.exec_annotation.detail.xls'
-        kegg_stat=f'{wkdir}/{self.name}.exec_annotation.kegg_pathway_stata.xls'
+        kegg_info=f'{wkdir}/{self.name}.exec_annotation.kegg_anno.xls'
         kegg_lv2_stat=f'{wkdir}/kegg_lv2_stat.xls'
         cmd=[utils.selectENV('VC-General')]
         cmd.extend(
@@ -47,7 +47,7 @@ class GeneFunc(Seq):
             '-p',ko_prof,'-k',ko_list,'-o',exec_anno_detail,orfs_faa,'\n',
             'cd',wkdir,'&& kaas_kofam2pathwayAnalysis.py',
             exec_anno,'&& cd -\n',
-            'kegg_lv_stat.py',kegg_stat,'Level2 >',kegg_lv2_stat,'\n',
+            'kegg_lv_stat.py',kegg_info,'level_2 >',kegg_lv2_stat,'\n',
             'kegg_lv2_stat.R',kegg_lv2_stat,wkdir,'\n']
         )
         return cmd
