@@ -4,11 +4,12 @@ import sys
 def kegg_lv_stat(kegg_anno_f:str,lv_name:str):
     with open(kegg_anno_f) as f:
         gene_dict={}
-        headers=f.readline().split('\t')
+        headers=f.readline().strip().split('\t')
         col_idx=headers.index(lv_name)
         for line in f:
             items=line.strip().split('\t')
             gene_id=items[0]
+            if len(items)<7: continue
             level=items[col_idx]
             gene_dict.setdefault(level,[])
             if not gene_id in gene_dict[level]:
