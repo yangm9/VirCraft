@@ -10,12 +10,22 @@ if(length(argv)<3){
 if(!require("pheatmap")){install.packages("pheatmap")}
 library(pheatmap)
 
-#类似于拉链功能，生成命名向量
+# 生成命名向量函数
 generate_named_vector <- function(keys, values) {
-    n <- length(keys)
-    named_vector <- setNames(values[1:n], keys)
+    named_vector <- setNames(values[1:length(keys)], keys)
     return(named_vector)
 }
+
+# 读取数据
+df <- read.table(argv[1],header=T,sep="\t",
+                 row.names=1,check.names=F,quote="")
+samp_group_df <- read.table(argv[2],header=T,sep="\t",
+                            check.names=F,quote="")
+
+colnames(samp_group_df) <- c("sample","group")
+SampNames <- samp_group_df$sample
+ColNames <- samp_group_df$group
+
 grp_color <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
                "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf",
                "#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5",
@@ -34,42 +44,28 @@ source_color <- c("#8dd3c7", "#fdb462", "#b3de69", "#00688b", "#d9d9d9",
                   "#cd950c", "#00688b", "#8b795e", "#458b74", "#9acdf2",
                   "#ee9a00", "#00ff00", "#bebebe", "#9ac73f", "#beaed4")
 
-df<-read.table(
-    argv[1],header=T,sep="\t",
-    row.names=1,check.names=F,quote=""
-)
-
-samp_group_df<-read.table(
-    argv[2],header=T,sep="\t",
-    check.names=F,quote=""
-)
-
-colnames(samp_group_df)<-c("sample","group")
-SampNames<-samp_group_df$sample
-ColNames<-samp_group_df$group
-RowNames<-rownames(df)
-
 ann_colors <- list(Group=generate_named_vector(unique(ColNames),grp_color))
-
 annotation_col<-data.frame(Group=factor(ColNames))
+rownames(annotation_col) <- SampNames
+
 if('Source' %in% colnames(df)){
-    Uniq_Source=unique(df$Source)
-    annotation_row<-data.frame(Source=factor(df$Source))
-    ann_colors <- list(ann_colors,
-                       Source=generate_named_vector(Uniq_Source,source_color))
-    rownames(annotation_row)<-RowNames
+    Uniq_Source <- sort(unique(df$Source))
+    annotation_row <- data.frame(Source = factor(df$Source))
+    ann_colors$Source <- generate_named_vector(Uniq_Source,source_color)
+    rownames(annotation_row) <- rownames(df)
 }else{
     annotation_row<-NA
 }
 
-df<-subset(df,select=SampNames)
+df <- subset(df,select=SampNames)
 rownames(annotation_col)=names(df)
 
-plot<-pheatmap(
+pdf(paste(argv[3],'/abundance_heatmap.pdf',sep=''),width=10,height=8)
+pheatmap(
     log10(df+1),
     cluster_row=TRUE,
     cluster_col=FALSE,
-    show_rownames=F,
+    show_rownames=FALSE,
     #scale = "row",#参数归一化
     #clustering_method参数设定不同聚类方法，默认为"complete",可以设定为'ward','ward.D','ward.D2','single','complete','average','mcquitty','median' or 'centroid')
     clustering_method="complete",
@@ -83,11 +79,4 @@ plot<-pheatmap(
     annotation_row=annotation_row
     #display_numbers=matrix(ifelse(dat > 0.01,"*",""),nrow(dat))
 )
-
-pdf(paste(argv[3],'/abundance_heatmap.pdf',sep=''),width=10,height=8)
-plot
 dev.off()
-#Sys.setenv("DISPLAY"=":0")
-#png(paste(argv[3],'/tpm_heatmap.png',sep=''),width=1000,height=800)
-#plot
-#dev.off()
