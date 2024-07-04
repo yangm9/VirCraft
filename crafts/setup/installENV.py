@@ -74,7 +74,7 @@ class ENV:
             shell=f'{self.outdir}/{env}_install.sh'
             utils.printSH(shell,cmd)
             if is_env:
-                print(f'{self.ENVDICT[env]} installed, skipping...')
+                print(f'{self.ENVDICT[env]} installed, skipped!')
                 continue
             if not unrun: results+=utils.execute(shell)
         return results
