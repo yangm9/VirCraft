@@ -8,7 +8,7 @@ dependencies:
   - python=3.8
   - samtools=1.18
   - mash=2.1
-  - mummer=2.23
+  - mummer=3.23
   - mmseqs2=13.45111
   - prodigal=2.6.3
   - bowtie2=2.5.2

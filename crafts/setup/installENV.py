@@ -76,5 +76,7 @@ class ENV:
             if is_env:
                 print(f'{self.ENVDICT[env]} installed, skipped!')
                 continue
-            if not unrun: results+=utils.execute(shell)
+            if not unrun:
+                print(f'{self.ENVDICT[env]} pending...')
+                results+=str(utils.execute(shell))
         return results
