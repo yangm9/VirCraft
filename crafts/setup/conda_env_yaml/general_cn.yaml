@@ -31,6 +31,7 @@ dependencies:
   - r-dplyr=1.1.3
   - r-ggnewscale=0.4.9
   - r-ggplot2=3.4.3
+  - r-ggpubr=0.6.0
   - r-patchwork=1.1.3
   - r-permute=0.9_7
   - r-pheatmap=1.0.12
