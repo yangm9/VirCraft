@@ -2,15 +2,13 @@
 import time
 import task_states as ts
 
-def judge(dvf_sh):
-    states=ts.check_sh_stat(dvf_sh)
-    return ts.check_process_states(states)
-
 def rerun(dvf_sh):
-    try:
-        judgement=judge(dvf_sh)
-    if judgement:
-        time.sleep(600)
-    else:
-        time.sleep(600)
+    stat=ts.judge(dvf_sh)
+    while True:
+        time.sleep(300)
+        if not stat:
+            time.sleep(5)
+            if not judge(script_path):
+
+    return 0
 
