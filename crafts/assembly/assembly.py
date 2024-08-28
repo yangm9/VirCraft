@@ -68,7 +68,7 @@ class Assembly(Reads):
         unused_fq_s=f'{wkdir}/unused_reads_s.fq'
         cmd=['bwa index -a bwtsw',scaf,'-p',bwa_idx,'\n',
             'bwa mem','-t',self.threads,bwa_idx,self.fastqs[0],self.fastqs[1],
-            '|samtools view -bf 4>',unused_bam,'\n',
+            '|samtools view -b >',unused_bam,'\n',
             'samtools fastq -N',unused_bam,'-1',unused_fq_1,'-2',unused_fq_2,
             '-s',unused_fq_s,'\n']
         unused_fqs=[unused_fq_1,unused_fq_2,unused_fq_s]

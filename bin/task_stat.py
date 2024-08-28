@@ -28,6 +28,7 @@ def check_state(pid, level=0):
 def check_sh_stat(sh_name):
     pids = subprocess.run(f'pgrep -f {sh_name}', shell=True, stdout=subprocess.PIPE, text=True).stdout.splitlines()
     #for pid in pids:
+    print(pids)
     if pids == []:
         return []
     states=check_state(pids[0]).split('\n')
@@ -35,17 +36,21 @@ def check_sh_stat(sh_name):
 
 def check_process_stat(lists):
     if lists == []:
-        return "Done"
+        return -1
     result = []
     for process_states in lists:
         if process_states.endswith('S'):
-            result.append(False)
+            result.append(0)
         else:
-            result.append(True)
-    return any(result)
+            result.append(1)
+    if any(result):
+        return 1
+    else:
+        return 0
 
 def judge(sh_name):
     states=check_sh_stat(sh_name)
+    print(states)
     return check_process_stat(states)
 
 if __name__=='__main__':
