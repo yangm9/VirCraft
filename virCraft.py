@@ -22,7 +22,7 @@ from crafts.host import hosts
 from crafts.func_annot import geneAnnot
 from crafts.func_annot import callAMGs
 
-version='0.0.11'
+version='0.0.13'
 #try:
 #    if len(sys.argv)<2:
 #        raise ValueError('''Insufficient parameters provided.
