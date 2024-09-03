@@ -1,6 +1,6 @@
 # VirCraft
 VirCraft是一个自动化病毒组学分析流程软件。  
-VirCraft is an automatic viromic analysis pipeline.
+a flexible bioinfomatic pipeline for viromic analysis from metagenomic data.
 
 ## 1 软件安装和数据库部署
 
@@ -743,5 +743,6 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 **VirCraft-v0.0.13**
 ```
 1. 整理所有模块的结果文件夹，使其输出更为规范化。
-2. 增加vContact2结果绘制venn图的功能，正在进行中……
+2. 增加vContact2结果绘制venn图的功能。
+3. 增加用blast结合来自CheckV的anicalc.py和aniclust.py工具进行基于ANI聚类vOTU的功能。
 ```

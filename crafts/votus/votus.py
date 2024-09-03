@@ -40,8 +40,10 @@ class VirRef(VirScan):
     def cluster(self,method):
         if method=='blast':
             return self.blast_cluster()
-        else:
+        elif method=='cdhit':
             return self.cdhit_cluster()
+        else:
+            raise Exception('method should only be "blast" or "cdhit".')
     def votuQC(self,votus,cutoff=1500):
         cmd,__=self.checkv(votus)
         wkdir=f'{self.outdir}/stat'
