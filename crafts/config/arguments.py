@@ -124,7 +124,11 @@ Usage: {name} <subcommand> [options] -o <outdir>
     subpsr=addFaArg(subpsr)
     subpsr=addGlbArg(subpsr)
     subpsr=addCutoffArg(subpsr)
-
+    subpsr.add_argument(
+        '-m','--method',action='store',type=str,
+        dest='method',metavar='STR',default='blast',required=False,
+        help='the method for vOTU clustering, including "blast" and "cdhit". [default=blast]'
+    )
 #---------------------classify------------------------
     subpsr=subparsers.add_parser(
         'classify',
@@ -198,17 +202,11 @@ Usage: {name} <subcommand> [options] -o <outdir>
     return parser
 
 #------------Functions for adding Arguments-----------
-def addGlbArg(psr):#,batch=0): #Add global arguments
+def addGlbArg(psr):
     ThreadsHelpDict={
         0:'Number of processes/threads to use [default=8]',
         1:'Number of processes/threads to use for each task in a batch [default=8]'
     }
-#    if batch==1:
-#        psr.add_argument(
-#            '-b','--batch_size',action='store',type=str,
-#            dest='batch_size',metavar='INT',default=5,
-#            help='Set the task number in each run batch, namely batch size, [default=5]'
-#        )
     psr.add_argument(
         '-t','--threads',action='store',type=str,
         dest='threads',metavar='INT',default=8,

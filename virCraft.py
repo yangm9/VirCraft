@@ -114,7 +114,8 @@ elif sys.argv[1]=='votus':
     )
     vOTUs.RmDup(
         args.cutoff,
-        unrun=args.unrun
+        unrun=args.unrun,
+        method=args.method
     )
     print('\nvOTU cluster completed!!!')
 elif sys.argv[1]=='func_annot':
