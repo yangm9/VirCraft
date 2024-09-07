@@ -9,25 +9,18 @@ def filt_checkv(checkv_d:str):
     output: virus_quality_summary.filt.tsv and provir_quality_summary.filt.tsv
     return: viral ID list and proviral ID list
     '''
-    #Filter conditions
     virus_qual_filt_condition='provirus=="No" and (contig_length>=5000 or (contig_length>1500 and checkv_quality=="Complete"))'
     provir_qual_filt_condition='provirus=="Yes" and (proviral_length>=5000 or (proviral_length>1500 and checkv_quality=="Complete"))'
-    #
     qual_summ_tsv=f'{sys.argv[1]}/quality_summary.tsv'
     virus_qual_summ_tsv=qual_summ_tsv.replace('quality_summary.tsv','virus_quality_summary.filt.tsv')
     provir_qual_summ_tsv=qual_summ_tsv.replace('quality_summary.tsv','provir_quality_summary.filt.tsv')
-
     df=pd.read_csv(qual_summ_tsv,sep='\t')
-
     virus_df=df.query(virus_qual_filt_condition)
     provir_df=df.query(provir_qual_filt_condition)
-
     virus_id_list=virus_df['contig_id'].tolist()
     provir_id_list=provir_df['contig_id'].tolist()
-
     virus_df.to_csv(virus_qual_summ_tsv,index=False,sep='\t')
     provir_df.to_csv(provir_qual_summ_tsv,index=False,sep='\t')
-    
     return virus_id_list,provir_id_list
 
 def extr_ctgs(id_list,in_fa,out_fa):
