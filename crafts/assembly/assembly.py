@@ -36,7 +36,6 @@ class Assembly(Reads):
         Assemble metagenome by megahit.
         '''
         input_para=''
-        other_paras=''
         wkdir=f'{self.wkdir}/megahit'
         tmpdir=f'{self.wkdir}/megahit.tmp'
         utils.mkdir(tmpdir)
@@ -44,15 +43,13 @@ class Assembly(Reads):
             input_para=f'-r {fastqs[0]}'
         elif len(fastqs)==2:
             input_para=f'-1 {fastqs[0]} -2 {fastqs[1]}'
-            other_paras='--continue'
         elif len(fastqs)==3:
             input_para=f'-1 {fastqs[0]} -2 {fastqs[1]} -r {fastqs[2]}'
-            other_paras='--continue'
         else:
             pass
         cmd=['megahit',input_para,'-o',wkdir,
             '-t',self.threads,self.confDict['MegahitOpts'],
-            '--tmp-dir',tmpdir,other_paras,'\n']
+            '--tmp-dir',tmpdir,'\n']
         scaf=f'{wkdir}/final.contigs.fa'
         return cmd,scaf
     def unmapReads(self,scaf:str):

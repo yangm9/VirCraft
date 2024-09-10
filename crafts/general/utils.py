@@ -14,7 +14,7 @@ def printSH(sh_path:str,command:list):
     SHPATH=open(sh_path,'w')
     scripts=' '.join(command).replace('\n ','\n')
     scripts=scripts.replace(' \n ','\n')
-    SHPATH.write(scripts)
+    SHPATH.write('#!/bin/bash\nset -e\n'+scripts)
     SHPATH.close()
     return 0
 
@@ -50,14 +50,21 @@ def execute(sh_file:str):
     log_file=f'{sh_file}.log'
     error_file=f'{sh_file}.error'
     try:
-        result=subprocess.run(['bash', sh_file],capture_output=True,text=True)
-        with open(log_file,'w') as log_file:
-            log_file.write(result.stdout)
-        with open(error_file,'w') as error_file:
-            error_file.write(result.stderr)
+        result=subprocess.run(['bash', sh_file],capture_output=True,text=True,check=True)
+        with open(log_file,'w') as log_f:
+            log_f.write(result.stdout)
+        with open(error_file,'w') as error_f:
+            error_f.write(result.stderr)
         return result.returncode
+    except subprocess.CalledProcessError as e:
+        with open(log_file, 'a') as log_f:
+            log_f.write(e.stdout)
+        with open(error_file, 'a') as error_f:
+            error_f.write(e.stderr)
+        print(f"Script {sh_file} failed with error. Check {error_file} for details.")
+        return e.returncode
     except Exception as e:
-        print(f'Error: {e}')
+        print(f'Unexpected error: {e}')
         return 1
 
 def run(cmd):
