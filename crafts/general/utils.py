@@ -14,7 +14,7 @@ def printSH(sh_path:str,command:list):
     SHPATH=open(sh_path,'w')
     scripts=' '.join(command).replace('\n ','\n')
     scripts=scripts.replace(' \n ','\n')
-    SHPATH.write('#!/bin/bash\nset -e\n'+scripts)
+    SHPATH.write('#!/bin/bash\nset -e\nset -o pipefail\n'+scripts)
     SHPATH.close()
     return 0
 
