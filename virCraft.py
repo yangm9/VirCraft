@@ -37,7 +37,7 @@ if len(sys.argv)==1:
     exit(0)
 
 if sys.argv[1]=='setup_env':
-    print('Installing all environments for VirCraft...\n')
+    print('Installing all environments for VirCraft...')
     ENV=installENV.ENV(
         outdir=args.outdir,
         threads=args.threads
@@ -46,9 +46,9 @@ if sys.argv[1]=='setup_env':
         unrun=args.unrun,
         in_wall=args.in_wall
     )
-    print('\nVirCraft environments Done!!!')
+    print('VirCraft environments Done!!!')
 elif sys.argv[1]=='setup_db':
-    print('Deploying all databases for VirCraft...\n')
+    print('Deploying all databases for VirCraft...')
     DB=deployDB.DB(
         outdir=args.outdir,
         threads=args.threads
@@ -56,9 +56,9 @@ elif sys.argv[1]=='setup_db':
     DB.Deploy(
         unrun=args.unrun    
     )
-    print('\nVirCraft databases Done!!!')
+    print('VirCraft databases Done!!!')
 elif sys.argv[1]=='reads_qc':
-    print('VirCraft reads QC...\n')
+    print('VirCraft reads QC...')
     Reads=fastqc.QualCtrl(
         fq1=args.fq1,fq2=args.fq2,
         outdir=args.outdir,
@@ -69,9 +69,9 @@ elif sys.argv[1]=='reads_qc':
         unrun=args.unrun,
         clear=args.clear
     )
-    print('\nReads quality control completed!!!')
+    print('Reads quality control completed!!!')
 elif sys.argv[1]=='assembly':
-    print('VirCraft assembly...\n')
+    print('VirCraft assembly...')
     Draft=assembly.Assembly(
         fq1=args.fq1,fq2=args.fq2,
         outdir=args.outdir,
@@ -82,9 +82,9 @@ elif sys.argv[1]=='assembly':
         cutoff=args.cutoff,
         unrun=args.unrun
     )
-    print('\nReads assembly completed!!!')
+    print('Reads assembly completed!!!')
 elif sys.argv[1]=='identify':
-    print('Viral contig identification...\n')
+    print('Viral contig identification...')
     if args.sop=='viral-id-sop':
         VirSeq=viridsop.VirScan(
             fasta=args.fasta,
@@ -104,9 +104,9 @@ elif sys.argv[1]=='identify':
             cutoff=args.cutoff,
             unrun=args.unrun
         )
-    print('\nConfig identification completed!!!')
+    print('Config identification completed!!!')
 elif sys.argv[1]=='votus':
-    print('Remove the redundancy...\n')
+    print('Remove the redundancy...')
     vOTUs=votus.VirRef(
         fasta=args.fasta,
         outdir=args.outdir,
@@ -126,7 +126,7 @@ elif sys.argv[1]=='func_annot':
     #    threads=args.threads
     #)
     #VirGene.FuncAnnot()
-    print('Predicting AMGs...\n')
+    print('Predicting AMGs...')
     AMG=callAMGs.AMGs(
         fasta=args.fasta,
         outdir=args.outdir,
@@ -135,9 +135,9 @@ elif sys.argv[1]=='func_annot':
     AMG.annotAMGs(
         unrun=args.unrun
     )
-    print('\nFunction annotation completed!!!')
+    print('Function annotation completed!!!')
 elif sys.argv[1]=='classify':
-    print('Viral contig classification...\n')
+    print('Viral contig classification...')
     Taxa=classify.VirTaxa(
         fasta=args.fasta,
         outdir=args.outdir,
@@ -146,9 +146,9 @@ elif sys.argv[1]=='classify':
     Taxa.Classify(
         unrun=args.unrun
     )
-    print('\nContigs classification completed!!!')
+    print('Contigs classification completed!!!')
 elif sys.argv[1]=='compare':
-    print('Viral contig comparasion...\n')
+    print('Viral contig comparasion...')
     NWK=vCont.EnviComp(
         fasta=args.fasta,
         outdir=args.outdir,
@@ -158,9 +158,9 @@ elif sys.argv[1]=='compare':
     NWK.CompSeq(
         unrun=args.unrun
     )
-    print('\nContigs comparasion completed!!!')
+    print('Contigs comparasion completed!!!')
 elif sys.argv[1]=='vir_quant':
-    print('Viral abundance and diversity analysis...\n')
+    print('Viral abundance and diversity analysis...')
     VirQuant=virQuantStat.VirAbdStat(
         samp_info=args.samp_info,
         fasta=args.fasta,
@@ -172,9 +172,9 @@ elif sys.argv[1]=='vir_quant':
         args.checkv,
         unrun=args.unrun
     )
-    print('\nViral quantifications completed!!!')
+    print('Viral quantifications completed!!!')
 elif sys.argv[1]=='gene_quant':
-    print('Gene abundance analysis...\n')
+    print('Gene abundance analysis...')
     GeneQuant=geneQuantStat.GeneAbdStat(
         samp_info=args.samp_info,
         fasta=args.fasta,
@@ -184,9 +184,9 @@ elif sys.argv[1]=='gene_quant':
     GeneQuant.QuantStat(
         unrun=args.unrun
     )
-    print('\nGene quantifications completed!!!')
+    print('Gene quantifications completed!!!')
 elif sys.argv[1]=='host_pred':
-    print('Host prediction...\n')
+    print('Host prediction...')
     Hosts=hosts.VirHost(
         fasta=args.fasta,
         hostsdir=args.hostsdir,
@@ -198,6 +198,6 @@ elif sys.argv[1]=='host_pred':
         taxa_anno=args.taxa,
         unrun=args.unrun
     )
-    print('\nViral-host relationship prediction done!!!')
+    print('Viral-host relationship prediction done!!!')
 else: 
     exit(0)

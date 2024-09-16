@@ -127,13 +127,29 @@ class Assembly(Reads):
         else: 
             pass
         return cmd,final_scaf
-    def Assemble(self,process='m',cutoff=1500,unrun=False,clear=False):
-        cmd=[self.envs]
+    
+    def Assemble(self,process='ms',cutoff=1500,unrun=False,clear=False):
+        '''
+        Perform the entire assembly process and return the result.
+        :param process: Assembly process (default is MEGAHIT).
+        :param cutoff: Minimum contig length to retain.
+        :param unrun: If True, the assembly will not run but the commands will be generated.
+        :param clear: If True, intermediate files will be deleted after assembly.
+        :return: Assembly results.
+        '''
+        
+        cmd=[self.envs] # Store the environment variables command
         scafs=[]
+        
+        # Perform the assembly process and get commands and scaffold
         tmp_cmd,scaf=self.mixAsse(self.fastqs,process)
         cmd.extend(tmp_cmd)
+        
+        # Create a FASTA sequence object and append statistics commands
         FastA=Seq(scaf,self.outdir)
         cmd.extend(FastA.statFA(cutoff))
+        
+        # Optionally clear intermediate alignment files
         if clear and len(process)==2:
             alndir=f'{self.wkdir}/alignment'
             scafIdx=f'{alndir}/scaffoldsIDX*'
@@ -141,5 +157,8 @@ class Assembly(Reads):
         shell=f'{self.shelldir}/{self.samp}_assembly.sh'
         utils.printSH(shell,cmd)
         results=''
-        if not unrun: results=utils.execute(shell)
+        
+        # Execute the shell script if not in unrun mode
+        if not unrun: 
+            results=utils.execute(shell)
         return results
