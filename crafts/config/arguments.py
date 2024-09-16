@@ -98,7 +98,7 @@ Usage: {name} <subcommand> [options] -o <outdir>
     )
     subpsr=addPairFqArg(subpsr)
     subpsr=addGlbArg(subpsr)
-    subpsr=addProcArg(subpsr,'sm')
+    subpsr=addProcArg(subpsr,'ms')
     subpsr=addCutoffArg(subpsr)
 
 #----------------------identify-----------------------
@@ -232,7 +232,7 @@ def addGlbArg(psr):
 def addProcArg(psr,dflt:str):
     HelpDict={
         'fuc' : 'Select the optional analysis process of read_qc (f, u, and/or c), i.e. "-p fuc". Among these, "f" means filter, "u" means removing the duplications and get the unique reads, and "c" refers to the process of remove the contamination from a customized reference database [default="fuc"]',   
-        'sm'  : 'Select the optional analysis process of assembly (s and/or c), i.e. "-p sm". Among these, "s" or "m" represent the assembly tool of SPAdes or megahit. i.e. "sm" refer to the process as follows: 1) assemble the reads to metagenome using SPAdes, 2) map all reads to the assembled contigs and get the unmapped reads, 3) assemble the unmapped reads with megahit, and 4) merge the assembly results from 2) and 3) [default="sm"]'
+        'ms'  : 'Select the optional analysis process of assembly (s and/or c), i.e. "-p ms". Among these, "m" and/or "s" represent the assembly tool of MEGAHIT and/or SPAdes. i.e. "ms" refer to the process as follows: 1) assemble the reads to metagenome using MEGAHIT, 2) map all reads back to the assembled contigs and get the unmapped reads, 3) assemble the unmapped reads with SPAdes, and 4) merge the assembly results from 2) and 3) [default="ms"]'
     }
     psr.add_argument(
         '-p','--process',action='store',type=str,
