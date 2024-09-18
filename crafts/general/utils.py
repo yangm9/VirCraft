@@ -2,8 +2,21 @@ import os
 import sys
 import importlib
 import subprocess
-import logging
 from datetime import datetime 
+
+try:
+    import warnings
+    from conda.base.context import context
+    warnings.filterwarnings("ignore")
+except ImportError as e:
+    print(f'''ImportError: {e}
+Please activate conda base environment using `conda activate` command...''')
+    exit(1)
+
+def get_conda_env_dir(env_name):
+    envs_dir=os.path.join(context.root_prefix,'envs')
+    env_dir=os.path.join(envs_dir,env_name)
+    return env_dir
 
 def mkdir(name:str):
     if not os.path.exists(name):
@@ -100,27 +113,6 @@ def install_module(module_name):
         except ImportError:
             print(f"Module '{module_name}' was installed but cannot be imported.")
             return None
-
-try:
-    import warnings
-    from conda.base.context import context
-    warnings.filterwarnings("ignore")
-except ImportError as e:
-    print(f'''ImportError: {e}
-Please activate conda base environment using `conda activate` command...''')
-    exit(1)
-#    try:
-#        subprocess.run(['conda','activate','base'],shell=True)
-#        from conda.base.context import context
-#    except Exception as activation_error:
-#        print("Failed to activate Conda environment.")
-#        print(str(activation_error))
-#    #install_module('conda')
-
-def get_conda_env_dir(env_name):
-    envs_dir=os.path.join(context.root_prefix,'envs')
-    env_dir=os.path.join(envs_dir,env_name)
-    return env_dir
 
 def is_file_exist(file_name):
     try:

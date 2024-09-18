@@ -1,6 +1,7 @@
 # Customized by yangm9
 
 results/
+*.bk
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
