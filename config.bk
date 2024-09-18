@@ -6,31 +6,31 @@ SPAdesOpts = --careful -m 1300 -k 21,33,55,77,99,127
 
 # Databases
 ## Path to blank control for the decontaminate in reads_qc module
-ContamDB = /mnt/data/database/VC-db/VC-ContaminantsDB
+ContamDB = /your_path_to_database/VC-ContaminantsDB
 
 ## Full path pf DeepVirFinder for identify module
-DeepVirFinderDB = /mnt/data/database/VC-db/VC-DeepVirFinder/models
+DeepVirFinderDB = /your_path_to_database/VC-DeepVirFinder/models
 
 ## Path to Virsorter2 database for identify module
-VirSorter2DB = /mnt/data/database/VC-db/VC-VirSorter2DB
+VirSorter2DB = /your_path_to_database/VC-VirSorter2DB
 
 ## Path to VIBRANT database for identify and func_annot module
-VIBRANTDB = /mnt/data/database/VC-db/VC-VIBRANTDB
+VIBRANTDB = /your_path_to_database/VC-VIBRANTDB
 
 ## Path to CheckV database for identify and votus module
-CheckvDB = /mnt/data/database/VC-db/VC-CheckVDB
+CheckvDB = /your_path_to_database/VC-CheckVDB
 
 ## NCBI viral RefSeq database and database for classify module
-NCBIvRefProtDB = /mnt/data/database/VC-db/VC-ViralRefSeqDB
+NCBIvRefProtDB = /your_path_to_database/VC-ViralRefSeqDB
 
 ## Full path to Demovir database for classify module
-DemovirDB = /mnt/data/database/VC-db/VC-DemovirDB
+DemovirDB = /your_path_to_database/VC-DemovirDB
 
 ## Full path to EggNOG database func_annot module
-EggNOGDB = /mnt/data/database/VC-db/VC-eggNOGDB
+EggNOGDB = /your_path_to_database/VC-eggNOGDB
 
 ## Full path to kofamscan database for func_annot module
-KofamscanDB = /mnt/data/database/VC-db/VC-KofamScanDB
+KofamscanDB = /your_path_to_database/VC-KofamScanDB
 
 ## Datasets for compararion
 CompDataSet =
