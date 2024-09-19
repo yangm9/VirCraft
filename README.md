@@ -1,6 +1,8 @@
-# VirCraft
-
-VirCraft is an open-source automatic viromic analysis pipeline designed for Linux-based systems. It comprises multiple modules for reads quality control (reads_qc), viral assembly (assembly),identification of viral contigs (identify), votus clustering (votus), viral classification (classify), dataset comparison (compare), functional annotation (func_annot), and quantification of viral and gene abundances (vir_quant and gene_quant).
+# VirCraft - a flexible bioinfomatic pipeline for viromic analysis from metagenomic data
+VirCraft aims to be an **easy-to-use Viral Metagenomic Analysis Craft** that is an open-source automatic viromic analysis pipeline designed for Linux-based systems.
+accomplishes the core tasks of viral metagenomic analysis from start to finish: read quality control, assembly, viral contig identification, viral operational taxonomic units clustering, extracting draft viral genomes (binning), viral-host linkage analysis, functional annotation, viral/gene diversity analysis and their visualization. 
+Additionally, metaWRAP takes bin extraction and analysis to the next level (see module overview below). While there is no single best approach for processing metagenomic data, metaWRAP is meant to be a fast and simple approach before you delve deeper into parameterization of your analysis. MetaWRAP can be applied to a variety of environments, including gut, water, and soil microbiomes (see metaWRAP paper for benchmarks). Each individual module of metaWRAP is a standalone program, which means you can use only the modules you are interested in for your data.
+It comprises multiple modules for reads quality control (reads_qc), viral assembly (assemble),identification of viral contigs (identify), votus clustering (votus), viral classification (classify), dataset comparison (compare), functional annotation (func_annot), and quantification of viral and gene abundances (vir_quant and gene_quant).
 
 ## 1 Software installation and database deployment
 
