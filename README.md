@@ -1,5 +1,5 @@
 # VirCraft - a flexible bioinfomatic pipeline for viromic analysis from metagenomic data
-VirCraft aims to be an **easy-to-use Viral Metagenomic Analysis Craft** that integrates a variety of tools to cover various steps of viral metagenomic analysis. VirCraft can be installed easily by executing the setup_env and setup_db modules that wrapped in VirCraft. For viromic analysis, VirCraft compriss multiple modules for reads quality control (reads_qc module), viral assembly (assemble module),identification of viral contigs (identify module), viral operational taxonomic units (vOTUs) clustering (votus module), viral classification (classify module), dataset comparison (compare module), viral-host linkage analysis (host_pred module), functional annotation (func_annot module), and quantification of viral and gene abundances (vir_quant and gene_quant modules). VirCraft supports execution in local or cloud-based Linux systems, uses containerization technology to ensure the repeatability of calculations. While there is no single best approach for processing metagenomic data, VirCraft is meant to be a fast and simple approach before you delve deeper into parameterization of your analysis. VirCraft can be applied to a variety of environments, including gut, water, and soil microbiomes (see VirCraft paper for benchmarks). Each individual module of VirCraft is a standalone program, which means you can use only the modules you are interested in for your data.
+VirCraft aims to be an **easy-to-use Viral Metagenomic Analysis Craft** that integrates a variety of tools to cover various steps of viral metagenomic analysis. VirCraft can be installed easily by executing the setup_env and setup_db modules that wrapped in VirCraft. For viral metagenoomic analysis, VirCraft compriss multiple modules for reads quality control (reads_qc module), viral assembly (assemble module), identification of viral contigs (identify module), viral operational taxonomic units (vOTUs) clustering (votus module), viral classification (classify module), dataset comparison (compare module), viral-host linkage analysis (host_pred module), functional annotation (func_annot module), and viral and gene abundance analysis (vir_quant and gene_quant modules). VirCraft supports execution in local or cloud-based Linux systems, uses containerization technology to ensure the repeatability of calculations. While there is no single best approach for processing metagenomic data, VirCraft is meant to be a fast and simple approach before you delve deeper into parameterization of your analysis. VirCraft can be applied to a variety of environments, including gut, water, and soil microbiomes (see VirCraft paper for benchmarks). Each individual module of VirCraft is a standalone program, which means you can use only the modules you are interested in for your data.
 
 ![Overall workflow of VirCraft](docs/Overall_workflow_of_VirCraft.png)
 
@@ -31,10 +31,20 @@ The resource requirements for VirCraft will vary greatly based on the amount of 
 ## INSTALLATION
 
 #### Manual installation (this is best, if you are comfortable):
-0. Install mamba: `conda install -y mamba`. Mamba will effectively replace conda and do exactly the same thing, but much faster.
+0. Install mamba: `conda install -y mamba`. Mamba will efficiently replace Conda, performing the same tasks but much faster.
 1. Download or clone this ripository: `git clone https://github.com/yangm9/VirCraft.git`
-2. Install the conda environments for VirCraft: `mkdir tmp_vc_envs && /your_path/virCraft.py setup_env -o tmp_vc_envs`
-3. Install the bioinformatic databases for VirCraft: `mkdir vc_db && /your_path/virCraft.py setup_db -o vc_db`
+2. Install the conda environments for VirCraft: `mkdir tmp_envs && /your_path/virCraft.py setup_env -o tmp_envs`. 
+*Note: the "tmp_envs" will be a temporary directory to deposit the intermediate files for installing conda environment, so this directory can be deleted after the installation is complete. Additionally, if the installation fails, rerun the installation commands frequently until the all conda environments are installed.*
+3. Deposit the bioinformatic databases for VirCraft: `mkdir vc_db && /your_path/virCraft.py setup_db -o vc_db`
+4. (Optional) In the step 2 and 3, In Step 2 and Step 3, the user can install the conda environment by manually running these scripts by adding the "-u" parameter option on the command line. For example:
+```
+#step 2. Install the conda environments for VirCraft:
+mkdir tmp_envs && /your_path/virCraft.py setup_env -o tmp_envs
+#step 3. Deposit the bioinformatic databases for VirCraft:
+mkdir vc_db && /your_path/virCraft.py setup_db -o vc_db
+```
+
+
 
 #### Docker installation
 
@@ -99,7 +109,7 @@ options:
 
 ## Acknowledgements
 
-Author of pipeline: [Ming YANG](https://github.com/yangm9)
+Author of pipeline: [Ming YANG](yangm@idsse.ac.cn)
 
 Institution: [Institute of Deep-sea Science and Engineering，Chinese Academy of Sciences](http://www.idsse.cas.cn/)
 
