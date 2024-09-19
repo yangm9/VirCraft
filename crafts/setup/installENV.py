@@ -62,8 +62,7 @@ class ENV:
                 "&& sed -i 's/ar122/ar53/' bin/VirMatcher",
                 "&& sed -i -E 's/^indexes = set\(\).union\(\*indices_to_use\)/indexes = list(set().union(*indices_to_use))/' bin/ResultsAggregator.py",
                 "&& sed -i -E 's/^columns = set\(\).union\(\*columns_to_use\)/columns = list(set().union(*columns_to_use))/' bin/ResultsAggregator.py",
-                '&& conda run -n',
-                self.ENVDICT[name],'pip install . --no-deps\n']
+                '&& conda run -n',self.ENVDICT[name],'pip install . --no-deps\n']
             )
         return cmd
     def Install(self,in_wall=False,unrun=False):

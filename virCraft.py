@@ -26,7 +26,6 @@ from crafts.general import logger
 
 @logger.Log(level='INFO')
 def setup_env(args):
-    print('Installing all environments for VirCraft...')
     ENV=installENV.ENV(
         outdir=args.outdir,
         threads=args.threads
@@ -35,12 +34,10 @@ def setup_env(args):
         unrun=args.unrun,
         in_wall=args.in_wall
     )
-    print('VirCraft environments Done!!!')
     return 0
 
 @logger.Log(level='INFO')
 def setup_db(args):
-    print('Deploying all databases for VirCraft...')
     DB=deployDB.DB(
         outdir=args.outdir,
         threads=args.threads
@@ -48,12 +45,10 @@ def setup_db(args):
     DB.Deploy(
         unrun=args.unrun    
     )
-    print('VirCraft databases Done!!!')
     return 0
 
 @logger.Log(level='INFO')
 def reads_qc(args):
-    print('VirCraft reads QC...')
     Reads=fastqc.QualCtrl(
         fq1=args.fq1,fq2=args.fq2,
         outdir=args.outdir,
@@ -64,12 +59,10 @@ def reads_qc(args):
         unrun=args.unrun,
         clear=args.clear
     )
-    print('Reads quality control completed!!!')
     return 0
 
 @logger.Log(level='INFO')
 def assemble(args):
-    print('VirCraft assembly...')
     Draft=assembly.Assembly(
         fq1=args.fq1,fq2=args.fq2,
         outdir=args.outdir,
@@ -80,12 +73,10 @@ def assemble(args):
         cutoff=args.cutoff,
         unrun=args.unrun
     )
-    print('Reads assembly completed!!!')
     return 0
 
 @logger.Log(level='INFO')
 def identify(args):
-    print('Viral contig identification...')
     if args.sop=='viral-id-sop':
         VirSeq=viridsop.VirScan(
             fasta=args.fasta,
@@ -105,12 +96,10 @@ def identify(args):
             cutoff=args.cutoff,
             unrun=args.unrun
         )
-    print('Config identification completed!!!')
     return 0
 
 @logger.Log(level='INFO')
 def votus(args):
-    print('Remove the redundancy...')
     vOTUs=votus.VirRef(
         fasta=args.fasta,
         outdir=args.outdir,
@@ -121,12 +110,10 @@ def votus(args):
         unrun=args.unrun,
         method=args.method
     )
-    print('\nvOTU cluster completed!!!')
     return 0
 
 @logger.Log(level='INFO')
 def classify(args):
-    print('Viral contig classification...')
     Taxa=vClassify.VirTaxa(
         fasta=args.fasta,
         outdir=args.outdir,
@@ -135,12 +122,10 @@ def classify(args):
     Taxa.Classify(
         unrun=args.unrun
     )
-    print('Contigs classification completed!!!')
     return 0
 
 @logger.Log(level='INFO')
 def compare(args):
-    print('Viral contig comparasion...')
     NWK=vCont.EnviComp(
         fasta=args.fasta,
         outdir=args.outdir,
@@ -150,12 +135,10 @@ def compare(args):
     NWK.CompSeq(
         unrun=args.unrun
     )
-    print('Contigs comparasion completed!!!')
     return 0
 
 @logger.Log(level='INFO')
 def host_pred(args):
-    print('Host prediction...')
     Hosts=hosts.VirHost(
         fasta=args.fasta,
         hostsdir=args.hostsdir,
@@ -167,7 +150,6 @@ def host_pred(args):
         taxa_anno=args.taxa,
         unrun=args.unrun
     )
-    print('Viral-host relationship prediction done!!!')
     return 0
 
 @logger.Log(level='INFO')
@@ -179,7 +161,6 @@ def func_annot(args):
     #    threads=args.threads
     #)
     #VirGene.FuncAnnot()
-    print('Predicting AMGs...')
     AMG=callAMGs.AMGs(
         fasta=args.fasta,
         outdir=args.outdir,
@@ -188,12 +169,10 @@ def func_annot(args):
     AMG.annotAMGs(
         unrun=args.unrun
     )
-    print('Function annotation completed!!!')
     return 0
 
 @logger.Log(level='INFO')
 def vir_quant(args):
-    print('Viral abundance and diversity analysis...')
     VirQuant=virQuantStat.VirAbdStat(
         samp_info=args.samp_info,
         fasta=args.fasta,
@@ -205,12 +184,10 @@ def vir_quant(args):
         args.checkv,
         unrun=args.unrun
     )
-    print('Viral quantifications completed!!!')
     return 0
 
 @logger.Log(level='INFO')
 def gene_quant(args):
-    print('Gene abundance analysis...')
     GeneQuant=geneQuantStat.GeneAbdStat(
         samp_info=args.samp_info,
         fasta=args.fasta,
@@ -220,12 +197,10 @@ def gene_quant(args):
     GeneQuant.QuantStat(
         unrun=args.unrun
     )
-    print('Gene quantifications completed!!!')
     return 0
 
-@logger.Log(level='INFO')
 def main():
-    version='0.0.13'
+    version='0.0.14'
     parser=arguments.setOpts(sys.argv[0],version)
     args=parser.parse_args()
     if len(sys.argv)==1: 
