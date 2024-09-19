@@ -1,42 +1,42 @@
 # VirCraft
+VirCraft是一个自动化病毒组学分析流程软件。  
+a flexible bioinfomatic pipeline for viromic analysis from metagenomic data.
 
-VirCraft is an open-source automatic viromic analysis pipeline designed for Linux-based systems. It comprises multiple modules for reads quality control (reads_qc), viral assembly (assembly),identification of viral contigs (identify), votus clustering (votus), viral classification (classify), dataset comparison (compare), functional annotation (func_annot), and quantification of viral and gene abundances (vir_quant and gene_quant).
+## 1 软件安装和数据库部署
 
-## 1 Software installation and database deployment
+#### 1.1 VirCraft所需软件
 
-#### 1.1 The dependencies required by VirCraft
-
-Table 1-1 The tools used by VirCraft
-|Tool|Version|Modules|Note
+表1-1 VirCraft使用的软件
+|Tool|Version|Modules|Note|
 |:----|:----|:----|:----|
-|bedtools|2.30.0|identify|A powerful toolset for genome analysis|
-|blast|2.13.0|classify|Sequence alignment|
-|bowtie2|2.4.4|assembly|Alignment to reference genome|
-|BWA|0.7.17-r1188|assembly|Alignment to reference genome|
-|cd-hit|4.8.1|votus|Sequence clustering or de-redundancy|
-|checkv|1.0.1|identify|votus|
-|coverm|0.6.1|vir_quant|Calculation of TPM abundance|
-|diamond|2.0.14|classify|Sequence alignment|
-|dram|1.4.6|identify|func_annot AMGs prediction|
-|eggnog-mapper|2.1.10|identify|Gene functional annotation|
-|fastp|0.23.2|read_qc|Raw sequencing data quality control|
-|fastuniq|1.1|read_qc|Removal of duplicate reads|
-|GTDB-tk|1.7.0|host_pred|Generating evolutionary tree file for host prediction|
-|hmmer|3.3.2|identify|host_pred Sequence alignment|
-|iqtree|2.2.0.3|func_annot|Tree building|
-|kofamscan|1.3.0|func_annot|Gene functional annotation|
-|MEGAHIT|1.2.9|assembly|Metagenome assembly|
-|prodigal|2.6.3|identify|compare func_annot Gene prediction|
-|salmon|0.14.2|gene_quant|Direct quantification of genes without alignment|
-|sortmerna|4.3.4|read_qc|Removal of rRNA from FASTQ data|
-|SPAdes|3.15.4|assembly|Metagenome assembly|
-|Trimmomatic|0.39|read_qc|Trimming of FASTQ data and removal of adapter sequences|
-|trnascan-se|2.0.11|host_pred|Genome annotation for tRNA molecules|
-|vContact2|0.9.22|compare|Virus classification and comparison|
-|vibrant|1.2.1|identify|Identification of lysogenic viruses and integration sites|
-|virsorter2|2.2.4|identify|Virus sequence classification|
+|bedtools|2.30.0|identify|用于处理基因组信息分析的强大工具集合|
+|blast|2.13.0|classify|序列比对|
+|bowtie2|2.4.4|assembly|比对参考序列|
+|BWA|0.7.17-r1188|assembly|比对参考基因组|
+|cd-hit|4.8.1|votus|序列聚类或去冗余|
+|checkv|1.0.1|identify|votus|病毒序列质控和修剪|
+|coverm|0.6.1|vir_quant|计算TPM丰度信息|
+|diamond|2.0.14|classify|序列比对|
+|dram|1.4.6|identify|func_annot|AMGs预测|
+|eggnog-mapper|2.1.10|identify|基因功能注释|
+|fastp|0.23.2|read_qc|原始测序数据质量控制|
+|fastuniq|1.1|read_qc|去除重复reads|
+|GTDB-tk|1.7.0|host_pred|用于生成进化树文件用于宿主预测|
+|hmmer|3.3.2|identify|host_pred|序列比对|
+|iqtree|2.2.0.3|func_annot|建树|
+|kofamscan|1.3.0|func_annot|基因功能注释|
+|MEGAHIT|1.2.9|assembly|宏基因组组装|
+|prodigal|2.6.3|identify|compare|func_annot|基因预测|
+|salmon|0.14.2|gene_quant|不基于比对而直接对基因进行定量|
+|sortmerna|4.3.4|read_qc|去除FASTQ数据中的rRNA|
+|SPAdes|3.15.4|assembly|宏基因组组装|
+|Trimmomatic|0.39|read_qc|修剪FASTQ数据以及去除接头序列|
+|trnascan-se|2.0.11|host_pred|用于基因组注释tRNA分子|
+|vContact2|0.9.22|compare|用于病毒分类和比较|
+|vibrant|1.2.1|identify|识别裂解病毒基因组和整合前病毒|
+|virsorter2|2.2.4|identify|病毒序列判定|
 
-#### 1.2 Deployment of VirCraft operating environment
+#### 1.2 VirCraft环境部署
 
 ###### 1.2.1 reads_qc
 
@@ -50,7 +50,7 @@ conda env create -f install/assembly.yaml
 
 模块identify鉴定病毒contigs主要依赖VirSorter2、VIBRANT和DeepVirFinder三种软件。
 
-1) VirSorter2的
+1) VirSorter2
 ```
 #安装viral-id-sop所需软件
 conda env create -f install/viral-id-sop.yaml
@@ -99,7 +99,7 @@ git clone https://bitbucket.org/MAVERICLab/vcontact2
 cd vcontact2 && pip install .
 ```
 
-###### 1.2.5 
+###### 1.2.5 VirCraft 
 
 ```
 #安装VirCraft基本组件
@@ -345,9 +345,10 @@ virCraft.py reads_qc -1 Sample01_1.fq -2 Sample01_2.fq -t 8 -o dataqc -p fu -o r
 #### 3.2 宏基因组组装
 
 assembly模块主要功能是将高质量reads进行组装成宏基因组。
+
 ###### 3.2.1 宏基因组组装步骤
 
-1. 首先用SPAdes/megahit对高质量reads进行组装。
+1. 首先用SPAdes/MEGAHIT对高质量reads进行组装。
 2. 然后使用bwa将reads比对组装结果，收集未比对上的reads(Unmapped reads)。
 3. Unmapped reads采用megahit/SPAdes再次进行组装。最后合并两次组装结果。
 
@@ -362,6 +363,8 @@ assembly模块主要功能是将高质量reads进行组装成宏基因组。
 -2 输入文件FastQ2  
 -o 输出结果的目录  
 -p 选择分析步骤(s和/或m)。例如，"-p sm"。其中，"s"和"m"分别表示选择用SPAdes和megahit进行组装。"sm"表示先用SPAdes组装，然后用所有reads比对组装结果获得unmapped reads，unmapped reads用megahit组装，最后整合所有组装结果。  
+
+需要注意的是，有时候SPAdes组装消耗的内存资源过大，因此建议选择"-p ms"或者"-p m"进行组装。
 
 ###### 3.1.3 assembly结果文件说明
 
@@ -527,7 +530,7 @@ virCraft.py classify -a scaffolds.votu.fa -t 8 -o classify_out
 └── scaffolds_taxonomy.txt #最终物种注释结果 
 ```
 
-#### 3.6 病毒物种丰度分析
+#### 3.6 序列丰度分析
 
 vir_quant模块用于病毒物种丰度和多样性分析。主要步骤如下：
 1. 使用BWA分别将各个样本的reads比对到vOTUs。
@@ -612,6 +615,7 @@ virCraft.py func_annot -a scaffolds.votu.fa -t 8 -o func_annot_out
 #### 3.8 病毒宿主分析
 
 host_prid模块用于对病毒-宿主关系进行分析。使用集成工具VirMatcher预测病毒的宿主。
+
 ###### 3.6.1 host_prid使用方法
 
 ```
@@ -633,9 +637,13 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 
 ## 4 注意事项
 
-当前版本目前vir_quant模块只能生成脚本并不能直接运行，请生成脚本后自行运行。
-目前尚有很多。
+#### 4.1 待解决问题
 
+###### 4.1.1 移植性问题
+
+移植性问题比较大，最初的解决方案是想用Docker和Singularity，然而这俩恐怕对用户没那么友好。故而，本软件打算采用以下方案解决移植性。  
+1. 能不用依赖软件尽可能不用依赖软件，比如bedtools，仅仅用了一个根据bed文件坐标提取fasta文件子序列的功能。而现在ChatGPT写程序如此方便，故此别依赖它，增加安装成本。  
+暂时就想到这些。
 ## 5 版本更新日志
 
 **VirCraft-v0.0.1**
@@ -670,9 +678,79 @@ virCraft.py host_prid -a scaffolds.votu.fa -t 8 -o host_prid_out
 6.软件结构更新：data、general等模块。
 7.添加AMGs分析，暂定用dramv和vibrant分析，尚未整合。
 ```
+
+**VirCraft-v0.0.6**
 ```
-**VirCraft-v0.0.5**
+1.移植性问题解决方案：conda；
+2.添加VirSorter2, DeepVirFinder和VIBRANT分析流程（vs2-vb-dvf），并对其进行合并分析；
+3.采用DRAM-v结合VIBRANT合并分析AMGs；
+4.Classify配置NCBI RefSeq数据库，添加基于blastp分类功能，并将结果与Demovir整合
+5.所有模块均可直接运行，无需二次投递任务。
+```
+
+**VirCraft-v0.0.7**
+```
+1.所有模块添加'-u'参数用于调试；
+2.identify模块添加'-w'参数用于选择病毒序列判定分析流（viral-id-sop和vs2-vb-dvf）；
+3.病毒定量方式由TPM改为mean coverage；
+4.添加gene_quant (基因定量)分析模块。
+```
+
+**VirCraft-v0.0.8**
+```
 1.添加logging功能？？；
-2.完善README;
-3.编写install程序，解决移植性的问题；
+2.编写install程序，解决移植性的问题。
+3.将病毒的Family和Order分开统计并绘制累积式柱状图。
+```
+
+**VirCraft-v0.0.9**
+```
+1.DRAM-v数据库移植新服务器后的配置问题，mag_annotator中的CONFIG文件需要修改；
+2.vir_quant模块：Alpha多样性分析的组间计较分析，并绘制盒须图（boxplot）；
+3.classify模块：将vContact2的结果整合到最终结果中；
+4.编写install模块，用于自动下载、安装和配置相关软件和数据库。
+5.增加GO和KEGG注释分级统计功能(https://github.com/youngDouble/GO_KEGG_annotation)。
+6.votus模块：新增病毒基因组质量和生活方式堆叠柱状图功能。
+7.config文件放到主目录便于设置参数。
+8.reads_qc模块：添加clean参数，用于可选择性地删除中间结果文件。
+9.病毒判定打分方式调整 (Pratama, et al. PeerJ, 2021)
+```
+
+**VirCraft-v0.0.10**
+```
+1.identify模块：merge_ctg_list.py病毒判定打分方式不太科学，于是重新调回原样
+2.identify模块：merge_ctg_list.py程序重构，更加简洁
+3.func_annot模块：AMG_filter.py修复无法合并VIBRANT结果中的fragment序列的bug
+4.identify模块：添加vir_qual_filt.py程序，用于基于checkv结果中的长度和质量过滤病毒contigs
+5.setup模块：添加数据库和conda环境自动部署功能
+6.identify模块：线程分配机制调试，把总线程数分为8份，DeepVirFinder和VIBRANT各1份，其余的全部分给VirSorter2
+```
+
+**VirCraft-v0.0.11**
+```
+1. setup模块：自动化环境安装和数据库部署功能已经初步完成。
+2. setup模块：environment.yaml简化，只安装必须的软件，环境相关的内容不固定版本，因为环境组件的版本更新会导致以前的版本无法下载。
+3. AMG需要check启动子
+4. host_pred模块：添加hosts的物种注释。
+```
+
+**VirCraft-v0.0.12**
+```
+1. 删除了一些不必要的文件，代码更简洁.
+2. 增加了脚本报错(xxx.sh.error)输出(xxx.sh.log)等内容
+```
+
+**VirCraft-v0.0.13**
+```
+1. 整理所有模块的结果文件夹，使其输出更为规范化。
+2. 增加vContact2结果绘制venn图的功能。
+3. 增加用blast结合来自CheckV的anicalc.py和aniclust.py工具进行基于ANI聚类vOTU的功能。
+4. 采用’set -e和set -o pipefail‘分别捕获返回值不为0的shell命令错误以及管道中的报错
+5. 添加记录时间的日志。
+```
+
+**VirCraft-v0.0.14**
+```
+1. 更改模块assembly的名称为assemble。
+2. virCraft.py主程序模块选择命令从if else选择模块的方式改为采用字典调取模块。
 ```
