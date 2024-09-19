@@ -38,5 +38,7 @@ class Log:
             result=func(*args,**kwargs)
             end_time=curr_time()
             logging.info(f"{end_time} - VirCraft {func.__name__} end")
+            elapsed_time = end_time - start_time
+            logging.info(f"VirCraft {func.__name__} elapsed time: {elapsed_time}")
             return result
         return wrapper
