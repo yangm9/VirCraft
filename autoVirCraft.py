@@ -7,7 +7,7 @@ import sys
 from crafts.config import arguments
 from crafts.config import config
 
-version='0.0.11'
+version='0.0.14'
 parser=arguments.autOpts(sys.argv[0],version)
 args=parser.parse_args()
 if len(sys.argv)==1:
@@ -34,8 +34,4 @@ if sys.argv[1]=='exec':
         else:
 
         if '2' in steps:
-
-        
-    
-
 
