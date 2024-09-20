@@ -1,32 +1,42 @@
-# This dockerfile uses the centos image
-# VERSION 1 - EDITION 1
+# Optimized Dockerfile using Ubuntu
+# VERSION 2 - EDITION 1
 # Author: yangm9
 # Command format: Instruction [arguments / command] ..
-FROM ubuntu
+
+FROM ubuntu:20.04
 MAINTAINER yangm9 yangm9@qq.com
-ENV VOLUME_SIZE=20G #116M 12st
-RUN apt update && \ #158M 120s
-# 安装git, wget
-apt install -y git && \ #237M 30s
-apt install -y wget && \ #237M 8s
-apt install -y build-essential && \
-apt install -y cmake && \ #237M 8s
-# 安装conda和mamba
-cd /opt && \ 
-wget -c https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh && \ #352M 6s
-sh Miniconda3-latest-Linux-x86_64.sh -p /opt/miniconda3 -b && \ #939M 20s
-/opt/miniconda3/bin/conda init && \ #939M 1s
-source /root/.bashrc && \
-/opt/miniconda3/bin/conda install -y -c conda-forge mamba && \ #1.3G 3m4.330s
-# 安装VirCraft
-git clone https://gitee.com/brightyoung/VirCraft.git && \ #1.4G 2s
-export PATH="/opt/VirCraft:/opt/VirCraft/bin":$PATH && \ 
-cd /opt/VirCraft && \
-virCraft.py setup_env -w -o envs && \
 
-#
+# Set environment variables
+ENV VOLUME_SIZE=20G \
+    DEBIAN_FRONTEND=noninteractive \
+    CONDA_DIR=/opt/miniconda3 \
+    PATH=/opt/VirCraft:/opt/VirCraft/bin:$PATH
 
-EXPOSE 315
-EXPOSE 443
+# Install system dependencies, minimize layers
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    wget \
+    build-essential \
+    cmake \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-#总共大概19G
+# Install Miniconda and Mamba in one layer
+RUN cd /opt && \
+    wget -c https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
+    sh Miniconda3-latest-Linux-x86_64.sh -p $CONDA_DIR -b && \
+    $CONDA_DIR/bin/conda init bash && \
+    $CONDA_DIR/bin/conda install -y -c conda-forge mamba && \
+    conda clean --all --yes && \
+    rm Miniconda3-latest-Linux-x86_64.sh
+
+# Clone and install VirCraft, setup environment and database
+RUN git clone https://gitee.com/brightyoung/VirCraft.git /opt/VirCraft && \
+    /opt/VirCraft/virCraft.py setup_env -w -o envs && \
+    /opt/VirCraft/virCraft.py setup_db -o VC-db && \
+    conda clean --all --yes
+
+# Expose required ports
+EXPOSE 315 443
+
+# Set entrypoint
+ENTRYPOINT ["/bin/bash"]

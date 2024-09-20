@@ -13,7 +13,7 @@ from crafts.assembly import assembly
 from crafts.identify import viridsop
 from crafts.identify import findV
 from crafts.config import arguments
-from crafts.votus import votus
+from crafts.votus import uniqV
 from crafts.taxa import vClassify
 from crafts.taxa import vCont
 from crafts.quantify import virQuantStat
@@ -100,7 +100,7 @@ def identify(args):
 
 @logger.Log(level='INFO')
 def votus(args):
-    vOTUs=votus.VirRef(
+    vOTUs=uniqV.VirRef(
         fasta=args.fasta,
         outdir=args.outdir,
         threads=args.threads
