@@ -2,25 +2,20 @@
 # VERSION 1 - EDITION 1
 # Author: yangm9
 
-FROM ubuntu:20.04
+FROM continuumio/miniconda3:latest
 
 LABEL maintainer="yangm9 yangm9@qq.com"
 
-ENV VOLUME_SIZE=20G #116M 12st
-WORKDIR /opt
+ENV VOLUME_SIZE=20G 
+WORKDIR /opt/VirCraft
 
 COPY . .
 
-RUN apt update && \ #158M 120s
+RUN apt update && \ 
     # 安装git, wget
-    apt install -y --no-install-recommends git wget build-essential cmake && \
-    # 安装conda和mamba
-    wget -qO /tmp/miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-    sh /tmp/miniconda.sh -p /opt/miniconda3 -b && \
-    rm -f /tmp/miniconda.sh && \
+    apt install -y --no-install-recommends build-essential &&\ 
     # 初始化conda并安装mamba
-    /opt/miniconda3/bin/conda init && \
-    /opt/miniconda3/bin/conda install -y -c conda-forge mamba && \ #1.3G 3m4.330s
+    conda install -y -c conda-forge mamba && \ 
     # 安装VirCraft
     export PATH="/opt/VirCraft:$PATH" && \ 
     virCraft.py setup_env -w -o envs && \
