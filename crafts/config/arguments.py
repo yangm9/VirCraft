@@ -208,6 +208,11 @@ def addGlbArg(psr):
         1:'Number of processes/threads to use for each task in a batch [default=8]'
     }
     psr.add_argument(
+        '-d','--config-file',action='store',type=str,
+        dest='config',metavar='STR',default=False,required=False,
+        help='Configure file can point to the parameters of certain tools and the database locations for VirCraft [default=False]'
+    )
+    psr.add_argument(
         '-t','--threads',action='store',type=str,
         dest='threads',metavar='INT',default=8,
         help=ThreadsHelpDict[0]#batch]
@@ -221,17 +226,17 @@ def addGlbArg(psr):
         '-r','--clear',action='store_true',
         dest='clear',default=False,required=False,
         help='Remove intermediate result files generated during program execution to save storage space [default=False]'
-)
+    )
     psr.add_argument(
         '-o','--outdir',action='store',type=str,
-        dest='outdir',metavar='STR',default=False,
-        required=True,help='Output folder [default is the current folder]'
+        dest='outdir',metavar='STR',default=False,required=True,
+        help='Output folder [default="."]'
     )
     return psr
 
 def addProcArg(psr,dflt:str):
     HelpDict={
-        'fuc' : 'Select the optional analysis process of read_qc (f, u, and/or c), i.e. "-p fuc". Among these, "f" means filter, "u" means removing the duplications and get the unique reads, and "c" refers to the process of remove the contamination from a customized reference database [default="fuc"]',   
+        'fuc' : 'Select the optional analysis process of read_qc (f, u, and/or c), i.e. "-p fuc". Among these, "f" means filter, "u" means removing the duplications and get the unique reads, and "c" refers to the process of remove the contamination from a customized reference database [default="fu"]',   
         'ms'  : 'Select the optional analysis process of assembly (s and/or c), i.e. "-p ms". Among these, "m" and/or "s" represent the assembly tool of MEGAHIT and/or SPAdes. i.e. "ms" refer to the process as follows: 1) assemble the reads to metagenome using MEGAHIT, 2) map all reads back to the assembled contigs and get the unmapped reads, 3) assemble the unmapped reads with SPAdes, and 4) merge the assembly results from 2) and 3) [default="ms"]'
     }
     psr.add_argument(

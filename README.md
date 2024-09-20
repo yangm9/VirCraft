@@ -26,11 +26,11 @@ Installation modules:
 12) gene_quant: estimate gene abundance
 
 ## SYSTEM REQUIREMENTS
-The resource requirements for VirCraft will vary greatly based on the amount of data being processed, but due to large memory requirements of many software used (such as metaSPAdes), I recommend at 8+ cores and 64GB+ RAM. VirCraft officially supports only Linux x64 systems, but may be installed on OSX manually or with docker (see below).
+The resource requirements for VirCraft depend heavily on the size of the data being processed. Due to the high memory demands of certain tools (like metaSPAdes), it is recommended to have at least **8 CPU cores** and **64 GB** of RAM for optimal performance. Officially, VirCraft supports **Linux x64** systems, but it can also be installed on **macOS** manually or through **Docker** for flexibility.
 
 ## INSTALLATION
 
-#### Manual installation (this is best, if you are comfortable):
+#### Manual installation (recommended):
 0. Install mamba: `conda install -y mamba`. Mamba will efficiently replace Conda, performing the same tasks but much faster.
 1. Download or clone this ripository: `git clone https://github.com/yangm9/VirCraft.git`
 2. Install the conda environments for VirCraft: `mkdir tmp_envs && /your_path/VirCraft/virCraft.py setup_env -o tmp_envs`. 
@@ -38,9 +38,9 @@ The resource requirements for VirCraft will vary greatly based on the amount of 
 3. Deposit the bioinformatic databases for VirCraft: `mkdir vc_db && /your_path/VirCraft/virCraft.py setup_db -o vc_db`
 4. (Optional) In the step 2 and 3, the user can install the conda environment by manually running these scripts by adding the "-u" parameter option on the command line. If the user chooses this manual method, the config file (/your_path/VirCraft/config) should also be modified manually.
 
-#### Docker installation
-
-
+#### Docker installation (not recommended):
+0. Prepare the bioinformatic databases for VirCraft: `mkdir vc_db && /your_path/VirCraft/virCraft.py setup_db -o vc_db`
+1. docker build -t vircraft:latest -f Dockerfile .
 
 ## DETAILED PIPELINE WALKTHROUGH
 
@@ -49,6 +49,7 @@ The resource requirements for VirCraft will vary greatly based on the amount of 
 
 ## USAGE
 
+#### After Manual installation
 ```
 virCraft.py -h
 usage:
@@ -57,7 +58,7 @@ usage:
         options: options described below in the section of Options.
         outdir: output directory.
 
-VirCraft is an flexible pipeline for metaviromic data analysis.
+VirCraft is an flexible pipeline for viral metagenomic data analysis.
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -66,38 +67,40 @@ subcommands:
   valid subcommands
 
   {reads_qc,assembly,identify,votus,classify,compare,vir_quant,func_annot,host_prid}
-    reads_qc            Pair-end FastQ reads qualitiy control.
-    assembly            Assemble the reads to contigs or scaffolds using
-                        MegaHit and/or SPAdes
-    identify            identify the viral contigs from a assembly fasta,
-                        using vir-id-sop
-    votus               construct the non-redundant virus operational
-                        taxonomic unit (vOTU) reference
+    reads_qc            Pair-end FastQ reads qualitiy control
+    assembly            Assemble the reads to contigs or scaffolds using MegaHit and/or SPAdes
+    identify            identify the viral contigs from a assembly fasta, using vir-id-sop
+    votus               construct the non-redundant virus operational taxonomic unit (vOTU) reference
     classify            classify the virus contigs by Demovir
     compare             Compare the virus protein sequence by vContact2
-    vir_quant           Calculate the abundance and diversity of each
-                        microbial community
+    vir_quant           Calculate the abundance and diversity of each microbial community
     func_annot          Gene annotation and quantification
     host_prid           Predict the hosts of virus
 ```
 
-Each module is run separately. For example, to run the identify module:
+Each module is run separately. For example, to run the  module:
 
 ```
-./virCraft.py assemble -h
-
-usage: ./virCraft.py assemble [-h] -1 STR [-2 STR] [-t INT] [-u] [-r] -o STR [-p STR] [-l INT]
+./virCraft.py identify -h
+usage: /home/yangming/.vc/virCraft.py identify [-h] [-a STR] [-d STR] [-t INT] [-u] [-r] -o STR [-l INT] [-w STR]
 
 options:
-  -h, --help            show this help message and exit
-  -1 STR, --fastq1 STR  FastQ file for read 1
-  -2 STR, --fastq2 STR  FastQ file for read 2
-  -t INT, --threads INT Number of processes/threads to use [default=8]
-  -u, --unrun           This parameter is mainly used for debugging. If this parameter is set, the script will not run directly, but will generate scripts for each analysis step [default=False]
-  -r, --clear           Remove intermediate result files generated during program execution to save storage space [default=False]
-  -o STR, --outdir STR  Output folder [default is the current folder]
-  -p STR, --process STR Select the optional analysis process of assembly (s and/or c), i.e. "-p ms". Among these, "m" and/or "s" represent the assembly tool of MEGAHIT and/or SPAdes. i.e. "ms" refer to the process as follows: 1) assemble the reads to metagenome using MEGAHIT, 2) map all reads back to the assembled contigs and get the unmapped reads, 3) assemble the unmapped reads with SPAdes, and 4) merge the assembly results from 2) and 3) [default="ms"]
-  -l INT, --cutoff INT  The minimal length of contigs/scaffolds. [default=1500]
+  -h, --help show this help message and exit
+  -a STR, --fasta STR     The absolute or relative path to a FastA file containing viral configs or vOTUs sequences. e.g., viral_positive_contigs.fsa
+  -d STR, --config-file   STR Configure file can point to the parameters of certain tools and the database locations for VirCraft [default=False]
+  -t INT, --threads INT   Number of processes/threads to use [default=8]
+  -u, --unrun             This parameter is mainly used for debugging. If this parameter is set, the script will not run directly, but will generate scripts for each analysis step [default=False]
+  -r, --clear             Remove intermediate result files generated during program execution to save storage space [default=False]
+  -o STR, --outdir STR    Output folder [default is the current folder]
+  -l INT, --cutoff INT    The minimal length of contigs/scaffolds. [default=1500]
+  -w STR, --sop STR       The sop/pipeline for viral contigs identification, including "viral-id-sop" and "vs2-vb-dvf". [default=vs2-vb-dvf]
+
+#### After Manual installation
+
+After successfully creating the image, the user can run VirCraft using the command like: `docker run --rm vircraft <module_name> -c config [options] ...`. For example, to run the identify module:
+
+```
+docker run --rm vircraft identify -d /your_path/config -a /your_path/test.fasta -t 32 -o viral_identification 
 ```
 
 ## Acknowledgements
