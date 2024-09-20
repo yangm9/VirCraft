@@ -1,42 +1,40 @@
-# Optimized Dockerfile using Ubuntu
-# VERSION 2 - EDITION 1
+# This dockerfile uses the centos image
+# VERSION 1 - EDITION 1
 # Author: yangm9
-# Command format: Instruction [arguments / command] ..
 
 FROM ubuntu:20.04
-MAINTAINER yangm9 yangm9@qq.com
 
-# Set environment variables
-ENV VOLUME_SIZE=20G \
-    DEBIAN_FRONTEND=noninteractive \
-    CONDA_DIR=/opt/miniconda3 \
-    PATH=/opt/VirCraft:/opt/VirCraft/bin:$PATH
+LABEL maintainer="yangm9 yangm9@qq.com"
 
-# Install system dependencies, minimize layers
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    git \
-    wget \
-    build-essential \
-    cmake \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+ENV VOLUME_SIZE=20G #116M 12st
+WORKDIR /opt
 
-# Install Miniconda and Mamba in one layer
-RUN cd /opt && \
-    wget -c https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-    sh Miniconda3-latest-Linux-x86_64.sh -p $CONDA_DIR -b && \
-    $CONDA_DIR/bin/conda init bash && \
-    $CONDA_DIR/bin/conda install -y -c conda-forge mamba && \
+COPY . .
+
+RUN apt update && \ #158M 120s
+    # 安装git, wget
+    apt install -y --no-install-recommends git wget build-essential cmake && \
+    # 安装conda和mamba
+    wget -qO /tmp/miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
+    sh /tmp/miniconda.sh -p /opt/miniconda3 -b && \
+    rm -f /tmp/miniconda.sh && \
+    # 初始化conda并安装mamba
+    /opt/miniconda3/bin/conda init && \
+    /opt/miniconda3/bin/conda install -y -c conda-forge mamba && \ #1.3G 3m4.330s
+    # 安装VirCraft
+    export PATH="/opt/VirCraft:$PATH" && \ 
+    virCraft.py setup_env -w -o envs && \
     conda clean --all --yes && \
-    rm Miniconda3-latest-Linux-x86_64.sh
+    rm -rf /var/lib/apt/lists/* && \
+    # 创建非root用户
+    groupadd -r appuser && useradd -r -g appuser appuser
 
-# Clone and install VirCraft, setup environment and database
-RUN git clone https://gitee.com/brightyoung/VirCraft.git /opt/VirCraft && \
-    /opt/VirCraft/virCraft.py setup_env -w -o envs && \
-    /opt/VirCraft/virCraft.py setup_db -o VC-db && \
-    conda clean --all --yes
+# 切换到非root用户
+USER appuser
 
-# Expose required ports
-EXPOSE 315 443
+# 暴露端口
+EXPOSE 518
+EXPOSE 443
 
-# Set entrypoint
-ENTRYPOINT ["/bin/bash"]
+# 运行应用程序
+ENTRYPOINT ["conda", "run", "-n", "base", "virCraft.py"]
