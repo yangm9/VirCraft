@@ -5,7 +5,11 @@ channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/linux-64
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/linux-64
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/linux-64
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r/linux-64/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r/linux-64
+  - bioconda
+  - conda-forge
+  - r
+  - defaults
 dependencies:
   - python=3.8
   - diamond=2.0.15

@@ -2,6 +2,7 @@ name: VC-Assembly
 channels:
   - conda-forge
   - bioconda
+  - r
   - defaults
 dependencies:
   - bwa=0.7.17
