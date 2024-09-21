@@ -34,11 +34,12 @@ The resource requirements for VirCraft depend heavily on the size of the data be
 #### Manual installation (recommended):
 0. Install mamba: `conda install -y mamba`. Mamba will efficiently replace Conda, performing the same tasks but much faster.
 1. Download or clone this ripository: `git clone https://github.com/yangm9/VirCraft.git`
-2. Install the conda environments for VirCraft: `mkdir tmp_envs && /your_path/VirCraft/virCraft.py setup_env -o tmp_envs`. 
-*Note: the "tmp_envs" will be a temporary directory to deposit the intermediate files for installing conda environment, so this directory can be deleted after the installation is complete. Additionally, if the installation fails, rerun the installation commands frequently until the all conda environments are installed.*
+2. Install the conda environments for VirCraft: `mkdir vc_envs && /your_path/VirCraft/virCraft.py setup_env -o tmp_envs`
+*Note: 1) The "vc_envs" directory will store some certain tools and log files; 2) if the installation fails, simply rerun the installation commands until the all conda environments are installed; 3) Additionally, users can also manage the version of the tools in VirCraft by modifing the YAML files located in the directory: "/your_path/VirCraft/crafts/setup/conda_env_yaml/".*
+
 3. Deposit the bioinformatic databases for VirCraft: `mkdir vc_db && /your_path/VirCraft/virCraft.py setup_db -o vc_db`
 *Note: the "vc_db" will be an important directory to deposit the intermediate files for installing conda environment, so this directory can be deleted after the installation is complete.*
-4. (Optional) In the step 2 and 3, the user can install the conda environment by manually running these scripts by adding the "-u" parameter option on the command line. If the user chooses this manual method, the config file (/your_path/VirCraft/config) should be modified manually.
+4. (Optional) In the step 2 and 3, the user can install the conda environment by manually running these scripts by adding the "-u" parameter option on the command line. If the user chooses this manual method, the config file ("/your_path/VirCraft/config") should be modified manually
 
 #### Docker installation (not recommended):
 0. Prepare the bioinformatic databases for VirCraft: `mkdir vc_db && /your_path/VirCraft/virCraft.py setup_db -o vc_db`
@@ -110,4 +111,3 @@ docker run --rm vircraft identify -d /your_path/config -a /your_path/test.fasta 
 Author of pipeline: [Ming YANG](yangm@idsse.ac.cn)
 
 Institution: [Institute of Deep-sea Science and Engineering，Chinese Academy of Sciences](http://www.idsse.cas.cn/)
-
