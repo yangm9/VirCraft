@@ -5,10 +5,5 @@ channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/linux-64
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/linux-64
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/linux-64
-  - bioconda
-  - conda-forge
-  - hcc
-  - r
-  - defaults
 dependencies:
   - deepvirfinder=2020.11.21
