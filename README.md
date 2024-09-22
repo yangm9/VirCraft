@@ -37,8 +37,44 @@ The resource requirements for VirCraft depend heavily on the size of the data be
 2. Install the conda environments for VirCraft: `mkdir vc_envs && /your_path/VirCraft/virCraft.py setup_env -o tmp_envs`
 *Note: 1) The "vc_envs" directory will store some certain tools and log files; 2) if the installation fails, simply rerun the installation commands until the all conda environments are installed; 3) Additionally, users can also manage the version of the tools in VirCraft by modifing the YAML files located in the directory: "/your_path/VirCraft/crafts/setup/conda_env_yaml/".*
 
+Finally, a total of 12 conda environments will be installed as follows.
+
+```
+VC-Assembly              /your_path/miniconda3/envs/VC-Assembly
+VC-CheckV                /your_path/miniconda3/envs/VC-CheckV
+VC-DRAMv                 /your_path/miniconda3/envs/VC-DRAMv
+VC-DeepVirFinder         /your_path/miniconda3/envs/VC-DeepVirFinder
+VC-GTDBTk                /your_path/miniconda3/envs/VC-GTDBTk
+VC-General               /your_path/miniconda3/envs/VC-General
+VC-Quantify              /your_path/miniconda3/envs/VC-Quantify
+VC-ReadsQC               /your_path/miniconda3/envs/VC-ReadsQC
+VC-VHMatcher             /your_path/miniconda3/envs/VC-VHMatcher
+VC-VIBRANT               /your_path/miniconda3/envs/VC-VIBRANT
+VC-VirSorter2            /your_path/miniconda3/envs/VC-VirSorter2
+VC-vContact2             /your_path/miniconda3/envs/VC-vContact2
+```
+
 3. Deposit the bioinformatic databases for VirCraft: `mkdir vc_db && /your_path/VirCraft/virCraft.py setup_db -o vc_db`
 *Note: the "vc_db" will be an important directory to deposit the intermediate files for installing conda environment, so this directory can be deleted after the installation is complete.*
+After VirCraft database installation, the size of each database will be as follows:
+
+```
+7.9G    vc_db/VC-dbCANDB
+199G    vc_db/VC-iPHoPDB
+112M    vc_db/VC-ContaminantsDB
+30G     vc_db/VC-GTDBTkDB
+166G    vc_db/VC-DRAMvDB
+48G     vc_db/VC-eggNOGDB
+11G     vc_db/VC-VIBRANTDB
+620M    vc_db/VC-ViralRefSeqDB
+11G     vc_db/VC-VirSorter2DB
+6.7G    vc_db/VC-KofamScanDB
+1.1G    vc_db/VC-DemovirDB
+114M    vc_db/VC-DeepVirFinder
+6.4G    vc_db/VC-CheckVDB
+```
+The total size of all databases will be ~484G.
+
 4. (Optional) In the step 2 and 3, the user can install the conda environment by manually running these scripts by adding the "-u" parameter option on the command line. If the user chooses this manual method, the config file ("/your_path/VirCraft/config") should be modified manually
 
 #### Docker installation (not recommended):
