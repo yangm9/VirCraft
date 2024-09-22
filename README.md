@@ -54,6 +54,8 @@ VC-VirSorter2            /your_path/miniconda3/envs/VC-VirSorter2
 VC-vContact2             /your_path/miniconda3/envs/VC-vContact2
 ```
 
+*The total size of all databases will be **~18G**.*
+
 3. Deposit the bioinformatic databases for VirCraft: `mkdir vc_db && /your_path/VirCraft/virCraft.py setup_db -o vc_db`
 *Note: the "vc_db" will be an important directory to deposit the intermediate files for installing conda environment, so this directory can be deleted after the installation is complete.*
 After VirCraft database installation, the size of each database will be as follows:
@@ -73,7 +75,7 @@ After VirCraft database installation, the size of each database will be as follo
 114M    vc_db/VC-DeepVirFinder
 6.4G    vc_db/VC-CheckVDB
 ```
-The total size of all databases will be ~484G.
+*The total size of all databases will be **~500G**.*
 
 4. (Optional) In the step 2 and 3, the user can install the conda environment by manually running these scripts by adding the "-u" parameter option on the command line. If the user chooses this manual method, the config file ("/your_path/VirCraft/config") should be modified manually
 
@@ -84,7 +86,6 @@ The total size of all databases will be ~484G.
 ## DETAILED PIPELINE WALKTHROUGH
 
 ![Detailed workflow of VirCraft](docs/Detailed_workflow_of_VirCraft.png)
-
 
 ## USAGE
 
@@ -136,7 +137,7 @@ options:
 
 #### After Manual installation
 
-After successfully creating the image, the user can run VirCraft using the command like: `docker run --rm vircraft <module_name> -c config [options] ...`. For example, to run the identify module:
+After successfully creating the docker image for VirCraft (see above, in INSTALLATION), users can run VirCraft using the command like: `docker run --rm vircraft <module_name> -c config [options] ...`. For example, to run the identify module:
 
 ```
 docker run --rm vircraft identify -d /your_path/config -a /your_path/test.fasta -t 32 -o viral_identification 
