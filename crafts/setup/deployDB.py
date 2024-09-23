@@ -174,11 +174,12 @@ fi
         shell=f'{self.outdir}/gtdbtk_db_deploy.sh'
         utils.printSH(shell,cmd)
         cmd=[utils.selectENV('VC-VIBRANT')]
-        sed_cmd=f"sed -i 's/\/data_backup\/database/{self.outdir}/'"
+        sed_cmd=f"sed 's/\/data_backup\/database/{self.outdir}/'"
+        config_template=f'{sys.path[0]}/config.tpl'
         config_file=f'{sys.path[0]}/config'
         cmd.extend(
             ['multithreads.pl',self.outdir,'db_deploy.sh 2\n',
-            sed_cmd,config_file,'\n']
+            sed_cmd,config_template,'>',config_file'\n']
         )
         shell=f'{self.outdir}/all_database_deploy.sh'
         utils.printSH(shell,cmd)

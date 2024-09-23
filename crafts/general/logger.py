@@ -43,7 +43,7 @@ class Log:
         logger.addHandler(stdout_handler)
         logger.addHandler(stderr_handler)
 
-        # 如果指定了日志文件
+        # if have a log file
         if self.logfile:
             file_handler = logging.FileHandler(self.logfile)
             file_handler.setLevel(self.levelDict[self.level])
