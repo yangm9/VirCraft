@@ -5,23 +5,24 @@ FastpOpts = -q 20 -u 20 -g -c -W 5 -3 -l 50 -f 10 -F 10
 MegahitOpts = --min-contig-len 300 -m 0.9 --k-list 21,33,55,77,99,127
 SPAdesOpts = --careful -m 1300 -k 21,33,55,77,99,127
 
-#Database
+#Databases
+## Path to blank control 
+ContamDB = /data_backup/database/contaminations/contaminations
 
 ## Full path pf DeepVirFinder
 DeepVirFinderDB = /data_backup/database/DeepVirFinderDB/models
 
-# Databases
 ## Path to Virsorter2 database
 VirSorter2DB = /data_backup/database/virsorter2DB/db-vs2
 
 ## Path to VIBRANT database
 VIBRANTDB = /data_backup/database/vibrantDB
 
-## Path to blank control 
-ContamDB = /data_backup/database/contaminations/contaminations
-
 ## Path to CheckV database
 CheckvDB = /data_backup/database/checkvDB/checkv-db-v1.5
+
+## NCBI viral RefSeq database
+NCBIvRefProtDB = /data_backup/database/NCBI_refseq/viral
 
 ## Full path to Demovir tools and database
 DemovirDB = /data_backup/software/biotools/demovir
@@ -31,7 +32,3 @@ EggNOGDB = /data_backup/database/eggnog-mapper
 
 ## Path to kofamscan database
 KofamscanDB = /data_backup/database/kofamscanDB
-
-## NCBI viral RefSeq database
-NCBIvRefProtDB = /data_backup/database/NCBI_refseq/viral
-

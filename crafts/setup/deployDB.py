@@ -175,7 +175,7 @@ fi
         utils.printSH(shell,cmd)
         cmd=[utils.selectENV('VC-VIBRANT')]
         sed_cmd=f"sed 's/\/data_backup\/database/{self.outdir}/'"
-        config_template=f'{sys.path[0]}/config.tpl'
+        config_template=f'{sys.path[0]}/crafts/config/config.tpl'
         config_file=f'{sys.path[0]}/config'
         cmd.extend(
             ['multithreads.pl',self.outdir,'db_deploy.sh 2\n',
