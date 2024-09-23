@@ -30,7 +30,7 @@ class QualCtrl(Reads):
         return cmd,out_fastqs,out_fq_list
     def fastUniq(self,fq_list):
         wkdir=f'{self.wkdir}/fastuniq'
-        in_fq_list=f'{self.outdir}/fastp/{self.samp}_list.txt'
+        in_fq_list=f'{self.wkdir}/fastp/{self.samp}_list.txt'
         out_fq1=f'{wkdir}/{self.basename_fq1}'.replace('.gz','')
         out_fq2=f'{wkdir}/{self.basename_fq2}'.replace('.gz','')
         utils.mkdir(wkdir)
