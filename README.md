@@ -55,6 +55,7 @@ VC-vContact2             /your_path/miniconda3/envs/VC-vContact2
 ```
 
 *The total size of all databases will be **~18G**.*
+*Note: if the installation of any environment failed, users can entry it and install them manually, but the environment name should be correct."
 
 3. Deposit the bioinformatic databases for VirCraft: `mkdir vc_db && /your_path/VirCraft/virCraft.py setup_db -o vc_db`
 *Note: the "vc_db" will be an important directory to deposit the intermediate files for installing conda environment, so this directory can be deleted after the installation is complete.*
