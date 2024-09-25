@@ -54,8 +54,8 @@ VC-VirSorter2            /your_path/miniconda3/envs/VC-VirSorter2
 VC-vContact2             /your_path/miniconda3/envs/VC-vContact2
 ```
 
-*The total size of all databases will be **~18G**.*
-*Note: if the installation of any environment failed, users can entry it and install them manually, but the environment name should be correct."
+*The total size of all conda environments will be **~18G**.*
+(Optional) if the installation of any environment failed, users can entry it and install them manually, but the environment name should be correct.
 
 3. Deposit the bioinformatic databases for VirCraft: `mkdir vc_db && /your_path/VirCraft/virCraft.py setup_db -o vc_db`
 *Note: the "vc_db" will be an important directory to deposit the intermediate files for installing conda environment, so this directory can be deleted after the installation is complete.*
@@ -78,8 +78,16 @@ After VirCraft database installation, the size of each database will be as follo
 ```
 *The total size of all databases will be **~500G**.*
 
-4. (Optional) In the step 2 and 3, the user can install the conda environment by manually running these scripts by adding the "-u" parameter option on the command line. If the user chooses this manual method, the config file ("/your_path/VirCraft/config") should be modified manually
-
+4. (Optional) In the step 2 and 3, the user can install the conda environment by manually running these scripts by adding the "-u" parameter option on the command line. If the user chooses this manual method, the config file ("/your_path/VirCraft/config") should be modified manually. Alternatively, users can also install all the conda environments by phisically transplant, and the steps are shown as follows:
+1) Download the VirCraft Conda environment packages from [Google Drive](https://drive.google.com/drive/folders/1QdwwcWSQv0IZNNFBvcENpIUWXY4adQGa?usp=sharing). For users in mainland China, download the Conda environment from Baidu Cloud: [VirCraft_conda_ENVs](https://pan.baidu.com/s/1NlRJVgYTCLYhGX1E6eE_Lw)(Access code: 6rq5)
+2) Install conda-pack: `conda install conda-pack`.
+3) Upload the downloaded conda environment packages to your server. For each conda environment, you should install it as follows:
+```
+mkdir ~/miniconda/envs/VC-XXXXXX  #VC-XXXXXX is the name of a certain conda environment, i.e. VC-Assembly
+tar -xzf my_env.tar.gz -C ~/miniconda3/envs/VC-XXXXXX
+cd ~/miniconda3/envs/VC-XXXXXX
+conda-unpack # Repair environmental path
+```
 #### Docker installation (not recommended):
 0. Prepare the bioinformatic databases for VirCraft: `mkdir vc_db && /your_path/VirCraft/virCraft.py setup_db -o vc_db`
 1. docker build -t vircraft:latest -f Dockerfile .
