@@ -64,6 +64,15 @@ class ENV:
                 "&& sed -i -E 's/^columns = set\(\).union\(\*columns_to_use\)/columns = list(set().union(*columns_to_use))/' bin/ResultsAggregator.py",
                 '&& conda run -n',self.ENVDICT[name],'pip install . --no-deps\n']
             )
+        elif name == 'general':
+            tmp_catdir=f'{self.outdir}/CAT'
+            cat_pack_files=f'{tmp_catdir}/CAT_pack/*'
+            general_bin_dir=utils.get_conda_env_dir(self.ENVDICT[name])
+            general_bin_dir+='/bin'
+            cmd.extend(
+                ['git clone',URL.CAT_URL,tmp_catdir,
+                '&& cp',cat_pack_files,general_bin_dir,'\n']
+            )
         return cmd
     def Install(self,in_wall=False,unrun=False):
         results=''

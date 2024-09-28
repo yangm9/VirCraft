@@ -25,3 +25,7 @@ GTDBTK_DB_URL='https://data.gtdb.ecogenomic.org/releases/release214/214.0/auxill
 ## WIsH
 WISH_URL='https://github.com/soedinglab/WIsH.git'
 VIRMATCHER_URL='https://bitbucket.org/MAVERICLab/virmatcher'
+
+# VC-General
+## Contig Annotation Tool
+CAT_URL='https://github.com/MGXlab/CAT_pack.git'
