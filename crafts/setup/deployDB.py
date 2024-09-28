@@ -31,6 +31,13 @@ class DB:
 #        models_dir=models_dir.replace('VC-DeepVirFinder/bin','VC-DeepVirFinder/share/deepvirfinder/models')
 #        cmd=['cp -r',models_dir,wkdir,'\n']
 #        return cmd
+    def dl_CAT_db(self):
+        wkdir=f'{self.outdir}/VC-CATDB'
+        db_basename=os.path.basename(URL.CAT_DB_URL)
+        db_file=f'{wkdir}/{db_file_basename}'
+        cmd=['wget -c',URL.CAT_DB_URL,'-O',db_file,'\n',
+            '&& tar xzf',db_file,'-C',wkdir,'\n']
+        return cmd
     def dl_checkv_db(self):
         wkdir=f'{self.outdir}/VC-CheckVDB'
         db_dir=f'{wkdir}/checkv-db-v*'
@@ -151,7 +158,10 @@ fi
         utils.printSH(shell,cmd)
  #       cmd=self.dl_deepvirfinder_db()
  #       shell=f'{self.outdir}/deepvirfinder_db_deploy.sh'
- #       utils.printSH(shell,cmd)
+ #       utils.printSH(shell,cmd) 
+        cmd=self.dl_checkv_db()
+        shell=f'{self.outdir}/CAT_db_deploy.sh'
+        utils.printSH(shell,cmd)
         cmd=self.dl_checkv_db()
         shell=f'{self.outdir}/checkv_db_deploy.sh'
         utils.printSH(shell,cmd)

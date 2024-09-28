@@ -29,3 +29,4 @@ VIRMATCHER_URL='https://bitbucket.org/MAVERICLab/virmatcher'
 # VC-General
 ## Contig Annotation Tool
 CAT_URL='https://github.com/MGXlab/CAT_pack.git'
+CAT_DB_URL='https://tbb.bio.uu.nl/tina/CAT_pack_prepare/20240422_CAT_nr.tar.gz'
