@@ -4,7 +4,7 @@ from ..identify.viridsop import VirScan
 
 class MultiTools(VirScan):
     '''
-    Generate command for deepvirfinder and VIBRANT.
+    Generate command for DeepVirFinder, VIBRANT and Contig Annotation Tool (CAT).
     '''
     def __init__(self,fasta='',outdir='',threads=8):
         super().__init__(fasta,outdir)
@@ -29,4 +29,15 @@ class MultiTools(VirScan):
             '-t',self.threads,'-folder',self.outdir,
             '-d',VIBRANT_DB_databases,'-m',VIBRANT_DB_files,'\n']
         )
+        return cmd,wkdir
+    def contig_annotation_tool(self,cutoff=1500):
+        cmd=[utils.selectENV('VC-CAT')]
+        wkdir=f'{self.outdir}/CAT_{self.name}'
+        utils.mkdir(wkdir)
+        CAT_DB=self.confDict['CATDB']+'/db'
+        CAT_TAX=self.confDict['CATDB']+'/tax'
+        out_prefix=f'{wkdir}/{self.name}.CAT'
+        cmd.extend(
+            ['CAT_pack contigs','-c',self.fasta,'-t',self.threads
+            '-d',CAT_DB,'-t',CAT_TAX,'-o',out_prefix,'\n']
         return cmd,wkdir
