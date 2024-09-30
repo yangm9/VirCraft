@@ -11,13 +11,14 @@ class vIdentify(MultiTools):
         super().__init__(fasta,outdir)
         self.allthreads=threads
         self.threads=int(threads)//(self.BATCH_SIZE*2)
-    def vFilter(self):
+    def vFilter(self,):
         #merge Contigs
         score_xls=f'{self.outdir}/all_viral_ctgs.score.xls'
         score_filt_xls=utils.insLable(score_xls,'gt2')
-        filt_ctgs_li=f'{self.outdir}/viral_ctgs_filt.list'
+        filt_ctgs_list=f'{self.outdir}/viral_ctgs_filt.list'
         filt_viral_ctgs=f'{self.outdir}/filted_viral_ctgs.fa'
         cmd=[utils.selectENV('VC-General')]
+        tmp_cmd,cat_dir=self.contig_annotation_tool(filt_viral_ctgs)
         cmd.extend(
             ['merge_ctg_list.py',self.name,self.outdir,'\n',
             "awk -F '\\t' 'NR==1 || $21>=2'",score_xls,'>',score_filt_xls,'\n',

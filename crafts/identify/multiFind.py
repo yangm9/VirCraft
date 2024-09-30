@@ -30,8 +30,8 @@ class MultiTools(VirScan):
             '-d',VIBRANT_DB_databases,'-m',VIBRANT_DB_files,'\n']
         )
         return cmd,wkdir
-    def contig_annotation_tool(self,cutoff=1500):
-        cmd=[utils.selectENV('VC-CAT')]
+    def contig_annotation_tool(self,in_fa=None):
+        cmd=[utils.selectENV('VC-General')]
         wkdir=f'{self.outdir}/CAT_{self.name}'
         utils.mkdir(wkdir)
         CAT_DB=self.confDict['CATDB']+'/db'
@@ -40,8 +40,8 @@ class MultiTools(VirScan):
         orf_annot=f'{out_prefix}.ORF2LCA.txt'
         orf_rate=f'{out_prefix}.host_orf_rate.tsv'
         cmd.extend(
-            ['CAT_pack contigs','-c',self.fasta,'-t',self.threads
+            ['CAT_pack contigs','-c',in_fa,'-t',self.threads,
             '-d',CAT_DB,'-t',CAT_TAX,'-o',out_prefix,'\n',
-            'host_orf_rate_from_CAT.py',orf_annot,orf_rate,'\n'
-            ]
+            'host_orf_rate_from_CAT.py',orf_annot,orf_rate,'\n']
+        )
         return cmd,wkdir
