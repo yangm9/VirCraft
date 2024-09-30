@@ -79,7 +79,7 @@ my $cmax_len=$con_len[0];		### max_len
 my $con_gc_rate=sprintf "%.3f",$con_gc/$total_clen;	### GC_rate
 my %cN=stalen(\@con_len,$total_clen);	### statistic
 ### print result
-open OUT,">$output" || die "Fail to open output file: N50.xls\n";
+open OUT,">$output" || die "Fail to open output file: N50.tsv\n";
 print OUT "\tscaffold\t\tcontig\n";
 print OUT "\tlength(bp)\tnumber\tlength(bp)\tnumber\n";
 print OUT "max_len\t$smax_len\t-\t$cmax_len\t-\n";

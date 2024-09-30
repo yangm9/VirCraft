@@ -4,7 +4,7 @@
 argv<-commandArgs(T)
 
 if(length(argv)<3){
-    stop("inputs: <merged_tpm_xls> <samp_group_xls> <heatmap_dir>\n")
+    stop("inputs: <merged_tpm_tsv> <samp_group_tsv> <heatmap_dir>\n")
 }
 
 if(!require("pheatmap")){install.packages("pheatmap")}

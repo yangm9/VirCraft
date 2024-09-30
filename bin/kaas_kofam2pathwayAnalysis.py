@@ -9,7 +9,7 @@ Edited by Yang Zhishuang at 2021/05/14
 The latest version was edited at : 2021/05/14 By:yang zs 
 ####################################################################################################
 
-This program is designed to perform kaas or KofamKOALA result. These files will be produced: *.kegg_anno.xls, *.kegg_pathway_stata.xls, *.K_codes_not_in_pathway_map.list.
+This program is designed to perform kaas or KofamKOALA result. These files will be produced: *.kegg_anno.tsv, *.kegg_pathway_stata.tsv, *.K_codes_not_in_pathway_map.list.
 Requirments:
     wget        windows: http://gnuwin32.sourceforge.net/packages/wget.htm
                 unix: https://www.gnu.org/software/wget/
@@ -111,7 +111,7 @@ def ko_class_map():
             print("Failed to run\n" + str(cmd) + "\nplease check the network")
             sys.exit()
     in_keg = open("br08901.keg", "r").readlines()
-    pathway_map=open("kegg_pathway_map.xls","w+")
+    pathway_map=open("kegg_pathway_map.tsv","w+")
     ko_class = {}
     for line in in_keg:
         if line.startswith("A"):
@@ -135,9 +135,9 @@ def ko_class_map():
 
 def K_list_Parser(K_list,sp="ko"):
     file_name = os.path.split(K_list)[1].rsplit(".",1)[0]
-    out_kegg_anno = file_name + ".kegg_anno.xls"
+    out_kegg_anno = file_name + ".kegg_anno.tsv"
     not_in_pathway_map = file_name + "K_codes_not_in_pathway_map.list"
-    out_kegg_pathway = file_name + ".kegg_pathway_stata.xls"
+    out_kegg_pathway = file_name + ".kegg_pathway_stata.tsv"
     anno_f = open(out_kegg_anno, "w+")
     not_in_pathway_f = open(not_in_pathway_map, "w+")
     pathway_f = open(out_kegg_pathway, "w+")

@@ -32,12 +32,12 @@ FastaDict={
 
 #The intermediate output from this program for each tool.
 CsvDict={
-    'virsorter2':'{}/vs2_viral_info.xls',    
-    'vibrant':'{}/vb_viral_info.xls',
-    'deepvirfinder':'{}/dvf_viral_info.xls'
+    'virsorter2':'{}/vs2_viral_info.tsv',    
+    'vibrant':'{}/vb_viral_info.tsv',
+    'deepvirfinder':'{}/dvf_viral_info.tsv'
 }
 
-#The column dictionary for each tool, and this will be used to rename the column names for the file named "all_viral_ctgs.score.xls:".
+#The column dictionary for each tool, and this will be used to rename the column names for the file named "all_viral_ctgs.score.tsv:".
 ColsDict={
     'virsorter2':{
         'dsDNAphage':'vs2_dsDNAphage','ssDNA':'vs2_ssDNA','NCLDV':'vs2_NCLDV',
@@ -106,8 +106,8 @@ def calcCtgScore(all_merged_ctgs):
     df['vb_score']=df['vb_isPhage'].apply(lambda x:1 if x==1 else 0)
     df['dvf_scores']=df.apply(lambda x:1 if x['dvf_score']>=0.9 and x['dvf_pvalue']<=0.1 else 0, axis=1)
     df['score']=df['vs2_score']+df['vb_score']+df['dvf_scores']
-    postfix=f'.score.xls'
-    all_filt_ctgs=all_merged_ctgs.replace('.xls',postfix)
+    postfix=f'.score.tsv'
+    all_filt_ctgs=all_merged_ctgs.replace('.tsv',postfix)
     df.to_csv(all_filt_ctgs,index=False,sep='\t')
     return 0
 
@@ -119,12 +119,12 @@ def ctgList(name,wkdir):
     listToFile(all_ctgs,all_ctgs_li)
     mark=all_ctgs_li
     for tool in CsvDict.keys():
-        csv_name=CsvDict[tool].format(wkdir) #{vb}_viral_cfgs.xls
+        csv_name=CsvDict[tool].format(wkdir) #{vb}_viral_cfgs.tsv
         merged_name=mark+'_'+tool
         linkTab.merge(mark,csv_name,'left','Contig',merged_name)
         if mark!=all_ctgs_li: os.remove(mark)
         mark=merged_name
-    all_merged_ctgs=f'{wkdir}/all_viral_ctgs.xls'
+    all_merged_ctgs=f'{wkdir}/all_viral_ctgs.tsv'
     os.rename(mark,all_merged_ctgs)
     calcCtgScore(all_merged_ctgs)
     return 0

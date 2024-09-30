@@ -11,18 +11,18 @@ class vIdentify(MultiTools):
         super().__init__(fasta,outdir)
         self.allthreads=threads
         self.threads=int(threads)//(self.BATCH_SIZE*2)
-    def vFilter(self,):
+    def vFilter(self):
         #merge Contigs
-        score_xls=f'{self.outdir}/all_viral_ctgs.score.xls'
-        score_filt_xls=utils.insLable(score_xls,'gt2')
+        score_tsv=f'{self.outdir}/all_viral_ctgs.score.tsv'
+        score_filt_tsv=utils.insLable(score_tsv,'gt2')
         filt_ctgs_list=f'{self.outdir}/viral_ctgs_filt.list'
         filt_viral_ctgs=f'{self.outdir}/filted_viral_ctgs.fa'
         cmd=[utils.selectENV('VC-General')]
         tmp_cmd,cat_dir=self.contig_annotation_tool(filt_viral_ctgs)
         cmd.extend(
             ['merge_ctg_list.py',self.name,self.outdir,'\n',
-            "awk -F '\\t' 'NR==1 || $21>=2'",score_xls,'>',score_filt_xls,'\n',
-            'cut -f 1',score_filt_xls,"|sed '1d' >",filt_ctgs_li,'\n',
+            "awk -F '\\t' 'NR==1 || $21>=2'",score_tsv,'>',score_filt_tsv,'\n',
+            'cut -f 1',score_filt_tsv,"|sed '1d' >",filt_ctgs_li,'\n',
             'extrSeqByName.pl',filt_ctgs_li,self.fasta,filt_viral_ctgs,'\n']
         )
         tmp_cmd,checkv_fa=self.checkv(filt_viral_ctgs)

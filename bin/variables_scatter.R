@@ -6,7 +6,7 @@ library(ggplot2)
 
 argv<-commandArgs(T)
 
-if(length(argv)<3){stop("inputs: <variables.xls> <Variables> <plot_dir>")}
+if(length(argv)<3){stop("inputs: <variables.tsv> <Variables> <plot_dir>")}
 
 df=read.table(
     argv[1],header=T,sep="\t",

@@ -72,14 +72,14 @@ def list_common_gene_id(dm_gff,vb_faa,wkdir):
     dm_geneidDict=get_common_gene_id_from_gff(dm_gff,'dram')
     #vb_geneidDict=get_common_gene_id_from_gff(vb_gff,'vibrant')
     vb_geneidDict=get_common_gene_id_for_vibrant(vb_faa)
-    dm_gene_id_list=f'{wkdir}/dram_id.xls'
+    dm_gene_id_list=f'{wkdir}/dram_id.tsv'
     DMGI=open(dm_gene_id_list,'w')
     DMGI.write('protein_id\tcommon_protein_id\n')
     for gene_id in dm_geneidDict.keys():
         line=f'{gene_id}\t{dm_geneidDict[gene_id]}\n'
         DMGI.write(line)
     DMGI.close()
-    vb_gene_id_list=f'{wkdir}/vibrant_id.xls'
+    vb_gene_id_list=f'{wkdir}/vibrant_id.tsv'
     VBGI=open(vb_gene_id_list,'w')
     VBGI.write('protein\tcommon_protein_id\n')
     for gene_id in vb_geneidDict.keys():
@@ -99,17 +99,17 @@ def combine_amgs_of_dramv_and_vibrant(dmdir,vbdir,wkdir='.'):
     #Get the common gene ID list of dramv and vibrant base on respective gff.
     dm_gene_id_list,vb_gene_id_list=list_common_gene_id(dm_gff,vb_faa,wkdir)
     dm_annot=f'{dmdir}/annotations.tsv'
-    dm_annot_c1=f'{wkdir}/annotations_c1.xls'
+    dm_annot_c1=f'{wkdir}/annotations_c1.tsv'
     #add the 1st column name for dramv
     add_1st_column_name(dm_annot,'protein_id',dm_annot_c1)
     vb_annot=f'{vbdir}/VIBRANT_results_{seq_name}/VIBRANT_annotations_{seq_name}.tsv'
     #Add the common gene id for dramv and vibrant annotation file, respectively
-    dm_id_annot=f'{wkdir}/dram_annotations.xls'
+    dm_id_annot=f'{wkdir}/dram_annotations.tsv'
     linkTab.merge(dm_annot_c1,dm_gene_id_list,'left','protein_id',dm_id_annot)
-    vb_id_annot=f'{wkdir}/vibrant_annotations.xls'
+    vb_id_annot=f'{wkdir}/vibrant_annotations.tsv'
     linkTab.merge(vb_annot,vb_gene_id_list,'left','protein',vb_id_annot)
     #Merge the annotation file of dramv and vibrant by common gene id
-    merged_annot=f'{wkdir}/merged_annotations.xls'
+    merged_annot=f'{wkdir}/merged_annotations.tsv'
     try:
         linkTab.merge(dm_id_annot,vb_id_annot,'outer','common_protein_id',merged_annot)
     except Exception as e:
@@ -142,10 +142,10 @@ def generate_amgs_table(dm_vb_merged_annot):
     df=df.drop('fasta', axis=1)
     df=df.rename(columns=rename_columns_dict)
     wkdir=os.path.dirname(dm_vb_merged_annot)
-    all_merged_annot=f'{wkdir}/all_merged_annotation.xls'
+    all_merged_annot=f'{wkdir}/all_merged_annotation.tsv'
     df.to_csv(all_merged_annot,sep='\t',index=False)
     df=df.query(amg_criteria)
-    filt_merged_annot=f'{wkdir}/filted_merged_amg.xls'
+    filt_merged_annot=f'{wkdir}/filted_merged_amg.tsv'
     df.to_csv(filt_merged_annot,sep='\t',index=False)
     return 0
 

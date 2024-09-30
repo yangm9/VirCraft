@@ -62,10 +62,10 @@ if __name__=='__main__':
     CheckV_f=wkdir+'/checkv/contamination.tsv'
     anno_f=wkdir+'/dramv-annotate/annotations.tsv'
     AutoDF,ManuDF=curateV(VirSort2_f,CheckV_f,anno_f)
-    autu_curated_f=wkdir+'/curation/autu_curated_contigs.xls'
-    manu_curate_f=wkdir+'/curation/manu_curate_contigs.xls'
+    autu_curated_f=wkdir+'/curation/autu_curated_contigs.tsv'
+    manu_curate_f=wkdir+'/curation/manu_curate_contigs.tsv'
     AutoDF.to_csv(autu_curated_f,index=False,sep='\t')
     ManuDF.to_csv(manu_curate_f,index=False,sep='\t')
     ManuAnnoDF=filtAnnoForManu(manu_curate_f,anno_f)
-    manu_anno_f=wkdir+'/curation/manu_curate_anno.xls'
+    manu_anno_f=wkdir+'/curation/manu_curate_anno.tsv'
     ManuAnnoDF.to_csv(manu_anno_f,index=False,sep='\t')

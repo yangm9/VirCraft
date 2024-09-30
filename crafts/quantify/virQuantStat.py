@@ -13,7 +13,7 @@ class VirAbdStat(multiVirCount):
         return cmd,abd
     def sizeAbdPlot(self,abd:str,checkv_dir=None):
         cmd=[utils.selectENV('VC-General')]
-        sum_abd=f'{self.outdir}/contig_sum_abd.xls'
+        sum_abd=f'{self.outdir}/contig_sum_abd.tsv'
         if not checkv_dir:
             tmp_fa=self.fasta
             tmp_dir=self.outdir
@@ -23,7 +23,7 @@ class VirAbdStat(multiVirCount):
             checkv_dir=f'{self.outdir}/checkv'
         checkv_dir=os.path.abspath(checkv_dir)
         votu_qual=f'{checkv_dir}/quality_summary.tsv'
-        sum_qual=f'{self.outdir}/sum_abd_qual.xls'
+        sum_qual=f'{self.outdir}/sum_abd_qual.tsv'
         cmd.extend(
             ['sum_abd_by_seq.py',abd,sum_abd,'\n',
             "sed -i '1s/contig_id/Contig/'",votu_qual,'\n',
@@ -42,12 +42,12 @@ class VirAbdStat(multiVirCount):
             return cmd
         taxa_anno=os.path.abspath(taxa_anno)
         m_taxa_anno=f'{self.outdir}/all_votu.taxa.txt'
-        abd_taxa=f'{self.outdir}/all_sum_abd_taxa.xls'
-        m_abd_taxa=f'{self.outdir}/all_sum_abd_taxa.m.xls'
-        ctg_taxa_abd=f'{self.outdir}/all_ctg_abd_taxa.xls'
-        taxa_sum_abd=f'{self.outdir}/all_taxa_sum_abd.xls'
-        order_sum_abd=f'{self.outdir}/all_Order_sum_abd.xls'
-        family_sum_abd=f'{self.outdir}/all_Family_sum_abd.xls'
+        abd_taxa=f'{self.outdir}/all_sum_abd_taxa.tsv'
+        m_abd_taxa=f'{self.outdir}/all_sum_abd_taxa.m.tsv'
+        ctg_taxa_abd=f'{self.outdir}/all_ctg_abd_taxa.tsv'
+        taxa_sum_abd=f'{self.outdir}/all_taxa_sum_abd.tsv'
+        order_sum_abd=f'{self.outdir}/all_Order_sum_abd.tsv'
+        family_sum_abd=f'{self.outdir}/all_Family_sum_abd.tsv'
         cmd.extend(
             ['echo "Heatmap for abundance"\n',
             "sed '1s/Sequence_ID/Contig/'",taxa_anno,'>',m_taxa_anno,'\n',

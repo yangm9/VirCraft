@@ -6,7 +6,7 @@ library(ggplot2)
 argv <- commandArgs(T)
 
 if (length(argv) < 2){
-    stop("inputs: <Contig_len_sum_tpm_quality.xls> <scatter_plot_dir>")
+    stop("inputs: <Contig_len_sum_tpm_quality.tsv> <scatter_plot_dir>")
 }
 
 df <- read.table(

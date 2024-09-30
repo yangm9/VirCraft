@@ -5,7 +5,7 @@
 argv<-commandArgs(T)
 
 if(length(argv)<2){
-    stop("inputs: <viral_lifetype_quality_xls> <barplot_dir>\n")
+    stop("inputs: <viral_lifetype_quality_tsv> <barplot_dir>\n")
 }
 
 library(ggplot2)

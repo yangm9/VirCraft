@@ -14,7 +14,7 @@ argv<-commandArgs(T)
 
 # 判断命令行参数个数
 if (length(argv)<2){
-    stop("inputs: <all_abundance.xls> <samp_info.list> <alpha_diversity.xls>")
+    stop("inputs: <all_abundance.tsv> <samp_info.list> <alpha_diversity.tsv>")
 }
 
 # 读取数据
@@ -36,11 +36,11 @@ alpha_df$Sample <- rownames(alpha_df)
 rownames(alpha_df) <- NULL
 alpha_df <- alpha_df[, c(ncol(alpha_df), 1:(ncol(alpha_df) - 1))] # 将最后一列Sample移动到第一列
 outprefix=file_path_sans_ext(basename(argv[1]))
-alpha_tab = paste(argv[3],'/',outprefix,'.alpha_diversity.xls',sep='')
+alpha_tab = paste(argv[3],'/',outprefix,'.alpha_diversity.tsv',sep='')
 write.table(alpha_df, alpha_tab, sep='\t', row.names=FALSE)
 
 # 读取样本分组信息并合并
-samp_group_df <- read.table(argv[2], header=T, sep="\t", # samp.info.xls
+samp_group_df <- read.table(argv[2], header=T, sep="\t", # samp.info.tsv
                             check.names=F, quote="")
 samp_group_df <- samp_group_df[, 1:2]
 alpha_df <- merge(samp_group_df, alpha_df, by.x="Sample", by.y="Sample")

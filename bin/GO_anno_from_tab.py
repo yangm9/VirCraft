@@ -98,7 +98,7 @@ def r_plot(stat_file_name):
 library(ggplot2)
 library(dplyr)
 in_file <-  '""" + stat_file_name +"""'
-out_file <- sub("_stats.xls","_stats_level2.pdf",in_file)
+out_file <- sub("_stats.tsv","_stats_level2.pdf",in_file)
 
 GO_table <- read.table(in_file,header = T,quote = '"', check.names = F,sep = "\\t")
 
@@ -175,9 +175,9 @@ else:
     obofile = obo_parser.GODag('go-basic.obo', load_obsolete=False)
 
     path_list = os.path.split(in_file)
-    out_file_name = path_list[-1].rsplit(".", 1)[0] + '_GO_anno.xls'
+    out_file_name = path_list[-1].rsplit(".", 1)[0] + '_GO_anno.tsv'
     out_file_path = os.path.join(path_list[0], out_file_name)
-    stat_file_name = path_list[-1].rsplit(".", 1)[0] + '_GO_anno_stats.xls'
+    stat_file_name = path_list[-1].rsplit(".", 1)[0] + '_GO_anno_stats.tsv'
     stat_file_path = os.path.join(path_list[0], stat_file_name)
 
     out_file = open(out_file_path, "w+")

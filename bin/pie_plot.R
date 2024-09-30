@@ -4,7 +4,7 @@
 argv<-commandArgs(T)
 
 if(length(argv)<3){
-    stop("inputs: <variables.xls> <Variable> <plot_dir>\n")
+    stop("inputs: <variables.tsv> <Variable> <plot_dir>\n")
 }
 
 if(!require("ggplot2")){install.packages("ggplot2")}

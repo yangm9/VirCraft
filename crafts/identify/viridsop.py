@@ -74,11 +74,11 @@ class VirScan(Seq):
         )
         combined_fna=f'{checkv_dir}/combined.fna'
         combined_modi_fna=f'{checkv_dir}/combined_modi.fna'
-        curated_contigs_xls=f'{wkdir}/curated_contigs.xls'
+        curated_contigs_tsv=f'{wkdir}/curated_contigs.tsv'
         curated_contigs_list=f'{wkdir}/curated_contigs_id.list'
         virus_posi_fna=f'{wkdir}/virus_positive.fna'
         cmd.extend(
-            ['cut -f 1',curated_contigs_xls,
+            ['cut -f 1',curated_contigs_tsv,
             '|grep -v "contig_id" >',curated_contigs_list,'\n',
             "sed 's/_[12] / /'",combined_fna,'>',combined_modi_fna,'\n',
             'extrSeqByName.pl',curated_contigs_list,combined_modi_fna,

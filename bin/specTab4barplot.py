@@ -37,7 +37,7 @@ def sumAbds(df:str,taxa:str,outdir:str):
     sumDF.reset_index(inplace=True)
     sumDF.rename(columns={'index':'Contig'},inplace=True)
     sumDF.fillna(0,inplace=True)
-    sumed_abd=f'{outdir}/all_{taxa}_sum_abd.xls'
+    sumed_abd=f'{outdir}/all_{taxa}_sum_abd.tsv'
     sumDF.to_csv(sumed_abd,sep='\t',index=False)
     return 0
 
@@ -54,4 +54,4 @@ if __name__=='__main__':
     if len(sys.argv)==3:
         sumAbdByTaxa(sys.argv[1],sys.argv[2])
     else:
-        print(f'Usage: python {sys.argv[0]} <merged_anno_abd.xls> <outdir>')
+        print(f'Usage: python {sys.argv[0]} <merged_anno_abd.tsv> <outdir>')

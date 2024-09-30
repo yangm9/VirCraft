@@ -68,8 +68,8 @@ class Seq(VirCfg):
     def statFA(self,cutoff=5000):
         cmd=[self.envs]
         size_dist=f'{self.statdir}/fasta_size_distribution.pdf'
-        len_gc_stat=f'{self.statdir}/fasta_size_gc_stat.xls'
-        ln50_stat=f'{self.statdir}/fasta_ln50_stat.xls'
+        len_gc_stat=f'{self.statdir}/fasta_size_gc_stat.tsv'
+        ln50_stat=f'{self.statdir}/fasta_ln50_stat.tsv'
         filt_prefix=f'{self.outdir}/{self.name}.filt'
         cmd.extend(
             ['fasta_size_distribution_plot.py',self.fasta,'-o',size_dist,

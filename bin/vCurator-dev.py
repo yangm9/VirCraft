@@ -93,7 +93,7 @@ def manuCurate(manu_f,anno_f):
     The classification of viral curation includes Positive (P), Likely Positive(LP), Virus of Uncertain Significance (VUS), Likely Negative (LN) and Negative (N). 
     '''
     ManuList,ManuDF,ManuAnnoDF=filtAnnoForManu(manu_f,anno_f)
-    manu_anno_f=wkdir+'/curation/manu_curate_anno.xls'
+    manu_anno_f=wkdir+'/curation/manu_curate_anno.tsv'
     ManuAnnoDF.to_csv(manu_anno_f,index=False,sep='\t')
     ManuDF.set_index('contig_id',inplace=True)
     ManuDF['curation']=''
@@ -111,12 +111,12 @@ if __name__=='__main__':
     CheckV_f=wkdir+'/checkv/contamination.tsv'
     anno_f=wkdir+'/dramv-annotate/annotations.tsv'
     AutoDF,ManuDF=autoCurate(VirSort2_f,CheckV_f,anno_f)
-    autu_curated_f=wkdir+'/curation/autu_curated_contigs.xls'
-    manu_curate_f=wkdir+'/curation/manu_curate_contigs.xls'
+    autu_curated_f=wkdir+'/curation/autu_curated_contigs.tsv'
+    manu_curate_f=wkdir+'/curation/manu_curate_contigs.tsv'
     AutoDF.to_csv(autu_curated_f,index=False,sep='\t')
     ManuDF.to_csv(manu_curate_f,index=False,sep='\t')
     CuratedDF=manuCurate(manu_curate_f,anno_f)
-    manu_curated_f=wkdir+'/curation/manu_curated_contigs.xls'
+    manu_curated_f=wkdir+'/curation/manu_curated_contigs.tsv'
     CuratedDF.to_csv(manu_curated_f,index=False,sep='\t')
 
 '''

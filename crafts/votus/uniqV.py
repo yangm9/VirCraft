@@ -65,11 +65,11 @@ class VirRef(VirScan):
         cmd.extend(tmp_cmd)
         votus_prefix=f'{self.name}_votus'
         vb_vir_info=f'{self.outdir}/VIBRANT_{votus_prefix}/VIBRANT_results_{votus_prefix}/VIBRANT_genome_quality_{votus_prefix}.tsv'
-        vb_ckv_xls=f'{wkdir}/votus_lifetype_quality.xls'
+        vb_ckv_tsv=f'{wkdir}/votus_lifetype_quality.tsv'
         cmd.append(utils.selectENV('VC-General'))
         cmd.extend(
-            ['votus_lifetype_quality.py',checkv_qual,vb_vir_info,vb_ckv_xls,'\n',
-            'votus_lifetype_quality_barplot.R',vb_ckv_xls,wkdir,'\n']
+            ['votus_lifetype_quality.py',checkv_qual,vb_vir_info,vb_ckv_tsv,'\n',
+            'votus_lifetype_quality_barplot.R',vb_ckv_tsv,wkdir,'\n']
         )
         return cmd
     def binning():

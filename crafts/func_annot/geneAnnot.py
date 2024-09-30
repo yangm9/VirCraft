@@ -16,7 +16,7 @@ class GeneFunc(Seq):
         anno_prefix=f'{wkdir}/{self.name}'
         seed_orth=f'{anno_prefix}.emapper.seed_orthologs'
         eggout=f'{wkdir}/{self.name}_eggout'
-        eggout_xls=f'{eggout}/.emapper.annotations'
+        eggout_tsv=f'{eggout}/.emapper.annotations'
         eggnog_db=self.confDict['EggNOGDB']
         cmd=[utils.selectENV('VC-General')]
         cmd.extend(
@@ -26,7 +26,7 @@ class GeneFunc(Seq):
             'emapper.py','--annotate_hits_table',seed_orth,
             '--no_file_comments','-o',eggout,'--cpu',self.threads,
             '--data_dir',eggnog_db,'--override\n',
-            'cd',wkdir,'&& GO_anno_from_tab.py','-i',eggout_xls,'&& cd -\n']
+            'cd',wkdir,'&& GO_anno_from_tab.py','-i',eggout_tsv,'&& cd -\n']
         )
         return cmd
     def keggAnno(self,orfs_faa):
@@ -35,10 +35,10 @@ class GeneFunc(Seq):
         kegg_db=self.confDict['KofamscanDB']
         ko_prof=f'{kegg_db}/profiles'
         ko_list=f'{kegg_db}/ko_list'
-        exec_anno=f'{wkdir}/{self.name}.exec_annotation.xls'
-        exec_anno_detail=f'{wkdir}/{self.name}.exec_annotation.detail.xls'
-        kegg_info=f'{wkdir}/{self.name}.exec_annotation.kegg_anno.xls'
-        kegg_lv2_stat=f'{wkdir}/kegg_lv2_stat.xls'
+        exec_anno=f'{wkdir}/{self.name}.exec_annotation.tsv'
+        exec_anno_detail=f'{wkdir}/{self.name}.exec_annotation.detail.tsv'
+        kegg_info=f'{wkdir}/{self.name}.exec_annotation.kegg_anno.tsv'
+        kegg_lv2_stat=f'{wkdir}/kegg_lv2_stat.tsv'
         cmd=[utils.selectENV('VC-General')]
         cmd.extend(
             ['exec_annotation -f mapper','--cpu',self.threads,

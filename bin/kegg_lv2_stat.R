@@ -4,7 +4,7 @@
 argv<-commandArgs(T)
 
 if(length(argv)<2){
-    stop("inputs: <kegg_lv2_genenum.xls> <plot_dir>\n")
+    stop("inputs: <kegg_lv2_genenum.tsv> <plot_dir>\n")
 }
 
 if(!require("ggplot2")){install.packages("ggplot2")}
