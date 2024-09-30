@@ -40,7 +40,7 @@ def process_cat_file(input_file, output_file):
             other_count = counts['other']
             total_count = virus_count + host_count
             host_percentage = (host_count / total_count) * 100 if total_count > 0 else 0
-            is_virus = 0 if host_percentage > 40 else 1
+            is_virus = 0 if host_percentage > 40 and host_count > 0 else 1
             outfile.write(f'{contig_id}\t{virus_count}\t{host_count}\t{other_count}\t{host_percentage:.2f}\t{is_virus}\n')
     return 0
 
