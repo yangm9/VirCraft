@@ -1,12 +1,13 @@
 #!/usr/bin/env perl
-#根据序列名称提取FastA文件中的序列并输出FASTA文件
-#用法：perl extrSeqByName.pl <序列名称列表> <输入FA文件> <结果FA文件>
+# Extracts the sequence from the FastA file based on the sequence name and outputs the FASTA file
+# Usage：perl extrSeqByName.pl <sequence_name_list> <input_fasta> <output_fasta>
+# yangm@idsse.ac.cn 2022-08-12 18:56 
 use strict;
 
 die "$0 <seq_name_list> <fasta_file> <extracted_fasta> [0/1]\n" if(@ARGV<3);
 
 $ARGV[3]||=0;
-#获取序列名称
+# Get all sequence name from sequence name list file
 open LIST,$ARGV[0] or die $!;
 my %SeqName=();
 while(<LIST>){
@@ -15,7 +16,7 @@ while(<LIST>){
 }
 close LIST;
 
-#根据序列名提取FastA序列
+# Extracts the sequence by sequence name list
 $/='>';
 open IN,$ARGV[1] or die $!;
 open OUT,">$ARGV[2]" or die $!;
@@ -26,7 +27,7 @@ while(<IN>){
     my($id,$seq)=split /\n/,$_,2;
     $seq=~s/\s+//g;
     my $mother_id=(split /\s/,$id,2)[0];
-    $mother_id=~s/_\d+$// if($ARGV[3]); #如果添加第四个非0参数，则本行用于去除prodigal的编号
+    $mother_id=~s/_\d+$// if($ARGV[3]); # If a fourth non-0 parameter is added, this line is used to remove prodigal's number
     if(exists $SeqName{$mother_id}){
         print OUT ">$id\n$seq\n";
         #delete $SeqName{$id};
@@ -36,7 +37,7 @@ $/='\n';
 close IN;
 close OUT;
 
-#输出不存在序列的序列名称列表
+#Outputs a list of sequence names for which no sequence exists
 #print "The sequence name without sequence are as follows:";
 #foreach my $key(keys %SeqName){
 #    print "$key\n";
