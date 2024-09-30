@@ -146,6 +146,7 @@ options:
   -o STR, --outdir STR    Output folder [default is the current folder]
   -l INT, --cutoff INT    The minimal length of contigs/scaffolds. [default=1500]
   -w STR, --sop STR       The sop/pipeline for viral contigs identification, including "viral-id-sop" and "vs2-vb-dvf". [default=vs2-vb-dvf]
+```
 
 #### After Manual installation
 
@@ -157,6 +158,6 @@ docker run --rm vircraft identify -d /your_path/config -a /your_path/test.fasta 
 
 ## Acknowledgements
 
-Author of pipeline: [Ming_YANG](https://github.com/yangm9) yangm@idsse.ac.cn
+Author of pipeline: [Ming YANG](https://github.com/yangm9) yangm@idsse.ac.cn
 
 Institution: [Institute of Deep-sea Science and Engineering，Chinese Academy of Sciences](http://www.idsse.cas.cn/)
