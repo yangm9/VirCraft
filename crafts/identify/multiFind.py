@@ -37,7 +37,11 @@ class MultiTools(VirScan):
         CAT_DB=self.confDict['CATDB']+'/db'
         CAT_TAX=self.confDict['CATDB']+'/tax'
         out_prefix=f'{wkdir}/{self.name}.CAT'
+        orf_annot=f'{out_prefix}.ORF2LCA.txt'
+        orf_rate=f'{out_prefix}.host_orf_rate.tsv'
         cmd.extend(
             ['CAT_pack contigs','-c',self.fasta,'-t',self.threads
-            '-d',CAT_DB,'-t',CAT_TAX,'-o',out_prefix,'\n']
+            '-d',CAT_DB,'-t',CAT_TAX,'-o',out_prefix,'\n',
+            'host_orf_rate_from_CAT.py',orf_annot,orf_rate,'\n'
+            ]
         return cmd,wkdir
