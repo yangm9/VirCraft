@@ -79,8 +79,11 @@ After VirCraft database installation, the size of each database will be as follo
 *The total size of all databases will be **~500G**.*
 
 4. (Optional) In the step 2 and 3, the user can install the conda environment by manually running these scripts by adding the "-u" parameter option on the command line. If the user chooses this manual method, the config file ("/your_path/VirCraft/config") should be modified manually. Alternatively, users can also install all the conda environments by phisically transplant, and the steps are shown as follows:
+
 1\) Download the VirCraft Conda environment packages from [Google Drive](https://drive.google.com/drive/folders/1QdwwcWSQv0IZNNFBvcENpIUWXY4adQGa?usp=sharing). For users in mainland China, download the Conda environment from Baidu Cloud: [VirCraft_conda_ENVs](https://pan.baidu.com/s/1NlRJVgYTCLYhGX1E6eE_Lw) (Access code: 6rq5)
+
 2\) Install conda-pack: `conda install conda-pack`.
+
 3\) Upload the downloaded conda environment packages to your server. For each conda environment, you should install it as follows:
 ```
 mkdir ~/miniconda/envs/VC-XXXXXX  #VC-XXXXXX is the name of a certain conda environment, i.e. VC-Assembly
