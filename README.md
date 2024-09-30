@@ -157,6 +157,6 @@ docker run --rm vircraft identify -d /your_path/config -a /your_path/test.fasta 
 
 ## Acknowledgements
 
-Author of pipeline: [Ming YANG](yangm@idsse.ac.cn)
+Author of pipeline: [Ming YANG](https://github.com/yangm9) yangm@idsse.ac.cn
 
 Institution: [Institute of Deep-sea Science and Engineering，Chinese Academy of Sciences](http://www.idsse.cas.cn/)
