@@ -148,7 +148,7 @@ options:
   -w STR, --sop STR       The sop/pipeline for viral contigs identification, including "viral-id-sop" and "vs2-vb-dvf". [default=vs2-vb-dvf]
 ```
 
-#### After Manual installation
+#### After Docker installation
 
 After successfully creating the docker image for VirCraft (see above, in INSTALLATION), users can run VirCraft using the command like: `docker run --rm vircraft <module_name> -c config [options] ...`. For example, to run the identify module:
 
