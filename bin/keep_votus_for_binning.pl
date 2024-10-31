@@ -9,7 +9,7 @@ my %complete=();
 while(<QUAL>){
     chomp;
     my @items=split /\t/,$_;
-    if($items[7] eq 'Complete'){
+    if($items[1] < 5000 or $items[2] eq 'Yes' or $items[7] eq 'Complete'){
         $complete{$items[0]}=1;
     }
 }

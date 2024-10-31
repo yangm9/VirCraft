@@ -65,13 +65,21 @@ class ENV:
                 '&& conda run -n',self.ENVDICT[name],'pip install . --no-deps\n']
             )
         elif name == 'general':
-            tmp_catdir=f'{self.outdir}/CAT'
-            cat_pack_files=f'{tmp_catdir}/CAT_pack/*'
-            general_bin_dir=utils.get_conda_env_dir(self.ENVDICT[name])
-            general_bin_dir+='/bin'
+            tmp_catdir = f'{self.outdir}/CAT'
+            cat_pack_files = f'{tmp_catdir}/CAT_pack/*'
+            general_bin_dir = utils.get_conda_env_dir(self.ENVDICT[name])
+            general_bin_dir += '/bin'
             cmd.extend(
                 ['git clone',URL.CAT_URL,tmp_catdir,
                 '&& cp',cat_pack_files,general_bin_dir,'\n']
+            )
+        elif name == 'vrhyme':
+            tmp_vrhymedir = f'{self.outdir}/vRhyme'
+            model_gz = f'{tmp_vrhymedir}/models/vRhyme_machine_model_ET.sav.gz'
+            cmd.extend(
+                ['git clone', URL.VRHYME_URL, tmp_vrhymedir,
+                '&& cd', tmp_vrhymedir, '&& gunzip', model_gz,
+                '&& conda run -n',self.ENVDICT[name],'pip install .\n']
             )
         return cmd
     def Install(self,in_wall=False,unrun=False):
