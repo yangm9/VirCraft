@@ -75,7 +75,7 @@ class VirTaxa(Seq):
             outdir=self.outdir,
             threads=self.threads
         )
-        cmd.extend(Comp.vContact())
+        cmd.extend(Comp.vContact(''))
         cmd.extend(self.mergeTaxa(demovir_taxa,ncbi_taxa))
         shell=f'{self.outdir}/{self.name}_classify.sh'
         utils.printSH(shell,cmd)
