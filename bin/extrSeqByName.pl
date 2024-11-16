@@ -30,8 +30,11 @@ while(<IN>){
     $mother_id=~s/_\d+$// if($ARGV[3]); # If a fourth non-0 parameter is added, this line is used to remove prodigal's number
     if(exists $SeqName{$mother_id}){
         print OUT ">$id\n$seq\n";
-        #delete $SeqName{$id};
+        delete $SeqName{$id};
     }
+}
+foreach my $id(keys %SeqName){
+    print "$id\n";
 }
 $/='\n';
 close IN;
