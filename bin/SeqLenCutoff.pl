@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 use strict;
 
 die "perl $0 <fasta_file> <cutted_fasta_prefix> <cutoff_len>" unless (@ARGV==3);
