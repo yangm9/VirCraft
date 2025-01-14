@@ -42,7 +42,7 @@ def filt_posi_ctgs(qual_summ_tsv: str, viral_filt_ctg_fna: str, viral_posi_ctg_f
     return 0
 
 if __name__  == '__main__':
-    if len(sys.argv) == 3:
+    if len(sys.argv) == 4:
         filt_posi_ctgs(sys.argv[1],sys.argv[2],sys.argv[3])
     else:
         print(f'Usage: {sys.argv[0]} quality_summary.tsv viral_filt_ctg.fna viral_positive_ctg.fna')
