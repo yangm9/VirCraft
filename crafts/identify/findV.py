@@ -31,11 +31,11 @@ class vIdentify(MultiTools):
             quality_summary_tsv = os.path.dirname(checkv_fa) + '/quality_summary.tsv'
             cmd.extend([utils.selectENV('VC-General')])
             cmd.extend(
-                ['vir_qual_filt.py', quality_summary_tsv, viral_posi_ctgs_fna, viral_posi_ctgs_fna, '\n']
+                ['vir_qual_filt.py', quality_summary_tsv, viral_filt_ctgs_fna, viral_posi_ctgs_fna, '\n']
             )
         else:
             cmd.extend(
-                ['cp', viral_filt_ctgs_fna, ]
+                ['cp', viral_filt_ctgs_fna, viral_posi_ctgs_fna, '\n']
             )
         return cmd
     def Identify(self, cutoff = 1500, unrun = False):
