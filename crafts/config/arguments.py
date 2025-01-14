@@ -111,8 +111,8 @@ Usage: {name} <subcommand> [options] -o <outdir>
     subpsr=addCutoffArg(subpsr)
     subpsr.add_argument(
         '-w','--sop',action='store',type=str,
-        dest='sop',metavar='STR',default='vs2-vb-dvf',required=False,
-        help='The sop/pipeline for viral contigs identification, including "viral-id-sop" and "vs2-vb-dvf". [default=vs2-vb-dvf]'
+        dest='sop',metavar='STR',default='vs2-vb-dvf-gm',required=False,
+        help='The sop/pipeline for viral contigs identification, including "viral-id-sop" and "vs2-vb-dvf-gm". [default=vs2-vb-dvf-gm]'
     )
 
  

@@ -22,7 +22,7 @@ class vIdentify(MultiTools):
         tmp_cmd = ''
         #tmp_cmd, cat_dir = self.contig_annotation_tool(viral_filt_ctgs_fna)
         cmd.extend(
-            ['merge_ctg_list.py', self.name, self.outdir, "&& awk -F '\\t' 'NR==1 || $21>=2'", score_tsv, '>', score_filt_tsv, '\n',
+            ['merge_ctg_list.py', self.name, self.outdir, "&& awk -F '\\t' 'NR == 1 || $32 >= 2'", score_tsv, '>', score_filt_tsv, '\n',
             'cut -f 1', score_filt_tsv, "|sed '1d' >", viral_filt_ctg_list, '&& extrSeqByName.pl', viral_filt_ctg_list, self.fasta, viral_filt_ctgs_fna, '\n']
         )
         if cutoff <= 5000:
