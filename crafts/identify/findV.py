@@ -69,12 +69,12 @@ class vIdentify(MultiTools):
         #multiple run
         cmd = [utils.selectENV('VC-General')]
         cmd.extend(['multithreads.pl', self.outdir, 'ctg.sh 4\n'])
-        shell = f'{self.outdir}/{self.name}_multi_find.sh'
+        shell = f'{self.outdir}/{self.name}_batch_identify_virus.sh'
         utils.printSH(shell, cmd)
         if not unrun: results = utils.execute(shell) 
         self.threads = str(int(self.allthreads))
         cmd = self.vFilter()
-        shell = f'{self.outdir}/{self.name}_merge_vir.sh'
+        shell = f'{self.outdir}/{self.name}_get_positive_virus.sh'
         utils.printSH(shell, cmd)
         if not unrun: results += utils.execute(shell)
         return results
