@@ -18,6 +18,12 @@ VirSorter2DB = /data_backup/database/virsorter2DB/db-vs2
 ## Path to VIBRANT database
 VIBRANTDB = /data_backup/database/vibrantDB
 
+## Path to GeNomad database
+GeNomadDB = /data_backup/database/GeNomadDB/genomad_db
+
+## Path to the database of contig annotation tool
+CATDB = /data_backup/database/CATDB
+
 ## Path to CheckV database
 CheckvDB = /data_backup/database/checkvDB/checkv-db-v1.5
 
