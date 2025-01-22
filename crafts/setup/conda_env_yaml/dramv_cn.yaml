@@ -1,19 +1,14 @@
 name: VC-DRAMv
 channels:
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/linux-64
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/linux-64
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/linux-64
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/linux-64
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/linux-64
-  - bioconda
   - conda-forge
-  - r
-  - defaults
-dependencies: 
+  - bioconda
+dependencies:
   - python=3.10
   - pandas=1.5.2
   - pytest=7.2.0
-  - scikit-bio=0.5.7 
+  - scikit-bio=0.5.7
   - prodigal=2.6.3
   - mmseqs2==13.45111
   - hmmer=3.3.2
@@ -26,4 +21,6 @@ dependencies:
   - networkx=2.8.8
   - ruby=3.1.2
   - parallel=20221122
-  - dram=1.4.6
+  - pip
+  - pip:
+    - DRAM-bio==1.5.0
