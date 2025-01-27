@@ -7,14 +7,14 @@ def curr_time():
 
 class Log:
     levelDict = {
-        'DEBUG': logging.DEBUG,
-        'INFO': logging.INFO,
-        'WARNING': logging.WARNING,
-        'ERROR': logging.ERROR,
-        'CRITICAL': logging.CRITICAL
+        'DEBUG' : logging.DEBUG,
+        'INFO' : logging.INFO,
+        'WARNING' : logging.WARNING,
+        'ERROR' : logging.ERROR,
+        'CRITICAL' : logging.CRITICAL
     }
 
-    def __init__(self, level='INFO', logfile=None):
+    def __init__(self, level = 'INFO', logfile = None):
         self.level = level.upper()
         self.logfile = logfile
 

@@ -7,10 +7,10 @@ class VirScan(Seq):
     According to the Viral sequence identification SOP with VirSorter2 (https://www.protocols.io/view/viral-sequence-identification-sop-with-virsorter2-5qpvoyqebg4o/v3)
     '''
     vs2_subcmds = ['--keep-original-seq', '--seqname-suffix-off --viral-gene-enrich-off --provirus-off --prep-for-dramv']
-    def __init__(self, fasta='', outdir = '', threads=8):
+    def __init__(self, fasta=None, outdir=None, threads=8):
         super().__init__(fasta, outdir)
         self.threads = str(threads)
-    def virsorter(self, in_fa: str, n: int, min_length = 1500, min_score = 0.5):
+    def virsorter(self, in_fa: str, n: int, min_length=1500, min_score=0.5):
         idx = str(n+1)
         min_score = str(min_score)
         min_length = str(min_length)
@@ -21,7 +21,7 @@ class VirScan(Seq):
             ['virsorter run', self.vs2_subcmds[n], '-i', in_fa, '-d', self.confDict['VirSorter2DB'], '-w', wkdir, '--include-groups dsDNAphage, NCLDV, RNA, ssDNA, lavidaviridae', '-j', self.threads, '--min-length', min_length, '--min-score', min_score, 'all\n']
         )
         return cmd,wkdir
-    def checkv(self, in_fa:str):
+    def checkv(self, in_fa: str):
         wkdir = f'{self.outdir}/checkv'
         utils.mkdir(wkdir)
         cmd = [utils.selectENV('VC-CheckV')]
@@ -75,14 +75,14 @@ class VirScan(Seq):
         return cmd
     def Identify(self, unrun=False):
         #Step 1 Run VirSorter2
-        tmp_cmd,wkdir = self.virsorter(self.fasta, 0)
+        tmp_cmd, wkdir = self.virsorter(self.fasta, 0)
         cmd.extend(tmp_cmd)
         #Step 2 Run CheckV
         vs2_fa = f'{wkdir}/final-viral-combined.fa'
-        tmp_cmd,checkv_fa = self.checkv(vs2_fa)
+        tmp_cmd, checkv_fa = self.checkv(vs2_fa)
         cmd.extend(tmp_cmd)
         #Step 3 rerun VirSorter2 
-        tmp_cmd,wkdir = self.virsorter(checkv_fa, 1)
+        tmp_cmd, wkdir = self.virsorter(checkv_fa, 1)
         cmd.extend(tmp_cmd)
         #Step 4 DRAMv annotation
         tmp_cmd = self.annotate(wkdir) 
@@ -93,6 +93,6 @@ class VirScan(Seq):
         #Generate shell and exeute it
         shell = f'{self.outdir}/{self.name}_find_vir.sh'
         utils.printSH(shell, cmd)
-        results=''
+        results = ''
         if not unrun: results=utils.execute(shell)
         return results

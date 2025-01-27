@@ -37,7 +37,7 @@ def sumAbds(df:str,taxa:str,outdir:str):
     sumDF.reset_index(inplace=True)
     sumDF.rename(columns={'index':'Contig'},inplace=True)
     sumDF.fillna(0,inplace=True)
-    sumed_abd=f'{outdir}/all_{taxa}_sum_abd.tsv'
+    sumed_abd = f'{outdir}/all_{taxa}_sum_abd.tsv'
     sumDF.to_csv(sumed_abd,sep='\t',index=False)
     return 0
 

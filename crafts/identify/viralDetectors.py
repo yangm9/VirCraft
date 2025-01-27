@@ -6,7 +6,7 @@ class VirDetectTools(VirScan):
     '''
     Generate command for DeepVirFinder, VIBRANT and Contig Annotation Tool (CAT).
     '''
-    def __init__(self, fasta = '', outdir = '', threads = 8):
+    def __init__(self, fasta=None, outdir=None, threads=8):
         super().__init__(fasta, outdir)
         self.threads = str(threads)
     def deepvirfinder(self, cutoff: int):
