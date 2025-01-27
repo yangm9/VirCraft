@@ -1,7 +1,7 @@
 from os import path
 from ..general import utils
 from ..identify.viridsop import VirScan
-from ..identify.multiFind import MultiTools
+from ..identify.viralDetectors import VirDetectTools
 
 class VirRef(VirScan):
     '''
@@ -56,12 +56,12 @@ class VirRef(VirScan):
         tmp_cmd=self.statFA(cutoff)
         cmd.extend(self.statFA(cutoff))
         cmd.extend(tmp_cmd)
-        MT=MultiTools(
+        VDT=VirDetectTools(
             fasta=votus,
             outdir=self.outdir,
             threads=self.threads
         )
-        tmp_cmd,vbdir=MT.vibrant(str(cutoff))
+        tmp_cmd,vbdir=VDT.vibrant(str(cutoff))
         cmd.extend(tmp_cmd)
         votus_prefix=f'{self.name}_votus'
         vb_vir_info=f'{self.outdir}/VIBRANT_{votus_prefix}/VIBRANT_results_{votus_prefix}/VIBRANT_genome_quality_{votus_prefix}.tsv'

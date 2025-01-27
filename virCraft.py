@@ -11,7 +11,7 @@ from crafts.setup import deployDB
 from crafts.data import fastqc
 from crafts.assembly import assembly
 from crafts.identify import viridsop
-from crafts.identify import findV
+from crafts.identify import posiViralConfirm
 from crafts.config import arguments
 from crafts.votus import uniqV
 from crafts.taxa import vClassify
@@ -87,7 +87,7 @@ def identify(args):
             unrun=args.unrun
         )
     else:
-        VirSeq=findV.vIdentify(
+        VirSeq=posiViralConfirm.vIdentify(
             fasta=args.fasta,
             outdir=args.outdir,
             threads=args.threads

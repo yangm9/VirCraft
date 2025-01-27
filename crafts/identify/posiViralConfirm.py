@@ -1,19 +1,19 @@
 import os
 import sys
 from ..general import utils
-from ..identify.multiFind import MultiTools
+from ..identify.viralDetectors import VirDetectTools
 
-class vIdentify(MultiTools):
+class vIdentify(VirDetectTools):
     '''
     Main Scripts of identify module.
     self.BATCH_SIZE initialized as 4 in VirCfg class will be used to divide the input threads into 2*self.BATCH_SIZE portions, with 2 allocated to VirSorter2, and the other 2 allocated to VIBRANT and DeepVirFinder respectively.
     '''
-    def __init__(self,fasta = '', outdir = '', threads = 8):
+    def __init__(self,fasta = None, outdir = None, threads = 8):
         super().__init__(fasta, outdir)
         self.allthreads = threads
         self.threads = int(threads) // (self.BATCH_SIZE * 2)
     def vFilter(self, cutoff = 1500, mode = 'permissive'):
-        mode_dict = {'permissive' : 1, 'strict' : 2}
+        mode_dict = {'permissive' : '1', 'strict' : '2'}
         score_tsv = f'{self.outdir}/all_viral_ctgs.score.tsv'
         score_filt_tsv = utils.insLable(score_tsv, mode)
         viral_filt_ctg_list = f'{self.outdir}/viral_filt_ctg.list'
@@ -47,7 +47,6 @@ class vIdentify(MultiTools):
             print(f'ERROR: {e}')
             exit(1)
         results = ''
-        cutoff = str(cutoff)
         self.threads = str(self.threads)
         #vibrant
         cmd, wkdir = self.vibrant(cutoff)

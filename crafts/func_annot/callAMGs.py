@@ -1,6 +1,6 @@
 from ..general import utils
 from ..identify.viridsop import VirScan
-from ..identify.multiFind import MultiTools
+from ..identify.viralDetectors import VirDetectTools
 from .geneAnnot import GeneFunc
 
 class AMGs(VirScan):
@@ -43,12 +43,12 @@ class AMGs(VirScan):
         cmd,dmvdir=self.dramv(vs2_dramv_fa,vs2_dramv_tab)
         shell=f'{self.outdir}/{self.name}_dramv_amg.sh'
         utils.printSH(shell,cmd)
-        MT=MultiTools(
+        VDT=VirDetectTools(
             fasta=vs2_dramv_fa,
             outdir=self.outdir,
             threads=self.threads
         )
-        cmd,vbdir=MT.vibrant()
+        cmd,vbdir=VDT.vibrant()
         shell=f'{self.outdir}/{self.name}_vibrant_amg.sh'
         utils.printSH(shell,cmd)
         return dmvdir,vbdir

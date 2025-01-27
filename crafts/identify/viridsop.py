@@ -6,105 +6,93 @@ class VirScan(Seq):
     '''
     According to the Viral sequence identification SOP with VirSorter2 (https://www.protocols.io/view/viral-sequence-identification-sop-with-virsorter2-5qpvoyqebg4o/v3)
     '''
-    vs2_subcmds=['--keep-original-seq','--seqname-suffix-off --viral-gene-enrich-off --provirus-off --prep-for-dramv']
-    def __init__(self,fasta='',outdir='',threads=8):
-        super().__init__(fasta,outdir)
-        self.threads=str(threads)
-    def virsorter(self,in_fa:str,n:int,min_length=5000,min_score=0.5):
-        idx=str(n+1)
-        min_score=str(min_score)
-        min_length=str(min_length)
-        wkdir=f'{self.outdir}/vs2-pass{idx}'
+    vs2_subcmds = ['--keep-original-seq', '--seqname-suffix-off --viral-gene-enrich-off --provirus-off --prep-for-dramv']
+    def __init__(self, fasta='', outdir = '', threads=8):
+        super().__init__(fasta, outdir)
+        self.threads = str(threads)
+    def virsorter(self, in_fa: str, n: int, min_length = 1500, min_score = 0.5):
+        idx = str(n+1)
+        min_score = str(min_score)
+        min_length = str(min_length)
+        wkdir = f'{self.outdir}/vs2-pass{idx}'
         utils.mkdir(wkdir)
-        cmd=[utils.selectENV('VC-VirSorter2')]
+        cmd = [utils.selectENV('VC-VirSorter2')]
         cmd.extend(
-            ['virsorter run',self.vs2_subcmds[n],'-i',in_fa,
-            '-d',self.confDict['VirSorter2DB'],'-w',wkdir,
-            '--include-groups dsDNAphage,NCLDV,RNA,ssDNA,lavidaviridae',
-            '-j',self.threads,'--min-length',min_length,
-            '--min-score',min_score,'all\n']
+            ['virsorter run', self.vs2_subcmds[n], '-i', in_fa, '-d', self.confDict['VirSorter2DB'], '-w', wkdir, '--include-groups dsDNAphage, NCLDV, RNA, ssDNA, lavidaviridae', '-j', self.threads, '--min-length', min_length, '--min-score', min_score, 'all\n']
         )
         return cmd,wkdir
-    def checkv(self,in_fa:str):
-        wkdir=f'{self.outdir}/checkv'
+    def checkv(self, in_fa:str):
+        wkdir = f'{self.outdir}/checkv'
         utils.mkdir(wkdir)
-        cmd=[utils.selectENV('VC-CheckV')]
+        cmd = [utils.selectENV('VC-CheckV')]
         cmd.extend(
-            ['checkv','end_to_end',in_fa,wkdir,
-            '-d',self.confDict['CheckvDB'],
-            '-t',self.threads,'\n']
+            ['checkv', 'end_to_end', in_fa, wkdir, '-d', self.confDict['CheckvDB'], '-t', self.threads, '\n']
         )
-        provir_fna=f'{wkdir}/proviruses.fna'
-        vir_fna=f'{wkdir}/viruses.fna'
-        out_fa=f'{wkdir}/combined.fna'
+        provir_fna = f'{wkdir}/proviruses.fna'
+        vir_fna = f'{wkdir}/viruses.fna'
+        out_fa = f'{wkdir}/combined.fna'
         cmd.extend(
-            ['cat',provir_fna,vir_fna,'>',out_fa,'\n']
+            ['cat', provir_fna, vir_fna, '>', out_fa, '\n']
         )
         return cmd,out_fa
-    def annotate(self,indir:str):
-        vs2_fa=f'{indir}/for-dramv/final-viral-combined-for-dramv.fa'
-        vs2_tab=f'{indir}/for-dramv/viral-affi-contigs-for-dramv.tab'
-        wkdir=f'{self.outdir}/dramv-annotate'
-        cmd=[utils.selectENV('VC-DRAMv')]
+    def annotate(self, indir: str):
+        vs2_fa = f'{indir}/for-dramv/final-viral-combined-for-dramv.fa'
+        vs2_tab = f'{indir}/for-dramv/viral-affi-contigs-for-dramv.tab'
+        wkdir = f'{self.outdir}/dramv-annotate'
+        cmd = [utils.selectENV('VC-DRAMv')]
         cmd.extend(
-            ['DRAM-v.py annotate','-i',vs2_fa,'-v',vs2_tab,
-            '-o',wkdir,'--threads',self.threads,
-            '--skip_trnascan --min_contig_size 1000\n']
+            ['DRAM-v.py annotate', '-i', vs2_fa, '-v', vs2_tab, '-o', wkdir, '--threads', self.threads,  '--skip_trnascan --min_contig_size 1000\n']
         )
-        dramv_annot=f'{wkdir}/annotations.tsv'
-        wkdir=f'{self.outdir}/dramv-distill'
-        cmd.extend(['DRAM-v.py distill','-i',dramv_annot,'-o',wkdir,'\n'])
+        dramv_annot = f'{wkdir}/annotations.tsv'
+        wkdir = f'{self.outdir}/dramv-distill'
+        cmd.extend(['DRAM-v.py distill', '-i', dramv_annot, '-o', wkdir, '\n'])
         return cmd
     def curate(self):
-        checkv_dir=f'{self.outdir}/checkv'
-        wkdir=f'{self.outdir}/curation'
+        checkv_dir = f'{self.outdir}/checkv'
+        wkdir = f'{self.outdir}/curation'
         utils.mkdir(wkdir)
-        vir_score=f'{self.outdir}/vs2-pass1/final-viral-score.tsv'
-        curation_score=f'{wkdir}/final-viral-score.tsv'
-        contamination=f'{checkv_dir}/contamination.tsv'
+        vir_score = f'{self.outdir}/vs2-pass1/final-viral-score.tsv'
+        curation_score = f'{wkdir}/final-viral-score.tsv'
+        contamination = f'{checkv_dir}/contamination.tsv'
         cmd.extend(
-            ["sed '1s/seqname/contig_id/'",vir_score,'>',curation_score,'\n']
+            ["sed '1s/seqname/contig_id/'", vir_score, '>', curation_score, '\n']
         )
-        cura_vs2_chkv=f'{wkdir}/curation_vs2_checkv.tsv'
-        cmd=[utils.selectENV('VC-General')]
+        cura_vs2_chkv = f'{wkdir}/curation_vs2_checkv.tsv'
+        cmd = [utils.selectENV('VC-General')]
         cmd.extend(
-            ['linkTab.py',curation_score,contamination,
-            'left contig_id',cura_vs2_chkv,'\n',
-            'vCurator.py',self.outdir,'\n']
+            ['linkTab.py', curation_score, contamination, 'left contig_id', cura_vs2_chkv, '&& vCurator.py', self.outdir, '\n']
         )
-        combined_fna=f'{checkv_dir}/combined.fna'
-        combined_modi_fna=f'{checkv_dir}/combined_modi.fna'
-        curated_contigs_tsv=f'{wkdir}/curated_contigs.tsv'
-        curated_contigs_list=f'{wkdir}/curated_contigs_id.list'
-        virus_posi_fna=f'{wkdir}/virus_positive.fna'
+        combined_fna = f'{checkv_dir}/combined.fna'
+        combined_modi_fna = f'{checkv_dir}/combined_modi.fna'
+        curated_contigs_tsv = f'{wkdir}/curated_contigs.tsv'
+        curated_contigs_list = f'{wkdir}/curated_contigs_id.list'
+        virus_posi_fna = f'{wkdir}/virus_positive.fna'
         cmd.extend(
-            ['cut -f 1',curated_contigs_tsv,
-            '|grep -v "contig_id" >',curated_contigs_list,'\n',
-            "sed 's/_[12] / /'",combined_fna,'>',combined_modi_fna,'\n',
-            'extrSeqByName.pl',curated_contigs_list,combined_modi_fna,
-            virus_posi_fna,'\n']
+            ['cut -f 1', curated_contigs_tsv, '|grep -v "contig_id" >', curated_contigs_list, '\n',
+            "sed 's/_[12] / /'", combined_fna, '>', combined_modi_fna, '\n',
+            'extrSeqByName.pl', curated_contigs_list, combined_modi_fna, virus_posi_fna, '\n']
         )
         return cmd
-    def Identify(self,unrun=False):
+    def Identify(self, unrun=False):
         #Step 1 Run VirSorter2
-        tmp_cmd,wkdir=self.virsorter(self.fasta,0)
+        tmp_cmd,wkdir = self.virsorter(self.fasta, 0)
         cmd.extend(tmp_cmd)
         #Step 2 Run CheckV
-        vs2_fa=f'{wkdir}/final-viral-combined.fa'
-        tmp_cmd,checkv_fa=self.checkv(vs2_fa)
+        vs2_fa = f'{wkdir}/final-viral-combined.fa'
+        tmp_cmd,checkv_fa = self.checkv(vs2_fa)
         cmd.extend(tmp_cmd)
         #Step 3 rerun VirSorter2 
-        tmp_cmd,wkdir=self.virsorter(checkv_fa,1)
+        tmp_cmd,wkdir = self.virsorter(checkv_fa, 1)
         cmd.extend(tmp_cmd)
         #Step 4 DRAMv annotation
-        tmp_cmd=self.annotate(wkdir) 
+        tmp_cmd = self.annotate(wkdir) 
         cmd.extend(tmp_cmd)
         #Step 5 Curation
-        tmp_cmd=self.curate()
+        tmp_cmd = self.curate()
         cmd.extend(tmp_cmd)
         #Generate shell and exeute it
-        shell=f'{self.outdir}/{self.name}_find_vir.sh'
-        utils.printSH(shell,cmd)
+        shell = f'{self.outdir}/{self.name}_find_vir.sh'
+        utils.printSH(shell, cmd)
         results=''
         if not unrun: results=utils.execute(shell)
         return results

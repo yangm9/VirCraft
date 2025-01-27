@@ -2,14 +2,15 @@ import os
 from ..general import utils
 from ..identify.viridsop import VirScan
 
-class MultiTools(VirScan):
+class VirDetectTools(VirScan):
     '''
     Generate command for DeepVirFinder, VIBRANT and Contig Annotation Tool (CAT).
     '''
     def __init__(self, fasta = '', outdir = '', threads = 8):
         super().__init__(fasta, outdir)
         self.threads = str(threads)
-    def deepvirfinder(self, cutoff: str):
+    def deepvirfinder(self, cutoff: int):
+        cutoff = str(cutoff)
         cmd = [utils.selectENV('VC-DeepVirFinder')]
         wkdir = f'{self.outdir}/deepvirfinder'
         utils.mkdir(wkdir)
@@ -17,8 +18,8 @@ class MultiTools(VirScan):
             ['dvf.py', '-i', self.fasta, '-m', self.confDict['DeepVirFinderDB'],  '-o', wkdir, '-c', self.threads, '-l', cutoff, '\n']
         )
         return cmd, wkdir
-    def vibrant(self, cutoff=1500):
-        cutoff=str(cutoff)
+    def vibrant(self, cutoff: int):
+        cutoff = str(cutoff)
         cmd = [utils.selectENV('VC-VIBRANT')]
         wkdir = f'{self.outdir}/VIBRANT_{self.name}'
         VIBRANT_DB_databases = self.confDict['VIBRANTDB'] + '/databases'
