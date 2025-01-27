@@ -12,9 +12,10 @@ class vIdentify(MultiTools):
         super().__init__(fasta, outdir)
         self.allthreads = threads
         self.threads = int(threads) // (self.BATCH_SIZE * 2)
-    def vFilter(self, cutoff = 1500):
+    def vFilter(self, cutoff = 1500, mode = 'permissive'):
+        mode_dict = {'permissive' : 1, 'strict' : 2}
         score_tsv = f'{self.outdir}/all_viral_ctgs.score.tsv'
-        score_filt_tsv = utils.insLable(score_tsv, 'gt2')
+        score_filt_tsv = utils.insLable(score_tsv, mode)
         viral_filt_ctg_list = f'{self.outdir}/viral_filt_ctg.list'
         viral_filt_ctgs_fna = f'{self.outdir}/viral_filt_ctg.fna'
         viral_posi_ctgs_fna = f'{self.outdir}/viral_positive_ctg.fna'
@@ -22,7 +23,7 @@ class vIdentify(MultiTools):
         tmp_cmd = ''
         #tmp_cmd, cat_dir = self.contig_annotation_tool(viral_filt_ctgs_fna)
         cmd.extend(
-            ['merge_ctg_list.py', self.name, self.outdir, "&& awk -F '\\t' 'NR == 1 || $32 >= 2'", score_tsv, '>', score_filt_tsv, '\n',
+            ['merge_ctg_list.py', self.name, self.outdir, f"&& awk -F '\\t' 'NR == 1 || $32 >= {mode_dict[mode]}'", score_tsv, '>', score_filt_tsv, '\n',
             'cut -f 1', score_filt_tsv, "|sed '1d' >", viral_filt_ctg_list, '&& extrSeqByName.pl', viral_filt_ctg_list, self.fasta, viral_filt_ctgs_fna, '\n']
         )
         if cutoff <= 5000:
@@ -38,7 +39,7 @@ class vIdentify(MultiTools):
                 ['cp', viral_filt_ctgs_fna, viral_posi_ctgs_fna, '\n']
             )
         return cmd
-    def Identify(self, cutoff = 1500, unrun = False):
+    def Identify(self, cutoff = 1500, mode = 'permissive', unrun = False):
         try:
             if int(self.allthreads) < 8:
                 raise ValueError('The threads number must not be less than 8!!!')
@@ -73,7 +74,7 @@ class vIdentify(MultiTools):
         utils.printSH(shell, cmd)
         if not unrun: results = utils.execute(shell) 
         self.threads = str(int(self.allthreads))
-        cmd = self.vFilter()
+        cmd = self.vFilter(cutoff, mode)
         shell = f'{self.outdir}/{self.name}_get_positive_virus.sh'
         utils.printSH(shell, cmd)
         if not unrun: results += utils.execute(shell)

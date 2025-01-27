@@ -6,8 +6,9 @@ import os
 import sys
 from crafts.config import arguments
 from crafts.config import config
+from crafts.general import utils
 
-version='0.0.14'
+version='0.0.15'
 parser=arguments.autOpts(sys.argv[0],version)
 args=parser.parse_args()
 if len(sys.argv)==1:
@@ -24,14 +25,12 @@ if sys.argv[1]=='exec':
     threads_per_samp=threads/len(groups)
     reads_qc_dir=f'{outdir}/01.reads_qc'
     for samp in sampDict.keys():
-        if '1' in steps:
             fq1,fq2=sampDict[samp][1].split(',')
             samp_outdir=f'{reads_qc_dir}/{samp}'
             cmd=['virCraft.py','reads_qc','-1',fq1,'-2',fq2,
                 '-t',threads_per_samp,'-p fuc','-o',samp_outdir,'\n']
             shell=f'{reads_qc_dir}/{samp}_reads_qc.sh'
             utils.printSH(shell,cmd)
-        else:
-
-        if '2' in steps:
+            
+            
 

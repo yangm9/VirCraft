@@ -94,6 +94,7 @@ def identify(args):
         )
         VirSeq.Identify(
             cutoff=args.cutoff,
+            mode=args.mode,
             unrun=args.unrun
         )
     return 0
