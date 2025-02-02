@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import os
 import sys
-import glob
 import pandas as pd
 
 def getSampList(samp_info_tsv: str):
