@@ -21,9 +21,9 @@ class EnviComp(ORF):
         cmd = [utils.selectENV('VC-vContact2')]
         wkdir = f'{self.outdir}/vContact2'
         utils.mkdir(wkdir)
-        orfs_info = f'{self.outdir}/all_merged_orfs.csv'
+        orfs_info = f'{self.outdir}/orf_to_contig.csv'
         cmd.extend(
-            ['virus2csv.py', self.fasta, '>', orfs_info, '\n',
+            ['connect_orf_to_contig.py', self.fasta, '>', orfs_info, '\n',
             'vcontact2 --rel-mode Diamond --pcs-mode MCL --vcs-mode ClusterONE', '-t', self.threads, '--raw-proteins', self.fasta, '--proteins-fp', orfs_info, '--db', vcont_db, '--output-dir', wkdir, '\n']
         )
         if self.orfprefix:

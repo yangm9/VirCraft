@@ -11,7 +11,7 @@ class GeneAbdStat(multiGeneCount):
     def mergeAbd(self):
         abd = f'{self.outdir}/all_merged_gene.sf'
         cmd = [utils.selectENV('VC-General')]
-        cmd.extend(['merge_abds.pl', self.samp_info, self.outdir, 'sf Gene\n'])
+        cmd.extend(['paste_abundance_files.py', self.samp_info, self.outdir, 'sf Gene\n'])
         return cmd,abd
     def QuantStat(self, unrun=False):#,batch_size):
         cmd = self.geneCountBySamp()

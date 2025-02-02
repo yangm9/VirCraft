@@ -49,7 +49,7 @@ def selectENV(env: str):
     else:
         conda_bin = os.path.dirname('conda_path')
         envs = f'export PATH="{conda_bin}:$PATH"\n'
-    envs+ = f'export PATH="{bin_dir}:$PATH"\n'
+    envs += f'export PATH="{bin_dir}:$PATH"\n'
     return envs
 
 def isInstalled(name: str):
