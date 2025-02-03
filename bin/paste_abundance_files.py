@@ -17,9 +17,9 @@ def getSampList(samp_info_tsv: str):
 def mergeAbundanceFiles(abd_d, samp_info_tsv, output_tsv, seq_type='Contig'):
     samples = getSampList(samp_info_tsv)
     if seq_type == 'Contig':
-        abd_files = [abd_d+'/'+i+'.cov' for i in samples]
+        abd_files = [abd_d + '/' + i + '.cov' for i in samples]
     elif seq_type == 'Gene':
-        abd_files = [abd_d+'/'+i+'_gene_quant/quant.sf' for i in samples]
+        abd_files = [abd_d + '/' + i + '_gene_quant/quant.sf' for i in samples]
     else:
         raise ValueError("Sequence type must be 'Contig' or 'Gene'")
     merged_df = pd.DataFrame()
