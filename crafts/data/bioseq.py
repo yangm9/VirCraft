@@ -108,7 +108,7 @@ class VirSeq(Seq):
 
 class CDS(Seq):
     envs = utils.selectENV('VC-Quantify')
-    def __init__(self, fastai=None, outdir=None, *args, **kwargs):
+    def __init__(self, fasta=None, outdir=None, *args, **kwargs):
         super().__init__(fasta, outdir, *args, **kwargs)
     @property
     def mkSalmonIdx(self):
