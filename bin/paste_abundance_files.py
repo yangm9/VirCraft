@@ -34,7 +34,7 @@ def mergeAbundanceFiles(abd_d, samp_info_tsv, output_tsv, seq_type='Contig'):
     merged_df.to_csv(output_tsv, sep='\t', index=False)
 
 if __name__ == '__main__':
-    if len(sys.argv) == 4:
+    if len(sys.argv) == 5:
         mergeAbundanceFiles(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
     else:
         print(f'Usage: {sys.argv[0]} <contig/gene_abundance_dir> <sample_info.tsv> <output_tsv> <Contig/Gene>')
