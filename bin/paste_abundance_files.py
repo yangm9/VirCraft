@@ -17,20 +17,24 @@ def getSampList(samp_info_tsv: str):
 def mergeAbundanceFiles(abd_d, samp_info_tsv, output_tsv, seq_type='Contig'):
     samples = getSampList(samp_info_tsv)
     if seq_type == 'Contig':
-        abd_files = [abd_d + '/' + i + '.cov' for i in samples]
+        abd_file_dict = {i: abd_d + '/' + i + '.cov' for i in samples}
     elif seq_type == 'Gene':
-        abd_files = [abd_d + '/' + i + '_gene_quant/quant.sf' for i in samples]
+        abd_file_dict = {i: abd_d + '/' + i + '_gene_quant/quant.sf' for i in samples}
     else:
         raise ValueError("Sequence type must be 'Contig' or 'Gene'")
     merged_df = pd.DataFrame()
-    for file_path in abd_files:
-        sample_name = os.path.basename(file_path).split(".")[0]
-        df = pd.read_csv(file_path, sep='\t', names=["Contig", f"{sample_name}"], header=0)
+    for sample_name, file_path in abd_file_dict.items():
+        df = pd.read_csv(file_path, sep='\t', header=0)
+        df = df.iloc[:, [0, 3]] if seq_type == 'Gene' else df
+        df.columns = [seq_type, f"{sample_name}"]
         if merged_df.empty:
             merged_df = df
         else:
-            merged_df = pd.merge(merged_df, df, on="Contig", how="outer")
+            merged_df = pd.merge(merged_df, df, on=seq_type, how="outer")
     merged_df.to_csv(output_tsv, sep='\t', index=False)
 
 if __name__ == '__main__':
-    mergeAbundanceFiles(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    if len(sys.argv) == 4:
+        mergeAbundanceFiles(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    else:
+        print(f'Usage: {sys.argv[0]} <contig/gene_abundance_dir> <sample_info.tsv> <output_tsv> <Contig/Gene>')
