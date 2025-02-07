@@ -14,7 +14,7 @@ class VirTaxa(Seq):
         '''
         ORFs predicated from Prodigal (v2.6.3) were subjected to BLASTp (E-value of < 0.001, bitscore ≥ 50) against the NCBI viral RefSeq database (https://ftp.ncbi.nlm.nih.gov/refseq/release/viral/).
         '''
-        wkdir = f'{self.outdir}/blast'
+        wkdir = f'{self.wkdir}/blast'
         utils.mkdir(wkdir)
         dbdir = self.confDict['NCBIvRefProtDB']
         refdb = f'{dbdir}/viral.1.protein'
@@ -37,7 +37,7 @@ class VirTaxa(Seq):
         '''
         Classify the virus contig by Demovir software for a certain single group.
         '''
-        wkdir = f'{self.outdir}/demovir'
+        wkdir = f'{self.wkdir}/demovir'
         utils.mkdir(wkdir)
         cmd = [utils.selectENV('VC-General')]
         cmd.extend(['cd', wkdir, '\n'])
@@ -67,12 +67,12 @@ class VirTaxa(Seq):
         cmd.extend(tmp_cmd)
         Comp = EnviComp(
             fasta=orf_faa,
-            outdir=self.outdir,
+            outdir=self.wkdir,
             threads=self.threads
         )
         cmd.extend(Comp.vContact(''))
         cmd.extend(self.mergeTaxa(demovir_taxa, ncbi_taxa))
-        shell = f'{self.outdir}/{self.name}_classify.sh'
+        shell = f'{self.shelldir}/{self.name}_classify.sh'
         utils.printSH(shell, cmd)
         results = ''
         if not unrun: results = utils.execute(shell)

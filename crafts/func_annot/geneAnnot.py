@@ -11,7 +11,7 @@ class GeneFunc(Seq):
         super().__init__(fasta, outdir)
         self.threads = str(threads)
     def eggnogAnno(self, orfs_faa):
-        wkdir = f'{self.outdir}/eggnog'
+        wkdir = f'{self.wkdir}/eggnog'
         utils.mkdir(wkdir)
         anno_prefix = f'{wkdir}/{self.name}'
         seed_orth = f'{anno_prefix}.emapper.seed_orthologs'
@@ -26,7 +26,7 @@ class GeneFunc(Seq):
         )
         return cmd
     def keggAnno(self, orfs_faa):
-        wkdir = f'{self.outdir}/kegg'
+        wkdir = f'{self.wkdir}/kegg'
         utils.mkdir(wkdir)
         kegg_db = self.confDict['KofamscanDB']
         ko_prof = f'{kegg_db}/profiles'
@@ -50,7 +50,7 @@ class GeneFunc(Seq):
         cmd.extend(self.eggnogAnno(orfs_faa))
         cmd.append(utils.selectENV('VC-General'))
         cmd.extend(self.keggAnno(orfs_faa))
-        shell = f'{self.outdir}/{self.name}_gene_annot.sh'
+        shell = f'{self.shelldir}/{self.name}_gene_annot.sh'
         utils.printSH(shell, cmd)
         results = utils.execute(shell)
         return results

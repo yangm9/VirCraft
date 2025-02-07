@@ -21,12 +21,12 @@ class VirRef(VirScan):
         '''
         Rapid genome clustering based on pairwise ANI provided by CheckV.
         '''
-        blastdb = f'{self.outdir}/{self.name}.db'
-        blast_out = f'{self.outdir}/{self.name}.blast'
-        ani_out = f'{self.outdir}/{self.name}.ani'
-        clusters = f'{self.outdir}/{self.name}.clusters'
-        votu_list = f'{self.outdir}/{self.name}.votulist'
-        votus = f'{self.outdir}/{self.name}_votus.fa'
+        blastdb = f'{self.wkdir}/{self.name}.db'
+        blast_out = f'{self.wkdir}/{self.name}.blast'
+        ani_out = f'{self.wkdir}/{self.name}.ani'
+        clusters = f'{self.wkdir}/{self.name}.clusters'
+        votu_list = f'{self.wkdir}/{self.name}.votulist'
+        votus = f'{self.wkdir}/{self.name}_votus.fa'
         cmd = ['makeblastdb', '-in', self.fasta, '-dbtype nucl', '-out', blastdb, '\n',
                'blastn', '-query', self.fasta, '-db', blastdb, '-num_threads', self.threads, '-out', blast_out, "-outfmt '6 std qlen slen' -max_target_seqs 10000\n",
                'anicalc.py', '-i', blast_out, '-o', ani_out,'\n',
@@ -44,41 +44,42 @@ class VirRef(VirScan):
     def votuQC(self, votus, cutoff=1500):
         cmd,__ = self.checkv(votus)
         wkdir = f'{self.outdir}/statistics'
-        ckdir = f'{self.outdir}/checkv'
-        checkv_qual = f'{ckdir}/quality_summary.tsv'
+        checkv_qual = f'{self.wkdir}/checkv/quality_summary.tsv'
         cmd.append(utils.selectENV('VC-General'))
-        cmd.extend(['pie_plot.R', checkv_qual, 'checkv_quality', wkdir, '\n'])
-        cmd.extend(['pie_plot.R', checkv_qual, 'provirus', wkdir, '\n'])
-        cmd.extend(['pie_plot.R', checkv_qual, 'miuvig_quality', wkdir, '\n'])
-        tmp_cmd=self.statFA(cutoff)
+        cmd.extend(
+            ['pie_plot.R', checkv_qual, 'checkv_quality', wkdir, '\n',
+             'pie_plot.R', checkv_qual, 'provirus', wkdir, '\n',
+             'pie_plot.R', checkv_qual, 'miuvig_quality', wkdir, '\n']
+        )
+        tmp_cmd = self.statFA(cutoff)
         cmd.extend(self.statFA(cutoff))
         cmd.extend(tmp_cmd)
         VDT=VirDetectTools(
             fasta=votus,
-            outdir=self.outdir,
+            outdir=self.wkdir,
             threads=self.threads
         )
         tmp_cmd, vbdir = VDT.vibrant(str(cutoff))
         cmd.extend(tmp_cmd)
         votus_prefix = f'{self.name}_votus'
-        vb_vir_info = f'{self.outdir}/VIBRANT_{votus_prefix}/VIBRANT_results_{votus_prefix}/VIBRANT_genome_quality_{votus_prefix}.tsv'
+        vb_vir_info = f'{self.wkdir}/VIBRANT_{votus_prefix}/VIBRANT_results_{votus_prefix}/VIBRANT_genome_quality_{votus_prefix}.tsv'
         vb_ckv_tsv = f'{wkdir}/votus_lifetype_quality.tsv'
         cmd.append(utils.selectENV('VC-General'))
         cmd.extend(
             ['votus_lifetype_quality.py', checkv_qual, vb_vir_info, vb_ckv_tsv, '\n',
-             'votus_lifetype_quality_barplot.R', vb_ckv_tsv,wkdir, '\n']
+             'votus_lifetype_quality_barplot.R', vb_ckv_tsv, wkdir, '\n']
         )
         return cmd
     def binning():
         cmd = [utils.selectENV('VC-General')]
-        wkdir = f'{self.outdir}'
+        wkdir = f'{self.wkdir}'
         return cmd
     def RmDup(self, cutoff=1500, unrun=False, method='blast'):
         cmd = [self.envs]
         tmp_cmd, votus = self.cluster(method)
         cmd.extend(tmp_cmd)
         cmd.extend(self.votuQC(votus, cutoff))
-        shell = f'{self.outdir}/{self.name}_votu.sh'
+        shell = f'{self.shelldir}/{self.name}_votu.sh'
         utils.printSH(shell, cmd)
         results = ''
         if not unrun: results = utils.execute(shell)
