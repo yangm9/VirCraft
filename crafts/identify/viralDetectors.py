@@ -12,7 +12,7 @@ class VirDetectTools(VirScan):
     def deepvirfinder(self, cutoff: int):
         cutoff = str(cutoff)
         cmd = [utils.selectENV('VC-DeepVirFinder')]
-        wkdir = f'{self.outdir}/deepvirfinder'
+        wkdir = f'{self.wkdir}/deepvirfinder'
         utils.mkdir(wkdir)
         cmd.extend(
             ['dvf.py', '-i', self.fasta, '-m', self.confDict['DeepVirFinderDB'],  '-o', wkdir, '-c', self.threads, '-l', cutoff, '\n']
@@ -21,16 +21,16 @@ class VirDetectTools(VirScan):
     def vibrant(self, cutoff: int):
         cutoff = str(cutoff)
         cmd = [utils.selectENV('VC-VIBRANT')]
-        wkdir = f'{self.outdir}/VIBRANT_{self.name}'
+        wkdir = f'{self.wkdir}/VIBRANT_{self.name}'
         VIBRANT_DB_databases = self.confDict['VIBRANTDB'] + '/databases'
         VIBRANT_DB_files = self.confDict['VIBRANTDB'] + '/files'
         cmd.extend(
-            ['VIBRANT_run.py', '-i', self.fasta, '-l', cutoff, '-t', self.threads, '-folder', self.outdir, '-d', VIBRANT_DB_databases, '-m', VIBRANT_DB_files, '\n']
+            ['VIBRANT_run.py', '-i', self.fasta, '-l', cutoff, '-t', self.threads, '-folder', self.wkdir, '-d', VIBRANT_DB_databases, '-m', VIBRANT_DB_files, '\n']
         )
         return cmd, wkdir
     def genomad(self):
         cmd = [utils.selectENV('VC-GeNomad')]
-        wkdir = f'{self.outdir}/genomad'
+        wkdir = f'{self.wkdir}/genomad'
         GeNomad_DB = self.confDict['GeNomadDB']
         cmd.extend(
             ['genomad end-to-end', '--cleanup', '--threads', self.threads, self.fasta, wkdir, GeNomad_DB, '\n']
@@ -38,7 +38,7 @@ class VirDetectTools(VirScan):
         return cmd, wkdir
     def contig_annotation_tool(self, in_fa=None):
         cmd = [utils.selectENV('VC-General')]
-        wkdir = f'{self.outdir}/CAT_{self.name}'
+        wkdir = f'{self.wkdir}/CAT_{self.name}'
         utils.mkdir(wkdir)
         CAT_DB = self.confDict['CATDB'] + '/db'
         CAT_TAX = self.confDict['CATDB'] + '/tax'

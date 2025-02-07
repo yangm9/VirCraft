@@ -14,16 +14,16 @@ class vIdentify(VirDetectTools):
         self.threads = int(threads) // (self.BATCH_SIZE * 2)
     def vFilter(self, cutoff = 1500, mode = 'permissive'):
         mode_dict = {'permissive' : '1', 'strict' : '2'}
-        score_tsv = f'{self.outdir}/all_viral_ctgs.score.tsv'
+        score_tsv = f'{self.wkdir}/all_viral_ctgs.score.tsv'
         score_filt_tsv = utils.insLable(score_tsv, mode)
-        viral_filt_ctg_list = f'{self.outdir}/viral_filt_ctg.list'
-        viral_filt_ctgs_fna = f'{self.outdir}/viral_filt_ctg.fna'
+        viral_filt_ctg_list = f'{self.wkdir}/viral_filt_ctg.list'
+        viral_filt_ctgs_fna = f'{self.wkdir}/viral_filt_ctg.fna'
         viral_posi_ctgs_fna = f'{self.outdir}/viral_positive_ctg.fna'
         cmd = [utils.selectENV('VC-General')]
         tmp_cmd = ''
         #tmp_cmd, cat_dir = self.contig_annotation_tool(viral_filt_ctgs_fna)
         cmd.extend(
-            ['merge_ctg_list.py', self.name, self.outdir, f"&& awk -F '\\t' 'NR == 1 || $32 >= {mode_dict[mode]}'", score_tsv, '>', score_filt_tsv, '\n',
+            ['merge_ctg_list.py', self.name, self.wkdir, f"&& awk -F '\\t' 'NR == 1 || $32 >= {mode_dict[mode]}'", score_tsv, '>', score_filt_tsv, '\n',
             'cut -f 1', score_filt_tsv, "|sed '1d' >", viral_filt_ctg_list, '&& extrSeqByName.pl', viral_filt_ctg_list, self.fasta, viral_filt_ctgs_fna, '\n']
         )
         if cutoff <= 5000:
@@ -50,31 +50,31 @@ class vIdentify(VirDetectTools):
         self.threads = str(self.threads)
         #vibrant
         cmd, wkdir = self.vibrant(cutoff)
-        shell = f'{self.outdir}/{self.name}_vb_ctg.sh'
+        shell = f'{self.shelldir}/{self.name}_vb_ctg.sh'
         utils.printSH(shell, cmd)
         #deepvirfinder
         cmd, wkdir = self.deepvirfinder(cutoff)
-        shell = f'{self.outdir}/{self.name}_dvf_ctg.sh'
+        shell = f'{self.shelldir}/{self.name}_dvf_ctg.sh'
         utils.printSH(shell, cmd)
         #genomad
         self.threads = str(int(self.threads))
         cmd, wkdir = self.genomad()
-        shell = f'{self.outdir}/{self.name}_gm_ctg.sh'
+        shell = f'{self.shelldir}/{self.name}_gm_ctg.sh'
         utils.printSH(shell, cmd)
         #VirSorter2
         self.threads = str(int(self.allthreads) - (int(self.threads) * 3))
         cmd, wkdir = self.virsorter(self.fasta, 0, cutoff)
-        shell = f'{self.outdir}/{self.name}_vs2_ctg.sh'
+        shell = f'{self.shelldir}/{self.name}_vs2_ctg.sh'
         utils.printSH(shell, cmd)
         #multiple run
         cmd = [utils.selectENV('VC-General')]
-        cmd.extend(['multithreads.pl', self.outdir, 'ctg.sh 4\n'])
-        shell = f'{self.outdir}/{self.name}_batch_identify_virus.sh'
+        cmd.extend(['multithreads.pl', self.shelldir, 'ctg.sh 4\n'])
+        shell = f'{self.shelldir}/{self.name}_batch_identify_virus.sh'
         utils.printSH(shell, cmd)
         if not unrun: results = utils.execute(shell) 
         self.threads = str(int(self.allthreads))
         cmd = self.vFilter(cutoff, mode)
-        shell = f'{self.outdir}/{self.name}_get_positive_virus.sh'
+        shell = f'{self.shelldir}/{self.name}_get_positive_virus.sh'
         utils.printSH(shell, cmd)
         if not unrun: results += utils.execute(shell)
         return results

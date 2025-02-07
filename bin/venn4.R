@@ -1,4 +1,3 @@
-#setwd("E:\\研发\\最后的test\\果蝇test\\SNP")
 library(grid)
 library(VennDiagram)
 args <- commandArgs(trailing=T)

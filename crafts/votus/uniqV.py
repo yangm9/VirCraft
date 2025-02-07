@@ -43,7 +43,7 @@ class VirRef(VirScan):
             raise Exception('method should only be "blast" or "cdhit".')
     def votuQC(self, votus, cutoff=1500):
         cmd,__ = self.checkv(votus)
-        wkdir = f'{self.outdir}/stat'
+        wkdir = f'{self.outdir}/statistics'
         ckdir = f'{self.outdir}/checkv'
         checkv_qual = f'{ckdir}/quality_summary.tsv'
         cmd.append(utils.selectENV('VC-General'))

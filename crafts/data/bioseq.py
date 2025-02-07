@@ -27,7 +27,7 @@ class Reads(VirCfg):
         utils.mkdir(self.shelldir)
         self.wkdir = f'{self.outdir}/work_files'
         utils.mkdir(self.wkdir)
-        self.statdir = f'{self.outdir}/stat'
+        self.statdir = f'{self.outdir}/statistics'
         utils.mkdir(self.statdir)
     @property
     def getSampName(self):
