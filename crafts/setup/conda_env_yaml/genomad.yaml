@@ -1,0 +1,7 @@
+name: VC-GeNomad
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - genomad=1.8
