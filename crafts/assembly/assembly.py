@@ -135,15 +135,15 @@ class Assembly(Reads):
         '''
         
         cmd = [self.envs] # Store the environment variables command
-        scafs = []
         
         # Perform the assembly process and get commands and scaffold
         tmp_cmd, scaf = self.mixAsse(self.fastqs, process)
         cmd.extend(tmp_cmd)
         
         # Create a FASTA sequence object and append statistics commands
-        FastA=Seq(scaf, self.outdir)
-        cmd.extend(FastA.statFA(cutoff))
+        FastA = Seq(scaf, self.outdir)
+        cmd.extend(FastA.statFA())
+        cmd.extend(FastA.lenCutoff())
         
         # Optionally clear intermediate alignment files
         if clear and len(process) == 2:
@@ -152,9 +152,8 @@ class Assembly(Reads):
             cmd.extend(['rm -f', scafIdx, '\n'])
         shell = f'{self.shelldir}/{self.samp}_assembly.sh'
         utils.printSH(shell, cmd)
-        results=''
         
         # Execute the shell script if not in unrun mode
-        if not unrun: 
-            results = utils.execute(shell)
+        results=''
+        if not unrun: results = utils.execute(shell)
         return results

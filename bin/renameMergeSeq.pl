@@ -23,35 +23,35 @@ Vwesion:
     0.0.2 2022.6.17 18:08
 =cut
 
-my ($fadir,$outfa,$postfix,$seqtype,$help);
+my ($fadir, $outfa, $postfix, $seqtype, $help);
 GetOptions(
-    "i:s"=>\$fadir,
-    "o:s"=>\$outfa,
-    "p:s"=>\$postfix,
-    "t:s"=>\$seqtype,
-    "help|h"=>\$help
+    "i:s" => \$fadir,
+    "o:s" => \$outfa,
+    "p:s" => \$postfix,
+    "t:s" => \$seqtype,
+    "help|h" => \$help
 );
-if($help||!defined $fadir||!defined $outfa){
+if($help || !defined $fadir || !defined $outfa){
     print STDERR `pod2text $0`;
     exit 0;
 }
 
-$postfix||="fa";
-$seqtype||="Seq";
-my @mags=glob "$fadir/*.$postfix";
+$postfix ||= "fa";
+$seqtype ||= "Seq";
+my @mags = glob "$fadir/*.$postfix";
 open OUT, ">$outfa" or die $!;
-foreach my $i(0..$#mags){
-    my $mag_name=basename($mags[$i]);
-    $mag_name=~s/\.$postfix$//;
-    $mag_name=~s/-//;
+foreach my $i(0 .. $#mags){
+    my $mag_name = basename($mags[$i]);
+    $mag_name =~ s/\.$postfix$//; #mag file name
+    $mag_name =~ s/-//;
     open FA, $mags[$i] or die $!;
     while(<FA>){
         chomp;
-        my $line=$_;
+        my $line = $_;
         if(/^>/){
-            $line=~s/^>//;
-            $line=&fabricateMAGName($line) if($seqtype eq "MAG");
-            $line=$mag_name."_".$line; #For MAGs
+            $line =~ s/^>//;
+            $line = &fabricateMAGName($line) if($seqtype eq "MAG");
+            $line = $mag_name."_".$line; #For MAGs
             print OUT ">$line\n";
         }else{
             print OUT "$line\n";    
@@ -62,8 +62,8 @@ foreach my $i(0..$#mags){
 close OUT;
 
 sub fabricateMAGName{
-    my $line=shift;
-    my @items=split /_/,$line; #For MAGs
-    $line=join "_",@items[0,1]; #For MAGs
+    my $line = shift;
+    my @items = split /_/, $line;
+    $line = join "_", @items[0, 1];
     return $line;
 }

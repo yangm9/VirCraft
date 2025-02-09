@@ -63,18 +63,23 @@ class Seq(VirCfg):
         shell = f'{self.shelldir}/{self.name}_bwaidx.sh'
         utils.printSH(shell, cmd)
         return cmd, bwa_idx
-    def statFA(self, cutoff=1500):
+    def lenCutoff(self, cutoff=1500):
+        cmd = [self.envs]
+        filt_prefix = f'{self.outdir}/{self.name}.filt'
+        cmd.extend(
+            ['SeqLenCutoff.pl', self.fasta, filt_prefix, str(cutoff), '\n']
+        )
+        return cmd
+    def statFA(self):
         cmd = [self.envs]
         size_dist = f'{self.statdir}/fasta_size_distribution.pdf'
         len_gc_stat = f'{self.statdir}/fasta_size_gc_stat.tsv'
         ln50_stat = f'{self.statdir}/fasta_ln50_stat.tsv'
-        filt_prefix = f'{self.outdir}/{self.name}.filt'
         cmd.extend(
             ['fasta_size_distribution_plot.py', self.fasta, '-o', size_dist, '-s 2000 -g 10 -t "Sequence Size Distribution"\n',
-            'fasta_size_gc.py', self.fasta, '>', len_gc_stat, '\n',
-            'variables_scatter.R', len_gc_stat, 'Length~GC', self.statdir, '\n',
-            'stat_N50.pl', self.fasta, ln50_stat, '\n',
-            'SeqLenCutoff.pl', self.fasta, filt_prefix, str(cutoff), '\n']
+             'fasta_size_gc.py', self.fasta, '>', len_gc_stat, '\n',
+             'variables_scatter.R', len_gc_stat, 'Length~GC', self.statdir, '\n',
+             'stat_N50.pl', self.fasta, ln50_stat, '\n']
         )
         return cmd
     def genePred(self):
@@ -87,8 +92,8 @@ class Seq(VirCfg):
         temp_faa = f'{wkdir}/temp.orf.faa'
         temp_ffn = f'{wkdir}/temp.orf.ffn'
         cmd = ['prodigal', '-i', self.fasta, '-d', temp_ffn, '-a', temp_faa, '-o', orf_gff, '-f gff -p meta -m -q\n',
-            'cut -f 1 -d \" \"', temp_faa, '>', orf_faa, '&& cut -f 1 -d \" \"', temp_ffn, '>', orf_ffn, '\n',
-            f'rm -f {wkdir}/temp.*\n']
+               'cut -f 1 -d \" \"', temp_faa, '>', orf_faa, '&& cut -f 1 -d \" \"', temp_ffn, '>', orf_ffn, '\n',
+               f'rm -f {wkdir}/temp.*\n']
         return cmd, orf_faa
 
 class VirSeq(Seq):
@@ -99,7 +104,7 @@ class VirSeq(Seq):
         cmd = [self.envs]
         wkdir = f'{self.outdir}/checkv'
         utils.mkdir(wkdir)
-        cmd = ['checkv', 'end_to_end', self.fasta,wkdir, '-d', self.confDict['CheckvDB'], '-t',self.threads,'\n']
+        cmd = ['checkv', 'end_to_end', self.fasta,wkdir, '-d', self.confDict['CheckvDB'], '-t', self.threads, '\n']
         provir_fna = f'{wkdir}/proviruses.fna'
         vir_fna = f'{wkdir}/viruses.fna'
         merged_fa = f'{wkdir}/combined.fna'
@@ -135,5 +140,5 @@ class ORF(Seq):
         eggout = f'{wkdir}/{self.name}_eggout'
         eggnog_db = self.confDict['EggNOGDB']
         cmd = ['emapper.py -m diamond --no_annot --no_file_comments', '--cpu', self.threads, '-i', self.fasta, '-o', anno_prefix, '--data_dir', eggnog_db, '\n',
-              'emapper.py', '--annotate_hits_table', seed_orth, '--no_file_comments', '-o', eggout, '--cpu', self.threads, '--data_dir', eggnog_db, '--override\n']
+               'emapper.py', '--annotate_hits_table', seed_orth, '--no_file_comments', '-o', eggout, '--cpu', self.threads, '--data_dir', eggnog_db, '--override\n']
         return cmd

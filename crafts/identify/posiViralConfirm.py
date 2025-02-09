@@ -1,6 +1,7 @@
 import os
 import sys
 from ..general import utils
+from ..data.bioseq import Seq
 from ..identify.viralDetectors import VirDetectTools
 
 class vIdentify(VirDetectTools):
@@ -38,6 +39,8 @@ class vIdentify(VirDetectTools):
             cmd.extend(
                 ['cp', viral_filt_ctgs_fna, viral_posi_ctgs_fna, '\n']
             )
+        FastA = Seq(viral_posi_ctgs_fna, self.outdir)
+        cmd.extend(FastA.statFA())
         return cmd
     def Identify(self, cutoff = 1500, mode = 'permissive', unrun = False):
         try:
