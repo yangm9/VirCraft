@@ -14,8 +14,8 @@ from crafts.identify import viridsop
 from crafts.identify import posiViralConfirm
 from crafts.config import arguments
 from crafts.votus import uniqV
-from crafts.taxa import vClassify
-from crafts.taxa import vCont
+from crafts.taxa import viralClassifier
+from crafts.taxa import viralCompare
 from crafts.quantify import virQuantStat
 from crafts.quantify import geneQuantStat
 from crafts.host import hosts
@@ -117,7 +117,7 @@ def votus(args):
 
 @logger.Log(level='INFO')
 def classify(args):
-    Taxa = vClassify.VirTaxa(
+    Taxa = viralClassifier.VirTaxa(
         fasta=args.fasta,
         outdir=args.outdir,
         threads=args.threads
@@ -129,7 +129,7 @@ def classify(args):
 
 @logger.Log(level='INFO')
 def compare(args):
-    NWK = vCont.EnviComp(
+    NWK = viralCompare.EnviComp(
         fasta=args.fasta,
         outdir=args.outdir,
         threads=args.threads,

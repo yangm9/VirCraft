@@ -30,7 +30,7 @@ class Assembly(Reads):
         :param fastqs: List of FASTQ files.
         :return: The command to run SPAdes and the resulting scaffold file.
         '''
-        wkdir = f'{self.workfiles_dir}/spades'
+        wkdir = f'{self.wkfile_dir}/spades'
         utils.mkdir(wkdir)
         # Prepare input parameters based on the number of FASTQ files
         if len(fastqs) == 1:
@@ -52,8 +52,8 @@ class Assembly(Reads):
         :return: The command to run MEGAHIT and the resulting scaffold file.
         '''
         input_para = ''
-        wkdir = f'{self.workfiles_dir}/megahit'
-        tmpdir = f'{self.workfiles_dir}/megahit.tmp'
+        wkdir = f'{self.wkfile_dir}/megahit'
+        tmpdir = f'{self.wkfile_dir}/megahit.tmp'
         utils.mkdir(tmpdir)
 
         # Prepare input parameters based on the number of FASTQ files
@@ -77,7 +77,7 @@ class Assembly(Reads):
         :param scaf: Path to the assembled scaffold file.
         :return: The command to map reads back to the scaffold and the paths to unmapped reads.
         '''
-        wkdir = f'{self.workfiles_dir}/alignment'
+        wkdir = f'{self.wkfile_dir}/alignment'
         utils.mkdir(wkdir)
 
         # Define paths for BWA index and output files
@@ -146,7 +146,7 @@ class Assembly(Reads):
         
         # Optionally clear intermediate alignment files
         if clear and len(process) == 2:
-            alndir = f'{self.workfiles_dir}/alignment'
+            alndir = f'{self.wkfile_dir}/alignment'
             scafIdx = f'{alndir}/scaffoldsIDX*'
             cmd.extend(['rm -f', scafIdx, '\n'])
         shell = f'{self.shell_dir}/{self.samp}_assembly.sh'

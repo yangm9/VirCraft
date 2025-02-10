@@ -33,6 +33,9 @@ class VirRef(VirDetectTools):
                'aniclust.py', '--fna', self.fasta, '--ani', ani_out, '--out', clusters, '--min_ani 95 --min_tcov 85 --min_qcov 0\n',
                'cut -f 1', clusters, '>', votu_list, '\n',
                'extrSeqByName.pl', votu_list, self.fasta, votus, '\n']
+        cmd.extend(
+           ['cd', self.outdir, '&& ln', ani_out, '&& ln', clusters, '&& ln', votus, '\n']
+        )
         return cmd, votus
     def cluster(self, method):
         if method == 'blast':

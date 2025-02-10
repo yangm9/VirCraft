@@ -74,7 +74,7 @@ class Seq(VirCfg):
         return cmd
     def genePred(self):
         cmd = [self.envs]
-        wkdir = f'{self.outdir}/prodigal'
+        wkdir = f'{self.wkfile_dir}/prodigal'
         utils.mkdir(wkdir)
         orf_ffn = f'{wkdir}/{self.name}.ffn'
         orf_faa = f'{wkdir}/{self.name}.faa'

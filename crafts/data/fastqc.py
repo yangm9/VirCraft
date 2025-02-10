@@ -9,7 +9,7 @@ class QualCtrl(Reads):
         super().__init__(fq1, fq2, outdir, *args, **kwargs)
         self.threads = str(threads)
     def filtReads(self, process):
-        wkdir = f'{self.wkdir}/fastp'
+        wkdir = f'{self.wkfile_dir}/fastp'
         out_fq1 = f'{wkdir}/{self.basename_fq1}'.replace('.gz', '')
         out_fq2 = f'{wkdir}/{self.basename_fq2}'.replace('.gz', '')
         fastp_json = f'{wkdir}/fastp.json'
@@ -27,8 +27,8 @@ class QualCtrl(Reads):
             out_fastqs = self.fastqs
         return cmd, out_fastqs, out_fq_list
     def fastUniq(self, fq_list):
-        wkdir = f'{self.wkdir}/fastuniq'
-        in_fq_list = f'{self.wkdir}/fastp/{self.samp}_list.txt'
+        wkdir = f'{self.wkfile_dir}/fastuniq'
+        in_fq_list = f'{self.wkfile_dir}/fastp/{self.samp}_list.txt'
         out_fq1 = f'{wkdir}/{self.basename_fq1}'.replace('.gz', '')
         out_fq2 = f'{wkdir}/{self.basename_fq2}'.replace('.gz', '')
         utils.mkdir(wkdir)
@@ -36,7 +36,7 @@ class QualCtrl(Reads):
         fastqs = [out_fq1, out_fq2]
         return cmd, fastqs
     def decontaminate(self, fq1, fq2):
-        wkdir = f'{self.wkdir}/decontaminate'
+        wkdir = f'{self.wkfile_dir}/decontaminate'
         prefix = f'{wkdir}/{self.samp}'
         contam_db = self.confDict['ContamDB']
         utils.mkdir(wkdir)
@@ -63,13 +63,13 @@ class QualCtrl(Reads):
             unused_fqs.extend(fastqs)
         lnk_fq1 = os.path.basename(fastqs[0])
         lnk_fq2 = os.path.basename(fastqs[1])
-        cmd.append(f'ln -s {fastqs[0]} {self.outdir}/{lnk_fq1} && ln -s {fastqs[1]} {self.outdir}/{lnk_fq2}\n')
+        cmd.append(f'ln {fastqs[0]} {self.outdir}/{lnk_fq1} && ln {fastqs[1]} {self.outdir}/{lnk_fq2}\n')
         if clear:
             unused_fqs.remove(fastqs[0])
             unused_fqs.remove(fastqs[1])
             unused_fqs_str = ' '.join(unused_fqs)
             cmd.extend(['rm -f', unused_fqs_str, '\n'])
-        shell = f'{self.shelldir}/{self.samp}_readsqc.sh'
+        shell = f'{self.shell_dir}/{self.samp}_readsqc.sh'
         utils.printSH(shell, cmd)
         results = ''
         if not unrun: results = utils.execute(shell)

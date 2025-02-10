@@ -1,7 +1,7 @@
 import sys
 from ..general import utils
 from ..data.bioseq import Seq
-from .vCont import EnviComp
+from .viralCompare import EnviComp
 
 class VirTaxa(Seq):
     '''
@@ -14,7 +14,7 @@ class VirTaxa(Seq):
         '''
         ORFs predicated from Prodigal (v2.6.3) were subjected to BLASTp (E-value of < 0.001, bitscore ≥ 50) against the NCBI viral RefSeq database (https://ftp.ncbi.nlm.nih.gov/refseq/release/viral/).
         '''
-        wkdir = f'{self.wkdir}/blast'
+        wkdir = f'{self.wkfile_dir}/blast'
         utils.mkdir(wkdir)
         dbdir = self.confDict['NCBIvRefProtDB']
         refdb = f'{dbdir}/viral.1.protein'
@@ -28,16 +28,16 @@ class VirTaxa(Seq):
         cmd = [utils.selectENV('VC-General')]
         cmd.extend(
             ['blastp', '-query', orf_f, '-out', blast_resu, '-db', refdb, '-num_threads', self.threads, '-outfmt 6 -evalue 1e-3 -max_target_seqs 1\n',
-            "awk '$12>=50'", blast_resu, '>', filt_blast,'\n', 'sed', sed_cmd, filt_blast, '>', filt_h_blast, '\n',
-            "csvtk join -t -f 'NCBI_ID,NCBI_ID'", filt_h_blast, taxadb, '>', gene_taxa_blast, '\n',
-            'virus_tax.py', orf_f, gene_taxa_blast, '>', votu_taxa, '\n']
+             "awk '$12>=50'", blast_resu, '>', filt_blast,'\n', 'sed', sed_cmd, filt_blast, '>', filt_h_blast, '\n',
+             "csvtk join -t -f 'NCBI_ID,NCBI_ID'", filt_h_blast, taxadb, '>', gene_taxa_blast, '\n',
+             'virus_tax.py', orf_f, gene_taxa_blast, '>', votu_taxa, '\n']
         )
         return cmd, votu_taxa
     def demovir(self):
         '''
         Classify the virus contig by Demovir software for a certain single group.
         '''
-        wkdir = f'{self.wkdir}/demovir'
+        wkdir = f'{self.wkfile_dir}/demovir'
         utils.mkdir(wkdir)
         cmd = [utils.selectENV('VC-General')]
         cmd.extend(['cd', wkdir, '\n'])
@@ -48,7 +48,7 @@ class VirTaxa(Seq):
         cmd.extend(['ln -s', uniprot_trembl_viral, '\n'])
         demovir = f'{sys.path[0]}/bin/demovir.*'
         cmd.extend(
-            ['cp', demovir, '.','&& ./demovir.sh',self.fasta,self.threads,'\n']
+            ['cp', demovir, '.', '&& ./demovir.sh',self.fasta,self.threads,'\n']
         )
         votu_taxa = f'{wkdir}/DemoVir_assignments.txt'
         return cmd, votu_taxa
@@ -67,12 +67,12 @@ class VirTaxa(Seq):
         cmd.extend(tmp_cmd)
         Comp = EnviComp(
             fasta=orf_faa,
-            outdir=self.wkdir,
+            outdir=self.wkfile_dir,
             threads=self.threads
         )
-        cmd.extend(Comp.vContact(''))
+        cmd.extend(Comp.vcontact2(''))
         cmd.extend(self.mergeTaxa(demovir_taxa, ncbi_taxa))
-        shell = f'{self.shelldir}/{self.name}_classify.sh'
+        shell = f'{self.shell_dir}/{self.name}_classify.sh'
         utils.printSH(shell, cmd)
         results = ''
         if not unrun: results = utils.execute(shell)
