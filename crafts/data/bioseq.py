@@ -23,7 +23,7 @@ class Reads(VirCfg):
         self.outdir = os.path.abspath(outdir)
         self.samp = self.getSampName
         utils.mkdir(self.outdir)
-        self.shell_dir, self.workfiles_dir, self.stat_dir = utils.make_general_dir(outdir)
+        self.shell_dir, self.wkfile_dir, self.stat_dir = utils.make_general_dir(self.outdir)
     @property
     def getSampName(self):
         samp = ''
@@ -36,7 +36,7 @@ class Seq(VirCfg):
     '''
     Fasta processing class.
     '''
-    envs=utils.selectENV('VC-General')
+    envs = utils.selectENV('VC-General')
     def __init__(self, fasta=None, outdir=None, *args, **kwargs):
         super().__init__()
         basename_fa = os.path.basename(fasta)
@@ -44,19 +44,13 @@ class Seq(VirCfg):
         self.fasta = os.path.abspath(fasta)
         self.outdir = os.path.abspath(outdir)
         utils.mkdir(self.outdir)
-#    def makeGeneralDir(self):
-#        self.shelldir = f'{self.outdir}/shell'
-#        utils.mkdir(self.shelldir)
-#        self.wkdir = f'{self.outdir}/work_files'
-#        utils.mkdir(self.wkdir)
-#        self.statdir = f'{self.outdir}/statistics'
-#        utils.mkdir(self.statdir)
+        self.shell_dir, self.wkfile_dir, self.stat_dir = utils.make_general_dir(self.outdir)
     def mkBwaIdx(self):
         "Make bwa index for votus."
         cmd = [utils.selectENV('VC-Quantify')]
         bwa_idx = f'{self.wkdir}/{self.name}.BWAIDX'
         cmd.extend(['bwa index -a bwtsw', self.fasta, '-p', bwa_idx, '\n'])
-        shell = f'{self.shelldir}/{self.name}_bwaidx.sh'
+        shell = f'{self.shell_dir}/{self.name}_bwaidx.sh'
         utils.printSH(shell, cmd)
         return cmd, bwa_idx
     def lenCutoff(self, cutoff=1500):
@@ -68,13 +62,13 @@ class Seq(VirCfg):
         return cmd
     def statFA(self):
         cmd = [self.envs]
-        size_dist = f'{self.statdir}/fasta_size_distribution.pdf'
-        len_gc_stat = f'{self.statdir}/fasta_size_gc_stat.tsv'
-        ln50_stat = f'{self.statdir}/fasta_ln50_stat.tsv'
+        size_dist = f'{self.stat_dir}/fasta_size_distribution.pdf'
+        len_gc_stat = f'{self.stat_dir}/fasta_size_gc_stat.tsv'
+        ln50_stat = f'{self.stat_dir}/fasta_ln50_stat.tsv'
         cmd.extend(
             ['fasta_size_distribution_plot.py', self.fasta, '-o', size_dist, '-s 2000 -g 10 -t "Sequence Size Distribution"\n',
              'fasta_size_gc.py', self.fasta, '>', len_gc_stat, '\n',
-             'variables_scatter.R', len_gc_stat, 'Length~GC', self.statdir, '\n',
+             'variables_scatter.R', len_gc_stat, 'Length~GC', self.stat_dir, '\n',
              'stat_N50.pl', self.fasta, ln50_stat, '\n']
         )
         return cmd
@@ -120,7 +114,7 @@ class CDS(Seq):
         cmd.extend(
             ['salmon index', '-p 8 -k 31', '-t', self.fasta, '-i', wkdir, '\n']
         )
-        shell = f'{self.shelldir}/{self.name}_salmonidx.sh'
+        shell = f'{self.shell_dir}/{self.name}_salmonidx.sh'
         utils.printSH(shell, cmd)
         return cmd, idx
 

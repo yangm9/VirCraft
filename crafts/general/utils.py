@@ -25,12 +25,13 @@ def mkdir(name: str):
 
 def make_general_dir(outdir: str):
     shell_dir = f'{outdir}/shell'
-    mkdir(shell_dir)
     wkfile_dir = f'{outdir}/work_files'
-    mkdir(wkfile_dir)
     stat_dir = f'{outdir}/statistics'
-    mkdir(stat_dir)
-    return shell_dir, workfiles_dir, stat_dir
+    if not (outdir.endswith('shell') or outdir.endswith('work_files') or outdir.endswith('statistics')):
+        mkdir(shell_dir)
+        mkdir(wkfile_dir)
+        mkdir(stat_dir)
+    return shell_dir, wkfile_dir, stat_dir
 
 def printSH(sh_path: str, command: list):
     SHPATH = open(sh_path, 'w')

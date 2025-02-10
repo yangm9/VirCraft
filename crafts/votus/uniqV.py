@@ -1,10 +1,9 @@
 from os import path
 from ..general import utils
 from ..data.bioseq import Seq
-from ..identify.viridsop import VirScan
 from ..identify.viralDetectors import VirDetectTools
 
-class VirRef(VirScan):
+class VirRef(VirDetectTools):
     '''
     Generate vOTUs
     '''
@@ -22,12 +21,12 @@ class VirRef(VirScan):
         '''
         Rapid genome clustering based on pairwise ANI provided by CheckV.
         '''
-        blastdb = f'{self.wkdir}/{self.name}.db'
-        blast_out = f'{self.wkdir}/{self.name}.blast'
-        ani_out = f'{self.wkdir}/{self.name}.ani'
-        clusters = f'{self.wkdir}/{self.name}.clusters'
-        votu_list = f'{self.wkdir}/{self.name}.votulist'
-        votus = f'{self.wkdir}/{self.name}_votus.fa'
+        blastdb = f'{self.wkfile_dir}/{self.name}.db'
+        blast_out = f'{self.wkfile_dir}/{self.name}.blast'
+        ani_out = f'{self.wkfile_dir}/{self.name}.ani'
+        clusters = f'{self.wkfile_dir}/{self.name}.clusters'
+        votu_list = f'{self.wkfile_dir}/{self.name}.votulist'
+        votus = f'{self.wkfile_dir}/{self.name}_votus.fa'
         cmd = ['makeblastdb', '-in', self.fasta, '-dbtype nucl', '-out', blastdb, '\n',
                'blastn', '-query', self.fasta, '-db', blastdb, '-num_threads', self.threads, '-out', blast_out, "-outfmt '6 std qlen slen' -max_target_seqs 10000\n",
                'anicalc.py', '-i', blast_out, '-o', ani_out,'\n',
@@ -44,42 +43,32 @@ class VirRef(VirScan):
             raise Exception('method should only be "blast" or "cdhit".')
     def votuQC(self, votus, cutoff=1500):
         cmd,__ = self.checkv(votus)
-        wkdir = f'{self.outdir}/statistics'
-        checkv_qual = f'{self.wkdir}/checkv/quality_summary.tsv'
+        checkv_qual = f'{self.wkfile_dir}/checkv/quality_summary.tsv'
         cmd.append(utils.selectENV('VC-General'))
         cmd.extend(
-            ['pie_plot.R', checkv_qual, 'checkv_quality', wkdir, '\n',
-             'pie_plot.R', checkv_qual, 'provirus', wkdir, '\n',
-             'pie_plot.R', checkv_qual, 'miuvig_quality', wkdir, '\n']
+            ['pie_plot.R', checkv_qual, 'checkv_quality', self.stat_dir, '\n',
+             'pie_plot.R', checkv_qual, 'provirus', self.stat_dir, '\n',
+             'pie_plot.R', checkv_qual, 'miuvig_quality', self.stat_dir, '\n']
         )
-        FastA = Seq(votus, self.outdir)
-        cmd.extend(FastA.statFA())
-        VDT=VirDetectTools(
-            fasta=votus,
-            outdir=self.wkdir,
-            threads=self.threads
-        )
-        tmp_cmd, vbdir = VDT.vibrant(str(cutoff))
+        cmd.extend(self.statFA())
+        self.outdir = self.wkfile_dir
+        tmp_cmd, vbdir = self.vibrant(str(cutoff))
         cmd.extend(tmp_cmd)
         votus_prefix = f'{self.name}_votus'
-        vb_vir_info = f'{self.wkdir}/VIBRANT_{votus_prefix}/VIBRANT_results_{votus_prefix}/VIBRANT_genome_quality_{votus_prefix}.tsv'
-        vb_ckv_tsv = f'{wkdir}/votus_lifetype_quality.tsv'
+        vb_vir_info = f'{self.wkfile_dir}/VIBRANT_{votus_prefix}/VIBRANT_results_{votus_prefix}/VIBRANT_genome_quality_{votus_prefix}.tsv'
+        vb_ckv_tsv = f'{self.stat_dir}/votus_lifetype_quality.tsv'
         cmd.append(utils.selectENV('VC-General'))
         cmd.extend(
             ['votus_lifetype_quality.py', checkv_qual, vb_vir_info, vb_ckv_tsv, '\n',
-             'votus_lifetype_quality_barplot.R', vb_ckv_tsv, wkdir, '\n']
+             'votus_lifetype_quality_barplot.R', vb_ckv_tsv, self.stat_dir, '\n']
         )
-        return cmd
-    def binning():
-        cmd = [utils.selectENV('VC-General')]
-        wkdir = f'{self.wkdir}'
         return cmd
     def RmDup(self, cutoff=1500, unrun=False, method='blast'):
         cmd = [self.envs]
         tmp_cmd, votus = self.cluster(method)
         cmd.extend(tmp_cmd)
         cmd.extend(self.votuQC(votus, cutoff))
-        shell = f'{self.shelldir}/{self.name}_votu.sh'
+        shell = f'{self.shell_dir}/{self.name}_votu.sh'
         utils.printSH(shell, cmd)
         results = ''
         if not unrun: results = utils.execute(shell)

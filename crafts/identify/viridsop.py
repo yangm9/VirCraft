@@ -14,7 +14,7 @@ class VirScan(Seq):
         idx = str(n+1)
         min_score = str(min_score)
         min_length = str(min_length)
-        wkdir = f'{self.wkdir}/vs2-pass{idx}'
+        wkdir = f'{self.wkfile_dir}/vs2-pass{idx}'
         utils.mkdir(wkdir)
         cmd = [utils.selectENV('VC-VirSorter2')]
         cmd.extend(
@@ -22,7 +22,7 @@ class VirScan(Seq):
         )
         return cmd,wkdir
     def checkv(self, in_fa: str):
-        wkdir = f'{self.wkdir}/checkv'
+        wkdir = f'{self.wkfile_dir}/checkv'
         utils.mkdir(wkdir)
         cmd = [utils.selectENV('VC-CheckV')]
         cmd.extend(
@@ -38,20 +38,20 @@ class VirScan(Seq):
     def annotate(self, indir: str):
         vs2_fa = f'{indir}/for-dramv/final-viral-combined-for-dramv.fa'
         vs2_tab = f'{indir}/for-dramv/viral-affi-contigs-for-dramv.tab'
-        wkdir = f'{self.wkdir}/dramv-annotate'
+        wkdir = f'{self.wkfile_dir}/dramv-annotate'
         cmd = [utils.selectENV('VC-DRAMv')]
         cmd.extend(
             ['DRAM-v.py annotate', '-i', vs2_fa, '-v', vs2_tab, '-o', wkdir, '--threads', self.threads,  '--skip_trnascan --min_contig_size 1000\n']
         )
         dramv_annot = f'{wkdir}/annotations.tsv'
-        wkdir = f'{self.wkdir}/dramv-distill'
+        wkdir = f'{self.wkfile_dir}/dramv-distill'
         cmd.extend(['DRAM-v.py distill', '-i', dramv_annot, '-o', wkdir, '\n'])
         return cmd
     def curate(self):
-        checkv_dir = f'{self.wkdir}/checkv'
-        wkdir = f'{self.wkdir}/curation'
+        checkv_dir = f'{self.wkfile_dir}/checkv'
+        wkdir = f'{self.wkfile_dir}/curation'
         utils.mkdir(wkdir)
-        vir_score = f'{self.wkdir}/vs2-pass1/final-viral-score.tsv'
+        vir_score = f'{self.wkfile_dir}/vs2-pass1/final-viral-score.tsv'
         curation_score = f'{wkdir}/final-viral-score.tsv'
         contamination = f'{checkv_dir}/contamination.tsv'
         cmd.extend(
@@ -60,7 +60,7 @@ class VirScan(Seq):
         cura_vs2_chkv = f'{wkdir}/curation_vs2_checkv.tsv'
         cmd = [utils.selectENV('VC-General')]
         cmd.extend(
-            ['linkTab.py', curation_score, contamination, 'left contig_id', cura_vs2_chkv, '&& vCurator.py', self.wkdir, '\n']
+            ['linkTab.py', curation_score, contamination, 'left contig_id', cura_vs2_chkv, '&& vCurator.py', self.wkfile_dir, '\n']
         )
         combined_fna = f'{checkv_dir}/combined.fna'
         combined_modi_fna = f'{checkv_dir}/combined_modi.fna'
@@ -91,7 +91,7 @@ class VirScan(Seq):
         tmp_cmd = self.curate()
         cmd.extend(tmp_cmd)
         #Generate shell and exeute it
-        shell = f'{self.shelldir}/{self.name}_find_vir.sh'
+        shell = f'{self.shell_dir}/{self.name}_find_vir.sh'
         utils.printSH(shell, cmd)
         results = ''
         if not unrun: results=utils.execute(shell)
