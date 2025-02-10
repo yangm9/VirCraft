@@ -8,7 +8,6 @@ class Assembly(Reads):
     '''
     # Set the environment variables for the assembly process using a utility function
     envs=utils.selectENV('VC-Assembly')
-    
     def __init__(self, fq1=None, fq2=None, outdir=None, threads=8):
         '''
         Initialize the Assembly class.
@@ -18,7 +17,7 @@ class Assembly(Reads):
         :param threads: Number of threads.
         '''
         # Initialize from the parent class Reads
-        super().__init__(fq1,fq2,outdir)
+        super().__init__(fq1, fq2, outdir)
         self.threads = str(threads)
         self.methDict = {
             'm': self.megahit, # 'm' key refers to the MEGAHIT assembly method
@@ -31,7 +30,7 @@ class Assembly(Reads):
         :param fastqs: List of FASTQ files.
         :return: The command to run SPAdes and the resulting scaffold file.
         '''
-        wkdir = f'{self.wkdir}/spades'
+        wkdir = f'{self.workfiles_dir}/spades'
         utils.mkdir(wkdir)
         # Prepare input parameters based on the number of FASTQ files
         if len(fastqs) == 1:
@@ -53,8 +52,8 @@ class Assembly(Reads):
         :return: The command to run MEGAHIT and the resulting scaffold file.
         '''
         input_para = ''
-        wkdir = f'{self.wkdir}/megahit'
-        tmpdir = f'{self.wkdir}/megahit.tmp'
+        wkdir = f'{self.workfiles_dir}/megahit'
+        tmpdir = f'{self.workfiles_dir}/megahit.tmp'
         utils.mkdir(tmpdir)
 
         # Prepare input parameters based on the number of FASTQ files
@@ -78,7 +77,7 @@ class Assembly(Reads):
         :param scaf: Path to the assembled scaffold file.
         :return: The command to map reads back to the scaffold and the paths to unmapped reads.
         '''
-        wkdir = f'{self.wkdir}/alignment'
+        wkdir = f'{self.workfiles_dir}/alignment'
         utils.mkdir(wkdir)
 
         # Define paths for BWA index and output files
@@ -147,10 +146,10 @@ class Assembly(Reads):
         
         # Optionally clear intermediate alignment files
         if clear and len(process) == 2:
-            alndir = f'{self.wkdir}/alignment'
+            alndir = f'{self.workfiles_dir}/alignment'
             scafIdx = f'{alndir}/scaffoldsIDX*'
             cmd.extend(['rm -f', scafIdx, '\n'])
-        shell = f'{self.shelldir}/{self.samp}_assembly.sh'
+        shell = f'{self.shell_dir}/{self.samp}_assembly.sh'
         utils.printSH(shell, cmd)
         
         # Execute the shell script if not in unrun mode

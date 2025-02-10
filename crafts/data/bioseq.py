@@ -23,12 +23,7 @@ class Reads(VirCfg):
         self.outdir = os.path.abspath(outdir)
         self.samp = self.getSampName
         utils.mkdir(self.outdir)
-        self.shelldir = f'{self.outdir}/shell'
-        utils.mkdir(self.shelldir)
-        self.wkdir = f'{self.outdir}/work_files'
-        utils.mkdir(self.wkdir)
-        self.statdir = f'{self.outdir}/statistics'
-        utils.mkdir(self.statdir)
+        self.shell_dir, self.workfiles_dir, self.stat_dir = utils.make_general_dir(outdir)
     @property
     def getSampName(self):
         samp = ''
@@ -49,12 +44,13 @@ class Seq(VirCfg):
         self.fasta = os.path.abspath(fasta)
         self.outdir = os.path.abspath(outdir)
         utils.mkdir(self.outdir)
-        self.shelldir = f'{self.outdir}/shell'
-        utils.mkdir(self.shelldir)
-        self.wkdir = f'{self.outdir}/work_files'
-        utils.mkdir(self.wkdir)
-        self.statdir = f'{self.outdir}/statistics'
-        utils.mkdir(self.statdir)
+#    def makeGeneralDir(self):
+#        self.shelldir = f'{self.outdir}/shell'
+#        utils.mkdir(self.shelldir)
+#        self.wkdir = f'{self.outdir}/work_files'
+#        utils.mkdir(self.wkdir)
+#        self.statdir = f'{self.outdir}/statistics'
+#        utils.mkdir(self.statdir)
     def mkBwaIdx(self):
         "Make bwa index for votus."
         cmd = [utils.selectENV('VC-Quantify')]

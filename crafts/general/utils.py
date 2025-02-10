@@ -13,7 +13,7 @@ except ImportError as e:
 Please activate conda base environment using `conda activate` command...''')
     exit(1)
 
-def get_conda_env_dir(env_name):
+def get_conda_env_dir(env_name: str):
     envs_dir = os.path.join(context.root_prefix, 'envs')
     env_dir = os.path.join(envs_dir, env_name)
     return env_dir
@@ -23,10 +23,19 @@ def mkdir(name: str):
         os.makedirs(name)
     return 0
 
+def make_general_dir(outdir: str):
+    shell_dir = f'{outdir}/shell'
+    mkdir(shell_dir)
+    wkfile_dir = f'{outdir}/work_files'
+    mkdir(wkfile_dir)
+    stat_dir = f'{outdir}/statistics'
+    mkdir(stat_dir)
+    return shell_dir, workfiles_dir, stat_dir
+
 def printSH(sh_path: str, command: list):
     SHPATH = open(sh_path, 'w')
-    scripts = ' '.join(command).replace('\n ','\n')
-    scripts = scripts.replace(' \n ','\n')
+    scripts = ' '.join(command).replace('\n ', '\n')
+    scripts = scripts.replace(' \n ', '\n')
     SHPATH.write('#!/bin/bash\nset -e\nset -o pipefail\n' + scripts)
     SHPATH.close()
     return 0

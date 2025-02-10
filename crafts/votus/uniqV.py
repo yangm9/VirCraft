@@ -1,5 +1,6 @@
 from os import path
 from ..general import utils
+from ..data.bioseq import Seq
 from ..identify.viridsop import VirScan
 from ..identify.viralDetectors import VirDetectTools
 
@@ -51,9 +52,8 @@ class VirRef(VirScan):
              'pie_plot.R', checkv_qual, 'provirus', wkdir, '\n',
              'pie_plot.R', checkv_qual, 'miuvig_quality', wkdir, '\n']
         )
-        tmp_cmd = self.statFA(cutoff)
-        cmd.extend(self.statFA(cutoff))
-        cmd.extend(tmp_cmd)
+        FastA = Seq(votus, self.outdir)
+        cmd.extend(FastA.statFA())
         VDT=VirDetectTools(
             fasta=votus,
             outdir=self.wkdir,

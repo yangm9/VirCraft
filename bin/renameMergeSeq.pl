@@ -51,7 +51,8 @@ foreach my $i(0 .. $#mags){
         if(/^>/){
             $line =~ s/^>//;
             $line = &fabricateMAGName($line) if($seqtype eq "MAG");
-            $line = $mag_name."_".$line; #For MAGs
+            $line =~ s/_length_.*_cov_.*$//;
+            $line = $mag_name . "_" . $line; #For MAGs
             print OUT ">$line\n";
         }else{
             print OUT "$line\n";    
