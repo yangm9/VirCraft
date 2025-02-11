@@ -74,6 +74,5 @@ class VirHost(VirRef):
         cmd.extend(self.hostTaxa(gtdbtk))
         shell = f'{self.shelldir}/{self.name}_hosts.sh'
         utils.printSH(shell, cmd)
-        results = ''
-        if not unrun: results = utils.execute(shell)
+        results = 0 if unrun else utils.execute(shell)
         return results

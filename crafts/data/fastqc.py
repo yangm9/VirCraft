@@ -71,6 +71,5 @@ class QualCtrl(Reads):
             cmd.extend(['rm -f', unused_fqs_str, '\n'])
         shell = f'{self.shell_dir}/{self.samp}_readsqc.sh'
         utils.printSH(shell, cmd)
-        results = ''
-        if not unrun: results = utils.execute(shell)
+        results = 0 if unrun else utils.execute(shell)
         return results

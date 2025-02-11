@@ -54,8 +54,10 @@ class VirRef(VirDetectTools):
              'pie_plot.R', checkv_qual, 'miuvig_quality', self.stat_dir, '\n']
         )
         cmd.extend(self.statFA())
+        outdir = self.outdir
         self.outdir = self.wkfile_dir
         tmp_cmd, vbdir = self.vibrant(str(cutoff))
+        self.outdir = outdir #self.outdir need to be changed back to its original value
         cmd.extend(tmp_cmd)
         votus_prefix = f'{self.name}_votus'
         vb_vir_info = f'{self.wkfile_dir}/VIBRANT_{votus_prefix}/VIBRANT_results_{votus_prefix}/VIBRANT_genome_quality_{votus_prefix}.tsv'
@@ -73,6 +75,5 @@ class VirRef(VirDetectTools):
         cmd.extend(self.votuQC(votus, cutoff))
         shell = f'{self.shell_dir}/{self.name}_votu.sh'
         utils.printSH(shell, cmd)
-        results = ''
-        if not unrun: results = utils.execute(shell)
+        results = 0 if unrun else utils.execute(shell)
         return results

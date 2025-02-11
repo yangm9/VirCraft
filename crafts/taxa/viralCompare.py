@@ -37,9 +37,8 @@ class EnviComp(ORF):
         )
         return cmd
     def CompSeq(self, unrun=False):
-        cmd = self.vcontact2()
+        cmd = self.vcontact2('')
         shell = f'{self.shell_dir}/viral_datasets_compare.sh'
         utils.printSH(shell, cmd)
-        results = ''
-        if not unrun: results = utils.execute(shell)
+        results = 0 if unrun else utils.execute(shell)
         return results

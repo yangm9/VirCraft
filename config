@@ -4,7 +4,8 @@
 FastpOpts = -q 20 -u 20 -g -c -W 5 -3 -l 50 -f 10 -F 10
 MegahitOpts = --min-contig-len 300 -m 0.9 --k-list 21,33,55,77,99,127
 SPAdesOpts = --careful -m 1300 -k 21,33,55,77,99,127
-VirSorterOpts = --include-groups dsDNAphage, NCLDV, RNA, ssDNA, lavidaviridae 
+VirSorter2Opts = --include-groups dsDNAphage, NCLDV, RNA, ssDNA, lavidaviridae
+
 
 #Databases
 ## Path to blank control 
@@ -33,6 +34,9 @@ NCBIvRefProtDB = /data_backup/database/NCBI_refseq/viral
 
 ## Full path to Demovir tools and database
 DemovirDB = /data_backup/software/biotools/demovir
+
+## Version of vContact2 database
+vContact2DB = ProkaryoticViralRefSeq211-Merged
 
 ## Path to EggNOG database
 EggNOGDB = /data_backup/database/eggnog-mapper

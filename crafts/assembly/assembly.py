@@ -153,6 +153,5 @@ class Assembly(Reads):
         utils.printSH(shell, cmd)
         
         # Execute the shell script if not in unrun mode
-        results=''
-        if not unrun: results = utils.execute(shell)
+        results = 0 if unrun else utils.execute(shell)
         return results

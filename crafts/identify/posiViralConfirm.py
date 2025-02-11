@@ -55,7 +55,6 @@ class vIdentify(VirDetectTools):
         except ValueError as e:
             print(f'ERROR: {e}')
             exit(1)
-        results = ''
         self.threads = str(self.threads)
         #vibrant
         cmd, wkdir = self.vibrant(cutoff)
@@ -82,6 +81,7 @@ class vIdentify(VirDetectTools):
         )
         shell = f'{self.shell_dir}/{self.name}_batch_identify_virus.sh'
         utils.printSH(shell, cmd)
+        results = ''
         if not unrun: results = utils.execute(shell) 
         self.threads = str(int(self.allthreads))
         cmd = self.vFilter(cutoff, mode)

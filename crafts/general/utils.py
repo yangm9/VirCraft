@@ -73,7 +73,7 @@ def execute(sh_file: str):
     log_file = f'{sh_file}.log'
     error_file = f'{sh_file}.error'
     try:
-        result=subprocess.run(['bash', sh_file], capture_output=True, text=True, check=True)
+        result = subprocess.run(['bash', sh_file], capture_output=True, text=True, check=True)
         with open(log_file, 'w') as log_f:
             log_f.write(result.stdout)
         with open(error_file, 'w') as error_f:
@@ -84,7 +84,7 @@ def execute(sh_file: str):
             log_f.write(e.stdout)
         with open(error_file, 'a') as error_f:
             error_f.write(e.stderr)
-        print(f"Script {sh_file} failed with error. Check {error_file} for details.")
+        print(f'Script {sh_file} failed with error.\nCheck {error_file} for details.')
         return e.returncode
     except Exception as e:
         print(f'Unexpected error: {e}')

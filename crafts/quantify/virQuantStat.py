@@ -84,6 +84,5 @@ class VirAbdStat(multiVirCount):
         cmd.extend(self.diversity(abd))
         shell = f'{self.shelldir}/{self.name}_vir_count.sh'
         utils.printSH(shell, cmd)
-        results = ''
-        if not unrun: results = utils.execute(shell)
+        results = 0 if unrun else utils.execute(shell)
         return results

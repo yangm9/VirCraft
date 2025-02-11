@@ -40,15 +40,13 @@ class VirTaxa(Seq):
         wkdir = f'{self.wkfile_dir}/demovir'
         utils.mkdir(wkdir)
         cmd = [utils.selectENV('VC-General')]
-        cmd.extend(['cd', wkdir, '\n'])
         demovir_db = self.confDict['DemovirDB']
         TrEMBL_viral_taxa = f'{demovir_db}/TrEMBL_viral_taxa.RDS'
-        cmd.extend(['ln -s', TrEMBL_viral_taxa, '\n'])
         uniprot_trembl_viral = f'{demovir_db}/uniprot_trembl.viral.udb'
-        cmd.extend(['ln -s', uniprot_trembl_viral, '\n'])
         demovir = f'{sys.path[0]}/bin/demovir.*'
         cmd.extend(
-            ['cp', demovir, '.', '&& ./demovir.sh',self.fasta,self.threads,'\n']
+            ['cd', wkdir, '&& ln', TrEMBL_viral_taxa, '&& ln', uniprot_trembl_viral, '\n',
+             'cp', demovir, '.', '&& ./demovir.sh',self.fasta,self.threads,'\n']
         )
         votu_taxa = f'{wkdir}/DemoVir_assignments.txt'
         return cmd, votu_taxa
@@ -67,13 +65,12 @@ class VirTaxa(Seq):
         cmd.extend(tmp_cmd)
         Comp = EnviComp(
             fasta=orf_faa,
-            outdir=self.wkfile_dir,
+            outdir=self.outdir,
             threads=self.threads
         )
-        cmd.extend(Comp.vcontact2(''))
+        cmd.extend(Comp.vcontact2(vcont_db=self.confDict['vContact2DB']))
         cmd.extend(self.mergeTaxa(demovir_taxa, ncbi_taxa))
         shell = f'{self.shell_dir}/{self.name}_classify.sh'
         utils.printSH(shell, cmd)
-        results = ''
-        if not unrun: results = utils.execute(shell)
+        results = 0 if unrun else utils.execute(shell)
         return results

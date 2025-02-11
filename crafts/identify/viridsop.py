@@ -1,8 +1,8 @@
 import os
 from ..general import utils
-from ..data.bioseq import Seq
+from .viralDetectors import VirDetectTools
 
-class VirScan(Seq):
+class VirScan(VirDetectTools):
     '''
     According to the Viral sequence identification SOP with VirSorter2 (https://www.protocols.io/view/viral-sequence-identification-sop-with-virsorter2-5qpvoyqebg4o/v3)
     '''
@@ -10,31 +10,6 @@ class VirScan(Seq):
     def __init__(self, fasta=None, outdir=None, threads=8):
         super().__init__(fasta, outdir)
         self.threads = str(threads)
-    def virsorter(self, in_fa: str, n: int, min_length=1500, min_score=0.5):
-        idx = str(n+1)
-        min_score = str(min_score)
-        min_length = str(min_length)
-        wkdir = f'{self.wkfile_dir}/vs2-pass{idx}'
-        utils.mkdir(wkdir)
-        cmd = [utils.selectENV('VC-VirSorter2')]
-        cmd.extend(
-            ['virsorter run', self.vs2_subcmds[n], '-i', in_fa, '-d', self.confDict['VirSorter2DB'], '-w', wkdir, '--include-groups dsDNAphage,NCLDV,RNA,ssDNA,lavidaviridae', '-j', self.threads, '--min-length', min_length, '--min-score', min_score, 'all\n']
-        )
-        return cmd,wkdir
-    def checkv(self, in_fa: str):
-        wkdir = f'{self.wkfile_dir}/checkv'
-        utils.mkdir(wkdir)
-        cmd = [utils.selectENV('VC-CheckV')]
-        cmd.extend(
-            ['checkv', 'end_to_end', in_fa, wkdir, '-d', self.confDict['CheckvDB'], '-t', self.threads, '\n']
-        )
-        provir_fna = f'{wkdir}/proviruses.fna'
-        vir_fna = f'{wkdir}/viruses.fna'
-        out_fa = f'{wkdir}/combined.fna'
-        cmd.extend(
-            ['cat', provir_fna, vir_fna, '>', out_fa, '\n']
-        )
-        return cmd,out_fa
     def annotate(self, indir: str):
         vs2_fa = f'{indir}/for-dramv/final-viral-combined-for-dramv.fa'
         vs2_tab = f'{indir}/for-dramv/viral-affi-contigs-for-dramv.tab'
@@ -75,7 +50,7 @@ class VirScan(Seq):
         return cmd
     def Identify(self, unrun=False):
         #Step 1 Run VirSorter2
-        tmp_cmd, wkdir = self.virsorter(self.fasta, 0)
+        tmp_cmd, wkdir = self.virsorter2(self.fasta, 0)
         cmd.extend(tmp_cmd)
         #Step 2 Run CheckV
         vs2_fa = f'{wkdir}/final-viral-combined.fa'
@@ -93,6 +68,5 @@ class VirScan(Seq):
         #Generate shell and exeute it
         shell = f'{self.shell_dir}/{self.name}_find_vir.sh'
         utils.printSH(shell, cmd)
-        results = ''
-        if not unrun: results=utils.execute(shell)
+        results = 0 if unrun else utils.execute(shell)
         return results
