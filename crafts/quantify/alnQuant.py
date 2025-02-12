@@ -1,7 +1,5 @@
 from ..general import utils
 from ..data.bioseq import Reads
-from ..data.bioseq import Seq
-from ..identify.viridsop import VirScan
 
 class VirCount(Reads):
     coverm_args = '--min-read-percent-identity 0.95 --min-read-aligned-length 50 --min-covered-fraction 10 -m mean'
@@ -13,8 +11,8 @@ class VirCount(Reads):
         '''
         Align the reads to the vOTUs for each sample.
         '''
-        raw_bam = f'{self.wkdir}/{samp}.raw.bam'
-        sort_bam = f'{self.wkdir}/{samp}.sort.bam'
+        raw_bam = f'{self.wkfile_dir}/{samp}.raw.bam'
+        sort_bam = f'{self.wkfile_dir}/{samp}.sort.bam'
         cmd = [utils.selectENV('VC-Quantify')]
         cmd.extend(
             ['bwa mem', '-t', self.threads, bwa_idx, self.fastqs[0], self.fastqs[1], '|samtools view', '-o', raw_bam, '-@ 28 -b -S\n',
@@ -22,8 +20,8 @@ class VirCount(Reads):
         )
         return cmd
     def coverm(self, samp: str):
-        cov = f'{self.wkdir}/{samp}.cov'
-        sort_bam = f'{self.wkdir}/{samp}.sort.bam'
+        cov = f'{self.wkfile_dir}/{samp}.cov'
+        sort_bam = f'{self.wkfile_dir}/{samp}.sort.bam'
         cmd = [utils.selectENV('VC-Quantify')]
         cmd.extend(
             ['coverm contig', '-b', sort_bam, '-t', self.threads, self.coverm_args, '>', cov, '\n']
@@ -35,7 +33,7 @@ class GeneCount(Reads):
         super().__init__(fq1, fq2, outdir)
         self.threads = str(int(threads) // self.BATCH_SIZE)
     def salmon(self, samp: str, salmon_idx: str):
-        wkdir = f'{self.wkdir}/{samp}_gene_quant'
+        wkdir = f'{self.wkfile_dir}/{samp}_gene_quant'
         cmd = [utils.selectENV('VC-Quantify')]
         cmd.extend(
             ['salmon quant --validateMappings','-i', salmon_idx, '-l A', '-p', self.threads, '--meta', '-1', self.fastqs[0], '-2', self.fastqs[1], '-o', wkdir, '\n']

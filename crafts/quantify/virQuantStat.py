@@ -1,7 +1,7 @@
 import os
 from .multiQuant import multiVirCount
 from ..general import utils
-from ..identify.viridsop import VirScan
+from ..identify.viralDetectors import VirDetectTools
 
 #Main Class
 class VirAbdStat(multiVirCount):
@@ -18,8 +18,12 @@ class VirAbdStat(multiVirCount):
             tmp_fa = self.fasta
             tmp_dir = self.wkdir
             tmp_threads = self.threads
-            VirSOP = VirScan(tmp_fa, tmp_dir, tmp_threads)
-            cmd,__ = VirSOP.checkv(tmp_fa)
+            VirDetect = VirDetectTools(
+                fasta=tmp_fa,
+                outdir=tmp_dir,
+                threads=tmp_threads
+            )
+            cmd,__ = VirDetect.checkv(tmp_fa)
             checkv_dir = f'{self.wkdir}/checkv'
         checkv_dir = os.path.abspath(checkv_dir)
         votu_qual = f'{checkv_dir}/quality_summary.tsv'

@@ -1,9 +1,9 @@
 import sys
 from ..general import utils
-from ..data.bioseq import Seq
+from ..identify.viralDetectors import VirDetectTools
 from .viralCompare import EnviComp
 
-class VirTaxa(Seq):
+class VirTaxa(VirDetectTools):
     '''
     Taxonomic assignment
     '''
@@ -57,6 +57,8 @@ class VirTaxa(Seq):
         return cmd
     def Classify(self, unrun=False):
         cmd = [self.envs]
+        tmp_cmd, __ = self.genomad()
+        cmd.extend(tmp_cmd)
         tmp_cmd, orf_faa = self.genePred()
         cmd.extend(tmp_cmd)
         tmp_cmd, ncbi_taxa = self.ncbiRefSeqTaxa(orf_faa)

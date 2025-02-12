@@ -16,4 +16,5 @@ else
     echo "graphviz has been installed!"
 fi
 
-pyreverse -o pdf -d . -p VirCraft --colorized --max-color-depth 8 ../crafts
+#pyreverse -o pdf -d . -p VirCraft --colorized --max-color-depth 8 ../crafts
+pyreverse -o pdf -d . -p VirCraft ../crafts

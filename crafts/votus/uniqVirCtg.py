@@ -1,6 +1,5 @@
 from os import path
 from ..general import utils
-from ..data.bioseq import Seq
 from ..identify.viralDetectors import VirDetectTools
 
 class VirRef(VirDetectTools):

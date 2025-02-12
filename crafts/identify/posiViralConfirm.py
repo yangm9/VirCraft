@@ -1,5 +1,4 @@
 import os
-import sys
 from ..general import utils
 from ..data.bioseq import Seq
 from ..identify.viralDetectors import VirDetectTools

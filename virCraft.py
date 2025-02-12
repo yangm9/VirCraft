@@ -13,7 +13,7 @@ from crafts.assembly import assembly
 from crafts.identify import viridsop
 from crafts.identify import posiViralConfirm
 from crafts.config import arguments
-from crafts.votus import uniqV
+from crafts.votus import uniqVirCtg
 from crafts.taxa import viralClassifier
 from crafts.taxa import viralCompare
 from crafts.quantify import virQuantStat
@@ -103,7 +103,7 @@ def identify(args):
 
 @logger.Log(level='INFO')
 def votus(args):
-    vOTUs = uniqV.VirRef(
+    vOTUs = uniqVirCtg.VirRef(
         fasta=args.fasta,
         outdir=args.outdir,
         threads=args.threads

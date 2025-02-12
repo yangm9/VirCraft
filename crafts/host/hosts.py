@@ -1,7 +1,7 @@
 import os
 import sys
 from ..general import utils
-from ..votus.uniqV import VirRef
+from ..votus.uniqVirCtg import VirRef
 
 class VirHost(VirRef):
     '''
