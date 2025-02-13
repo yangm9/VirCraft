@@ -128,6 +128,19 @@ Usage: {name} <subcommand> [options] -o <outdir>
         '-m', '--method', action='store', type=str, dest='method', metavar='STR', default='blast', required=False,
         help='vOTU clustering method, including "blast" and "cdhit". [default=blast]'
     )
+
+#---------------------binning------------------------
+    subpsr = subparsers.add_parser(
+        'binning',
+        help=''
+    )
+    subpsr = addFaArg(subpsr)
+    subpsr = addGlbArg(subpsr)
+    subpsr.add_argument(
+        '-m', '--method', action='store', type=str, dest='method', metavar='STR', default='blast', required=False,
+        help='vOTU clustering method, including "blast" and "cdhit". [default=blast]'
+    )
+
 #---------------------classify------------------------
     subpsr = subparsers.add_parser(
         'classify',
