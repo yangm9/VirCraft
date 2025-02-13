@@ -90,16 +90,20 @@ class VirSeq(Seq):
     envs = utils.selectENV('VC-CheckV')
     def __init__(self, fasta=None, outdir=None, *args, **kwargs):
         super().__init__(fasta, outdir, *args, **kwargs)
-    def checkv(self):
-        cmd = [self.envs]
+    def checkv(self, in_fa: str):
         wkdir = f'{self.outdir}/checkv'
         utils.mkdir(wkdir)
-        cmd = ['checkv', 'end_to_end', self.fasta,wkdir, '-d', self.confDict['CheckvDB'], '-t', self.threads, '\n']
+        cmd = [self.envs]
+        cmd.extend(
+            ['checkv', 'end_to_end', in_fa, wkdir, '-d', self.confDict['CheckvDB'], '-t', self.threads, '\n']
+        )
         provir_fna = f'{wkdir}/proviruses.fna'
         vir_fna = f'{wkdir}/viruses.fna'
-        merged_fa = f'{wkdir}/combined.fna'
-        cmd.extend(['cat', provir_fna, vir_fna, '>', out_fa, '\n'])
-        return cmd, merged_fa
+        merged_fna = f'{wkdir}/combined.fna'
+        cmd.extend(
+            ['cat', provir_fna, vir_fna, '>', merged_fna, '\n']
+        )
+        return cmd, wkdir
 
 class CDS(Seq):
     envs = utils.selectENV('VC-Quantify')

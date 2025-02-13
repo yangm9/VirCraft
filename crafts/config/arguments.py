@@ -176,7 +176,6 @@ Usage: {name} <subcommand> [options] -o <outdir>
         help='Gene annotation and quantification'
     )
     subpsr = addFaArg(subpsr)
-    subpsr = addCheckVArg(subpsr)
     subpsr = addGlbArg(subpsr)
 
 #-----------------------host_pred---------------------

@@ -8,11 +8,11 @@ class vIdentify(VirDetectTools):
     Main Scripts of identify module.
     self.BATCH_SIZE initialized as 4 in VirCfg class will be used to divide the input threads into 2*self.BATCH_SIZE portions, with 2 allocated to VirSorter2, and the other 2 allocated to VIBRANT and DeepVirFinder respectively.
     '''
-    def __init__(self,fasta = None, outdir = None, threads = 8):
+    def __init__(self, fasta=None, outdir=None, threads=8):
         super().__init__(fasta, outdir)
         self.allthreads = threads
         self.threads = int(threads) // (self.BATCH_SIZE * 2)
-    def vFilter(self, cutoff = 1500, mode = 'permissive'):
+    def vFilter(self, cutoff=1500, mode='permissive'):
         mode_dict = {'permissive' : '1', 'strict' : '2'}
         score_tsv = f'{self.wkfile_dir}/all_viral_ctgs.score.tsv'
         score_filt_tsv = utils.insLable(score_tsv, mode)
@@ -27,9 +27,9 @@ class vIdentify(VirDetectTools):
              'cut -f 1', score_filt_tsv, "|sed '1d' >", viral_filt_ctg_list, '&& extrSeqByName.pl', viral_filt_ctg_list, self.fasta, viral_filt_ctgs_fna, '\n']
         )
         if cutoff <= 5000:
-            tmp_cmd, checkv_fa = self.checkv(viral_filt_ctgs_fna)
+            tmp_cmd, checkv_dir = self.checkv(viral_filt_ctgs_fna)
             cmd.extend(tmp_cmd)
-            quality_summary_tsv = os.path.dirname(checkv_fa) + '/quality_summary.tsv'
+            quality_summary_tsv = checkv_dir + '/quality_summary.tsv'
             cmd.extend([utils.selectENV('VC-General')])
             cmd.extend(
                 ['vir_qual_filt.py', quality_summary_tsv, viral_filt_ctgs_fna, viral_posi_ctgs_fna, '\n']
@@ -38,16 +38,15 @@ class vIdentify(VirDetectTools):
             cmd.extend(
                 ['cp', viral_filt_ctgs_fna, viral_posi_ctgs_fna, '\n']
             )
-        FastA = Seq(
-            viral_posi_ctgs_fna,
-            self.outdir
-        )
-        cmd.extend(FastA.statFA())
+        outdir = self.outdir
+        self.outdir = viral_posi_ctgs_fna
+        cmd.extend(self.statFA()) # Invoke the statFA() method from the Seq module
+        self.outdir = outdir
         cmd.extend(
             ['cd', self.outdir, '&& ln', score_tsv, '&& ln', viral_posi_ctgs_fna, '\n']
         )
         return cmd
-    def Identify(self, cutoff = 1500, mode = 'permissive', unrun = False):
+    def Identify(self, cutoff=1500, mode='permissive', unrun=False):
         try:
             if int(self.allthreads) < 8:
                 raise ValueError('The threads number must not be less than 8!!!')

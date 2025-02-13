@@ -1,10 +1,10 @@
 import os
 from ..general import utils
-from ..data.bioseq import Seq
+from ..data.bioseq import VirSeq
 
-class VirDetectTools(Seq):
+class VirDetectTools(VirSeq):
     '''
-    Generate command for VirSorter2, DeepVirFinder, VIBRANT, geNomad, Contig Annotation Tool (CAT) and CheckV.
+    Generate command for VirSorter2, DeepVirFinder, VIBRANT, geNomad, Contig Annotation Tool (CAT).
     '''
     vs2_subcmds = ['--keep-original-seq', '--seqname-suffix-off --viral-gene-enrich-off --provirus-off --prep-for-dramv']
     def __init__(self, fasta=None, outdir=None, threads=8):
@@ -65,18 +65,3 @@ class VirDetectTools(Seq):
             'host_orf_rate_from_CAT.py', orf_annot,orf_rate, '\n']
         )
         return cmd, wkdir
-
-    def checkv(self, in_fa: str):
-        wkdir = f'{self.wkfile_dir}/checkv'
-        utils.mkdir(wkdir)
-        cmd = [utils.selectENV('VC-CheckV')]
-        cmd.extend(
-            ['checkv', 'end_to_end', in_fa, wkdir, '-d', self.confDict['CheckvDB'], '-t', self.threads, '\n']
-        )
-        provir_fna = f'{wkdir}/proviruses.fna'
-        vir_fna = f'{wkdir}/viruses.fna'
-        out_fa = f'{wkdir}/combined.fna'
-        cmd.extend(
-            ['cat', provir_fna, vir_fna, '>', out_fa, '\n']
-        )
-        return cmd, out_fa

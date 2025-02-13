@@ -54,7 +54,8 @@ class VirScan(VirDetectTools):
         cmd.extend(tmp_cmd)
         #Step 2 Run CheckV
         vs2_fa = f'{wkdir}/final-viral-combined.fa'
-        tmp_cmd, checkv_fa = self.checkv(vs2_fa)
+        tmp_cmd, checkv_dir = self.checkv(vs2_fa)
+        checkv_fa = checkv_dir + '/combined.fna'
         cmd.extend(tmp_cmd)
         #Step 3 rerun VirSorter2 
         tmp_cmd, wkdir = self.virsorter(checkv_fa, 1)

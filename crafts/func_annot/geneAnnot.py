@@ -1,7 +1,7 @@
 from ..general import utils
-from ..data.bioseq import Seq
+from ..data.bioseq import VirSeq
 
-class GeneFunc(Seq):
+class GeneFunc(VirSeq):
     '''
     Gene function annotation.
     1) Predict genes from fasta file;

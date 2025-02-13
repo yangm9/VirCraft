@@ -1,13 +1,13 @@
 import os
 from ..general import utils
-from ..data.bioseq import Seq
+from ..data.bioseq import VirSeq
 from ..data.bioseq import CDS
 from .alnQuant import VirCount
 from .alnQuant import GeneCount
 
 #Running virus or gene abundance analysis in batch
 
-class multiVirCount(Seq):
+class multiVirCount(VirSeq):
     def __init__(self, samp_info=None, fasta=None, outdir=None, threads=8):
         super().__init__(fasta, outdir)
         self.samp_info = os.path.abspath(samp_info)

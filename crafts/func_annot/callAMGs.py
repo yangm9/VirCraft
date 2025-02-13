@@ -20,24 +20,22 @@ class AMGs(VirDetectTools):
             'DRAM-v.py distill', '-i', anno_tsv, '-o', distill_dir, '\n']
         )
         return cmd, wkdir
-    def mergeResults(self, dmvdir, vbdir):
+    def mergeResults(self, dmvdir: str, vbdir: str):
         cmd = [utils.selectENV('VC-General')]
-        cmd.extend(['AMGs_filter.py', dmvdir, vbdir, self.wkfile_dir, '\n'])
+        cmd.extend(['vb_dmv_annot_merge.py', dmvdir, vbdir, self.wkfile_dir, '\n'])
         return cmd
-    def annotBatchSH(self, orf_faa):
-        GF = GeneFunc(
-            fasta=self.fasta,
-            outdir=self.wkfile_dir,
-            threads=self.threads
-        )
-        cmd = GF.eggnogAnno(orf_faa)
+    def annotBatchSH(self, orf_faa: str):
+        outdir = self.outdir
+        self.outdir = self.wkfile_dir
+        cmd = self.eggnogAnno(orf_faa) # invoke eggnogAnno() method from GeneFunc
         shell = f'{self.shell_dir}/{self.name}_eggnog_anno.sh'
         utils.printSH(shell, cmd)
-        cmd = GF.keggAnno(orf_faa)
+        cmd = self.keggAnno(orf_faa) # invoke keggAnno() method from GeneFunc
+        self.outdir = outdir
         shell = f'{self.shell_dir}/{self.name}_kegg_anno.sh'
         utils.printSH(shell, cmd)
         return 0
-    def amgBatchSH(self, vs2_dramv_fa, vs2_dramv_tab):
+    def amgBatchSH(self, vs2_dramv_fa: str, vs2_dramv_tab: str):
         cmd, dmvdir = self.dramv(vs2_dramv_fa, vs2_dramv_tab)
         shell = f'{self.shell_dir}/{self.name}_dramv_amg.sh'
         utils.printSH(shell, cmd)
@@ -48,9 +46,9 @@ class AMGs(VirDetectTools):
         shell = f'{self.shell_dir}/{self.name}_vibrant_amg.sh'
         utils.printSH(shell, cmd)
         return dmvdir, vbdir
-    def annotAMGs(self, checkv_dir=None, unrun=False):
+    def annotAMGs(self, unrun=False):
         #step1 VS2
-        cmd, vs2dir = self.virsorter(self.fasta, 1, min_score=0, min_length=1500)
+        cmd, vs2dir = self.virsorter(self.fasta, 1, min_score=0.5, min_length=1500)
         #step2 for DRAM-v and VIBRANT 
         vs2_dramv_fa = f'{vs2dir}/for-dramv/final-viral-combined-for-dramv.fa'
         vs2_dramv_tab = f'{vs2dir}/for-dramv/viral-affi-contigs-for-dramv.tab'

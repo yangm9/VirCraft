@@ -138,7 +138,7 @@ def generate_amgs_table(dm_vb_merged_annot):
     wkdir = os.path.dirname(dm_vb_merged_annot)
     all_merged_annot = f'{wkdir}/all_merged_annotation.tsv'
     df.to_csv(all_merged_annot, sep='\t', index=False)
-    df=df.query(amg_criteria)
+    df = df.query(amg_criteria)
     filt_merged_annot = f'{wkdir}/filted_merged_amg.tsv'
     df.to_csv(filt_merged_annot, sep='\t', index=False)
     return 0

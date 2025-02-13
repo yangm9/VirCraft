@@ -5,7 +5,7 @@ from ..identify.viralDetectors import VirDetectTools
 
 #Main Class
 class VirAbdStat(multiVirCount):
-    def __init__(self, samp_info=None, fasta=None, outdir=None,threads=8):
+    def __init__(self, samp_info=None, fasta=None, outdir=None, threads=8):
         super().__init__(samp_info, fasta, outdir, threads)
     def mergeAbd(self): #Heatmap for contigs abundance
         abd = f'{self.wkdir}/all_merged.cov'

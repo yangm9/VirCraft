@@ -23,7 +23,7 @@ from crafts.func_annot import geneAnnot
 from crafts.func_annot import callAMGs
 from crafts.general import logger
 
-
+#----------------------setup_env-----------------------
 @logger.Log(level='INFO')
 def setup_env(args):
     ENV = installENV.ENV(
@@ -36,6 +36,7 @@ def setup_env(args):
     )
     return 0
 
+#----------------------setup_db-----------------------
 @logger.Log(level='INFO')
 def setup_db(args):
     DB = deployDB.DB(
@@ -47,6 +48,7 @@ def setup_db(args):
     )
     return 0
 
+#----------------------reads_qc-----------------------
 @logger.Log(level='INFO')
 def reads_qc(args):
     Reads = fastqc.QualCtrl(
@@ -62,6 +64,7 @@ def reads_qc(args):
     )
     return 0
 
+#----------------------assemble-----------------------
 @logger.Log(level='INFO')
 def assemble(args):
     Draft = assembly.Assembly(
@@ -77,30 +80,32 @@ def assemble(args):
     )
     return 0
 
+#----------------------identify-----------------------
 @logger.Log(level='INFO')
 def identify(args):
     if args.sop == 'viral-id-sop':
-        VirSeq=viridsop.VirScan(
+        VirCtg = viridsop.VirScan(
             fasta=args.fasta,
             outdir=args.outdir,
             threads=args.threads
         )
-        VirSeq.Identify(
+        VirCtg.Identify(
             unrun=args.unrun
         )
     else:
-        VirSeq=posiViralConfirm.vIdentify(
+        VirCtg = posiViralConfirm.vIdentify(
             fasta=args.fasta,
             outdir=args.outdir,
             threads=args.threads
         )
-        VirSeq.Identify(
+        VirCtg.Identify(
             cutoff=args.cutoff,
             mode=args.mode,
             unrun=args.unrun
         )
     return 0
 
+#-----------------------votus-------------------------
 @logger.Log(level='INFO')
 def votus(args):
     vOTUs = uniqVirCtg.VirRef(
@@ -115,6 +120,7 @@ def votus(args):
     )
     return 0
 
+#---------------------classify------------------------
 @logger.Log(level='INFO')
 def classify(args):
     Taxa = viralClassifier.VirTaxa(
@@ -127,6 +133,7 @@ def classify(args):
     )
     return 0
 
+#---------------------compare-------------------------
 @logger.Log(level='INFO')
 def compare(args):
     NWK = viralCompare.EnviComp(
@@ -140,9 +147,10 @@ def compare(args):
     )
     return 0
 
+#-----------------------host_pred---------------------
 @logger.Log(level='INFO')
 def host_pred(args):
-    Hosts=hosts.VirHost(
+    Hosts = hosts.VirHost(
         fasta=args.fasta,
         hostsdir=args.hostsdir,
         outdir=args.outdir,
@@ -155,6 +163,7 @@ def host_pred(args):
     )
     return 0
 
+#-----------------------func_annot---------------------
 @logger.Log(level='INFO')
 def func_annot(args):
     #print('Function annotation')
@@ -174,6 +183,7 @@ def func_annot(args):
     )
     return 0
 
+#---------------------vir_quant-----------------------
 @logger.Log(level='INFO')
 def vir_quant(args):
     VirQuant = virQuantStat.VirAbdStat(
@@ -189,6 +199,7 @@ def vir_quant(args):
     )
     return 0
 
+#-----------------------gene_quant---------------------
 @logger.Log(level='INFO')
 def gene_quant(args):
     GeneQuant = geneQuantStat.GeneAbdStat(
