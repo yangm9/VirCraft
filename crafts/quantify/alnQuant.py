@@ -2,8 +2,6 @@ from ..general import utils
 from ..data.bioseq import Reads
 
 class VirCount(Reads):
-    coverm_args = '--min-read-percent-identity 0.95 --min-read-aligned-length 50 --min-covered-fraction 10 -m mean'
-    #coverm_args='--min-read-percent-identity 0.95 --min-read-aligned-length 50 --min-covered-fraction 10 --proper-pairs-only -m mean'
     def __init__(self, fq1=None, fq2=None, outdir=None, threads=8):
         super().__init__(fq1,fq2,outdir)
         self.threads = str(int(threads) // self.BATCH_SIZE)
@@ -19,12 +17,12 @@ class VirCount(Reads):
             'samtools sort', raw_bam, '-o', sort_bam,'-@ 28\n', 'rm -f', raw_bam, '\n', 'samtools index', sort_bam, '\n']
         )
         return cmd
-    def coverm(self, samp: str):
+    def coverm(self, samp: str, method='mean'):
         cov = f'{self.wkfile_dir}/{samp}.cov'
         sort_bam = f'{self.wkfile_dir}/{samp}.sort.bam'
         cmd = [utils.selectENV('VC-Quantify')]
         cmd.extend(
-            ['coverm contig', '-b', sort_bam, '-t', self.threads, self.coverm_args, '>', cov, '\n']
+            ['coverm contig', '-m', method, '-b', sort_bam, '-t', self.threads, self.confDict['CoverMOpts'], '>', cov, '\n']
         )
         return cmd
 

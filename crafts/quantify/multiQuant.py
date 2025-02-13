@@ -18,10 +18,15 @@ class multiVirCount(VirSeq):
         for samp in self.sampDict.keys():
             cmd = [utils.selectENV('VC-General')]
             fq1, fq2 = self.sampDict[samp][1].split(',')
-            Count = VirCount(fq1, fq2, self.wkdir, self.threads)
+            Count = VirCount(
+                fq1=fq1, 
+                fq2=fq2, 
+                outdir=self.wkfile_dir,
+                threads=self.threads
+            )
             cmd.extend(Count.bwa(samp, bwa_idx))
             cmd.extend(Count.coverm(samp))
-            shell=f'{self.shelldir}/{samp}_viral_count.sh'
+            shell = f'{self.shell_dir}/{samp}_viral_count.sh'
             utils.printSH(shell, cmd)
         return idx_cmd
 
@@ -37,8 +42,13 @@ class multiGeneCount(CDS):
         for samp in self.sampDict.keys():
             cmd = [self.envs]
             fq1, fq2 = self.sampDict[samp][1].split(',')
-            Count = GeneCount(fq1, fq2, self.outdir, self.threads)
+            Count = GeneCount(
+                fq1=fq1,
+                fq2=fq2, 
+                outdir=self.outdir,
+                threads=self.threads
+            )
             cmd.extend(Count.salmon(samp, salmon_idx))
-            shell = f'{self.outdir}/{samp}_gene_count.sh'
+            shell = f'{self.shell_dir}/{samp}_gene_count.sh'
             utils.printSH(shell, cmd)
         return idx_cmd 
