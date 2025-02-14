@@ -20,7 +20,7 @@ from crafts.quantify import virQuantStat
 from crafts.quantify import geneQuantStat
 from crafts.host import hosts
 from crafts.func_annot import geneAnnot
-from crafts.func_annot import callAMGs
+from crafts.func_annot import callAMG
 from crafts.general import logger
 
 #----------------------setup_env-----------------------
@@ -173,12 +173,12 @@ def func_annot(args):
     #    threads=args.threads
     #)
     #VirGene.FuncAnnot()
-    AMG = callAMGs.AMGs(
+    AMGs = callAMG.AMGs(
         fasta=args.fasta,
         outdir=args.outdir,
         threads=args.threads
     )
-    AMG.annotAMGs(
+    AMGs.annotAMGs(
         unrun=args.unrun
     )
     return 0

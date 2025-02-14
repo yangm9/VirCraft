@@ -1,7 +1,7 @@
 from ..general import utils
-from ..data.bioseq import VirSeq
+from ..identify.viralDetectors import VirDetectTools
 
-class GeneFunc(VirSeq):
+class GeneFunc(VirDetectTools):
     '''
     Gene function annotation.
     1) Predict genes from fasta file;
@@ -11,7 +11,7 @@ class GeneFunc(VirSeq):
         super().__init__(fasta, outdir)
         self.threads = str(threads)
     def eggnogAnno(self, orfs_faa):
-        wkdir = f'{self.wkdir}/eggnog'
+        wkdir = f'{self.wkfile_dir}/eggnog'
         utils.mkdir(wkdir)
         anno_prefix = f'{wkdir}/{self.name}'
         seed_orth = f'{anno_prefix}.emapper.seed_orthologs'
@@ -26,7 +26,7 @@ class GeneFunc(VirSeq):
         )
         return cmd
     def keggAnno(self, orfs_faa):
-        wkdir = f'{self.wkdir}/kegg'
+        wkdir = f'{self.wkfile_dir}/kegg'
         utils.mkdir(wkdir)
         kegg_db = self.confDict['KofamscanDB']
         ko_prof = f'{kegg_db}/profiles'
@@ -50,7 +50,7 @@ class GeneFunc(VirSeq):
         cmd.extend(self.eggnogAnno(orfs_faa))
         cmd.append(utils.selectENV('VC-General'))
         cmd.extend(self.keggAnno(orfs_faa))
-        shell = f'{self.shelldir}/{self.name}_gene_annot.sh'
+        shell = f'{self.shell_dir}/{self.name}_gene_annot.sh'
         utils.printSH(shell, cmd)
         results = utils.execute(shell)
         return results

@@ -63,13 +63,12 @@ class vIdentify(VirDetectTools):
         shell = f'{self.shell_dir}/{self.name}_dvf_ctg.sh'
         utils.printSH(shell, cmd)
         #genomad
-        self.threads = str(int(self.threads))
         cmd, wkdir = self.genomad()
         shell = f'{self.shell_dir}/{self.name}_gm_ctg.sh'
         utils.printSH(shell, cmd)
         #VirSorter2
-        self.threads = str(int(self.allthreads) - (int(self.threads) * 3))
-        cmd, wkdir = self.virsorter(self.fasta, 0, cutoff)
+        self.threads = str(int(self.allthreads) - (int(self.threads) * 3)) #5
+        cmd, wkdir = self.virsorter(in_fa=self.fasta, n=0, min_length=cutoff, min_score=0.5)
         shell = f'{self.shell_dir}/{self.name}_vs2_ctg.sh'
         utils.printSH(shell, cmd)
         #multiple run
@@ -81,7 +80,7 @@ class vIdentify(VirDetectTools):
         utils.printSH(shell, cmd)
         results = ''
         if not unrun: results = utils.execute(shell) 
-        self.threads = str(int(self.allthreads))
+        self.threads = str(self.allthreads) #8
         cmd = self.vFilter(cutoff, mode)
         shell = f'{self.shell_dir}/{self.name}_get_positive_virus.sh'
         utils.printSH(shell, cmd)

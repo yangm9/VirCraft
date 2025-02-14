@@ -10,7 +10,7 @@ class VirDetectTools(VirSeq):
     def __init__(self, fasta=None, outdir=None, threads=8):
         super().__init__(fasta, outdir)
         self.threads = str(threads)
-    def virsorter(self, in_fa: str, n: int, min_length=1500, min_score=0.5):
+    def virsorter(self, in_fa: str, n: int, min_length=1500, min_score=0.5): #n is the index corespoding 2 purpose: 0: for viral identification, and 1 for DRAMv input files
         idx = str(n+1)
         min_score = str(min_score)
         min_length = str(min_length)
@@ -22,7 +22,7 @@ class VirDetectTools(VirSeq):
         )
         return cmd, wkdir
 
-    def deepvirfinder(self, cutoff: int):
+    def deepvirfinder(self, cutoff=1500):
         cutoff = str(cutoff)
         cmd = [utils.selectENV('VC-DeepVirFinder')]
         wkdir = f'{self.wkfile_dir}/deepvirfinder'
@@ -32,7 +32,7 @@ class VirDetectTools(VirSeq):
         )
         return cmd, wkdir
 
-    def vibrant(self, cutoff: int):
+    def vibrant(self, cutoff=1500):
         cutoff = str(cutoff)
         cmd = [utils.selectENV('VC-VIBRANT')]
         wkdir = f'{self.wkfile_dir}/VIBRANT_{self.name}'
