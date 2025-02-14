@@ -172,6 +172,11 @@ Usage: {name} <subcommand> [options] -o <outdir>
     subpsr = addCheckVArg(subpsr)
     subpsr = addGlbArg(subpsr)#,1)
     subpsr = addTaxaArg(subpsr)#,1)
+    subpsr.add_argument(
+        '-m', '--coverm_method', action='store', type=str, dest='coverm_method', metavar='STR', default='mean', required=False,
+        help='Abundance claculation method by CoverM, including "mean", "metabat" and so on. If preparing the input coverage file for VirCraft binning module, "metabat" should be chosen [default=mean]'
+    )
+
     
 #-----------------------gene_quant---------------------
     subpsr = subparsers.add_parser(
@@ -200,7 +205,7 @@ Usage: {name} <subcommand> [options] -o <outdir>
     subpsr = addGlbArg(subpsr)
     subpsr = addTaxaArg(subpsr)#,1)
     subpsr.add_argument(
-        '-m', '--mags', action='store', type=str, dest='hostsdir', metavar='STR', default=False, required=True,
+        '-m', '--host_mags', action='store', type=str, dest='hostsdir', metavar='STR', default=False, required=True,
         help='A directory stored the MAGs of hosts. [required!]'
     )
     subpsr.add_argument(

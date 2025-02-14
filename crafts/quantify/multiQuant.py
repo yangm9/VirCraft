@@ -13,7 +13,7 @@ class multiVirCount(VirSeq):
         self.samp_info = os.path.abspath(samp_info)
         self.groups, self.sampDict = self.readSampInfo(self.samp_info)
         self.threads = str(threads)
-    def virCountBySamp(self):
+    def virCountBySamp(self, coverm_method='mean'):
         idx_cmd,bwa_idx = self.mkBwaIdx()
         for samp in self.sampDict.keys():
             cmd = [utils.selectENV('VC-General')]
@@ -21,11 +21,11 @@ class multiVirCount(VirSeq):
             Count = VirCount(
                 fq1=fq1, 
                 fq2=fq2, 
-                outdir=self.wkfile_dir,
+                outdir=self.outdir,
                 threads=self.threads
             )
             cmd.extend(Count.bwa(samp, bwa_idx))
-            cmd.extend(Count.coverm(samp))
+            cmd.extend(Count.coverm(samp, coverm_method))
             shell = f'{self.shell_dir}/{samp}_viral_count.sh'
             utils.printSH(shell, cmd)
         return idx_cmd

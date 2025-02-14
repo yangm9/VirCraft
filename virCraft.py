@@ -195,6 +195,7 @@ def vir_quant(args):
     VirQuant.QuantStat(
         taxa_anno=args.taxa,
         checkv_dir=args.checkv,
+        coverm_method=args.coverm_method,
         unrun=args.unrun
     )
     return 0

@@ -48,7 +48,7 @@ class Seq(VirCfg):
     def mkBwaIdx(self):
         "Make bwa index for votus."
         cmd = [utils.selectENV('VC-Quantify')]
-        bwa_idx = f'{self.wkdir}/{self.name}.BWAIDX'
+        bwa_idx = f'{self.wkfile_dir}/{self.name}.BWAIDX'
         cmd.extend(['bwa index -a bwtsw', self.fasta, '-p', bwa_idx, '\n'])
         shell = f'{self.shell_dir}/{self.name}_bwaidx.sh'
         utils.printSH(shell, cmd)
@@ -112,7 +112,7 @@ class CDS(Seq):
     @property
     def mkSalmonIdx(self):
         cmd = [self.envs]
-        wkdir = f'{self.wkdir}/salmonidx'
+        wkdir = f'{self.wkfile_dir}/salmonidx'
         utils.mkdir(wkdir)
         idx = f'{wkdir}' # A directory
         cmd.extend(
