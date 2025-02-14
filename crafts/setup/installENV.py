@@ -10,8 +10,9 @@ class ENV:
     Install the environments of VirCraft
     '''
     CONDAENVDIR = f'{sys.path[0]}/crafts/setup/conda_env_yaml'
-    ENVDICT = {'reads_qc': 'VC-ReadsQC', 'assemble': 'VC-Assemble', 'virsorter2': 'VC-VirSorter2', 'vibrant': 'VC-VIBRANT', 'deepvirfinder': 'VC-DeepVirFinder',
-               'checkv': 'VC-CheckV', 'vrhyme': 'VC-vRhyme', 'dramv': 'VC-DRAMv', 'vcontact': 'VC-vContact2', 'gtdbtk': 'VC-GTDBTk', 'quantify': 'VC-Quantify', 
+    ENVDICT = {'reads_qc': 'VC-ReadsQC', 'assemble': 'VC-Assemble', 'virsorter2': 'VC-VirSorter2', 'vibrant': 'VC-VIBRANT', 
+               'deepvirfinder': 'VC-DeepVirFinder', 'genomad': 'VC-GeNomad', 'checkv': 'VC-CheckV', 'vrhyme': 'VC-vRhyme',
+               'dramv': 'VC-DRAMv', 'vcontact': 'VC-vContact2', 'gtdbtk': 'VC-GTDBTk', 'quantify': 'VC-Quantify', 
                'vhmatcher': 'VC-VHMatcher', 'general': 'VC-General'}
     def __init__(self, outdir=None, threads=8):
         self.outdir = os.path.abspath(outdir)
