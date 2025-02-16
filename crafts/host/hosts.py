@@ -14,7 +14,7 @@ class VirHost(VirRef):
         '''
         Classify the host MAGs by GTDBTK tools.
         '''
-        wkdir = f'{self.wkdir}/classify_wf'
+        wkdir = f'{self.wkfile_dir}/classify_wf'
         utils.mkdir(wkdir)
         cmd = [utils.selectENV('VC-GTDBTk')]
         cmd.extend(
@@ -25,7 +25,7 @@ class VirHost(VirRef):
         '''
         Predict the hosts for viral contigs using VirMatcher.
         '''
-        wkdir = f'{self.wkdir}/virmatcher'
+        wkdir = f'{self.wkfile_dir}/virmatcher'
         tredir = os.path.abspath(tredir)
         utils.mkdir(wkdir)
         cmd = [utils.selectENV('VC-VHMatcher')]
@@ -37,11 +37,11 @@ class VirHost(VirRef):
         '''
         Add the viral taxonomic annotation for host pridiction results.
         '''
-        wkdir = f'{self.wkdir}/virmatcher'
-        m_taxa_anno = f'{self.wkdir}/all_votu.taxa.txt'
+        wkdir = f'{self.wkfile_dir}/virmatcher'
+        m_taxa_anno = f'{self.wkfile_dir}/all_votu.taxa.txt'
         vh_pred = f'{wkdir}/VirMatcher_Summary_Predictions.tsv'
         taxa_anno = os.path.abspath(taxa_anno)
-        vh_vtaxa = f'{self.wkdir}/VirMatcher_Summary_Predictions.vtaxa.tsv'
+        vh_vtaxa = f'{self.wkfile_dir}/VirMatcher_Summary_Predictions.vtaxa.tsv'
         if not taxa_anno:
             return ['ln -s', vh_pred, vh_vtaxa, '\n']
         cmd = [utils.selectENV('VC-General')]
@@ -55,8 +55,8 @@ class VirHost(VirRef):
         gtdbtk_arc = f'{tredir}/gtdbtk.ar53.summary.tsv'
         gtdbtk_bac = f'{tredir}/gtdbtk.bac120.summary.tsv'
         gtdbtk_bac_tmp = gtdbtk_bac + '.tmp'
-        gtdbtk_hosts = f'{self.wkdir}/gtdbtk.hosts.taxa.tsv'
-        vh_vtaxa = f'{self.wkdir}/VirMatcher_Summary_Predictions.vtaxa.tsv'
+        gtdbtk_hosts = f'{self.wkfile_dir}/gtdbtk.hosts.taxa.tsv'
+        vh_vtaxa = f'{self.wkfile_dir}/VirMatcher_Summary_Predictions.vtaxa.tsv'
         vh_vhtaxa = vh_vtaxa.replace('vtaxa', 'vhtaxa')
         cmd = [utils.selectENV('VC-General')]
         cmd.extend(
@@ -72,7 +72,7 @@ class VirHost(VirRef):
         cmd.extend(self.virmatch(gtdbtk))
         cmd.extend(self.virTaxa(taxa_anno))
         cmd.extend(self.hostTaxa(gtdbtk))
-        shell = f'{self.shelldir}/{self.name}_hosts.sh'
+        shell = f'{self.shell_dir}/{self.name}_hosts.sh'
         utils.printSH(shell, cmd)
         results = 0 if unrun else utils.execute(shell)
         return results
