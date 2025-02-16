@@ -18,7 +18,7 @@ class VirHost(VirRef):
         utils.mkdir(wkdir)
         cmd = [utils.selectENV('VC-GTDBTk')]
         cmd.extend(
-            ['gtdbtk classify_wf', '--genome_dir', self.hostsdir, '--out_dir', wkdir, '--pplacer_cpus', self.threads, '--extension fasta\n']
+            ['gtdbtk classify_wf', '--genome_dir', self.hostsdir, '--out_dir', wkdir, '--pplacer_cpus', self.threads, '--extension fasta --skip_ani_screen\n']
         )
         return cmd, wkdir
     def virmatch(self, tredir):
@@ -26,13 +26,23 @@ class VirHost(VirRef):
         Predict the hosts for viral contigs using VirMatcher.
         '''
         wkdir = f'{self.wkfile_dir}/virmatcher'
-        tredir = os.path.abspath(tredir)
         utils.mkdir(wkdir)
         cmd = [utils.selectENV('VC-VHMatcher')]
         cmd.extend(
             ['VirMatcher --preparer', '--gtdbtk-out-dir', tredir, '--gtdbtk-in-dir', self.hostsdir, '-v', self.fasta, '-o', wkdir, '--threads', self.threads, '--python-aggregator\n']
         )
-        return cmd
+        return cmd, wkdir
+    def iphop(self, tredir: str):
+        '''
+        Predict the hosts for viral contigs using VirMatcher.
+        '''
+        wkdir = f'{self.wkfile_dir}/iphop'
+        utils.mkdir(wkdir)
+        cmd = [utils.selectENV('VC-iPHoP')]
+        cmd.extend(
+            ['iphop add_to_db', '--fna_dir', self.hostsdir, '--gtdb_dir', tredir, '--db_dir', self.confDict['iPHoPDB'], '--num_threads', self.threads, '\n'],
+        )
+        return cmd, wkdir
     def virTaxa(self, taxa_anno=None):
         '''
         Add the viral taxonomic annotation for host pridiction results.

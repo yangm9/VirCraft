@@ -2,6 +2,7 @@ import logging
 from datetime import datetime
 import sys
 
+version = '0.0.15'
 def curr_time():
     return datetime.now().replace(microsecond=0)
 
@@ -47,10 +48,11 @@ class Log:
     def __call__(self, func):
         def wrapper(*args, **kwargs):
             start_time = curr_time()
-            self.logger.info(f"VirCraft {func.__name__} start ...")
+            self.logger.info(f'VirCraft {version} -- A flexible pipeline for metaviromic data analysis')
+            self.logger.info(f'VirCraft {func.__name__} start ...')
             result = func(*args, **kwargs)
             end_time = curr_time()
             elapsed_time = end_time - start_time
-            self.logger.info(f"VirCraft {func.__name__} done!\nElapsed time: {elapsed_time}")
+            self.logger.info(f'VirCraft {func.__name__} done!\nElapsed time: {elapsed_time}')
             return result
         return wrapper

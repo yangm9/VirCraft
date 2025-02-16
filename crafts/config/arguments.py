@@ -51,7 +51,7 @@ def setOpts(name: str, version: str):
         description = f'''VirCraft {version} -- A flexible pipeline for metaviromic data analysis
 
 Usage: {name} <subcommand> [options] -o <outdir>
-    subcommand: an optional functional module, including reads_qc, assemble, identify, votus, classify, compare, vir_quant, func_annot, gene_quant and host_pred.
+    subcommand: an optional functional module, including reads_qc, assemble, identify, votus, binning, classify, compare, host_pred, func_annot, vir_quant and gene_quant.
     options: options described below in the section of Options.
     outdir: output folder.
 ''',

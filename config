@@ -45,6 +45,9 @@ DemovirDB = /data_backup/software/biotools/demovir
 ## Version of vContact2 database, the options to choose from include: ProkaryoticViralRefSeq85-ICTV,ProkaryoticViralRefSeq85-Merged,ProkaryoticViralRefSeq88-Merged,ProkaryoticViralRefSeq94-Merged,ProkaryoticViralRefSeq97-Merged,ProkaryoticViralRefSeq99-Merged,ProkaryoticViralRefSeq201-Merged,ProkaryoticViralRefSeq207-Merged,ProkaryoticViralRefSeq211-Merged,ArchaeaViralRefSeq85-Merged,ArchaeaViralRefSeq94-Merged,ArchaeaViralRefSeq97-Merged,ArchaeaViralRefSeq99-Merged,ArchaeaViralRefSeq201-Merged,ArchaeaViralRefSeq207-Merged,ArchaeaViralRefSeq211-Merged
 vContact2DB = ProkaryoticViralRefSeq211-Merged
 
+## Path to iPHoP database
+iPHoPDB = /data_backup/database/iPHoP
+
 ## Path to EggNOG database
 EggNOGDB = /data_backup/database/eggnog-mapper
 

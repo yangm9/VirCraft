@@ -8,11 +8,12 @@ import sys
 sys.path.append(sys.path[0] + '/crafts')
 from crafts.setup import installENV
 from crafts.setup import deployDB
+from crafts.config import arguments
+from crafts.general import logger
 from crafts.data import fastqc
 from crafts.assembly import assembly
 from crafts.identify import viridsop
 from crafts.identify import posiViralConfirm
-from crafts.config import arguments
 from crafts.votus import uniqVirCtg
 from crafts.taxa import viralClassifier
 from crafts.taxa import viralCompare
@@ -120,6 +121,11 @@ def votus(args):
     )
     return 0
 
+#-----------------------votus-------------------------
+@logger.Log(level='INFO')
+def binning(args):
+    BIN = ""
+    return 0
 #---------------------classify------------------------
 @logger.Log(level='INFO')
 def classify(args):
@@ -215,8 +221,7 @@ def gene_quant(args):
     return 0
 
 def main():
-    version = '0.0.15'
-    parser = arguments.setOpts(sys.argv[0], version)
+    parser = arguments.setOpts(sys.argv[0], logger.version)
     args = parser.parse_args()
     if len(sys.argv) == 1: 
         parser.print_help()
@@ -228,12 +233,13 @@ def main():
         'assemble': assemble,
         'identify': identify,
         'votus': votus, 
+        'binning': binning,
         'classify': classify,
         'compare': compare,
+        'host_pred': host_pred,
+        'func_annot': func_annot,
         'vir_quant': vir_quant,
         'gene_quant': gene_quant,
-        'func_annot': func_annot,
-        'host_pred': host_pred
     }
     moduleDict[sys.argv[1]](args)
     return 0
