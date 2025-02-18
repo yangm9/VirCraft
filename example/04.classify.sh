@@ -1,1 +1,1 @@
-virCraft.py classify -a input.fasta -t 8 -u -o func_annot_test
+virCraft.py classify -a test.fasta -t 8 -u -o func_annot_test

@@ -12,7 +12,7 @@ class ENV:
     CONDAENVDIR = f'{sys.path[0]}/crafts/setup/conda_env_yaml'
     ENVDICT = {'reads_qc': 'VC-ReadsQC', 'assemble': 'VC-Assemble', 'virsorter2': 'VC-VirSorter2', 'vibrant': 'VC-VIBRANT', 
                'deepvirfinder': 'VC-DeepVirFinder', 'genomad': 'VC-GeNomad', 'checkv': 'VC-CheckV', 'vrhyme': 'VC-vRhyme',
-               'dramv': 'VC-DRAMv', 'vcontact': 'VC-vContact2', 'gtdbtk': 'VC-GTDBTk', 'quantify': 'VC-Quantify', 
+               'dramv': 'VC-DRAMv', 'vcontact': 'VC-vContact2', 'gtdbtk': 'VC-GTDBTk', 'iphop': 'VC-iPHoP', 'quantify': 'VC-Quantify', 
                'vhmatcher': 'VC-VHMatcher', 'general': 'VC-General'}
     def __init__(self, outdir=None, threads=8):
         self.outdir = os.path.abspath(outdir)
@@ -20,17 +20,14 @@ class ENV:
         utils.mkdir(self.outdir)
     def is_conda_env(self, env_name):
         try:
-            # 使用conda命令列出已安装的环境
             result = subprocess.run(['conda', 'env', 'list'], capture_output=True, text=True, check=True)
             output_lines = result.stdout.splitlines()
-            # 检查每行输出是否包含指定的环境名称
             env_exist = any(env_name in line for line in output_lines)
             if env_exist:
                 return 1
             else:
                 return 0
         except subprocess.CalledProcessError as e:
-            # 如果无法执行conda命令，则返回-1表示出错
             print(f'ERROR: {e}')
             exit(1)
             return -1

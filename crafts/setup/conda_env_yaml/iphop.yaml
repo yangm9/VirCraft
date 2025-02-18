@@ -1,0 +1,11 @@
+name: VC-iPHoP
+channels:
+  - bioconda
+  - conda-forge
+  - r
+  - defaults
+dependencies:
+  - python=3.8
+  - iphop=1.3.3
+  - perl=5.22.0
+  - perl-data-dumper=2

@@ -15,6 +15,7 @@ from crafts.assembly import assembly
 from crafts.identify import viridsop
 from crafts.identify import posiViralConfirm
 from crafts.votus import uniqVirCtg
+from crafts.votus import virBinning
 from crafts.taxa import viralClassifier
 from crafts.taxa import viralCompare
 from crafts.quantify import virQuantStat
@@ -121,10 +122,19 @@ def votus(args):
     )
     return 0
 
-#-----------------------votus-------------------------
+#---------------------binning-------------------------
 @logger.Log(level='INFO')
 def binning(args):
-    BIN = ""
+    vMAGs = virBinning.VirMAG(
+        fasta=args.fasta,
+        outdir=args.outdir,
+        threads=args.threads
+    )
+    vMAGs = Bin.Binning(
+        gene=args.gene,
+        protein=args.protein,
+        unrun=args.unrun
+    )
     return 0
 #---------------------classify------------------------
 @logger.Log(level='INFO')

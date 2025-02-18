@@ -53,6 +53,8 @@ class Log:
             result = func(*args, **kwargs)
             end_time = curr_time()
             elapsed_time = end_time - start_time
-            self.logger.info(f'VirCraft {func.__name__} done!\nElapsed time: {elapsed_time}')
+            if result == 0:
+                self.logger.info(f'VirCraft {func.__name__} done!')
+            self.logger.info(f'Elapsed time: {elapsed_time}')
             return result
         return wrapper

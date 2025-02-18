@@ -1,4 +1,4 @@
-name: VC-VHMatcher2
+name: VC-iPHoP
 channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/linux-64
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/linux-64

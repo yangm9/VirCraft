@@ -72,30 +72,25 @@ def isInstalled(name: str):
 def execute(sh_file: str):
     log_file = f'{sh_file}.log'
     error_file = f'{sh_file}.error'
+    print(f'Script {sh_file} pending ...')
     try:
         result = subprocess.run(['bash', sh_file], capture_output=True, text=True, check=True)
         with open(log_file, 'w') as log_f:
             log_f.write(result.stdout)
         with open(error_file, 'w') as error_f:
             error_f.write(result.stderr)
+        print(f'Script {sh_file} done.\n')
         return result.returncode
     except subprocess.CalledProcessError as e:
         with open(log_file, 'a') as log_f:
             log_f.write(e.stdout)
         with open(error_file, 'a') as error_f:
             error_f.write(e.stderr)
-        print(f'Script {sh_file} failed with error.\nCheck {error_file} for details.')
+        print(f'Script {sh_file} failed with error.\nCheck {error_file} for details.', file=sys.stderr)
         return e.returncode
     except Exception as e:
-        print(f'Unexpected error: {e}')
-        return 1
-
-def run(cmd):
-    cmd_txt = ' '.join(cmd).replace('\n ', '\n')
-    cmd_txt = cmd_txt.replace(' \n ', '\n')
-    print(f'Running command:\n{cmd_txt}')
-    results = str(os.system(cmd_txt))
-    return results
+        print(f'Unexpected error: {e}', file=sys.stderr)
+        return -1
 
 def show_cmd(cmd):
     cmd_txt = ' '.join(cmd).replace('\n ', '\n')
@@ -129,5 +124,13 @@ def is_file_exist(file_name):
         with open(file_name, 'r') as f:
             return 0
     except FileNotFoundError as e:
-        print(f'FileNotFoundError: {e}')
+        print(f'FileNotFoundError: {e}', file=sys.stderr)
         exit(1)
+
+#def run(cmd):
+#    cmd_txt = ' '.join(cmd).replace('\n ', '\n')
+#    cmd_txt = cmd_txt.replace(' \n ', '\n')
+#    print(f'Running command:\n{cmd_txt}')
+#    results = str(os.system(cmd_txt))
+#    return results
+
