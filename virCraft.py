@@ -32,11 +32,11 @@ def setup_env(args):
         outdir=args.outdir,
         threads=args.threads
     )
-    ENV.Install(
+    rcode = ENV.Install(
         unrun=args.unrun,
         in_wall=args.in_wall
     )
-    return 0
+    return rcode
 
 #----------------------setup_db-----------------------
 @logger.Log(level='INFO')
@@ -45,10 +45,10 @@ def setup_db(args):
         outdir=args.outdir,
         threads=args.threads
     )
-    DB.Deploy(
+    rcode = DB.Deploy(
         unrun=args.unrun    
     )
-    return 0
+    return rcode
 
 #----------------------reads_qc-----------------------
 @logger.Log(level='INFO')
@@ -59,12 +59,12 @@ def reads_qc(args):
         outdir=args.outdir,
         threads=args.threads
     )
-    Reads.readqc(
+    rcode = Reads.readqc(
         process = args.process,
         unrun=args.unrun,
         clear=args.clear
     )
-    return 0
+    return rcode
 
 #----------------------assemble-----------------------
 @logger.Log(level='INFO')
@@ -75,23 +75,24 @@ def assemble(args):
         outdir=args.outdir,
         threads=args.threads
     )
-    Draft.Assemble(
+    rcode = Draft.Assemble(
         process=args.process,
         cutoff=args.cutoff,
         unrun=args.unrun
     )
-    return 0
+    return rcode
 
 #----------------------identify-----------------------
 @logger.Log(level='INFO')
 def identify(args):
+    rcode = 0
     if args.sop == 'viral-id-sop':
         VirCtg = viridsop.VirScan(
             fasta=args.fasta,
             outdir=args.outdir,
             threads=args.threads
         )
-        VirCtg.Identify(
+        rcode = VirCtg.Identify(
             unrun=args.unrun
         )
     else:
@@ -100,12 +101,12 @@ def identify(args):
             outdir=args.outdir,
             threads=args.threads
         )
-        VirCtg.Identify(
+        rcode = VirCtg.Identify(
             cutoff=args.cutoff,
             mode=args.mode,
             unrun=args.unrun
         )
-    return 0
+    return rcode
 
 #-----------------------votus-------------------------
 @logger.Log(level='INFO')
@@ -115,12 +116,12 @@ def votus(args):
         outdir=args.outdir,
         threads=args.threads
     )
-    vOTUs.RmDup(
+    rcode = vOTUs.RmDup(
         args.cutoff,
         unrun=args.unrun,
         method=args.method
     )
-    return 0
+    return rcode
 
 #---------------------binning-------------------------
 @logger.Log(level='INFO')
@@ -130,12 +131,12 @@ def binning(args):
         outdir=args.outdir,
         threads=args.threads
     )
-    vMAGs = Bin.Binning(
+    rcode = vMAGs.Binning(
         gene=args.gene,
         protein=args.protein,
         unrun=args.unrun
     )
-    return 0
+    return rcode
 #---------------------classify------------------------
 @logger.Log(level='INFO')
 def classify(args):
@@ -144,10 +145,10 @@ def classify(args):
         outdir=args.outdir,
         threads=args.threads
     )
-    Taxa.Classify(
+    rcode = Taxa.Classify(
         unrun=args.unrun
     )
-    return 0
+    return rcode
 
 #---------------------compare-------------------------
 @logger.Log(level='INFO')
@@ -158,10 +159,10 @@ def compare(args):
         threads=args.threads,
         orfprefix=args.orfprefix
     )
-    NWK.CompSeq(
+    rcode = NWK.CompSeq(
         unrun=args.unrun
     )
-    return 0
+    return rcode
 
 #-----------------------host_pred---------------------
 @logger.Log(level='INFO')
@@ -172,12 +173,12 @@ def host_pred(args):
         outdir=args.outdir,
         threads=args.threads
     )
-    Hosts.PredHosts(
+    rcode = Hosts.PredHosts(
         gtdbtk=args.gtdbtkdir,
         taxa_anno=args.taxa,
         unrun=args.unrun
     )
-    return 0
+    return rcode
 
 #-----------------------func_annot---------------------
 @logger.Log(level='INFO')
@@ -194,10 +195,10 @@ def func_annot(args):
         outdir=args.outdir,
         threads=args.threads
     )
-    AMGs.annotAMGs(
+    rcode = AMGs.annotAMGs(
         unrun=args.unrun
     )
-    return 0
+    return rcode
 
 #---------------------vir_quant-----------------------
 @logger.Log(level='INFO')
@@ -208,13 +209,13 @@ def vir_quant(args):
         outdir=args.outdir,
         threads=args.threads
     )
-    VirQuant.QuantStat(
+    rcode = VirQuant.QuantStat(
         taxa_anno=args.taxa,
         checkv_dir=args.checkv,
         coverm_method=args.coverm_method,
         unrun=args.unrun
     )
-    return 0
+    return rcode
 
 #-----------------------gene_quant---------------------
 @logger.Log(level='INFO')
@@ -225,10 +226,10 @@ def gene_quant(args):
         outdir=args.outdir,
         threads=args.threads
     )
-    GeneQuant.QuantStat(
+    rcode = GeneQuant.QuantStat(
         unrun=args.unrun
     )
-    return 0
+    return rcode
 
 def main():
     parser = arguments.setOpts(sys.argv[0], logger.version)
@@ -251,8 +252,8 @@ def main():
         'vir_quant': vir_quant,
         'gene_quant': gene_quant,
     }
-    moduleDict[sys.argv[1]](args)
-    return 0
+    rcode = moduleDict[sys.argv[1]](args)
+    return rcode
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

@@ -86,7 +86,9 @@ def execute(sh_file: str):
             log_f.write(e.stdout)
         with open(error_file, 'a') as error_f:
             error_f.write(e.stderr)
+        print('Something wrong...')
         print(f'Script {sh_file} failed with error.\nCheck {error_file} for details.', file=sys.stderr)
+        sys.exit(e.returncode)
         return e.returncode
     except Exception as e:
         print(f'Unexpected error: {e}', file=sys.stderr)
@@ -126,11 +128,3 @@ def is_file_exist(file_name):
     except FileNotFoundError as e:
         print(f'FileNotFoundError: {e}', file=sys.stderr)
         exit(1)
-
-#def run(cmd):
-#    cmd_txt = ' '.join(cmd).replace('\n ', '\n')
-#    cmd_txt = cmd_txt.replace(' \n ', '\n')
-#    print(f'Running command:\n{cmd_txt}')
-#    results = str(os.system(cmd_txt))
-#    return results
-
