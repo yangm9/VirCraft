@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-doc = """
+doc = '''
 ####################################################################################################
-Author:yangzhishuang  
-E-mail:yangzs_chi@yeah.net
+Author: yangzhishuang  
+E-mail: yangzs_chi@yeah.net
 Edited by Yang Zhishuang at 2021/05/14
-The latest version was edited at : 2021/05/14 By:yang zs 
+Modified by Yang Ming at 2024/01/23  
 ####################################################################################################
 
 This program is designed to perform kaas or KofamKOALA result. These files will be produced: *.kegg_anno.tsv, *.kegg_pathway_stata.tsv, *.K_codes_not_in_pathway_map.list.
@@ -26,9 +26,7 @@ python kaas_kofam2pathwayAnalysis.py  annot_kegg.txt
 
 2. Use species-specific annotations:
 python kaas_kofam2pathwayAnalysis.py  annot_kegg.txt eco
-
-
-"""
+'''
 
 import os
 import sys
@@ -36,23 +34,21 @@ import re
 
 
 def pathway_map(sp="ko"):
-    """
+    '''
     :param sp:The default is'ko', which means downloading 'ko00001.keg'
            https://www.genome.jp/kegg-bin/download_htext?htext=ko00001.keg&format=htext&filedir=
     :return: K_ko_map
-    """
+    '''
     #url = r"https://www.genome.jp/kegg-bin/download_htext?htext=asa00001.keg&format=htext&filedir="
-    keg_file = sp +"00001.keg"
-    cmd = r"wget 'http://www.kegg.jp/kegg-bin/download_htext?htext=" +sp + "00001.keg&format=htext&filedir=' -O " + keg_file
+    keg_file = sp + '00001.keg'
+    cmd = r"wget 'http://www.kegg.jp/kegg-bin/download_htext?htext=" + sp + "00001.keg&format=htext&filedir=' -O " + keg_file
     if not os.path.exists(keg_file):
         try:
             res = os.system(cmd)
-            # 使用system模块执行linux命令时，如果执行的命令没有返回值res的值是256
-            # 如果执行的命令有返回值且成功执行，返回值是0
         except:
-            print("Failed to run\n" + str(cmd) +"\nplease check the network")
+            print('Failed to run\n' + str(cmd) + '\nplease check the network')
             sys.exit()
-    in_keg = open(keg_file, "r",encoding='gbk',errors='ignore').readlines()
+    in_keg = open(keg_file, 'r', encoding='gbk', errors='ignore').readlines()
     K_ko_map = {}
     for line in in_keg:
         if line.startswith("A"):
@@ -67,10 +63,9 @@ def pathway_map(sp="ko"):
             pathway_id = "ko" + str(pathway_info.group(1))
             pathway_desc = str(pathway_info.group(2)).split(" [")[0]
             pathway_info_list = [pathway_desc, level_1, level_2]
-
-        elif line.startswith("D ")   and in_keg[0] == '+D\tGENES\tKO\n':
+        elif line.startswith("D ") and in_keg[0] == '+D\tGENES\tKO\n':
             # 'D      ASA_1323 glk; glucokinase\tK00845 glk; glucokinase [EC:2.7.1.2]\n'
-            K_info = re.match(r'^D\s*.*\t(K\d+?)\s(.*)\n', line)
+            K_info = re.match(r'^D\s*.*\t(K\d+?)\s+(.*)\n', line)
             K_id = K_info.group(1)
             K_desc = K_info.group(2)
             K_info_list = [K_desc, pathway_id, pathway_desc, level_1, level_2]
@@ -81,10 +76,9 @@ def pathway_map(sp="ko"):
                 if K_info_list not  in  l_tem:
                     l_tem.append(K_info_list)
                     K_ko_map[K_id] = l_tem
-
         elif line.startswith("D ")   and in_keg[0] == '+D\tKO\n':
             # 'D      K00844  HK; hexokinase [EC:2.7.1.1]'
-            K_info = re.match(r'^D\s*(K\d+?)\s(.*)\n', line)
+            K_info = re.match(r'^D\s*(K\d+?)\s+(.*)\n', line)
             K_id = K_info.group(1)
             K_desc = K_info.group(2)
             K_info_list = [K_desc, pathway_id, pathway_desc, level_1, level_2]
@@ -200,13 +194,11 @@ def K_list_Parser(K_list,sp="ko"):
             gene_str = gene_str + k_num_dict[k_num_sample] + ";"
             num_gene = gene_str.count(';')
         # pathway_f.write("Pathway\tGenes annoted in term\tPathway ID\tLevel1\tLevel2\tKOs\tGenes\n")
-        pathway_f.write(pathway + '\t' + str(num_gene)+ '\t'  + ko +'\t' +level1 + '\t'+level2 +'\t'+ko_sample_dict[ko].rstrip(';')+ '\t' + gene_str.rstrip(';')+'\n')
+        pathway_f.write(pathway + '\t' + str(num_gene) + '\t'  + ko + '\t' + level1 + '\t' + level2 + '\t'+ ko_sample_dict[ko].rstrip(';') + '\t' + gene_str.rstrip(';') + '\n')
     anno_f.close()
     pathway_f.close()
 
-
-
-if len(sys.argv) < 2:  #直接执行本脚本给出帮助信息
+if len(sys.argv) < 2:
     print(doc)
     sys.exit()
 elif len(sys.argv) == 2:
@@ -220,4 +212,3 @@ elif len(sys.argv) == 3:
 else:
     print(doc)
     sys.exit()
-
