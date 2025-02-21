@@ -15,12 +15,14 @@ class DB:
     def dl_virsorter2_db(self):
         wkdir = f'{self.outdir}/VC-VirSorter2DB'
         utils.mkdir(wkdir)
-        cmd = ['conda run -n VC-VirSorter2 virsorter setup', '-d', wkdir, '-j', self.threads, '\n']
+        Done = f'{wkdir}/Done'
+        cmd = ['conda run -n VC-VirSorter2 virsorter setup', '-d', wkdir, '-j', self.threads, '&& touch', Done, '\n']
         return cmd
     def dl_vibrant_db(self):
         wkdir = f'{self.outdir}/VC-VIBRANTDB'
         utils.mkdir(wkdir)
-        cmd = ['conda run -n VC-VIBRANT download-db.sh', wkdir, '\n']
+        Done = f'{wkdir}/Done'
+        cmd = ['conda run -n VC-VIBRANT download-db.sh', wkdir, '&& touch', Done, '\n']
         return cmd
 #    def dl_deepvirfinder_db(self):
 #        wkdir = f'{self.outdir}/VC-DeepVirFinder'
@@ -30,18 +32,26 @@ class DB:
 #        models_dir = models_dir.replace('VC-DeepVirFinder/bin', 'VC-DeepVirFinder/share/deepvirfinder/models')
 #        cmd = ['cp -r', models_dir, wkdir, '\n']
 #        return cmd
+    def dl_genomad_db(self):
+        wkdir = f'{self.outdir}/VC-geNomadDB'
+        utils.mkdir(wkdir)
+        Done = f'{wkdir}/Done'
+        cmd = ['conda run -n VC-GeNomad genomad download-database', wkdir, '&& touch', Done, '\n']
+        return cmd
     def dl_CAT_db(self):
         wkdir = f'{self.outdir}/VC-CATDB'
+        utils.mkdir(wkdir) 
+        Done = f'{wkdir}/Done'
         db_basename = os.path.basename(URL.CAT_DB_URL)
         db_file = f'{wkdir}/{db_file_basename}'
-        cmd = ['wget -c', URL.CAT_DB_URL, '-O', db_file, '&& tar xzf', db_file, '-C', wkdir, '\n']
+        cmd = ['wget -c', URL.CAT_DB_URL, '-O', db_file, '&& tar xzf', db_file, '-C', wkdir, '&& touch', Done, '\n']
         return cmd
     def dl_checkv_db(self):
         wkdir = f'{self.outdir}/VC-CheckVDB'
+        Done = f'{wkdir}/Done'
         db_dir = f'{wkdir}/checkv-db-v*'
         db_files = db_dir + '/*'
-        utils.mkdir(wkdir)
-        cmd=['conda run -n VC-CheckV checkv download_database', wkdir, '&& mv', db_files,wkdir, '&& rmdir', db_dir, '\n']
+        cmd = ['conda run -n VC-CheckV checkv download_database', wkdir, '&& mv', db_files, wkdir, '&& rmdir', db_dir, '&& touch', Done, '\n']
         return cmd
     def dl_refseq_viral_prot(self):
         wkdir = f'{self.outdir}/VC-ViralRefSeqDB'
@@ -60,23 +70,23 @@ class DB:
         cmd=[utils.selectENV('VC-General')]
         cmd.extend(
             ['wget', '-c', URL.NCBI_VIR_PROT_URL, '-O', vir_prot_gz, '--no-check-certificate\n', 'gzip -d',vir_prot_gz, '\n',
-            'wget', '-c', URL.NCBI_RELEASE_NUMBER_URL, '-O', vir_version, '--no-check-certificate\n',
-            'makeblastdb -in', vir_prot, '-parse_seqids -hash_index', '-out', vir_prot_prefix, '-dbtype prot\n',
-            'wget', '-c', URL.NCBI_TAXDUMP_URL, '-O', taxdump_tgz, '--no-check-certificate\n',
-            '''if [ ! -d ~/.taxonkit ]; then
+             'wget', '-c', URL.NCBI_RELEASE_NUMBER_URL, '-O', vir_version, '--no-check-certificate\n',
+             'makeblastdb -in', vir_prot, '-parse_seqids -hash_index', '-out', vir_prot_prefix, '-dbtype prot\n',
+             'wget', '-c', URL.NCBI_TAXDUMP_URL, '-O', taxdump_tgz, '--no-check-certificate\n',
+             '''if [ ! -d ~/.taxonkit ]; then
     mkdir ~/.taxonkit
 fi
 if [ -z "$(ls -A ~/.taxonkit)" ]; then
     tar xzf''', taxdump_tgz, '''-C ~/.taxonkit
 fi
 '''
-            'extract_pid_sp_from_faa.py', vir_prot, '>', vir_pid_sp, '\n',
-            'cut -f 2', vir_pid_sp, "|uniq|taxonkit name2taxid|sed '1ispecies\\ttaxid'>", vir_name_taxaid, '\n',
-            'cut -f 2', vir_pid_sp, "|uniq|taxonkit name2taxid|cut -f 2|taxonkit lineage|taxonkit reformat -r 'Unassigned'|cut -f 1,3|sed '1itaxid\\ttaxonomy'>", vir_pid_taxa, '\n',
-            "csvtk join -t -f 'taxid;taxid'", vir_name_taxaid, vir_pid_taxa, '|uniq>', vir_sp_taxa, '\n',
-            'csvtk add-header -t -n NCBI_ID,species', vir_pid_sp, '>', vir_pid_sp_h, '\n',
-            "csvtk join -t -f 'species;species'", vir_sp_taxa, vir_pid_sp_h, '>', vir_full_taxa, '\n',
-            'rm -f', taxdump_tgz, vir_pid_sp, vir_name_taxaid, vir_pid_taxa, vir_sp_taxa, vir_pid_sp_h, '\n']
+             'extract_pid_sp_from_faa.py', vir_prot, '>', vir_pid_sp, '\n',
+             'cut -f 2', vir_pid_sp, "|uniq|taxonkit name2taxid|sed '1ispecies\\ttaxid'>", vir_name_taxaid, '\n',
+             'cut -f 2', vir_pid_sp, "|uniq|taxonkit name2taxid|cut -f 2|taxonkit lineage|taxonkit reformat -r 'Unassigned'|cut -f 1,3|sed '1itaxid\\ttaxonomy'>", vir_pid_taxa, '\n',
+             "csvtk join -t -f 'taxid;taxid'", vir_name_taxaid, vir_pid_taxa, '|uniq>', vir_sp_taxa, '\n',
+             'csvtk add-header -t -n NCBI_ID,species', vir_pid_sp, '>', vir_pid_sp_h, '\n',
+             "csvtk join -t -f 'species;species'", vir_sp_taxa, vir_pid_sp_h, '>', vir_full_taxa, '\n',
+             'rm -f', taxdump_tgz, vir_pid_sp, vir_name_taxaid, vir_pid_taxa, vir_sp_taxa, vir_pid_sp_h, '\n']
         )
         return cmd
     def dl_demovir_db(self):
@@ -89,8 +99,8 @@ fi
         cmd = [utils.selectENV('VC-General')]
         cmd.extend(
             ['wget', '-c', URL.Demovir_URL, '-O', TrEMBL_viral_taxa_rds, '\n',
-            'wget', '-c', URL.DemovirDB_URL, '-O', nr95_bz2, '&& cd', wkdir, '&& bzip2 -d', nr95_bz2, '\n',
-            'usearch', '-makeudb_ublast', nr95_fa, '-output', uniprot_udb, '> usearch_database.log\n']
+             'wget', '-c', URL.DemovirDB_URL, '-O', nr95_bz2, '&& cd', wkdir, '&& bzip2 -d', nr95_bz2, '\n',
+             'usearch', '-makeudb_ublast', nr95_fa, '-output', uniprot_udb, '> usearch_database.log\n']
         )
         return cmd
     def dl_eggnog_db(self):
@@ -131,46 +141,31 @@ fi
         )
         return cmd
     def Deploy(self, unrun=False, clear=False):
-        cmd = self.dl_virsorter2_db()
-        shell = f'{self.outdir}/virsorter2_db_deploy.sh'
-        utils.printSH(shell,cmd)
-        cmd = self.dl_vibrant_db()
-        shell = f'{self.outdir}/vibrant_db_deploy.sh'
-        utils.printSH(shell,cmd)
- #       cmd=self.dl_deepvirfinder_db()
- #       shell=f'{self.outdir}/deepvirfinder_db_deploy.sh'
- #       utils.printSH(shell,cmd) 
-        cmd = self.dl_checkv_db()
-        shell = f'{self.outdir}/CAT_db_deploy.sh'
-        utils.printSH(shell,cmd)
-        cmd = self.dl_checkv_db()
-        shell = f'{self.outdir}/checkv_db_deploy.sh'
-        utils.printSH(shell,cmd)
-        cmd = self.dl_refseq_viral_prot()
-        shell = f'{self.outdir}/ncbirefseq_db_deploy.sh'
-        utils.printSH(shell,cmd)
-        cmd = self.dl_demovir_db()
-        shell = f'{self.outdir}/demovir_db_deploy.sh'
-        utils.printSH(shell,cmd)
-        cmd = self.dl_eggnog_db()
-        shell = f'{self.outdir}/eggnog_db_deploy.sh'
-        utils.printSH(shell,cmd)
-        cmd = self.dl_kofamscan_db()
-        shell = f'{self.outdir}/kegg_db_deploy.sh'
-        utils.printSH(shell,cmd)
-        cmd = self.dl_dramv_db()
-        shell = f'{self.outdir}/dramv_db_deploy.sh'
-        utils.printSH(shell,cmd)
-        cmd = self.dl_gtdbtk_db()
-        shell = f'{self.outdir}/gtdbtk_db_deploy.sh'
-        utils.printSH(shell,cmd)
-        cmd = [utils.selectENV('VC-VIBRANT')]
+        makeDBDict = {
+            'virsorter2': self.dl_virsorter2_db,
+            'vibrant': self.dl_vibrant_db,
+            'genomad': self.dl_genomad_db,
+            'CAT': self.dl_CAT_db,
+            'checkv': self.dl_checkv_db,
+            'ncbirefseq': self.dl_refseq_viral_prot,
+            'demovir': self.dl_demovir_db,
+            'eggnog': self.dl_eggnog_db,
+            'kegg': self.dl_kofamscan_db,
+            'gtdbtk': self.dl_gtdbtk_db,
+            'dramv': self.dl_dramv_db 
+        }
+        for name, dl_db in makeDBDict.items():
+            cmd = dl_db()
+            shell = f'{self.outdir}/{name}_db_deploy.sh'
+            utils.printSH(shell, cmd)
+
+        cmd = [utils.selectENV('VC-General')]
         sed_cmd = f"sed 's/\/data_backup\/database/{self.outdir}/'"
         config_template = f'{sys.path[0]}/crafts/config/config.tpl'
         config_file = f'{sys.path[0]}/config'
         cmd.extend(
-            ['multithreads.pl',self.outdir,'db_deploy.sh 2\n',
-             sed_cmd,config_template,'>',config_file,'\n']
+            ['multithreads.pl', self.outdir, 'db_deploy.sh 4\n',
+             sed_cmd, config_template, '>', config_file, '\n']
         )
         shell = f'{self.outdir}/all_database_deploy.sh'
         utils.printSH(shell, cmd)
