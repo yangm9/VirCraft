@@ -43,7 +43,7 @@ class DB:
         utils.mkdir(wkdir) 
         Done = f'{wkdir}/Done'
         db_basename = os.path.basename(URL.CAT_DB_URL)
-        db_file = f'{wkdir}/{db_file_basename}'
+        db_file = f'{wkdir}/{db_basename}'
         cmd = ['wget -c', URL.CAT_DB_URL, '-O', db_file, '&& tar xzf', db_file, '-C', wkdir, '&& touch', Done, '\n']
         return cmd
     def dl_checkv_db(self):
