@@ -130,7 +130,7 @@ fi
             'VC-geNomadDB': self.dl_genomad_db,
             'VC-CATDB': self.dl_CAT_db,
             'VC-CheckVDB': self.dl_checkv_db,
-            'VC-VIBRANTDB': self.dl_refseq_viral_prot,
+            'VC-ViralRefSeqDB': self.dl_refseq_viral_prot,
             #'VC-DemovirDB': self.dl_demovir_db,
             #'VC-eggNOGDB': self.dl_eggnog_db,
             'VC-KofamScanDB': self.dl_kofamscan_db,
