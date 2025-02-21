@@ -131,9 +131,9 @@ fi
             'VC-CATDB': self.dl_CAT_db,
             'VC-CheckVDB': self.dl_checkv_db,
             'VC-ViralRefSeqDB': self.dl_refseq_viral_prot,
-            #'VC-DemovirDB': self.dl_demovir_db,
+            'VC-DemovirDB': self.dl_demovir_db,
             #'VC-eggNOGDB': self.dl_eggnog_db,
-            'VC-KofamScanDB': self.dl_kofamscan_db,
+            #'VC-KofamScanDB': self.dl_kofamscan_db,
             'VC-GTDBTkDB': self.dl_gtdbtk_db,
             'VC-DRAMvDB': self.dl_dramv_db 
         }
@@ -141,7 +141,7 @@ fi
             wkdir = f'{self.outdir}/{name}'
             utils.mkdir(wkdir)
             Done = f'{wkdir}/Done'
-            tmp_cmd = f'echo "{name} has been deployed!"'
+            tmp_cmd = f'echo "{name} has already been deployed previously."'
             cmd = [tmp_cmd]
             if not os.path.exists(Done):
                 cmd = dl_db(wkdir)
