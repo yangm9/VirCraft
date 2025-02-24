@@ -21,9 +21,10 @@ class VirCount(Reads):
         cov = f'{self.wkfile_dir}/{samp}.cov'
         sort_bam = f'{self.wkfile_dir}/{samp}.sort.bam'
         cmd = [utils.selectENV('VC-Quantify')]
-        cmd.extend(
-            ['coverm contig', '-m', method, '-b', sort_bam, '-t', self.threads, self.confDict['CoverMOpts'], '>', cov, '\n']
-        )
+        tmp_cmd = ['coverm contig', '-m', method, '-b', sort_bam, '-t', self.threads, self.confDict['CoverMOpts'], '>', cov, '\n']
+        if method == 'metabat':
+            tmp_cmd.remove(self.confDict['CoverMOpts'])
+        cmd.extend(tmp_cmd)
         return cmd
 
 class GeneCount(Reads):

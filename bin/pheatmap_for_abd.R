@@ -1,13 +1,16 @@
 #!/usr/bin/env Rscript
 #yangm@idsse.ac.cn
 #为每一行添加来源或者Taxa
-argv<-commandArgs(T)
+argv <- commandArgs(T)
 
-if(length(argv)<3){
+if(length(argv) < 3){
     stop("inputs: <merged_tpm_tsv> <samp_group_tsv> <heatmap_dir>\n")
 }
 
-if(!require("pheatmap")){install.packages("pheatmap")}
+if(!require("pheatmap")){
+    install.packages("pheatmap")
+}
+
 library(pheatmap)
 
 # 生成命名向量函数
@@ -17,12 +20,17 @@ generate_named_vector <- function(keys, values) {
 }
 
 # 读取数据
-df <- read.table(argv[1],header=T,sep="\t",
-                 row.names=1,check.names=F,quote="")
-samp_group_df <- read.table(argv[2],header=T,sep="\t",
-                            check.names=F,quote="")
+df <- read.table(
+    argv[1], header=T, sep="\t",
+    row.names=1, check.names=F, quote=""
+)
 
-colnames(samp_group_df) <- c("sample","group")
+samp_group_df <- read.table(
+    argv[2], header=T, sep="\t",
+    check.names=F, quote=""
+)
+
+colnames(samp_group_df) <- c("sample", "group")
 SampNames <- samp_group_df$sample
 ColNames <- samp_group_df$group
 
@@ -44,8 +52,8 @@ source_color <- c("#8dd3c7", "#fdb462", "#b3de69", "#00688b", "#d9d9d9",
                   "#cd950c", "#00688b", "#8b795e", "#458b74", "#9acdf2",
                   "#ee9a00", "#00ff00", "#bebebe", "#9ac73f", "#beaed4")
 
-ann_colors <- list(Group=generate_named_vector(unique(ColNames),grp_color))
-annotation_col<-data.frame(Group=factor(ColNames))
+ann_colors <- list(Group=generate_named_vector(unique(ColNames), grp_color))
+annotation_col <- data.frame(Group=factor(ColNames))
 rownames(annotation_col) <- SampNames
 
 if('Source' %in% colnames(df)){
@@ -60,7 +68,7 @@ if('Source' %in% colnames(df)){
 df <- subset(df,select=SampNames)
 rownames(annotation_col)=names(df)
 
-pdf(paste(argv[3],'/abundance_heatmap.pdf',sep=''),width=10,height=8)
+pdf(paste(argv[3], '/abundance_heatmap.pdf', sep=''), width=10, height=8)
 pheatmap(
     log10(df+1),
     cluster_row=TRUE,
