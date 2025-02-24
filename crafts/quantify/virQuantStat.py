@@ -9,7 +9,7 @@ class VirAbdStat(multiVirCount):
         super().__init__(samp_info, fasta, outdir, threads)
     def mergeAbd(self, seq_type='Contig'): #Heatmap for contigs abundance
         abd = f'{self.wkfile_dir}/all_merged.cov'
-        cmd = ['paste_abundance_files.py', self.samp_info, self.wkfile_dir, abd, seq_type, '\n']
+        cmd = ['paste_abundance_files.py', self.wkfile_dir, self.samp_info, abd, seq_type, '\n']
         return cmd, abd
     def sizeAbdPlot(self, abd: str, checkv_dir=None):
         cmd = [utils.selectENV('VC-General')]
