@@ -65,7 +65,7 @@ Usage: {name} <subcommand> [options] -o <outdir>
 #----------------------setup_env-----------------------
     subpsr = subparsers.add_parser(
         'setup_env',
-        help='Install the environments for VirCraft.'
+        help='Install the conda environments required by VirCraft'
     )
     subpsr = addGlbArg(subpsr)
     subpsr.add_argument(
@@ -76,14 +76,14 @@ Usage: {name} <subcommand> [options] -o <outdir>
 #----------------------setup_db-----------------------
     subpsr = subparsers.add_parser(
         'setup_db',
-        help='Prepare the databases for VirCraft.'
+        help='Deploy the bioinformatic databases requireed by VirCraft'
     )
     subpsr = addGlbArg(subpsr)
 
 #----------------------reads_qc-----------------------
     subpsr = subparsers.add_parser(
         'reads_qc',
-        help='Pair-end FastQ reads qualitiy control.'
+        help='Pair-end FastQ reads qualitiy control via fastp, fastuniq and/or decontamination'
     )
     subpsr = addPairFqArg(subpsr)
     subpsr = addGlbArg(subpsr)
@@ -92,7 +92,7 @@ Usage: {name} <subcommand> [options] -o <outdir>
 #----------------------assemble-----------------------
     subpsr = subparsers.add_parser(
         'assemble',
-        help='Assemble the reads to contigs or scaffolds using MegaHit or SPAdes'
+        help='Assemble the pair-end reads to contigs or scaffolds using MegaHit and/or SPAdes'
     )
     subpsr = addPairFqArg(subpsr)
     subpsr = addGlbArg(subpsr)
@@ -102,7 +102,7 @@ Usage: {name} <subcommand> [options] -o <outdir>
 #----------------------identify-----------------------
     subpsr = subparsers.add_parser(
         'identify',
-        help='identify the viral contigs from a assembly fasta, using vir-id-sop'
+        help='Identify the viral contigs from an assembly fasta, using vs2-vb-dvf-gm or vir-id-sop workflow'
     )
     subpsr = addFaArg(subpsr)
     subpsr = addGlbArg(subpsr)
@@ -119,7 +119,7 @@ Usage: {name} <subcommand> [options] -o <outdir>
 #-----------------------votus-------------------------
     subpsr = subparsers.add_parser(
         'votus',
-        help='construct the non-redundant virus operational taxonomic unit (vOTU) reference'
+        help='Construct the non-redundant virus operational taxonomic unit (vOTU) reference'
     )
     subpsr = addFaArg(subpsr)
     subpsr = addGlbArg(subpsr)
@@ -132,7 +132,7 @@ Usage: {name} <subcommand> [options] -o <outdir>
 #---------------------binning------------------------
     subpsr = subparsers.add_parser(
         'binning',
-        help=''
+        help='Cluster input viral contigs based on sequence composition, coverage and other features to generate potential viral MAGs'
     )
     subpsr = addFaArg(subpsr)
     subpsr = addGlbArg(subpsr)
@@ -144,7 +144,7 @@ Usage: {name} <subcommand> [options] -o <outdir>
 #---------------------classify------------------------
     subpsr = subparsers.add_parser(
         'classify',
-        help='classify the virus contigs by Demovir'
+        help='Classify the viral contigs by a series of tools'
     )
     subpsr = addFaArg(subpsr)
     subpsr = addGlbArg(subpsr)
@@ -199,7 +199,7 @@ Usage: {name} <subcommand> [options] -o <outdir>
 #-----------------------host_pred---------------------
     subpsr = subparsers.add_parser(
         'host_pred',
-        help='Predict the hosts of virus'
+        help='Predict the linkages between virus and hosts.'
     )
     subpsr = addFaArg(subpsr)
     subpsr = addGlbArg(subpsr)
