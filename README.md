@@ -32,7 +32,7 @@ The resource requirements for VirCraft depend heavily on the size of the data be
 ## INSTALLATION
 
 #### Manual installation (recommended):
-0. Install mamba: `conda install -y mamba`. Mamba will efficiently replace Conda, performing the same tasks but much faster.
+0. Install mamba: `conda install -c conda-forge -y mamba`. Mamba will efficiently replace Conda, performing the same tasks but much faster.
 1. Download or clone this ripository: `git clone https://github.com/yangm9/VirCraft.git`
 2. Install the conda environments for VirCraft: `mkdir vc_envs && /your_path/VirCraft/virCraft.py setup_env -o tmp_envs`
 *Note: 1) The "vc_envs" directory will store some certain tools and log files; 2) if the installation fails, simply rerun the installation commands until the all conda environments are installed; 3) Additionally, users can also manage the version of the tools in VirCraft by modifing the YAML files located in the directory: "/your_path/VirCraft/crafts/setup/conda_env_yaml/".*
