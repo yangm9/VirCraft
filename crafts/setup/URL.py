@@ -28,7 +28,7 @@ VIRMATCHER_URL = 'https://bitbucket.org/MAVERICLab/virmatcher'
 
 #VC-vRhyme
 ## vRhyme
-VRHYME_URL = 'https://github.com/AnantharamanLab/vRhyme.githttps://github.com/AnantharamanLab/vRhyme.git'
+VRHYME_URL = 'https://github.com/AnantharamanLab/vRhyme.git'
 
 # VC-General
 ## Contig Annotation Tool

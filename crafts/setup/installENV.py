@@ -9,6 +9,7 @@ class ENV:
     '''
     Install the environments of VirCraft
     '''
+
     CONDAENVDIR = f'{sys.path[0]}/crafts/setup/conda_env_yaml'
     ENVDICT = {'reads_qc': 'VC-ReadsQC', 'assemble': 'VC-Assemble', 'virsorter2': 'VC-VirSorter2', 'vibrant': 'VC-VIBRANT', 
                'deepvirfinder': 'VC-DeepVirFinder', 'genomad': 'VC-GeNomad', 'checkv': 'VC-CheckV', 'vrhyme': 'VC-vRhyme',
@@ -35,7 +36,8 @@ class ENV:
         net = ''
         if in_wall: net = '_cn'
         env_yaml = f'{self.CONDAENVDIR}/{name}{net}.yaml'
-        cmd = ['mamba env create', '-f', env_yaml, '-y\n']
+        cmd = [utils.selectENV('base')]
+        cmd.extend(['mamba env create', '-f', env_yaml, '-y\n'])
         if name == 'vhmatcher':
             tmp_wishdir = f'{self.outdir}/WIsH'
             vhmatcher_bin_dir = utils.get_conda_env_dir(self.ENVDICT[name])
