@@ -28,7 +28,7 @@ class DB:
 #        return cmd
     def dl_genomad_db(self, wkdir):
         Done = f'{wkdir}/Done'
-        cmd = ['conda run -n VC-GeNomad genomad download-database', wkdir, '&& touch', Done, '\n']
+        cmd = ['conda run -n VC-geNomad genomad download-database', wkdir, '&& touch', Done, '\n']
         return cmd
     def dl_CAT_db(self, wkdir):
         Done = f'{wkdir}/Done'

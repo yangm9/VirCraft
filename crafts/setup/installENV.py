@@ -12,7 +12,7 @@ class ENV:
 
     CONDAENVDIR = f'{sys.path[0]}/crafts/setup/conda_env_yaml'
     ENVDICT = {'reads_qc': 'VC-ReadsQC', 'assemble': 'VC-Assemble', 'virsorter2': 'VC-VirSorter2', 'vibrant': 'VC-VIBRANT', 
-               'deepvirfinder': 'VC-DeepVirFinder', 'genomad': 'VC-GeNomad', 'checkv': 'VC-CheckV', 'vrhyme': 'VC-vRhyme',
+               'deepvirfinder': 'VC-DeepVirFinder', 'genomad': 'VC-geNomad', 'checkv': 'VC-CheckV', 'vrhyme': 'VC-vRhyme',
                'dramv': 'VC-DRAMv', 'vcontact': 'VC-vContact2', 'gtdbtk': 'VC-GTDBTk', 'iphop': 'VC-iPHoP', 'quantify': 'VC-Quantify', 
                'vhmatcher': 'VC-VHMatcher', 'general': 'VC-General'}
     def __init__(self, outdir=None, threads=8):

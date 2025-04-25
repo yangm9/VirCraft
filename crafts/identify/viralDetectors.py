@@ -43,11 +43,11 @@ class VirDetectTools(VirSeq):
         )
         return cmd, wkdir
     def genomad(self):
-        cmd = [utils.selectENV('VC-GeNomad')]
+        cmd = [utils.selectENV('VC-geNomad')]
         wkdir = f'{self.wkfile_dir}/genomad'
-        GeNomad_DB = self.confDict['GeNomadDB']
+        geNomad_DB = self.confDict['geNomadDB']
         cmd.extend(
-            ['genomad end-to-end', '--cleanup', '--threads', self.threads, self.fasta, wkdir, GeNomad_DB, '\n']
+            ['genomad end-to-end', '--cleanup', '--threads', self.threads, self.fasta, wkdir, geNomad_DB, '\n']
         )
         return cmd, wkdir
     
