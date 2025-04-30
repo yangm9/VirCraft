@@ -87,13 +87,12 @@ class Seq(VirCfg):
         return cmd, orf_faa
 
 class VirSeq(Seq):
-    envs = utils.selectENV('VC-CheckV')
     def __init__(self, fasta=None, outdir=None, *args, **kwargs):
         super().__init__(fasta, outdir, *args, **kwargs)
     def checkv(self, in_fa: str):
         wkdir = f'{self.outdir}/checkv'
         utils.mkdir(wkdir)
-        cmd = [self.envs]
+        cmd = [utils.selectENV('VC-CheckV')]
         cmd.extend(
             ['checkv', 'end_to_end', in_fa, wkdir, '-d', self.confDict['CheckvDB'], '-t', self.threads, '\n']
         )
