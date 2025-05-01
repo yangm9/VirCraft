@@ -21,25 +21,25 @@ if(!require('car')){
     library(car)
 }
 
-data <- read.table(argv[1], header=T, sep='\t')
-all_contig_length <- data$contig_length
+df <- read.table(argv[1], header=T, sep='\t')
+all_contig_length <- df$contig_length
 
 # 将 checkv_quality 转换为因子，并设置因子的级别顺序
-data$checkv_quality <- factor(data$checkv_quality, 
+df$checkv_quality <- factor(df$checkv_quality, 
                                 levels = c("Complete", "High-quality", "Medium-quality", "Low-quality", "Not-determined"))
 
 # 获取最大值
-ymax <- max(data$contig_length, na.rm = TRUE)
+ymax <- max(df$contig_length, na.rm = TRUE)
 
 ### 绘图
-boxplot <- ggplot(data = data1, aes(x = checkv_quality, y = contig_length)) + 
+boxplot <- ggplot(data = df, aes(x = checkv_quality, y = contig_length)) + 
     geom_jitter(aes(colour = checkv_quality), alpha = 0.3, size = 3) +
     geom_boxplot(alpha = 0.5, size = 0.8, width = 0.6, colour = "black") + 
     scale_color_manual(
         limits = c("Complete", "High-quality", "Medium-quality", "Low-quality", "Not-determined"), 
         values = c("#e6a141", "#85B22E", "#5F80B4", "#f8766d", "#d9d9d9")) + 
     stat_compare_means(
-        comparisons = combn(levels(data1$checkv_quality), 2, simplify = FALSE),
+        comparisons = combn(levels(df$checkv_quality), 2, simplify = FALSE),
         method = "wilcox.test",
         label = "p.signif",
         tip.length = 0.01,
@@ -58,6 +58,6 @@ boxplot <- ggplot(data = data1, aes(x = checkv_quality, y = contig_length)) +
         axis.ticks.x = element_blank()
     )
 
-pdf(paste(argv[2],'/quality_length_box_plot.pdf',sep=''),width=5,height=10)
+pdf(paste(argv[2], '/quality_length_box_plot.pdf', sep = ''), width = 10, height = 5)
 boxplot
 dev.off()

@@ -50,7 +50,8 @@ class VirRef(VirDetectTools):
         cmd.extend(
             ['pie_plot.R', checkv_qual, 'checkv_quality', self.stat_dir, '\n',
              'pie_plot.R', checkv_qual, 'provirus', self.stat_dir, '\n',
-             'pie_plot.R', checkv_qual, 'miuvig_quality', self.stat_dir, '\n']
+             'pie_plot.R', checkv_qual, 'miuvig_quality', self.stat_dir, '\n',
+             'quality_length_boxplot.R', checkv_qual, self.stat_dir, '\n']
         )
         cmd.extend(self.statFA())
         outdir = self.outdir
