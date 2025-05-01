@@ -2,9 +2,9 @@
 #old_name: stacked_multi_bar_plot.R
 #yangm@idsse.ac.cn
 
-argv<-commandArgs(T)
+argv <- commandArgs(T)
 
-if(length(argv)<2){
+if(length(argv) < 2){
     stop("inputs: <viral_lifetype_quality_tsv> <barplot_dir>\n")
 }
 
@@ -78,6 +78,6 @@ barplot <- ggplot() +
         axis.line.y = element_line(colour = "black")
     )
 
-pdf(paste(argv[2],'/phage_lifetype_quality_bar_plot.pdf',sep=''),width=5,height=10)
+pdf(paste(argv[2], '/phage_lifetype_quality_bar_plot.pdf', sep = ''), width = 5, height = 10)
 barplot
 dev.off()
