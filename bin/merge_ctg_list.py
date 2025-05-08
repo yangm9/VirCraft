@@ -96,9 +96,10 @@ def vCtgMerge(name, wkdir):
             phage_txt = f'{wkdir}/{phage_txt}'
             try:
                 phage_df = pd.read_csv(phage_txt, sep='\t', header=None)
+                phage_list = phage_df[0].tolist()
             except pd.errors.EmptyDataError:
                 phage_df = pd.DataFrame()
-            phage_list = phage_df[0].tolist()
+                phage_list = []
             df['vb_isPhage'] = df['scaffold'].isin(phage_list).astype(int)
             try: #In case the VIBRANT doesn't output fragment results
                 df[['scaffold', 'vb_partial']] = df['scaffold'].str.split(r'_frag', expand=True)
