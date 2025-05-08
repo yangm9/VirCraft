@@ -90,7 +90,7 @@ class VirSeq(Seq):
     def __init__(self, fasta=None, outdir=None, *args, **kwargs):
         super().__init__(fasta, outdir, *args, **kwargs)
     def checkv(self, in_fa: str):
-        wkdir = f'{self.outdir}/checkv'
+        wkdir = f'{self.wkfile_dir}/checkv'
         utils.mkdir(wkdir)
         cmd = [utils.selectENV('VC-CheckV')]
         cmd.extend(

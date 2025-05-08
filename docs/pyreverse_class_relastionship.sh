@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source /data_backup/software/miniconda3/etc/profile.d/conda.sh
 # 检查 pylint 是否已经安装
 if ! mamba list pylint &>/dev/null; then
     echo "Install pylint..."

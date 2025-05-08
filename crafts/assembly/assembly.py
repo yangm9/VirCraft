@@ -7,7 +7,7 @@ class Assembly(Reads):
     This class assembles the clean reads using SPAdes and/or MEGAHIT assembles.
     '''
     # Set the environment variables for the assembly process using a utility function
-    envs=utils.selectENV('VC-Assembly')
+    envs = utils.selectENV('VC-Assemble')
     def __init__(self, fq1=None, fq2=None, outdir=None, threads=8):
         '''
         Initialize the Assembly class.

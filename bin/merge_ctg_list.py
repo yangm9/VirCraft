@@ -65,41 +65,44 @@ ColsDict = {
 }
 
 #Output a list to a file
-def listToFile(list_l,list_f):
-    LIST=open(list_f,'w')
+def listToFile(list_l, list_f):
+    LIST = open(list_f, 'w')
     for ctg in list_l:
         LIST.write(f'{ctg}\n')
     return 0
 
 #Get the fullpath results table from deepvirfinder, vibrant, virsorter2 or genomad
-def resultFile(name,tool,wkdir):
-    wkdir=wkdir.rstrip('/')
-    result=wkdir+'/'+PathDict[tool]
-    if tool=='deepvirfinder':
-        file_name=os.listdir(result)[0]
-        result+='/'+file_name
-    elif tool=='vibrant' or tool=='genomad':
-        result=result.format(name)
+def resultFile(name, tool, wkdir):
+    wkdir = wkdir.rstrip('/')
+    result = wkdir + '/'+PathDict[tool]
+    if tool == 'deepvirfinder':
+        file_name = os.listdir(result)[0]
+        result += '/' + file_name
+    elif tool == 'vibrant' or tool == 'genomad':
+        result = result.format(name)
     return result
 
 #Extract a list of full and partial contigs from the results of dvf, vb and vs2 tools, meanwhile output key information for each tools.
-def vCtgMerge(name,wkdir):
-    all_ctgs=[]
+def vCtgMerge(name, wkdir):
+    all_ctgs = []
     for tool in PathDict.keys():
-        result=resultFile(name,tool,wkdir)
-        df=pd.read_csv(result,sep='\t')
+        result = resultFile(name, tool, wkdir)
+        df = pd.read_csv(result, sep='\t')
         if tool == 'virsorter2':
-            df[['seqname','vs2_partial']]=df['seqname'].str.split(r'\|\|',expand=True)
+            df[['seqname', 'vs2_partial']] = df['seqname'].str.split(r'\|\|', expand=True)
             df.drop(columns=['length'], inplace=True)
         elif tool == 'vibrant':
-            phage_txt = FastaDict[tool].format(name).replace('.fna','.txt')
+            phage_txt = FastaDict[tool].format(name).replace('.fna', '.txt')
             phage_txt = f'{wkdir}/{phage_txt}'
-            phage_df = pd.read_csv(phage_txt,sep='\t',header=None)
+            try:
+                phage_df = pd.read_csv(phage_txt, sep='\t', header=None)
+            except pd.errors.EmptyDataError:
+                phage_df = pd.DataFrame()
             phage_list = phage_df[0].tolist()
             df['vb_isPhage'] = df['scaffold'].isin(phage_list).astype(int)
             try: #In case the VIBRANT doesn't output fragment results
-                df[['scaffold','vb_partial']]=df['scaffold'].str.split(r'_frag',expand=True)
-                df['vb_partial'] = df['vb_partial'].str.replace('ment_','fragment_')
+                df[['scaffold', 'vb_partial']] = df['scaffold'].str.split(r'_frag', expand=True)
+                df['vb_partial'] = df['vb_partial'].str.replace('ment_', 'fragment_')
             except ValueError:
                 df['vb_partial'] = ''
         elif tool == 'deepvirfinder':
