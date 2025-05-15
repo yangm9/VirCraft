@@ -1,12 +1,14 @@
 #!/usr/bin/perl
 
-#yangm@idsse.ac.cn 2023/04/01 01:54
+# yangm@idsse.ac.cn 2023/04/01 01:54
+# Updated to use thread pool model with Thread::Queue
 
 use strict;
+use warnings;
 use threads;
-use threads::shared;
+use Thread::Queue;
 
-unless(@ARGV > 0){
+unless (@ARGV > 0) {
     print STDERR "Usage: $0 <wkdir> <postfix_sh> <parallel_number>\n";
     exit 0;
 }
@@ -16,40 +18,28 @@ $wkdir ||= ".";
 $postfix ||= ".sh";
 $parallel_number ||= 2;
 
-#Search the scriptes in wkdir and with a postfix of XXX.
+# Search for all scripts files
 my @scripts = glob("$wkdir/*$postfix");
-my $subsets_ref = &get_subset(\@scripts, $parallel_number);
 
-#Batch processing batches
-for my $subset(@$subsets_ref){
-    &run_scripts($subset);
-}
-print "All threads finished!!!\n";
+# Create task queue
+my $task_queue = Thread::Queue->new(@scripts);
 
-#Batch job submission
-sub run_scripts($){
-    my ($scripts_ref) = @_;
-    my @scripts = @$scripts_ref;
-    my @threads;
-    foreach my $script(@scripts) {
-        push(@threads, threads->create(sub {
-            system("sh $script >$script.log 2>$script.error");
-        }));
-    }
-    foreach my $thread (@threads) {
-        $thread->join();
-    }
-    return 0;
+# Launch a fixed number of threads, each continuously fetching and executing tasks from a queue.
+my @threads;
+for (1..$parallel_number) {
+    push @threads, threads->create(
+        sub {
+            while (defined(my $script = $task_queue->dequeue_nb)) {
+                print "Thread ", threads->self->tid, " executing $script\n";
+                system("sh $script >$script.log 2>$script.error");
+            }
+        }
+    );
 }
-#Split a array to m subsets and output them, each subsets contains $n elements
-sub get_subset($$){
-    my ($array_ref, $n) = @_;
-    my @array = @$array_ref;
-    my @result;
-    while(@array){
-        my @subset = splice(@array, 0, $n);
-        push(@result, \@subset);
-    }
-    return \@result;
-}
+
+# Wait for all threads to complete
+$_->join for @threads;
+
+print "All task script file with a surfix of \"$postfix\" finished!!!\n";
+
 __END__
