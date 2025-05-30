@@ -8,28 +8,31 @@ use warnings;
 use threads;
 use Thread::Queue;
 
-unless (@ARGV > 0) {
+unless(@ARGV > 0){
     print STDERR "Usage: $0 <wkdir> <postfix_sh> <parallel_number>\n";
     exit 0;
 }
 
-my ($wkdir, $postfix, $parallel_number) = @ARGV;
+my($wkdir, $postfix, $parallel_number) = @ARGV;
 $wkdir ||= ".";
 $postfix ||= ".sh";
 $parallel_number ||= 2;
 
+die "The directory \"$wkdir\" does not exist" unless (-d $wkdir);
+
 # Search for all scripts files
 my @scripts = glob("$wkdir/*$postfix");
+die "No script files fitted for \"$wkdir/*$postfix\"" unless(@scripts);
 
 # Create task queue
 my $task_queue = Thread::Queue->new(@scripts);
 
 # Launch a fixed number of threads, each continuously fetching and executing tasks from a queue.
 my @threads;
-for (1..$parallel_number) {
+foreach(1..$parallel_number){
     push @threads, threads->create(
         sub {
-            while (defined(my $script = $task_queue->dequeue_nb)) {
+            while(defined(my $script = $task_queue->dequeue_nb)){
                 print "Thread ", threads->self->tid, " executing $script\n";
                 system("sh $script >$script.log 2>$script.error");
             }
