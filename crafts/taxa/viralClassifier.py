@@ -57,14 +57,16 @@ class VirTaxa(VirDetectTools):
         return cmd
     def Classify(self, unrun=False):
         cmd = [self.envs]
-        tmp_cmd, __ = self.genomad()
+        tmp_cmd, gn_dir = self.genomad()
+        tmp_cmd.extend(['genomad_taxa.pl', gn_dir])
+        #gn_taxa = 
         cmd.extend(tmp_cmd)
-        tmp_cmd, orf_faa = self.genePred()
-        cmd.extend(tmp_cmd)
-        tmp_cmd, ncbi_taxa = self.ncbiRefSeqTaxa(orf_faa)
-        cmd.extend(tmp_cmd)
-        tmp_cmd, demovir_taxa = self.demovir()
-        cmd.extend(tmp_cmd)
+        #tmp_cmd, orf_faa = self.genePred()
+        #cmd.extend(tmp_cmd)
+        #tmp_cmd, ncbi_taxa = self.ncbiRefSeqTaxa(orf_faa)
+        #cmd.extend(tmp_cmd)
+        #tmp_cmd, demovir_taxa = self.demovir()
+        #cmd.extend(tmp_cmd)
         Comp = EnviComp(
             fasta=orf_faa,
             outdir=self.outdir,

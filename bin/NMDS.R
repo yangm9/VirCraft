@@ -62,7 +62,7 @@ nmds_plt <- ggplot(data=df,aes(x=NMDS1, y=NMDS2))+#指定数据、X轴、Y轴，
           panel.grid=element_blank())+#隐藏网格线
     ggtitle(paste('Stress=', round(df_nmds_stress, 3)))#添加应力函数值
 
-pdf(paste(argv[3], '/NMDS.pdf', sep=''), width=8, height=6)
+pdf(paste(argv[3], '/NMDS.pdf', sep=''), width=8, height=5)
 nmds_plt
 dev.off()
 
