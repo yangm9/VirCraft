@@ -23,6 +23,7 @@ class vIdentify(VirDetectTools):
         vb_list = f'{self.wkfile_dir}/vb_ctg.list'
         dvf_list = f'{self.wkfile_dir}/dvf_ctg.list'
         gn_list = f'{self.wkfile_dir}/gn_ctg.list'
+        venn_pdf = f'{self.wkfile_dir}/vs2_vb_dvf_gn_venn.pdf'
         cmd = [utils.selectENV('VC-General')]
         tmp_cmd = ''
         #tmp_cmd, cat_dir = self.contig_annotation_tool(viral_filt_ctgs_fna)
@@ -31,7 +32,7 @@ class vIdentify(VirDetectTools):
             'cut -f 1', score_filt_tsv, "|sed '1d' >", viral_filt_ctg_list, '&& extrSeqByName.pl', viral_filt_ctg_list, self.fasta, viral_filt_ctgs_fna, '\n',
             "awk -F '\\t' '$28>=1 {print $1}'", score_tsv, '>', vs2_list, "&& awk -F '\\t' '$29>=1 {print $1}'", score_tsv, '>', vb_list,
             "&& awk -F '\\t' '$30>=1 {print $1}'", score_tsv, '>', dvf_list, "&& awk -F '\\t' '$31>=1 {print $1}'", score_tsv, '>', gn_list,
-            '&& venn4.R', vs2_list, vb_list, dvf_list, gn_list, '\n']
+            '&& venn4.R', vs2_list, vb_list, dvf_list, gn_list, venn_pdf, '\n']
         )
         if cutoff <= 5000:
             tmp_cmd, checkv_dir = self.checkv(viral_filt_ctgs_fna)
