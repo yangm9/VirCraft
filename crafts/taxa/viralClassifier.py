@@ -10,7 +10,6 @@ class VirTaxa(VirDetectTools):
     def __init__(self, fasta=None, outdir=None, threads=8):
         super().__init__(fasta, outdir)
         self.threads = str(threads)
-        return cmd, votu_taxa
     def genomadTaxa(self):
         cmd, gn_dir = self.genomad()
         cmd.extend([utils.selectENV('VC-General')])

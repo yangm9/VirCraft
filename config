@@ -46,7 +46,7 @@ DemovirDB = /data_backup/software/biotools/demovir
 vContact2DB = ProkaryoticViralRefSeq211-Merged
 
 ## Path to iPHoP database
-iPHoPDB = /data_backup/database/iPHoP
+iPHoPDB = /data_backup/database/iPHoPDB
 
 ## Path to EggNOG database
 EggNOGDB = /data_backup/database/eggnog-mapper
