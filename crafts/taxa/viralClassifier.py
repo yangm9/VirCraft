@@ -13,7 +13,7 @@ class VirTaxa(VirDetectTools):
     def genomadTaxa(self):
         cmd, gn_dir = self.genomad()
         cmd.extend([utils.selectENV('VC-General')])
-        gn_taxa = f'{gn_dir}/{self.name}_votus_summary/{self.name}_votus_virus_summary.tsv'
+        gn_taxa = f'{gn_dir}/{self.name}_summary/{self.name}_virus_summary.tsv'
         votu_taxa = f'{self.outdir}/{self.name}.votu.taxa.txt'
         cmd.extend(['genomad_to_taxa.pl', gn_taxa, votu_taxa, '\n'])
         return cmd
@@ -21,12 +21,12 @@ class VirTaxa(VirDetectTools):
         cmd = [self.envs]
         tmp_cmd = self.genomadTaxa()
         cmd.extend(tmp_cmd)
-        Comp = EnviComp(
-            fasta=orf_faa,
-            outdir=self.outdir,
-            threads=self.threads
-        )
-        cmd.extend(Comp.vcontact2(vcont_db=self.confDict['vContact2DB']))
+        #Comp = EnviComp(
+        #    fasta=orf_faa,
+        #    outdir=self.outdir,
+        #    threads=self.threads
+        #)
+        #cmd.extend(Comp.vcontact2(vcont_db=self.confDict['vContact2DB']))
         shell = f'{self.shell_dir}/{self.name}_classify.sh'
         utils.printSH(shell, cmd)
         results = 0 if unrun else utils.execute(shell)
