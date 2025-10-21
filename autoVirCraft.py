@@ -14,10 +14,10 @@ if len(sys.argv) == 1:
     parser.print_help()
 
 utils.mkdir(outdir)
-if sys.argv[1] == 'exec':
+def generate_shell(args):
     samp_info = args.samp_info
-    fasta = args.fasta
     threads = args.threads
+    host_mags = args.host
     outdir = args.outdir
     CONFIG = config.VirCfg()
     groups, sampDict = CONFIG.readSampInfo(samp_info)
@@ -38,10 +38,10 @@ if sys.argv[1] == 'exec':
         utils.printSH(shell, cmd)
         clean_fq1 = f'{samp_outdir}/'
         clean_fq2 = f'{samp_outdir}/'
-        cmd = ['virCraft.py assemble', '-1', clean_fq1, '-2', clean_fq2, '-t', threads_per_samp, '-p sm -l 1500', '-o', samp_outdir, '\n']
+        cmd = ['virCraft.py assemble', '-1', clean_fq1, '-2', clean_fq2, '-t', threads_per_samp, '-p sm -l 2000', '-o', samp_outdir, '\n']
         shell = f'{shell_dir}/01.{samp}_assemble.sh'
         utils.printSH(shell, cmd)
-        metagenome = f'{assemble_dir}/{sample}/final_assembly.filt.gt1500.fa'
+        metagenome = f'{assemble_dir}/{sample}/final_assembly.filt.gt2000.fa'
         cmd = ['virCraft.py identify', '-a', metagenome, '-t', threads_per_samp, '-o', samp_outdir, '\n']
         shell = f'{shell_dir}/02.{samp}_identify.sh'
         utils.printSH(shell, cmd)
@@ -75,9 +75,14 @@ if sys.argv[1] == 'exec':
     cmd = ['virCraft.py func_annot', '-a', votu_fasta, '-t', threads, '-o', func_annot_dir, '\n']
     shell = f'{shell_dir}/07.viral_gene_annotation.sh'
     utils.printSH(shell, cmd)
-    func_annot_dir = f'{outdir}/08.GeneAbundance'
-    cmd = ['virCraft.py gene_quant', '-a', ]
+    gene_abundance_dir = f'{outdir}/08.GeneAbundance'
+    viral_genes_ffn = f'{func_annot_dir}/prodigal/all_viral_ctg_votus.ffn'
+    cmd = ['virCraft.py gene_quant', '-s', samp_info, '-a', viral_genes_ffn, '-t', threads, '-o', gene_abundance_dir, '\n']
+    shell = f'{shell_dir}/08.gene_abundance.sh'
+    utils.printSH(shell, cmd)
+    return 0
 
+def execute_shell():
 
 
 

@@ -15,7 +15,6 @@ from crafts.assembly import assembly
 from crafts.identify import viridsop
 from crafts.identify import posiViralConfirm
 from crafts.votus import uniqVirCtg
-from crafts.votus import virBinning
 from crafts.taxa import viralClassifier
 from crafts.taxa import viralCompare
 from crafts.quantify import virQuantStat
@@ -28,58 +27,29 @@ from crafts.general import logger
 #----------------------setup_env-----------------------
 @logger.Log(level='INFO')
 def setup_env(args):
-    ENV = installENV.ENV(
-        outdir=args.outdir,
-        threads=args.threads
-    )
-    rcode = ENV.Install(
-        unrun=args.unrun,
-        in_wall=args.in_wall
-    )
+    ENV = installENV.ENV(outdir=args.outdir, threads=args.threads)
+    rcode = ENV.Install(unrun=args.unrun, in_wall=args.in_wall)
     return rcode
 
 #----------------------setup_db-----------------------
 @logger.Log(level='INFO')
 def setup_db(args):
-    DB = deployDB.DB(
-        outdir=args.outdir,
-        threads=args.threads
-    )
-    rcode = DB.Deploy(
-        unrun=args.unrun    
-    )
+    DB = deployDB.DB(outdir=args.outdir, threads=args.threads)
+    rcode = DB.Deploy(unrun=args.unrun)
     return rcode
 
 #----------------------reads_qc-----------------------
 @logger.Log(level='INFO')
 def reads_qc(args):
-    Reads = fastqc.QualCtrl(
-        fq1=args.fq1,
-        fq2=args.fq2,
-        outdir=args.outdir,
-        threads=args.threads
-    )
-    rcode = Reads.readqc(
-        process = args.process,
-        unrun=args.unrun,
-        clear=args.clear
-    )
+    Reads = fastqc.QualCtrl(fq1=args.fq1, fq2=args.fq2, outdir=args.outdir, threads=args.threads)
+    rcode = Reads.readqc(process = args.process, unrun=args.unrun, clear=args.clear)
     return rcode
 
 #----------------------assemble-----------------------
 @logger.Log(level='INFO')
 def assemble(args):
-    Draft = assembly.Assembly(
-        fq1=args.fq1,
-        fq2=args.fq2,
-        outdir=args.outdir,
-        threads=args.threads
-    )
-    rcode = Draft.Assemble(
-        process=args.process,
-        cutoff=args.cutoff,
-        unrun=args.unrun
-    )
+    Draft = assembly.Assembly(fq1=args.fq1, fq2=args.fq2, outdir=args.outdir, threads=args.threads)
+    rcode = Draft.Assemble(process=args.process, cutoff=args.cutoff, unrun=args.unrun)
     return rcode
 
 #----------------------identify-----------------------
@@ -87,97 +57,39 @@ def assemble(args):
 def identify(args):
     rcode = 0
     if args.sop == 'viral-id-sop':
-        VirCtg = viridsop.VirScan(
-            fasta=args.fasta,
-            outdir=args.outdir,
-            threads=args.threads
-        )
-        rcode = VirCtg.Identify(
-            unrun=args.unrun
-        )
+        VirCtg = viridsop.VirScan(fasta=args.fasta, outdir=args.outdir, threads=args.threads)
+        rcode = VirCtg.Identify(unrun=args.unrun)
     else:
-        VirCtg = posiViralConfirm.vIdentify(
-            fasta=args.fasta,
-            outdir=args.outdir,
-            threads=args.threads
-        )
-        rcode = VirCtg.Identify(
-            cutoff=args.cutoff,
-            mode=args.mode,
-            unrun=args.unrun
-        )
+        VirCtg = posiViralConfirm.vIdentify(fasta=args.fasta, outdir=args.outdir, threads=args.threads)
+        rcode = VirCtg.Identify(cutoff=args.cutoff, mode=args.mode, unrun=args.unrun)
     return rcode
 
 #-----------------------votus-------------------------
 @logger.Log(level='INFO')
 def votus(args):
-    vOTUs = uniqVirCtg.VirRef(
-        fasta=args.fasta,
-        outdir=args.outdir,
-        threads=args.threads
-    )
-    rcode = vOTUs.RmDup(
-        args.cutoff,
-        unrun=args.unrun,
-        method=args.method
-    )
+    vOTUs = uniqVirCtg.VirRef(fasta=args.fasta, outdir=args.outdir, threads=args.threads)
+    rcode = vOTUs.RmDup(args.cutoff, unrun=args.unrun, method=args.method)
     return rcode
 
-#---------------------binning-------------------------
-@logger.Log(level='INFO')
-def binning(args):
-    vMAGs = virBinning.VirMAG(
-        fasta=args.fasta,
-        outdir=args.outdir,
-        threads=args.threads
-    )
-    rcode = vMAGs.Binning(
-        gene=args.gene,
-        protein=args.protein,
-        unrun=args.unrun
-    )
-    return rcode
 #---------------------classify------------------------
 @logger.Log(level='INFO')
 def classify(args):
-    Taxa = viralClassifier.VirTaxa(
-        fasta=args.fasta,
-        outdir=args.outdir,
-        threads=args.threads
-    )
-    rcode = Taxa.Classify(
-        unrun=args.unrun
-    )
+    Taxa = viralClassifier.VirTaxa(fasta=args.fasta, outdir=args.outdir, threads=args.threads)
+    rcode = Taxa.Classify(unrun=args.unrun)
     return rcode
 
 #---------------------compare-------------------------
 @logger.Log(level='INFO')
 def compare(args):
-    NWK = viralCompare.EnviComp(
-        fasta=args.fasta,
-        outdir=args.outdir,
-        threads=args.threads,
-        orfprefix=args.orfprefix
-    )
-    rcode = NWK.CompSeq(
-        unrun=args.unrun
-    )
+    NWK = viralCompare.EnviComp(fasta=args.fasta, outdir=args.outdir, threads=args.threads, orfprefix=args.orfprefix)
+    rcode = NWK.CompSeq(unrun=args.unrun)
     return rcode
 
 #-----------------------host_pred---------------------
 @logger.Log(level='INFO')
 def host_pred(args):
-    Hosts = hosts.VirHost(
-        fasta=args.fasta,
-        hostsdir=args.hostsdir,
-        outdir=args.outdir,
-        threads=args.threads
-    )
-    rcode = Hosts.PredHosts(
-        gtdbtk=args.gtdbtkdir,
-        taxa_anno=args.taxa,
-        unrun=args.unrun
-    )
+    Hosts = hosts.VirHost(fasta=args.fasta, hostsdir=args.hostsdir, outdir=args.outdir, threads=args.threads)
+    rcode = Hosts.PredHosts(gtdbtk=args.gtdbtkdir, taxa_anno=args.taxa, unrun=args.unrun)
     return rcode
 
 #-----------------------func_annot---------------------
@@ -190,45 +102,22 @@ def func_annot(args):
     #    threads=args.threads
     #)
     #VirGene.FuncAnnot()
-    AMGs = callAMG.AMGs(
-        fasta=args.fasta,
-        outdir=args.outdir,
-        threads=args.threads
-    )
-    rcode = AMGs.annotAMGs(
-        unrun=args.unrun
-    )
+    AMGs = callAMG.AMGs(fasta=args.fasta, outdir=args.outdir, threads=args.threads)
+    rcode = AMGs.annotAMGs(unrun=args.unrun)
     return rcode
 
 #---------------------vir_quant-----------------------
 @logger.Log(level='INFO')
 def vir_quant(args):
-    VirQuant = virQuantStat.VirAbdStat(
-        samp_info=args.samp_info,
-        fasta=args.fasta,
-        outdir=args.outdir,
-        threads=args.threads
-    )
-    rcode = VirQuant.QuantStat(
-        taxa_anno=args.taxa,
-        checkv_dir=args.checkv,
-        coverm_method=args.coverm_method,
-        unrun=args.unrun
-    )
+    VirQuant = virQuantStat.VirAbdStat(samp_info=args.samp_info, fasta=args.fasta, outdir=args.outdir, threads=args.threads)
+    rcode = VirQuant.QuantStat(taxa_anno=args.taxa, checkv_dir=args.checkv, coverm_method=args.coverm_method,unrun=args.unrun)
     return rcode
 
 #-----------------------gene_quant---------------------
 @logger.Log(level='INFO')
 def gene_quant(args):
-    GeneQuant = geneQuantStat.GeneAbdStat(
-        samp_info=args.samp_info,
-        fasta=args.fasta,
-        outdir=args.outdir,
-        threads=args.threads
-    )
-    rcode = GeneQuant.QuantStat(
-        unrun=args.unrun
-    )
+    GeneQuant = geneQuantStat.GeneAbdStat(samp_info=args.samp_info, fasta=args.fasta, outdir=args.outdir, threads=args.threads)
+    rcode = GeneQuant.QuantStat(unrun=args.unrun)
     return rcode
 
 def main():
@@ -244,7 +133,6 @@ def main():
         'assemble': assemble,
         'identify': identify,
         'votus': votus, 
-        'binning': binning,
         'classify': classify,
         'compare': compare,
         'host_pred': host_pred,

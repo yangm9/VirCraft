@@ -27,8 +27,10 @@ class VirDetectTools(VirSeq):
         cmd = [utils.selectENV('VC-DeepVirFinder')]
         wkdir = f'{self.wkfile_dir}/deepvirfinder'
         utils.mkdir(wkdir)
+        input_fasta = self.name + '.lt2100000.fa'
         cmd.extend(
-            ['dvf.py', '-i', self.fasta, '-m', self.confDict['DeepVirFinderDB'],  '-o', wkdir, '-c', self.threads, '-l', cutoff, '\n']
+            ['SeqLenCutoff.pl', self.fasta, self.name, '0 2100000\n', 
+            'dvf.py', '-i', input_fasta, '-m', self.confDict['DeepVirFinderDB'], '-o', wkdir, '-c', self.threads, '-l', cutoff, '\n']
         )
         return cmd, wkdir
 

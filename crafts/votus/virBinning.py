@@ -1,12 +1,12 @@
 from ..general import utils
-from ..data.bioseq import VirSeq
+from ..identify.viralDetectors import VirDetectTools
 
-class VirMAG(VirSeq):
+class VirMAG(VirDetectTools):
     def __init__(self, fasta=None, outdir=None, threads=8):
         super().__init__(fasta, outdir)
         self.threads = str(threads)
     
-    def filtCtg(self, checkv=None):
+    def filt_ctgs_for_binning(self, checkv=None):
         cmd = [utils.selectENV('VC-General')]
         if not checkv:
             outdir = self.outdir
@@ -14,33 +14,38 @@ class VirMAG(VirSeq):
             cmd, checkv_dir = self.checkv(self.fasta)
             checkv = f'{checkv_dir}/quality_summary.tsv'
             self.outdir = outdir
-        fasta_for_binning = f'{self.wkfile_dir}/{self.name}_votu_for_binning.fa'
+        vctg_for_binning = f'{self.wkfile_dir}/{self.name}_vctg_for_binning.fa'
         cmd.extend(
-            ['keep_votus_for_binning.pl', checkv, self.fasta, fasta_for_binning, '\n']
+            ['keep_vctg_for_binning.pl', checkv, self.fasta, vctg_for_binning, '\n']
         )
-        return cmd, fasta_for_binning
+        return cmd, vctg_for_binning
 
-    def vrhyme(self, gene_fa=None, protein_fa=None, coverage_tsv=None):
+    def vrhyme(self, fasta_for_binning: str, coverage_tsv=None, fastqs=None):
         cmd = [utils.selectENV('VC-vRhyme')]
         wkdir = f'{self.wkfile_dir}/vrhyme'
+        if coverage_tsv:
+            sub_cmd =  f'-c {coverage_tsv}'
+        elif fastqs:
+            input_arg = f'-r {fastqs}'
+        else:
+            raise ValueError('Error: Either coverage_tsv or fastqs must be provided')
         cmd.extend(
-            ['vRhyme', '-i', self.fasta, '-g', gene_fa, '-p', protein_fa, '-c', coverage_tsv, '-t', self.threads, '-o', wkdir, '\n']
+            ['vRhyme', '-i', self.fasta, '-g', gene_fa, '-p', protein_fa, sub_cmd, '-t', self.threads, '-o', wkdir, '\n']
         )
         return cmd, wkdir
 
     def vMAGFilt(self):
-        pass    
+        pass
 
-    def Binning(self, gene_fa: str, protein_fa: str, coverage_tsv: str, checkv=None):
-        cmd, fasta_for_binning = self.filtCtg(checkv)
-        self.fasta = fasta_for_binning
-        if not (gene_fa or protein_fa):
-            cmd, protein_fa = self.genePred()
-            gene_fa = protein_fa.replace('.faa', '.ffn')
-        if not coverage_tsv: pass
-        tmp_cmd, vrhyme_dir = self.vrhyme(gene_fa, protein_fa, coverage_tsv)
-        
-        shell = f'{self.shell_dir}/{self.name}_viral_binning.sh'
+    def Binning(self, cov_input=None, checkv=None, unrun=False):
+        cmd, vctg_for_binning = self.filtCtg(checkv)
+        tmp_cmd, gene_fa, protein_fa = self.genePred()
+        cmd.extend(tmp_cmd)
+        tmp_cmd, vrhyme_dir = self.vrhyme(vctg_for_binning, coverage_tsv)
+        cmd.extend(tmp_cmd)
+        tmp_cmd, = vMAGFilt()
+        cmd.extend(tmp_cmd)
+        shell = f'{self.shell_dir}/{self.name}_vctg_binning.sh'
         utils.printSH(shell, cmd)
-        results = 0 if unrun else utils.execute(shell)
-        return results
+        rcode = 0 if unrun else utils.execute(shell)
+        return rcode

@@ -1,8 +1,8 @@
 from os import path
 from ..general import utils
-from ..identify.viralDetectors import VirDetectTools
+from .virBinning import VirMAG
 
-class VirRef(VirDetectTools):
+class VirRef(VirMAG):
     '''
     Generate vOTUs
     '''
@@ -43,8 +43,8 @@ class VirRef(VirDetectTools):
             return self.cdhit_cluster()
         else:
             raise Exception('method should only be "blast" or "cdhit".')
-    def votuQC(self, votus, cutoff=1500):
-        cmd,__ = self.checkv(votus)
+    def votuQC(self, votus, cutoff=2000):
+        cmd, __ = self.checkv(votus)
         checkv_qual = f'{self.wkfile_dir}/checkv/quality_summary.tsv'
         cmd.append(utils.selectENV('VC-General'))
         cmd.extend(
@@ -68,12 +68,23 @@ class VirRef(VirDetectTools):
              'votus_lifetype_quality_barplot.R', vb_ckv_tsv, self.stat_dir, '\n']
         )
         return cmd
-    def RmDup(self, cutoff=1500, unrun=False, method='blast'):
-        cmd = [self.envs]
+    def vCTGs_cluster(self, cov_input=None, checkv=None, unrun=False, method='blast'):
+        cmd = []
+        # Gene prediction using prodigal
+        if cov_input: 
+            tmp_cmd, vctg_for_binning = self.filtCtg(checkv)
+            cmd.extend(tmp_cmd)
+            tmp_cmd, gene_fa, protein_fa = self.genePred()
+            cmd.extend(tmp_cmd)
+            tmp_cmd, vrhyme_dir = self.vrhyme(vctg_for_binning, coverage_tsv)
+            cmd.extend(tmp_cmd)
+            self.fasta = vctg_for_binning
+        
         tmp_cmd, votus = self.cluster(method)
+
         cmd.extend(tmp_cmd)
         cmd.extend(self.votuQC(votus, cutoff))
-        shell = f'{self.shell_dir}/{self.name}_votu.sh'
+        shell = f'{self.shell_dir}/{self.name}_votu_cluster.sh'
         utils.printSH(shell, cmd)
         results = 0 if unrun else utils.execute(shell)
         return results

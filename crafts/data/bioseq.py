@@ -53,7 +53,7 @@ class Seq(VirCfg):
         shell = f'{self.shell_dir}/{self.name}_bwaidx.sh'
         utils.printSH(shell, cmd)
         return cmd, bwa_idx
-    def lenCutoff(self, cutoff=1500):
+    def lenCutoff(self, cutoff=2000):
         cmd = [self.envs]
         filt_prefix = f'{self.outdir}/{self.name}.filt'
         cmd.extend(
@@ -84,7 +84,7 @@ class Seq(VirCfg):
         cmd = ['prodigal', '-i', self.fasta, '-d', temp_ffn, '-a', temp_faa, '-o', orf_gff, '-f gff -p meta -m -q\n',
                'cut -f 1 -d \" \"', temp_faa, '>', orf_faa, '&& cut -f 1 -d \" \"', temp_ffn, '>', orf_ffn, '\n',
                f'rm -f {wkdir}/temp.*\n']
-        return cmd, orf_faa
+        return cmd, orf_ffn, orf_faa
 
 class VirSeq(Seq):
     def __init__(self, fasta=None, outdir=None, *args, **kwargs):

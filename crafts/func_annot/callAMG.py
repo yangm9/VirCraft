@@ -7,7 +7,7 @@ class AMGs(GeneFunc):
         self.allthreads = threads #8
         self.threads = int(threads) // (self.BATCH_SIZE * 2) # 1
     def dramv(self):
-        cmd, vs2dir = self.virsorter(in_fa=self.fasta, n=1, min_length=1500, min_score=0.5)
+        cmd, vs2dir = self.virsorter(in_fa=self.fasta, n=1, min_length=2000, min_score=0.5)
         vs2_dramv_fa = f'{vs2dir}/for-dramv/final-viral-combined-for-dramv.fa'
         vs2_dramv_tab = f'{vs2dir}/for-dramv/viral-affi-contigs-for-dramv.tab'
         cmd.extend([utils.selectENV('VC-DRAMv')])
@@ -60,7 +60,7 @@ class AMGs(GeneFunc):
         cmd = [utils.selectENV('VC-General')]
         cmd.extend(['multithreads.pl', self.shell_dir, 'amg.sh 2\n'])
         #step2 prodigal
-        tmp_cmd, orf_faa = self.genePred()
+        tmp_cmd, __, orf_faa = self.genePred()
         cmd.extend(tmp_cmd)
         #step3 eggnog and kegg annotation
         self.annotBatchSH(orf_faa)

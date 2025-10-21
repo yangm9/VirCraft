@@ -18,9 +18,7 @@ class VirTaxa(VirDetectTools):
         cmd.extend(['genomad_to_taxa.pl', gn_taxa, votu_taxa, '\n'])
         return cmd
     def Classify(self, unrun=False):
-        cmd = [self.envs]
-        tmp_cmd = self.genomadTaxa()
-        cmd.extend(tmp_cmd)
+        cmd = self.genomadTaxa()
         #Comp = EnviComp(
         #    fasta=orf_faa,
         #    outdir=self.outdir,

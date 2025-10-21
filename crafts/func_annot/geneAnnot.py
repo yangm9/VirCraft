@@ -45,7 +45,7 @@ class GeneFunc(VirDetectTools):
         )
         return cmd
     def FuncAnnot(self):
-        tmp_cmd, orfs_faa = self.genePred()
+        tmp_cmd, __, orfs_faa = self.genePred()
         cmd.extend(tmp_cmd)
         cmd.extend(self.eggnogAnno(orfs_faa))
         cmd.append(utils.selectENV('VC-General'))

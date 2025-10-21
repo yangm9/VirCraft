@@ -1,6 +1,7 @@
 #!/usr/bin/env Rscript
 library(grid)
 library(VennDiagram)
+
 args <- commandArgs(trailing=T)
 	site_f1 <- args[1]
 	site_f2 <- args[2]
@@ -8,6 +9,10 @@ args <- commandArgs(trailing=T)
 	site_f4 <- args[4]
 	pdf_f <- args[5]
 
+name_f1 <- sub("\\.[^.]*$", "", basename(site_f1))
+name_f2 <- sub("\\.[^.]*$", "", basename(site_f2))
+name_f3 <- sub("\\.[^.]*$", "", basename(site_f3))
+name_f4 <- sub("\\.[^.]*$", "", basename(site_f4))
 
 A <- read.table(site_f1, header=F)
 B <- read.table(site_f2, header=F)
@@ -35,25 +40,25 @@ length_acd <- length(intersect(intersect(a, c), d))
 length_bcd <- length(intersect(intersect(b, c), d))
 length_abcd <- length(intersect(intersect(intersect(a, b), c), d))
 
-pdf(pdf_f)
+pdf(pdf_f, width = 10, height = 10)
 draw.quad.venn(
     area1=length_a, area2=length_b, area3=length_c, area4=length_d,
     n12=length_ab, n13=length_ac, n14=length_ad, n23=length_bc, n24=length_bd, n34=length_cd,
     n123=length_abc, n124=length_abd, n134=length_acd, n234=length_bcd, n1234=length_abcd, 
     #category = c("A", "B", "C", "D"),
-    category=c(site_f1, site_f2, site_f3, site_f4),
-    cat.cex=1,
-    cat.fontface = "bold",
+    category=c(name_f1, name_f2, name_f3, name_f4),
+    cat.cex=1.8,
+    cat.fontface="bold",
     #col=c('darkred','darkgreen','darkblue'),
     lty=1,
     lwd=2,
     #rotation=1,
     alpha=0.50,#????
-    cex=1.8,#????
-    fontfamily = "serif", 
-    rotation.degree = 0, 
+    cex=2,#????
+    fontfamily="serif", 
+    rotation.degree=0, 
     #rotation.centre = c(0.5, 0.5),
     fill=c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3"),
     cat.col=c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3"),
-    reverse = F
+    reverse=F
 )

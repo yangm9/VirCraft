@@ -123,7 +123,7 @@ class Assembly(Reads):
             pass
         return cmd, final_scaf
     
-    def Assemble(self, process='ms', cutoff=1500, unrun=False, clear=False):
+    def Assemble(self, process='ms', cutoff=2000, unrun=False, clear=False):
         '''
         Perform the entire assembly process and return the result.
         :param process: Assembly process (default is MEGAHIT).

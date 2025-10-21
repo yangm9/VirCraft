@@ -5,11 +5,12 @@ import pandas as pd
 def filt_checkv(qual_summ_tsv: str):
     '''
     input: quality_summary.tsv, namely checkv result file
-    methods: the vs2-vb-dvf-gm identified viral contigs that are ≥ 5 kb or those that are circular and ≥ 1.5 kb were considered as high-confidence viral contigs.
+    methods: the vs2-vb-dvf-gm identified viral contigs with a length of ≥ 2 kb and .
     output: virus_quality_summary.filt.tsv and provir_quality_summary.filt.tsv
     return: viral ID list and proviral ID list
     '''
-    qual_filt_condition = 'contig_length >= 5000 or (contig_length >= 1500 and checkv_quality == "Complete")'
+    #qual_filt_condition = 'contig_length >= 5000 or (contig_length >= 1500 and checkv_quality == "Complete")'
+    qual_filt_condition = 'contig_length >= 2000 and checkv_quality != "Not-determined"'
     filt_qual_summ_tsv = qual_summ_tsv.replace('quality_summary.tsv', 'quality_summary.filt.tsv')
     df = pd.read_csv(qual_summ_tsv, sep='\t')
     filt_df = df.query(qual_filt_condition)

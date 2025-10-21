@@ -23,7 +23,7 @@ class VirAbdStat(multiVirCount):
                 outdir=tmp_dir,
                 threads=tmp_threads
             )
-            cmd,__ = VirDetect.checkv(tmp_fa)
+            cmd, __ = VirDetect.checkv(tmp_fa)
             checkv_dir = f'{self.wkfile_dir}/checkv'
         checkv_dir = os.path.abspath(checkv_dir)
         votu_qual = f'{checkv_dir}/quality_summary.tsv'

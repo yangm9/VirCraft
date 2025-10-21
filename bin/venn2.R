@@ -6,6 +6,8 @@ args <- commandArgs(trailing=T)
 	site_f2 <- args[2]
 	pdf_f <- args[3]
 
+
+
 A <- read.table(site_f1, header = F)
 B <- read.table(site_f2, header = F)
 

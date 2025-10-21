@@ -9,7 +9,6 @@ import re
 import pandas as pd
 import linkTab
 
-#The relative path to the final result table for viral identify tool, and it need to transform to the full path in this program.
 
 '''
 如果要添加新的病毒序列鉴定软件，需要修改以下内容：
@@ -19,6 +18,9 @@ import linkTab
 4. calcCtgScore函数中添加一行对新软件进行分数转换
 '''
 
+Tools = ['virsorter2', 'vibrant', 'genomad', 'deepvirfinder']
+
+#The relative path to the final result table for viral identify tool, and it need to transform to the full path in this program.
 PathDict = {
     'virsorter2' : 'vs2-pass1/final-viral-score.tsv',
     'vibrant' : 'VIBRANT_{0}/VIBRANT_results_{0}/VIBRANT_machine_{0}.tsv',
@@ -34,7 +36,7 @@ NameDict = {
     'genomad' : 'seq_name'
 }
 
-#The Final output FastA file from each tool.
+#The Final output FastA file of each tool.
 FastaDict = {
     'virsorter2' : 'vs2-pass1/final-viral-combined.fa',
     'vibrant' : 'VIBRANT_{0}/VIBRANT_phages_{0}/{0}.phages_combined.fna',
@@ -42,7 +44,7 @@ FastaDict = {
     'genomad' : ''
 }
 
-#The intermediate output from this program for each tool.
+#The intermediate output of this program for each tool.
 CsvDict = {
     'virsorter2' : '{}/vs2_viral_info.tsv',     
     'vibrant' : '{}/vb_viral_info.tsv',
@@ -82,10 +84,10 @@ def resultFile(name, tool, wkdir):
         result = result.format(name)
     return result
 
-#Extract a list of full and partial contigs from the results of dvf, vb and vs2 tools, meanwhile output key information for each tools.
+#Extract a list of full and partial contigs from the results of dvf, vb, vs2, and genomad tools, meanwhile output key information for each tools.
 def vCtgMerge(name, wkdir):
     all_ctgs = []
-    for tool in PathDict.keys():
+    for tool in Tools:
         result = resultFile(name, tool, wkdir)
         df = pd.read_csv(result, sep='\t')
         if tool == 'virsorter2':
@@ -125,11 +127,11 @@ def vCtgMerge(name, wkdir):
 
 #Calculate the final score according to all results.
 def calcCtgScore(all_merged_ctgs):
-    df=pd.read_csv(all_merged_ctgs, sep='\t')
-    df['vs2_score'] = df.apply(lambda x : 2 if x['vs2_max_score'] >= 0.9 else (1 if x['vs2_max_score'] >= 0.7 and x['vs2_hallmark'] > 0 else 0), axis = 1)
+    df = pd.read_csv(all_merged_ctgs, sep='\t')
+    df['vs2_score'] = df.apply(lambda x : 2 if x['vs2_max_score'] >= 0.9 else (1 if x['vs2_max_score'] >= 0.7 and x['vs2_hallmark'] >= 1 else 0), axis = 1)
     df['vb_score'] = df['vb_isPhage'].apply(lambda x : 1 if x == 1 else 0)
-    df['dvf_score'] = df.apply(lambda x : 1 if x['dvf_v_score'] >= 0.9 and x['dvf_pvalue'] <= 0.1 else 0, axis = 1)
-    df['gm_score'] = df.apply(lambda x : 2 if x['gm_v_score'] >= 0.8 else (1 if x['gm_v_score'] >= 0.7 and x['gm_hallmarks'] > 0 else 0), axis = 1)
+    df['dvf_score'] = df.apply(lambda x : 1 if x['dvf_v_score'] >= 0.9 and x['dvf_pvalue'] <= 0.05 else 0, axis = 1)
+    df['gm_score'] = df.apply(lambda x : 2 if x['gm_v_score'] >= 0.8 else (1 if x['gm_v_score'] >= 0.7 and x['gm_hallmarks'] >= 1 else 0), axis = 1)
     df['score'] = df['vs2_score'] + df['vb_score'] + df['dvf_score'] + df['gm_score']
     postfix = f'.score.tsv'
     all_filt_ctgs = all_merged_ctgs.replace('.tsv', postfix)
@@ -139,15 +141,15 @@ def calcCtgScore(all_merged_ctgs):
 #Main function
 def ctgList(name, wkdir):
     all_nh_ctgs = vCtgMerge(name, wkdir)
-    all_ctgs = ['Contig'] + all_nh_ctgs
+    all_ctgs = ['Contig'] + all_nh_ctgs # the 1st column of output
     all_ctgs_li = f'{wkdir}/all_viral_ctgs.list'
     listToFile(all_ctgs, all_ctgs_li)
     mark = all_ctgs_li
-    for tool in CsvDict.keys():
+    for tool in Tools:
         csv_name = CsvDict[tool].format(wkdir) #{vb}_viral_cfgs.tsv
-        merged_name = mark + '_' + tool
+        merged_name = mark + '_' + tool # all_viral_ctgs.list_virsorter2_vibrant_deepvirfinder_genomad 
         linkTab.merge(mark, csv_name, 'left', 'Contig', merged_name)
-        if mark != all_ctgs_li:
+        if mark != all_ctgs_li: # To prevent accidental deletion of all_viral_ctgs.list
             os.remove(mark)
         mark = merged_name
     all_merged_ctgs = f'{wkdir}/all_viral_ctgs.tsv'
