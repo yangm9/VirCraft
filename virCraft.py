@@ -14,6 +14,7 @@ from crafts.data import fastqc
 from crafts.assembly import assembly
 from crafts.identify import viridsop
 from crafts.identify import posiViralConfirm
+from crafts.identify import ctgBinning
 from crafts.votus import uniqVirCtg
 from crafts.taxa import viralClassifier
 from crafts.taxa import viralCompare
@@ -49,26 +50,32 @@ def reads_qc(args):
 @logger.Log(level='INFO')
 def assemble(args):
     Draft = assembly.Assembly(fq1=args.fq1, fq2=args.fq2, outdir=args.outdir, threads=args.threads)
-    rcode = Draft.Assemble(process=args.process, cutoff=args.cutoff, unrun=args.unrun)
+    rcode = Draft.Assemble(process=args.process, min_len=args.min_len, unrun=args.unrun)
     return rcode
 
 #----------------------identify-----------------------
 @logger.Log(level='INFO')
 def identify(args):
-    rcode = 0
     if args.sop == 'viral-id-sop':
         VirCtg = viridsop.VirScan(fasta=args.fasta, outdir=args.outdir, threads=args.threads)
         rcode = VirCtg.Identify(unrun=args.unrun)
     else:
         VirCtg = posiViralConfirm.vIdentify(fasta=args.fasta, outdir=args.outdir, threads=args.threads)
-        rcode = VirCtg.Identify(cutoff=args.cutoff, mode=args.mode, unrun=args.unrun)
+        rcode = VirCtg.Identify(min_len=args.min_len, mode=args.mode, unrun=args.unrun)
     return rcode
 
-#-----------------------votus-------------------------
+#----------------------binning-----------------------
+@logger.Log(level='INFO')
+def binning(args):
+    vMAGs = ctgBinning.VirMAG(fasta=args.fasta, outdir=args.outdir, threads=args.threads)
+    rcode = vMAGs.Binning(file_mode=args.file_mode, fsbc_files=arg.fsbc_files, unrun=args.unrun)
+    return rcode
+
+#---------------------votus-------------------------
 @logger.Log(level='INFO')
 def votus(args):
     vOTUs = uniqVirCtg.VirRef(fasta=args.fasta, outdir=args.outdir, threads=args.threads)
-    rcode = vOTUs.RmDup(args.cutoff, unrun=args.unrun, method=args.method)
+    rcode = vOTUs.RmDup(args.min_len, unrun=args.unrun, method=args.method)
     return rcode
 
 #---------------------classify------------------------
@@ -132,6 +139,7 @@ def main():
         'reads_qc': reads_qc,
         'assemble': assemble,
         'identify': identify,
+        'binning': binning,
         'votus': votus, 
         'classify': classify,
         'compare': compare,

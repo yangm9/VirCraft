@@ -42,54 +42,6 @@ class DB:
         db_files = db_dir + '/*'
         cmd = ['conda run -n VC-CheckV checkv download_database', wkdir, '&& mv', db_files, wkdir, '&& rmdir', db_dir, '&& touch', Done, '\n']
         return cmd
-    def dl_refseq_viral_prot(self, wkdir):
-        Done = f'{wkdir}/Done'
-        taxdump_tgz = f'{wkdir}/taxdump.tar.gz'
-        vir_prot_prefix = f'{wkdir}/viral.1.protein'
-        vir_prot = vir_prot_prefix + '.faa'
-        vir_prot_gz = vir_prot+'.gz'
-        vir_version = f'{wkdir}/RELEASE_NUMBER'
-        vir_pid_sp = f'{wkdir}/NCBI_viral_pid_sp.txt'
-        vir_name_taxaid = vir_pid_sp.replace('_pid_sp', '_name_taxid')
-        vir_pid_taxa = vir_pid_sp.replace('_pid_sp', '_taxnomomy')
-        vir_sp_taxa = vir_pid_sp.replace('_pid_sp', '_sp_taxa')
-        vir_pid_sp_h = vir_pid_sp.replace('.txt', '.h.txt')
-        vir_full_taxa=vir_pid_sp.replace('_pid_sp','_full_taxnomomy')
-        cmd=[utils.selectENV('VC-General')]
-        cmd.extend(
-            ['wget', '-c', URL.NCBI_VIR_PROT_URL, '-O', vir_prot_gz, '--no-check-certificate\n', 'gzip -d',vir_prot_gz, '\n',
-             'wget', '-c', URL.NCBI_RELEASE_NUMBER_URL, '-O', vir_version, '--no-check-certificate\n',
-             'makeblastdb -in', vir_prot, '-parse_seqids -hash_index', '-out', vir_prot_prefix, '-dbtype prot\n',
-             'wget', '-c', URL.NCBI_TAXDUMP_URL, '-O', taxdump_tgz, '--no-check-certificate\n',
-             '''if [ ! -d ~/.taxonkit ]; then
-    mkdir ~/.taxonkit
-fi
-if [ -z "$(ls -A ~/.taxonkit)" ]; then
-    tar xzf''', taxdump_tgz, '''-C ~/.taxonkit
-fi
-'''
-             'extract_pid_sp_from_faa.py', vir_prot, '>', vir_pid_sp, '\n',
-             'cut -f 2', vir_pid_sp, "|uniq|taxonkit name2taxid|sed '1ispecies\\ttaxid'>", vir_name_taxaid, '\n',
-             'cut -f 2', vir_pid_sp, "|uniq|taxonkit name2taxid|cut -f 2|taxonkit lineage|taxonkit reformat -r 'Unassigned'|cut -f 1,3|sed '1itaxid\\ttaxonomy'>", vir_pid_taxa, '\n',
-             "csvtk join -t -f 'taxid;taxid'", vir_name_taxaid, vir_pid_taxa, '|uniq>', vir_sp_taxa, '\n',
-             'csvtk add-header -t -n NCBI_ID,species', vir_pid_sp, '>', vir_pid_sp_h, '\n',
-             "csvtk join -t -f 'species;species'", vir_sp_taxa, vir_pid_sp_h, '>', vir_full_taxa, '\n',
-             'rm -f', taxdump_tgz, vir_pid_sp, vir_name_taxaid, vir_pid_taxa, vir_sp_taxa, vir_pid_sp_h, '&& touch', Done, '\n']
-        )
-        return cmd
-    def dl_demovir_db(self, wkdir):
-        Done = f'{wkdir}/Done'
-        TrEMBL_viral_taxa_rds = f'{wkdir}/TrEMBL_viral_taxa.RDS'
-        nr95_bz2 = f'{wkdir}/nr.95.fasta.bz2'
-        uniprot_udb = f'{wkdir}/uniprot_trembl.viral.udb'
-        nr95_fa = nr95_bz2.replace('nr.95.fasta.bz2','nr.95.fasta')
-        cmd = [utils.selectENV('VC-General')]
-        cmd.extend(
-            ['wget', '-c', URL.Demovir_URL, '-O', TrEMBL_viral_taxa_rds, '\n',
-             'wget', '-c', URL.DemovirDB_URL, '-O', nr95_bz2, '&& cd', wkdir, '&& bzip2 -d', nr95_bz2, '\n',
-             'usearch', '-makeudb_ublast', nr95_fa, '-output', uniprot_udb, '> usearch_database.log', '&& touch', Done, '\n']
-        )
-        return cmd
     def dl_eggnog_db(self, wkdir):
         Done = f'{wkdir}/Done'
         eggnog_db_gz = f'{wkdir}/eggnog.db.gz'
@@ -130,8 +82,6 @@ fi
             'VC-geNomadDB': self.dl_genomad_db,
             'VC-CATDB': self.dl_CAT_db,
             'VC-CheckVDB': self.dl_checkv_db,
-            'VC-ViralRefSeqDB': self.dl_refseq_viral_prot,
-            'VC-DemovirDB': self.dl_demovir_db,
             #'VC-eggNOGDB': self.dl_eggnog_db,
             #'VC-KofamScanDB': self.dl_kofamscan_db,
             'VC-GTDBTkDB': self.dl_gtdbtk_db,

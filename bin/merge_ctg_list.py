@@ -3,20 +3,17 @@
 #versions: 0.0.1
 #versions: 0.0.2 2023-07-26 22:42
 
+# If you need to add new virus sequence identification software, the following content must be modified:
+# 1. Add new key-value pairs to all dictionaries before the first function;
+# 2. Modify the result file path in the resultFile function to align with the dictionaries;
+# 3. Add the processing of results from the new software in the if...elif... structure within the vCtgMerge function;
+# 4. Add a line in the calcCtgScore function to convert scores for the new software.
+
 import os
 import sys
 import re
 import pandas as pd
 import linkTab
-
-
-'''
-如果要添加新的病毒序列鉴定软件，需要修改以下内容：
-1. 第一个函数前所有的字典中需要添加新的键值对；
-2. resultFile函数中的结果文件位置需要配合字典进行修改
-3. vCtgMerge函数中if……elif……结构中需要对应添加新软件的结果处理
-4. calcCtgScore函数中添加一行对新软件进行分数转换
-'''
 
 Tools = ['virsorter2', 'vibrant', 'genomad', 'deepvirfinder']
 
@@ -36,7 +33,7 @@ NameDict = {
     'genomad' : 'seq_name'
 }
 
-#The Final output FastA file of each tool.
+#The final output FastA file of each tool.
 FastaDict = {
     'virsorter2' : 'vs2-pass1/final-viral-combined.fa',
     'vibrant' : 'VIBRANT_{0}/VIBRANT_phages_{0}/{0}.phages_combined.fna',

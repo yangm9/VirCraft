@@ -1,6 +1,5 @@
 import os
 from ..general import utils
-from ..data.bioseq import Seq
 from .viralDetectors import VirDetectTools
 
 class vIdentify(VirDetectTools):
@@ -12,7 +11,7 @@ class vIdentify(VirDetectTools):
         super().__init__(fasta, outdir)
         self.allthreads = threads
         self.threads = int(threads) // (self.BATCH_SIZE * 2)
-    def vFilter(self, cutoff=2000, mode='permissive'):
+    def vFilter(self, min_len=2000, mode='permissive'):
         mode_dict = {'permissive' : '1', 'strict' : '2'}
         score_tsv = f'{self.wkfile_dir}/all_viral_ctgs.score.tsv'
         score_filt_tsv = utils.insLable(score_tsv, mode)
@@ -34,7 +33,7 @@ class vIdentify(VirDetectTools):
             "&& awk -F '\\t' 'NR>1 && $30>=1 {print $1}'", score_tsv, '>', dvf_list, "&& awk -F '\\t' 'NR>1 && $31>=1 {print $1}'", score_tsv, '>', gn_list,
             '&& venn4.R', vs2_list, vb_list, dvf_list, gn_list, venn_pdf, '\n']
         )
-        if cutoff < 5000:
+        if min_len < 5000:
             tmp_cmd, checkv_dir = self.checkv(viral_filt_ctgs_fna)
             cmd.extend(tmp_cmd)
             quality_summary_tsv = checkv_dir + '/quality_summary.tsv'
@@ -50,11 +49,14 @@ class vIdentify(VirDetectTools):
         self.outdir = viral_posi_ctgs_fna
         cmd.extend(self.statFA()) # Invoke the statFA() method from the Seq module
         self.outdir = outdir
+        complete_ctg_fna = viral_posi_ctgs_fna.replace('.fna', '_complete.fna')
+        provirus_ctg_fna = viral_posi_ctgs_fna.replace('.fna', '_provirus.fna')
+        vctg_for_binning_fna = viral_posi_ctgs_fna.replace('.fna', '_for_binning.fna')
         cmd.extend(
-            ['cd', self.outdir, '&& ln', score_tsv, '&& ln', viral_posi_ctgs_fna, '\n']
+            ['cd', self.outdir, '&& ln', score_tsv, '&& ln', viral_posi_ctgs_fna, '&& ln', complete_ctg_fna, '&& ln', provirus_ctg_fna, '&& ln', vctg_for_binning_fna, '\n']
         )
         return cmd
-    def Identify(self, cutoff=2000, mode='permissive', unrun=False):
+    def Identify(self, min_len=2000, mode='permissive', unrun=False):
         try:
             if int(self.allthreads) < 8:
                 raise ValueError('The threads number must not be less than 8!!!')
@@ -63,11 +65,11 @@ class vIdentify(VirDetectTools):
             exit(1)
         self.threads = str(self.threads)
         #vibrant
-        cmd, wkdir = self.vibrant(cutoff)
+        cmd, wkdir = self.vibrant(min_len)
         shell = f'{self.shell_dir}/{self.name}_vb_ctg.sh'
         utils.printSH(shell, cmd)
         #deepvirfinder
-        cmd, wkdir = self.deepvirfinder(cutoff)
+        cmd, wkdir = self.deepvirfinder(min_len)
         shell = f'{self.shell_dir}/{self.name}_dvf_ctg.sh'
         utils.printSH(shell, cmd)
         #genomad
@@ -76,7 +78,7 @@ class vIdentify(VirDetectTools):
         utils.printSH(shell, cmd)
         #VirSorter2
         self.threads = str(int(self.allthreads) - (int(self.threads) * 3)) #5
-        cmd, wkdir = self.virsorter(in_fa=self.fasta, n=0, min_length=cutoff, min_score=0.5)
+        cmd, wkdir = self.virsorter(in_fa=self.fasta, n=0, min_len=min_len, min_score=0.5)
         shell = f'{self.shell_dir}/{self.name}_vs2_ctg.sh'
         utils.printSH(shell, cmd)
         #multiple run
@@ -89,7 +91,7 @@ class vIdentify(VirDetectTools):
         results = ''
         if not unrun: results = utils.execute(shell) 
         self.threads = str(self.allthreads) #8
-        cmd = self.vFilter(cutoff, mode)
+        cmd = self.vFilter(min_len, mode)
         shell = f'{self.shell_dir}/{self.name}_get_positive_virus.sh'
         utils.printSH(shell, cmd)
         if not unrun: results += utils.execute(shell)

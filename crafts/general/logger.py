@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 import sys
 
-version = '0.0.15'
+version = '0.0.17'
 def curr_time():
     return datetime.now().replace(microsecond=0)
 
@@ -64,13 +64,17 @@ class Log:
                 arg_obj = args[0]
                 # Check if there is an unrun attribute and it is True
                 if hasattr(arg_obj, 'unrun') and getattr(arg_obj, 'unrun'):
-                    self.logger.info("VirCraft unrun flag -- will only output the shell scripts")
+                    self.logger.info(f'VirCraft {func.__name__} will only output the shell scripts without execution (-u: unrun flag)')
+            
+            try:
+                result = func(*args, **kwargs)
+                self.logger.info(f'VirCraft {func.__name__} done!')
+            except Exception as e:
+                self.logger.error(f'{func.__name__} failed: {e}', exc_info=True)
+                raise
 
-            result = func(*args, **kwargs)
             end_time = curr_time()
             elapsed_time = end_time - start_time
-            if result == 0:
-                self.logger.info(f'VirCraft {func.__name__} done!')
             self.logger.info(f'Elapsed time: {elapsed_time}')
             return result
         return wrapper

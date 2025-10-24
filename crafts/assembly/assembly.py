@@ -123,11 +123,11 @@ class Assembly(Reads):
             pass
         return cmd, final_scaf
     
-    def Assemble(self, process='ms', cutoff=2000, unrun=False, clear=False):
+    def Assemble(self, process='ms', min_len=2000, unrun=False, clear=False):
         '''
         Perform the entire assembly process and return the result.
         :param process: Assembly process (default is MEGAHIT).
-        :param cutoff: Minimum contig length to retain.
+        :param min_len: Minimum contig length to retain.
         :param unrun: If True, the assembly will not run but the commands will be generated.
         :param clear: If True, intermediate files will be deleted after assembly.
         :return: Assembly results.

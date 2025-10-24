@@ -53,23 +53,23 @@ class Seq(VirCfg):
         shell = f'{self.shell_dir}/{self.name}_bwaidx.sh'
         utils.printSH(shell, cmd)
         return cmd, bwa_idx
-    def lenCutoff(self, cutoff=2000):
+    def lenCutoff(self, min_len=2000):
         cmd = [self.envs]
         filt_prefix = f'{self.outdir}/{self.name}.filt'
         cmd.extend(
-            ['SeqLenCutoff.pl', self.fasta, filt_prefix, str(cutoff), '\n']
+            ['SeqLenCutoff.pl', self.fasta, filt_prefix, str(min_len), '\n']
         )
         return cmd
     def statFA(self):
         cmd = [self.envs]
         size_dist = f'{self.stat_dir}/fasta_size_distribution.pdf'
         len_gc_stat = f'{self.stat_dir}/fasta_size_gc_stat.tsv'
-        ln50_stat = f'{self.stat_dir}/fasta_ln50_stat.tsv'
+        nl50_stat = f'{self.stat_dir}/fasta_nl50_stat.tsv'
         cmd.extend(
             ['fasta_size_distribution_plot.py', self.fasta, '-o', size_dist, '-s 2000 -g 10 -t "Sequence Size Distribution"\n',
              'fasta_size_gc.py', self.fasta, '>', len_gc_stat, '\n',
              'variables_scatter.R', len_gc_stat, 'Length~GC', self.stat_dir, '\n',
-             'stat_N50.pl', self.fasta, ln50_stat, '\n']
+             'stat_NL50.pl', self.fasta, nl50_stat, '\n']
         )
         return cmd
     def genePred(self):
