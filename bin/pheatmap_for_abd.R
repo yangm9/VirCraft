@@ -1,10 +1,10 @@
 #!/usr/bin/env Rscript
 #yangm@idsse.ac.cn
-#为每一行添加来源或者Taxa
+
 argv <- commandArgs(T)
 
 if(length(argv) < 3){
-    stop("inputs: <merged_tpm_tsv> <samp_group_tsv> <heatmap_dir>\n")
+    stop("Usage: <merged_tpm_tsv> <samp_group_tsv> <heatmap_dir> [source_column]\n")
 }
 
 if(!require("pheatmap")){
@@ -56,19 +56,29 @@ ann_colors <- list(Group=generate_named_vector(unique(ColNames), grp_color))
 annotation_col <- data.frame(Group=factor(ColNames))
 rownames(annotation_col) <- SampNames
 
-if('Source' %in% colnames(df)){
-    Uniq_Source <- sort(unique(df$Source))
-    annotation_row <- data.frame(Source = factor(df$Source))
-    ann_colors$Source <- generate_named_vector(Uniq_Source,source_color)
+source_col <- if (length(argv) >= 4) argv[4]
+
+# 支持可选的 source 列
+if(!is.null(source_col) && source_col %in% colnames(df)){
+    source_values <- df[[source_col]]
+    source_values[is.na(source_values) | source_values == ""] <- "Unassigned"
+    uniq_source <- sort(unique(source_values))
+    annotation_row <- data.frame(factor(source_values))
+    colnames(annotation_row) <- source_col
+    ann_colors[[source_col]] <- generate_named_vector(uniq_source, source_color)
     rownames(annotation_row) <- rownames(df)
 }else{
-    annotation_row<-NA
+    annotation_row <- NA
 }
 
-df <- subset(df,select=SampNames)
-rownames(annotation_col)=names(df)
 
-pdf(paste(argv[3], '/abundance_heatmap.pdf', sep=''), width=10, height=8)
+df <- subset(df, select=SampNames)
+rownames(annotation_col) <- names(df)
+
+output_prefix <- basename(argv[1])
+output_prefix <- sub("\\.[^.]*$", "", output_prefix)
+output_file <- paste(argv[3], '/', output_prefix, '.heatmap.pdf', sep='')
+pdf(output_file, width=10, height=8)
 pheatmap(
     log10(df+1),
     cluster_row=TRUE,

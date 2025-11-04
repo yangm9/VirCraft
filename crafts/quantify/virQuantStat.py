@@ -8,12 +8,15 @@ class VirAbdStat(multiVirCount):
     def __init__(self, samp_info=None, fasta=None, outdir=None, threads=8):
         super().__init__(samp_info, fasta, outdir, threads)
     def mergeAbd(self, seq_type='Contig'): #Heatmap for contigs abundance
-        abd = f'{self.stat_dir}/all_merged.cov'
-        cmd = ['paste_abundance_files.py', self.wkfile_dir, self.samp_info, abd, seq_type, '\n']
+        abd = f'{self.stat_dir}/all_viral_contig_abundance.cov'
+        cmd = ['echo "Merge all viral contig abundance files"\n'
+               'paste_abundance_files.py', self.wkfile_dir, self.samp_info, abd, seq_type, '\n\n'
+        ]
         return cmd, abd
     def sizeAbdPlot(self, abd: str, checkv_dir=None):
         cmd = [utils.selectENV('VC-General')]
-        sum_abd = f'{self.stat_dir}/contig_sum_abd.tsv'
+        ctg_sum_abd_tsv = f'{self.stat_dir}/viral_contig_total_abundance.tsv'
+        cmd.append('echo "Draw scatter plots of abundance and quality information"\n')
         if not checkv_dir:
             tmp_fa = self.fasta
             tmp_dir = self.wkfile_dir
@@ -23,18 +26,18 @@ class VirAbdStat(multiVirCount):
                 outdir=tmp_dir,
                 threads=tmp_threads
             )
-            cmd, __ = VirDetect.checkv(tmp_fa)
+            tmp_cmd, __ = VirDetect.checkv(tmp_fa)
             checkv_dir = f'{self.wkfile_dir}/checkv'
+            cmd.extend(tmp_cmd)
         checkv_dir = os.path.abspath(checkv_dir)
-        votu_qual = f'{checkv_dir}/quality_summary.tsv'
-        sum_qual = f'{self.stat_dir}/sum_abd_qual.tsv'
+        votu_qual_tsv = f'{checkv_dir}/quality_summary.tsv'
+        ctg_sum_qual_tsv = f'{self.stat_dir}/vctg_total_abundance_quality.tsv'
         cmd.extend(
-            ['sum_abd_by_seq.py', abd,sum_abd, '\n',
-             "sed -i '1s/contig_id/Contig/'", votu_qual, '\n',
-             'linkTab.py', sum_abd, votu_qual, 'left Contig', sum_qual, '\n',
-             'variables_scatter.R', sum_qual, 'contig_length~Total_Abundance~checkv_quality', self.stat_dir, '\n',
-             'variables_scatter.R', sum_qual, 'contig_length~contamination~checkv_quality', self.stat_dir, '\n',
-             'variables_scatter.R', sum_qual, 'contig_length~gene_count~checkv_quality', self.stat_dir, '\n']
+            ['sum_abd_by_seq.py', abd, ctg_sum_abd_tsv, "&& sed -i '1s/contig_id/Contig/'", votu_qual_tsv,
+             '&& linkTab.py', ctg_sum_abd_tsv, votu_qual_tsv, 'left Contig', ctg_sum_qual_tsv, '&& rm -f', votu_qual_tsv,
+             '&& variables_scatter.R', ctg_sum_qual_tsv, 'contig_length~Total_Abundance~checkv_quality', self.stat_dir,
+             '&& variables_scatter.R', ctg_sum_qual_tsv, 'contig_length~contamination~checkv_quality', self.stat_dir,
+             '&& variables_scatter.R', ctg_sum_qual_tsv, 'contig_length~gene_count~checkv_quality', self.stat_dir, '\n\n']
         )
         return cmd
     def taxaAbd(self, abd: str, taxa_anno=None):
@@ -45,37 +48,39 @@ class VirAbdStat(multiVirCount):
             )
             return cmd
         taxa_anno = os.path.abspath(taxa_anno)
-        m_taxa_anno = f'{self.stat_dir}/all_votu.taxa.txt'
-        abd_taxa = f'{self.stat_dir}/all_sum_abd_taxa.tsv'
-        m_abd_taxa = f'{self.stat_dir}/all_sum_abd_taxa.m.tsv'
-        ctg_taxa_abd = f'{self.stat_dir}/all_ctg_abd_taxa.tsv'
-        taxa_sum_abd = f'{self.stat_dir}/all_taxa_sum_abd.tsv'
-        order_sum_abd = f'{self.stat_dir}/all_Order_sum_abd.tsv'
-        family_sum_abd = f'{self.stat_dir}/all_Family_sum_abd.tsv'
+        vir_taxa_anno_tsv = f'{self.stat_dir}/vctg_taxa.tsv'
+        vir_abd_taxa_tsv = f'{self.stat_dir}/vctg_abundance_order_family.tsv'
+        vir_taxa_abd_tsv = f'{self.stat_dir}/vctg_taxa_abundance.tsv'
+        vir_abd_sum_by_taxa_tsv = f'{self.stat_dir}/viral_abundance_summed_by_taxa.tsv'
+        order_sum_vir_abd_tsv = f'{self.stat_dir}/order_summed_viral_abundance.tsv'
+        family_sum_vir_abd_tsv = f'{self.stat_dir}/family_summed_viral_abundance.tsv'
         cmd.extend(
-            ["sed '1s/Sequence_ID/Contig/'", taxa_anno, '>', m_taxa_anno, '\n',
-             'linkTab.py', abd, m_taxa_anno, 'left Contig', abd_taxa, '\n',
-             "sed '1s/Order/Source/'", abd_taxa, '>', m_abd_taxa, '\n',
-             'pheatmap_for_abd.R', m_abd_taxa, self.samp_info, self.stat_dir, '\n',
+            ['echo "Ploting heatmaps of relative abundance"\n',
+             "sed '1s/Sequence_ID/Contig/'", taxa_anno, '>', vir_taxa_anno_tsv,
+             '&& linkTab.py', abd, vir_taxa_anno_tsv, 'left Contig', vir_abd_taxa_tsv, '&& rm -rf', vir_taxa_anno_tsv,
+             '&& pheatmap_for_abd.R', vir_abd_taxa_tsv, self.samp_info, self.stat_dir, 'Order',
+             '&& pheatmap_for_abd.R', vir_abd_taxa_tsv, self.samp_info, self.stat_dir, 'Family && rm -rf', vir_abd_taxa_tsv, '\n\n',
              'echo "Barplot for abundance by taxa"\n',
-             'taxa_annot_abd.py', abd_taxa, ctg_taxa_abd, '\n',
-             'sum_abd_by_taxa.py', ctg_taxa_abd, self.stat_dir, '\n',
-             'barplot_for_taxa_abd.R', taxa_sum_abd, self.stat_dir, '\n',
-             'barplot_for_taxa_abd.R', order_sum_abd, self.stat_dir, '\n',
-             'barplot_for_taxa_abd.R', family_sum_abd, self.stat_dir, '\n']
+             'taxa_annot_abd.py', vir_abd_taxa_tsv, vir_taxa_abd_tsv,
+             '&& sum_abd_by_taxa.py', vir_taxa_abd_tsv, self.stat_dir, '\n',
+             'barplot_for_taxa_abd.R', vir_abd_sum_by_taxa_tsv, self.stat_dir,
+             '&& barplot_for_taxa_abd.R', order_sum_vir_abd_tsv, self.stat_dir,
+             '&& barplot_for_taxa_abd.R', family_sum_vir_abd_tsv, self.stat_dir, '\n\n',
+             'echo "Heatmap for abundance by taxa"\n',
+             'pheatmap_for_abd.R', order_sum_vir_abd_tsv, self.stat_dir,
+             '&& pheatmap_for_abd.R', family_sum_vir_abd_tsv, self.stat_dir, '\n\n']
         )
         return cmd
     def diversity(self, abd: str):
         cmd = [utils.selectENV('VC-General')]
         cmd.extend(
-            ['echo "Alpha and Beta Diversity"\n',
+            ['echo "Alpha and Beta diversity analysis"\n',
              'alpha_diversity.R', abd, self.samp_info, self.stat_dir, '\n',
              'PCoA.R', abd, self.samp_info, self.stat_dir, '\n',
-             'NMDS.R', abd, self.samp_info, self.stat_dir, '\n']
+             'NMDS.R', abd, self.samp_info, self.stat_dir, '\n\n']
         )
         return cmd
-    def QuantStat(self, taxa_anno=None, checkv_dir=None, coverm_method='mean', unrun=False, clear=False):
-        "Main Function"
+    def QuantStat(self, taxa_anno=None, checkv_dir=None, coverm_method='mean', unrun=False, clear=False): # Main Function
         cmd = self.virCountBySamp(coverm_method)
         cmd.extend([utils.selectENV('VC-General')])
         cmd.extend(
