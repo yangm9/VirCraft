@@ -14,22 +14,17 @@ class VirAbdStat(multiVirCount):
         ]
         return cmd, abd
     def sizeAbdPlot(self, abd: str, checkv_dir=None):
-        cmd = [utils.selectENV('VC-General')]
-        ctg_sum_abd_tsv = f'{self.stat_dir}/viral_contig_total_abundance.tsv'
-        cmd.append('echo "Draw scatter plots of abundance and quality information"\n')
+        cmd = ['echo "Draw scatter plots of abundance and quality information"\n']
         if not checkv_dir:
             tmp_fa = self.fasta
-            tmp_dir = self.wkfile_dir
             tmp_threads = self.threads
-            VirDetect = VirDetectTools(
-                fasta=tmp_fa,
-                outdir=tmp_dir,
-                threads=tmp_threads
-            )
+            VirDetect = VirDetectTools(fasta=tmp_fa, outdir=self.outdir, threads=tmp_threads)
             tmp_cmd, __ = VirDetect.checkv(tmp_fa)
             checkv_dir = f'{self.wkfile_dir}/checkv'
             cmd.extend(tmp_cmd)
         checkv_dir = os.path.abspath(checkv_dir)
+        cmd.extend([utils.selectENV('VC-General')])
+        ctg_sum_abd_tsv = f'{self.stat_dir}/viral_contig_total_abundance.tsv'
         votu_qual_tsv = f'{checkv_dir}/quality_summary.tsv'
         ctg_sum_qual_tsv = f'{self.stat_dir}/vctg_total_abundance_quality.tsv'
         cmd.extend(
@@ -82,9 +77,10 @@ class VirAbdStat(multiVirCount):
         return cmd
     def QuantStat(self, taxa_anno=None, checkv_dir=None, coverm_method='mean', unrun=False, clear=False): # Main Function
         cmd = self.virCountBySamp(coverm_method)
+        cmd.append('echo "Run coverm in batch mode to calculate the abundance"\n')
         cmd.extend([utils.selectENV('VC-General')])
         cmd.extend(
-            ['multithreads.pl', self.shell_dir, 'viral_count.sh', str(self.BATCH_SIZE), '\n']
+            ['multithreads.pl', self.shell_dir, 'viral_count.sh', str(self.BATCH_SIZE), '\n\n']
         )
         tmp_cmd, abd = (None, None)
         if coverm_method == 'metabat':
