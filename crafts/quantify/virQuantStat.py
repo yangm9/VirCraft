@@ -29,7 +29,7 @@ class VirAbdStat(multiVirCount):
         ctg_sum_qual_tsv = f'{self.stat_dir}/vctg_total_abundance_quality.tsv'
         cmd.extend(
             ['sum_abd_by_seq.py', abd, ctg_sum_abd_tsv, "&& sed -i '1s/contig_id/Contig/'", votu_qual_tsv,
-             '&& linkTab.py', ctg_sum_abd_tsv, votu_qual_tsv, 'left Contig', ctg_sum_qual_tsv, '&& rm -f', votu_qual_tsv,
+             '&& linkTab.py', ctg_sum_abd_tsv, votu_qual_tsv, 'left Contig', ctg_sum_qual_tsv,
              '&& variables_scatter.R', ctg_sum_qual_tsv, 'contig_length~Total_Abundance~checkv_quality', self.stat_dir,
              '&& variables_scatter.R', ctg_sum_qual_tsv, 'contig_length~contamination~checkv_quality', self.stat_dir,
              '&& variables_scatter.R', ctg_sum_qual_tsv, 'contig_length~gene_count~checkv_quality', self.stat_dir, '\n\n']
@@ -47,23 +47,25 @@ class VirAbdStat(multiVirCount):
         vir_abd_taxa_tsv = f'{self.stat_dir}/vctg_abundance_order_family.tsv'
         vir_taxa_abd_tsv = f'{self.stat_dir}/vctg_taxa_abundance.tsv'
         vir_abd_sum_by_taxa_tsv = f'{self.stat_dir}/viral_abundance_summed_by_taxa.tsv'
-        order_sum_vir_abd_tsv = f'{self.stat_dir}/order_summed_viral_abundance.tsv'
-        family_sum_vir_abd_tsv = f'{self.stat_dir}/family_summed_viral_abundance.tsv'
+        order_sum_vir_abd_tsv = f'{self.stat_dir}/summed_vOrder_abundance.tsv'
+        family_sum_vir_abd_tsv = f'{self.stat_dir}/summed_vFamily_abundance.tsv'
         cmd.extend(
             ['echo "Ploting heatmaps of relative abundance"\n',
              "sed '1s/Sequence_ID/Contig/'", taxa_anno, '>', vir_taxa_anno_tsv,
-             '&& linkTab.py', abd, vir_taxa_anno_tsv, 'left Contig', vir_abd_taxa_tsv, '&& rm -rf', vir_taxa_anno_tsv,
+             '&& linkTab.py', abd, vir_taxa_anno_tsv, 'left Contig', vir_abd_taxa_tsv,
              '&& pheatmap_for_abd.R', vir_abd_taxa_tsv, self.samp_info, self.stat_dir, 'Order',
-             '&& pheatmap_for_abd.R', vir_abd_taxa_tsv, self.samp_info, self.stat_dir, 'Family && rm -rf', vir_abd_taxa_tsv, '\n\n',
+             '&& pheatmap_for_abd.R', vir_abd_taxa_tsv, self.samp_info, self.stat_dir, 'Family\n\n',
+             
              'echo "Barplot for abundance by taxa"\n',
              'taxa_annot_abd.py', vir_abd_taxa_tsv, vir_taxa_abd_tsv,
              '&& sum_abd_by_taxa.py', vir_taxa_abd_tsv, self.stat_dir, '\n',
              'barplot_for_taxa_abd.R', vir_abd_sum_by_taxa_tsv, self.stat_dir,
              '&& barplot_for_taxa_abd.R', order_sum_vir_abd_tsv, self.stat_dir,
              '&& barplot_for_taxa_abd.R', family_sum_vir_abd_tsv, self.stat_dir, '\n\n',
+             
              'echo "Heatmap for abundance by taxa"\n',
-             'pheatmap_for_abd.R', order_sum_vir_abd_tsv, self.stat_dir,
-             '&& pheatmap_for_abd.R', family_sum_vir_abd_tsv, self.stat_dir, '\n\n']
+             'pheatmap_for_abd.R', order_sum_vir_abd_tsv, self.samp_info, self.stat_dir,
+             '&& pheatmap_for_abd.R', family_sum_vir_abd_tsv, self.samp_info, self.stat_dir, '\n\n']
         )
         return cmd
     def diversity(self, abd: str):
