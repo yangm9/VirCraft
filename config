@@ -5,16 +5,25 @@ FastpOpts = -q 20 -u 20 -g -c -W 5 -3 -l 50 -f 10 -F 10
 
 ## assemble
 MegahitOpts = --min-contig-len 300 -m 0.9 --k-list 21,33,55,77,99,127
-SPAdesOpts = --careful -m 1300 -k 21,33,55,77,99,127
+SPAdesOpts = --careful -m 1000 -k 21,33,55,77,99,127
 
 ## identify
-VirSorter2Opts = --include-groups dsDNAphage, NCLDV, RNA, ssDNA, lavidaviridae
+VirSorter2Opts = --include-groups dsDNAphage,NCLDV,RNA,ssDNA,lavidaviridae all
+VIBRANTOpts =  
+DeepVirFinderOpts = 
+geNomadOpts = --cleanup
+
+## binning
+vRhymeOpts = --red 2 --method longest
+
+## classify
+CATOpts = 
 
 ## vir_quant
 CoverMOpts = --min-read-percent-identity 0.95 --min-read-aligned-length 50 --min-covered-fraction 10
 #coverm_args = --min-read-percent-identity 0.95 --min-read-aligned-length 50 --min-covered-fraction 10 --proper-pairs-only
 
-#Databases
+# Databases
 ## Path to blank control 
 ContamDB = /data_backup/database/contaminations/contaminations
 
@@ -38,9 +47,6 @@ CheckvDB = /data_backup/database/checkvDB/checkv-db-v1.5
 
 ## NCBI viral RefSeq database
 NCBIvRefProtDB = /data_backup/database/NCBI_refseq/viral
-
-## Full path to Demovir tools and database
-DemovirDB = /data_backup/software/biotools/demovir
 
 ## Version of vContact2 database, the options to choose from include: ProkaryoticViralRefSeq85-ICTV,ProkaryoticViralRefSeq85-Merged,ProkaryoticViralRefSeq88-Merged,ProkaryoticViralRefSeq94-Merged,ProkaryoticViralRefSeq97-Merged,ProkaryoticViralRefSeq99-Merged,ProkaryoticViralRefSeq201-Merged,ProkaryoticViralRefSeq207-Merged,ProkaryoticViralRefSeq211-Merged,ArchaeaViralRefSeq85-Merged,ArchaeaViralRefSeq94-Merged,ArchaeaViralRefSeq97-Merged,ArchaeaViralRefSeq99-Merged,ArchaeaViralRefSeq201-Merged,ArchaeaViralRefSeq207-Merged,ArchaeaViralRefSeq211-Merged
 vContact2DB = ProkaryoticViralRefSeq211-Merged

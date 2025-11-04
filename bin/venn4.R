@@ -1,5 +1,9 @@
 #!/usr/bin/env Rscript
-library(grid)
+
+if(!require("VennDiagram", quietly = TRUE)){
+    install.packages("VennDiagram", repos="https://cloud.r-project.org/")
+}
+
 library(VennDiagram)
 
 args <- commandArgs(trailing=T)
@@ -40,7 +44,8 @@ length_acd <- length(intersect(intersect(a, c), d))
 length_bcd <- length(intersect(intersect(b, c), d))
 length_abcd <- length(intersect(intersect(intersect(a, b), c), d))
 
-pdf(pdf_f, width = 10, height = 10)
+pdf(pdf_f, width=10, height=10)
+FillCol <- c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3")
 draw.quad.venn(
     area1=length_a, area2=length_b, area3=length_c, area4=length_d,
     n12=length_ab, n13=length_ac, n14=length_ad, n23=length_bc, n24=length_bd, n34=length_cd,
@@ -49,16 +54,16 @@ draw.quad.venn(
     category=c(name_f1, name_f2, name_f3, name_f4),
     cat.cex=1.8,
     cat.fontface="bold",
+    cat.col=FillCol,
     #col=c('darkred','darkgreen','darkblue'),
     lty=1,
     lwd=2,
     #rotation=1,
-    alpha=0.50,#????
-    cex=2,#????
+    alpha=0.50,
+    cex=2,
     fontfamily="serif", 
     rotation.degree=0, 
     #rotation.centre = c(0.5, 0.5),
-    fill=c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3"),
-    cat.col=c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3"),
+    fill=FillCol,
     reverse=F
 )

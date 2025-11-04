@@ -71,7 +71,8 @@ class VirAbdStat(multiVirCount):
         cmd.extend(
             ['echo "Alpha and Beta Diversity"\n',
              'alpha_diversity.R', abd, self.samp_info, self.wkfile_dir, '\n',
-             'NMDS.R', abd, self.samp_info, self.wkfile_dir,'\n']
+             'PCoA.R', abd, self.samp_info, self.wkfile_dir, '\n',
+             'NMDS.R', abd, self.samp_info, self.wkfile_dir, '\n']
         )
         return cmd
     def QuantStat(self, taxa_anno=None, checkv_dir=None, coverm_method='mean', unrun=False, clear=False):

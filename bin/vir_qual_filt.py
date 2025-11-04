@@ -5,7 +5,7 @@ import pandas as pd
 
 # filt_checkv
 # input: quality_summary.tsv, namely checkv result file
-# methods: the vs2-vb-dvf-gm identified viral contigs with a length of ≥ 2 kb and .
+# methods: the vs2-vb-dvf-gn identified viral contigs with a length of ≥ 2 kb and .
 # output: virus_quality_summary.filt.tsv and provir_quality_summary.filt.tsv
 # return: viral ID list and proviral ID list
 def filt_checkv(qual_summ_tsv: str):

@@ -2,7 +2,7 @@
 
 argv <- commandArgs(T)
 
-if(length(argv) < 2){
+if(length(argv) < 3){
     stop("inputs: <otus_tab.tsv> <group.txt> <outdir>")
 }
 
@@ -13,12 +13,12 @@ library(vegan)#计算距离时需要的包
 library(ggplot2)#绘图包
 
 otu <- read.table(
-    argv[1], sep="\t", header=T,
+    argv[1], sep="\t", header=TRUE,
     check.names=FALSE, row.names=1
 )
 otu_t <- t(otu)
-otu.distance <- vegdist(otu_t, method='bray')
-df_nmds <- metaMDS(otu.distance, k=2)
+otu_dist <- vegdist(otu_t, method='bray')
+df_nmds <- metaMDS(otu_dist, k=2)
 #summary(df_nmds)
 df_nmds_stress <- df_nmds$stress
 pdf(paste(argv[3], '/nmds_stressplot.pdf', sep=''), width=10, height=8)
@@ -33,12 +33,12 @@ names(df_points)[1:2] <- c('NMDS1', 'NMDS2')
 
 #添加分组
 group <- read.table(argv[2], sep='\t', header=T)
-group <- group[, 0:2]
+group <- group[, 1:2]
 colnames(group) <- c("sample", "group")
 df <- merge(df_points,group,by="sample")
 color <- c("#1597A5", "#FFC24B", "#85B22E", "#FEB3AE", "#5F80B4", "#964500", "#619cff", "#8f00ff")#颜色变量
 
-nmds_plt <- ggplot(data=df,aes(x=NMDS1, y=NMDS2))+#指定数据、X轴、Y轴，颜色
+nmds_plt <- ggplot(data=df, aes(x=NMDS1, y=NMDS2))+#指定数据、X轴、Y轴，颜色
     theme_bw()+#主题设置
     geom_point(aes(color=group), shape=19, size=3)+#绘制点图并设定大小
     theme(panel.grid=element_blank())+
@@ -70,13 +70,12 @@ dev.off()
 group_list <- df$group
 adonis_df <- adonis2(otu_t~group_list, method="bray", perm=999)
 adonis_df <- cbind(ADONIS=row.names(adonis_df), adonis_df)
-adonis_tab <- paste(argv[3], '/ADONIS.tsv', sep='')#,col.names=TRUE,row.names=FALSE)
+adonis_tab <- paste(argv[3], '/ADONIS_NMDS.tsv', sep='')#,col.names=TRUE,row.names=FALSE)
 write.table(adonis_df, adonis_tab, sep='\t')
 
 #ANOSIM分析
-otu_t.dist <- vegdist(otu_t)
-otu_t.ano <- with(group, anosim(otu_t.dist, group))
-pdf(paste(argv[3], '/ANOSIM.pdf', sep=''), width=10, height=8)
-anosim_plt<-plot(otu_t.ano,xlab="Groups",ylab="Dissimilarity Rank Value")
-anosim_plt
+otu_t_dist <- vegdist(otu_t)
+otu_t_ano <- with(group, anosim(otu_t_dist, group))
+pdf(paste(argv[3], '/ANOSIM_NMDS.pdf', sep=''), width=10, height=8)
+plot(otu_t_ano, xlab="Groups", ylab="Dissimilarity Rank Value")
 dev.off()

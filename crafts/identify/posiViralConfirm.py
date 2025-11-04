@@ -74,7 +74,7 @@ class vIdentify(VirDetectTools):
         utils.printSH(shell, cmd)
         #genomad
         cmd, wkdir = self.genomad()
-        shell = f'{self.shell_dir}/{self.name}_gm_ctg.sh'
+        shell = f'{self.shell_dir}/{self.name}_gn_ctg.sh'
         utils.printSH(shell, cmd)
         #VirSorter2
         self.threads = str(int(self.allthreads) - (int(self.threads) * 3)) #5

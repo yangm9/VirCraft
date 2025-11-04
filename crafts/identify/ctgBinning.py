@@ -28,7 +28,7 @@ class VirMAG(VirDetectTools):
             raise ValueError('Error: mode must be "pe_fastqs", "se_fastqs", "sams", "bams" or "coverage_tsv".')
         
         cmd.extend(
-            ['vRhyme', '-i', self.fasta, '-g', gene_fa, '-p', protein_fa, sub_cmd, '-t', self.threads, '-o', wkdir, '\n']
+            ['vRhyme', '-i', self.fasta, '-g', gene_fa, '-p', protein_fa, sub_cmd, '-t', self.threads, '-o', wkdir, self.confDict['vRhymeOpts'], '\n']
         )
         return cmd, wkdir
 

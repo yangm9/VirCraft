@@ -18,7 +18,7 @@ class VirDetectTools(VirSeq):
         utils.mkdir(wkdir)
         cmd = [utils.selectENV('VC-VirSorter2')]
         cmd.extend(
-            ['virsorter run', self.vs2_subcmds[n], '-i', in_fa, '-d', self.confDict['VirSorter2DB'], '-w', wkdir, '--include-groups dsDNAphage,NCLDV,RNA,ssDNA,lavidaviridae', '-j', self.threads, '--min-length', min_len, '--min-score', min_score, 'all\n']
+            ['virsorter run', self.vs2_subcmds[n], '-i', in_fa, '-d', self.confDict['VirSorter2DB'], '-w', wkdir, '-j', self.threads, '--min-length', min_len, '--min-score', min_score, self.confDict['VirSorter2Opts'] + '\n']
         )
         return cmd, wkdir
 
@@ -27,10 +27,11 @@ class VirDetectTools(VirSeq):
         cmd = [utils.selectENV('VC-DeepVirFinder')]
         wkdir = f'{self.wkfile_dir}/deepvirfinder'
         utils.mkdir(wkdir)
-        input_fasta = self.name + '.lt2100000.fa'
+        input_prefix = f'{self.wkfile_dir}/{self.name}'
+        input_fasta = input_prefix + '.lt2100000.fa'
         cmd.extend(
-            ['SeqLenCutoff.pl', self.fasta, self.name, '0 2100000\n', 
-            'dvf.py', '-i', input_fasta, '-m', self.confDict['DeepVirFinderDB'], '-o', wkdir, '-c', self.threads, '-l', min_len, '\n']
+            ['SeqLenCutoff.pl', self.fasta, input_prefix, '0 2100000\n', 
+            'dvf.py', '-i', input_fasta, '-m', self.confDict['DeepVirFinderDB'], '-o', wkdir, '-c', self.threads, '-l', min_len, self.confDict['DeepVirFinderOpts'] + '\n']
         )
         return cmd, wkdir
 
@@ -41,7 +42,7 @@ class VirDetectTools(VirSeq):
         VIBRANT_DB_databases = self.confDict['VIBRANTDB'] + '/databases'
         VIBRANT_DB_files = self.confDict['VIBRANTDB'] + '/files'
         cmd.extend(
-            ['VIBRANT_run.py', '-i', self.fasta, '-l', min_len, '-t', self.threads, '-folder', self.wkfile_dir, '-d', VIBRANT_DB_databases, '-m', VIBRANT_DB_files, '\n']
+            ['VIBRANT_run.py', '-i', self.fasta, '-l', min_len, '-t', self.threads, '-folder', self.wkfile_dir, '-d', VIBRANT_DB_databases, '-m', VIBRANT_DB_files, self.confDict['VIBRANTOpts'] + '\n']
         )
         return cmd, wkdir
     def genomad(self):
@@ -49,7 +50,7 @@ class VirDetectTools(VirSeq):
         wkdir = f'{self.wkfile_dir}/genomad'
         geNomad_DB = self.confDict['geNomadDB']
         cmd.extend(
-            ['genomad end-to-end', '--cleanup', '--threads', self.threads, self.fasta, wkdir, geNomad_DB, '\n']
+            ['genomad end-to-end', '--threads', self.threads, self.fasta, wkdir, geNomad_DB, self.confDict['geNomadOpts'] + '\n']
         )
         return cmd, wkdir
     
@@ -63,7 +64,7 @@ class VirDetectTools(VirSeq):
         orf_annot = f'{out_prefix}.ORF2LCA.txt'
         orf_rate = f'{out_prefix}.host_orf_rate.tsv'
         cmd.extend(
-            ['CAT_pack contigs', '-c', in_fa, '-t', self.threads, '-d', CAT_DB, '-t', CAT_TAX, '-o', out_prefix, '\n',
+            ['CAT_pack contigs', '-c', in_fa, '-t', self.threads, '-d', CAT_DB, '-t', CAT_TAX, '-o', out_prefix, self.confDict['CATOpts'] + '\n',
             'host_orf_rate_from_CAT.py', orf_annot,orf_rate, '\n']
         )
         return cmd, wkdir

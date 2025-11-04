@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 # Author:Yingli Zhou
-# modified by: yangming@idsse.ac.cn
+# modified by: yangm@idsse.ac.cn
 # version 0.1.0 2022/1/4
 # version 0.1.1 2023/3/13
 

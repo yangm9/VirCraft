@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#author:   yangm@idsse.com
+#author:   yangm@idsse.ac.cn
 #versions: 0.0.1
 #versions: 0.0.2 2023-07-26 22:42
 
@@ -46,7 +46,7 @@ CsvDict = {
     'virsorter2' : '{}/vs2_viral_info.tsv',     
     'vibrant' : '{}/vb_viral_info.tsv',
     'deepvirfinder' : '{}/dvf_viral_info.tsv',
-    'genomad' : '{}/gm_viral_info.tsv'
+    'genomad' : '{}/gn_viral_info.tsv'
 }
 
 #The column dictionary for each tool,  and this will be used to rename the column names for the file named "all_viral_ctgs.score.tsv : ".
@@ -58,8 +58,8 @@ ColsDict = {
     'vibrant' :  {'prediction' : 'vb_prediction'},
     'deepvirfinder' : {'score' : 'dvf_v_score', 'pvalue' : 'dvf_pvalue'},
     'genomad' :  {
-        'topology' : 'gm_topology', 'coordinates' : 'gm_coordinates', 'n_genes' : 'gm_genes', 'genetic_code' : 'gm_genetic_code', 'virus_score' : 'gm_v_score',
-        'fdr' : 'gm_fdr', 'n_hallmarks' : 'gm_hallmarks', 'marker_enrichment' : 'gm_marker_enrichment', 'taxonomy' : 'gm_taxonomy'
+        'topology' : 'gn_topology', 'coordinates' : 'gn_coordinates', 'n_genes' : 'gn_genes', 'genetic_code' : 'gn_genetic_code', 'virus_score' : 'gn_v_score',
+        'fdr' : 'gn_fdr', 'n_hallmarks' : 'gn_hallmarks', 'marker_enrichment' : 'gn_marker_enrichment', 'taxonomy' : 'gn_taxonomy'
     }
 }
 
@@ -109,10 +109,10 @@ def vCtgMerge(name, wkdir):
             df.drop(columns = ['len'], inplace = True)
         elif tool == 'genomad':
             try:
-                df[['seq_name', 'gm_partial']] = df['seq_name'].str.split(r'\|pro', expand = True)
-                df['gm_partial'] = df['gm_partial'].str.replace('virus_', 'provirus_')
+                df[['seq_name', 'gn_partial']] = df['seq_name'].str.split(r'\|pro', expand = True)
+                df['gn_partial'] = df['gn_partial'].str.replace('virus_', 'provirus_')
             except ValueError:
-                df['gm_partial'] = ''
+                df['gn_partial'] = ''
             df.drop(columns = ['length'], inplace = True)
         df.rename(columns = {NameDict[tool]: 'Contig'}, inplace = True)
         all_ctgs.extend(df['Contig'].tolist())
@@ -128,8 +128,8 @@ def calcCtgScore(all_merged_ctgs):
     df['vs2_score'] = df.apply(lambda x : 2 if x['vs2_max_score'] >= 0.9 else (1 if x['vs2_max_score'] >= 0.7 and x['vs2_hallmark'] >= 1 else 0), axis = 1)
     df['vb_score'] = df['vb_isPhage'].apply(lambda x : 1 if x == 1 else 0)
     df['dvf_score'] = df.apply(lambda x : 1 if x['dvf_v_score'] >= 0.9 and x['dvf_pvalue'] <= 0.05 else 0, axis = 1)
-    df['gm_score'] = df.apply(lambda x : 2 if x['gm_v_score'] >= 0.8 else (1 if x['gm_v_score'] >= 0.7 and x['gm_hallmarks'] >= 1 else 0), axis = 1)
-    df['score'] = df['vs2_score'] + df['vb_score'] + df['dvf_score'] + df['gm_score']
+    df['gn_score'] = df.apply(lambda x : 2 if x['gn_v_score'] >= 0.8 else (1 if x['gn_v_score'] >= 0.7 and x['gn_hallmarks'] >= 1 else 0), axis = 1)
+    df['score'] = df['vs2_score'] + df['vb_score'] + df['dvf_score'] + df['gn_score']
     postfix = f'.score.tsv'
     all_filt_ctgs = all_merged_ctgs.replace('.tsv', postfix)
     df.to_csv(all_filt_ctgs, index=False, sep='\t')
