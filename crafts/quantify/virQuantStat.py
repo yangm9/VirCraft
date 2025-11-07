@@ -46,7 +46,7 @@ class VirAbdStat(multiVirCount):
         vir_taxa_anno_tsv = f'{self.stat_dir}/vctg_taxa.tsv'
         vir_abd_taxa_tsv = f'{self.stat_dir}/vctg_abundance_order_family.tsv'
         vir_taxa_abd_tsv = f'{self.stat_dir}/vctg_taxa_abundance.tsv'
-        vir_abd_sum_by_taxa_tsv = f'{self.stat_dir}/viral_abundance_summed_by_taxa.tsv'
+        vir_abd_sum_by_taxa_tsv = f'{self.stat_dir}/summed_vtaxa_abundance.tsv'
         order_sum_vir_abd_tsv = f'{self.stat_dir}/summed_vOrder_abundance.tsv'
         family_sum_vir_abd_tsv = f'{self.stat_dir}/summed_vFamily_abundance.tsv'
         cmd.extend(
