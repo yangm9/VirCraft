@@ -39,7 +39,7 @@ $/ = ">";
 my $num = 1;
 while(<FA>){
     chomp;
-    my($id,$seq) = split /\n/, $_, 2;
+    my($id, $seq) = split /\n/, $_, 2;
     $id = (split /\s+/, $id)[0];
     $seq =~ s/\n//g;
     my $len = length($seq);

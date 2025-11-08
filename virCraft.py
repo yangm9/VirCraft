@@ -68,14 +68,14 @@ def identify(args):
 @logger.Log(level='INFO')
 def binning(args):
     vMAGs = ctgBinning.VirMAG(fasta=args.fasta, outdir=args.outdir, threads=args.threads)
-    rcode = vMAGs.Binning(file_mode=args.file_mode, fsbc_files=arg.fsbc_files, unrun=args.unrun)
+    rcode = vMAGs.Binning(coverage_mode=args.coverage_mode, coverage_files=args.coverage_files, unrun=args.unrun)
     return rcode
 
 #---------------------votus-------------------------
 @logger.Log(level='INFO')
 def votus(args):
     vOTUs = uniqVirCtg.VirRef(fasta=args.fasta, outdir=args.outdir, threads=args.threads)
-    rcode = vOTUs.RmDup(args.min_len, unrun=args.unrun, method=args.method)
+    rcode = vOTUs.vCTGs_cluster(args.min_len, unrun=args.unrun, method=args.method)
     return rcode
 
 #---------------------classify------------------------

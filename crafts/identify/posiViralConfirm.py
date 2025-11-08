@@ -27,11 +27,11 @@ class vIdentify(VirDetectTools):
         tmp_cmd = ''
         #tmp_cmd, cat_dir = self.contig_annotation_tool(viral_filt_ctgs_fna)
         cmd.extend(
-            ['merge_ctg_list.py', self.name, self.wkfile_dir, f"&& awk -F '\\t' 'NR == 1 || $32 >= {mode_dict[mode]}'", score_tsv, '>', score_filt_tsv, '\n',
-            'cut -f 1', score_filt_tsv, "|sed '1d' >", viral_filt_ctg_list, '&& extrSeqByName.pl', viral_filt_ctg_list, self.fasta, viral_filt_ctgs_fna, '\n',
-            "awk -F '\\t' 'NR>1 && $28>=1 {print $1}'", score_tsv, '>', vs2_list, "&& awk -F '\\t' 'NR>1 && $29>=1 {print $1}'", score_tsv, '>', vb_list,
-            "&& awk -F '\\t' 'NR>1 && $30>=1 {print $1}'", score_tsv, '>', dvf_list, "&& awk -F '\\t' 'NR>1 && $31>=1 {print $1}'", score_tsv, '>', gn_list,
-            '&& venn4.R', vs2_list, vb_list, dvf_list, gn_list, venn_pdf, '\n']
+            ['merge_ctg_list.py', self.name, self.wkfile_dir, f"&& awk -F '\\t' 'NR == 1 || $32 >= {mode_dict[mode]}'", score_tsv, '>', score_filt_tsv,
+             '&& cut -f 1', score_filt_tsv, "|sed '1d' >", viral_filt_ctg_list, '&& extrSeqByName.pl', viral_filt_ctg_list, self.fasta, viral_filt_ctgs_fna, '\n\n',
+             "awk -F '\\t' 'NR>1 && $28>=1 {print $1}'", score_tsv, '>', vs2_list, "&& awk -F '\\t' 'NR>1 && $29>=1 {print $1}'", score_tsv, '>', vb_list,
+             "&& awk -F '\\t' 'NR>1 && $30>=1 {print $1}'", score_tsv, '>', dvf_list, "&& awk -F '\\t' 'NR>1 && $31>=1 {print $1}'", score_tsv, '>', gn_list,
+             '&& venn4.R', vs2_list, vb_list, dvf_list, gn_list, venn_pdf, '\n\n']
         )
         if min_len < 5000:
             tmp_cmd, checkv_dir = self.checkv(viral_filt_ctgs_fna)
@@ -39,7 +39,7 @@ class vIdentify(VirDetectTools):
             quality_summary_tsv = checkv_dir + '/quality_summary.tsv'
             cmd.extend([utils.selectENV('VC-General')])
             cmd.extend(
-                ['vir_qual_filt.py', quality_summary_tsv, viral_filt_ctgs_fna, viral_posi_ctgs_fna, '\n']
+                ['vir_qual_filt.py', quality_summary_tsv, viral_filt_ctgs_fna, viral_posi_ctgs_fna, '\n\n']
             )
         else:
             cmd.extend(

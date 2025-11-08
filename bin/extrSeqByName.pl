@@ -25,13 +25,14 @@ open OUT, ">$ARGV[2]" or die $!;
 my $n = 0;
 while(<IN>){
     chomp;
-    my($id, $seq) = split /\n/,$_,2;
-    $seq =~s/\s+//g;
-    my $mother_id = (split /\s/,$id,2)[0];
-    $mother_id =~s/_\d+$// if($ARGV[3]); # If a fourth non-0 parameter is added, this line is used to remove prodigal's number
+    my($id, $seq) = split /\n/, $_, 2;
+    $seq =~ s/\s+//g;
+    my $mother_id = (split /\s+/, $id, 2)[0];
+    #print $mother_id, "\n" if($mother_id=~/k/);
+    $mother_id =~ s/_\d+$// if($ARGV[3]); # If a fourth non-0 parameter is added, this line is used to remove prodigal's number
     if(exists $SeqName{$mother_id}){
         print OUT ">$id\n$seq\n";
-        delete $SeqName{$id};
+        delete $SeqName{$mother_id};
     }
 }
 foreach my $id(keys %SeqName){

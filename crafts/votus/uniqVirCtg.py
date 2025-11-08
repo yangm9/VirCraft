@@ -68,7 +68,7 @@ class VirRef(VirDetectTools):
              'votus_lifetype_quality_barplot.R', vb_ckv_tsv, self.stat_dir, '\n']
         )
         return cmd
-    def vCTGs_cluster(self, cov_input=None, checkv=None, unrun=False, method='blast'):
+    def vCTGs_cluster(self, cov_input=None, checkv=None, unrun=False, method='blast', min_len=2000):
         cmd = []
         # Gene prediction using prodigal
         tmp_cmd, votus = self.cluster(method)

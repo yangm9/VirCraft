@@ -110,7 +110,7 @@ Usage: {name} <subcommand> [options] -o <outdir>
         help='The sop/pipeline for viral contigs identification, including "viral-id-sop" and "vs2-vb-dvf-gn". [default=vs2-vb-dvf-gn]'
     )
     subpsr.add_argument(
-        '-f', '--filter_mode', action='store', type=str, dest='mode', metavar='STR', default='permissive', required=False,
+        '-f', '--filter-mode', action='store', type=str, dest='mode', metavar='STR', default='permissive', required=False,
         help='Filter mode for viral contigs, including "permissive" and "strict". [default=permissive]'
     )
  
@@ -133,11 +133,15 @@ Usage: {name} <subcommand> [options] -o <outdir>
         help='Cluster input viral contigs based on sequence composition, coverage and other features to generate potential viral MAGs'
     )
     subpsr = addFaArg(subpsr)
-    subpsr = addGlbArg(subpsr)
     subpsr.add_argument(
-        '-m', '--method', action='store', type=str, dest='method', metavar='STR', default='blast', required=False,
-        help='vOTU clustering method, including "blast" and "cdhit". [default=blast]'
+        '-m', '--coverage-mode', action='store', type=str, dest='coverage_mode', metavar='STR', default='pe_fastq', required=False,
+        help='Coverage input file type for binning, including "pe_fastq", "se_fastq", "sam", "bam" or "cov". [default=pe_fastq]'
     )
+    subpsr.add_argument(
+        '-f', '--coverage-files', action='store', type=str, nargs='+', dest='coverage_files', metavar='STR', default=False, required=True,
+        help='Coverage input files for binning, including fastq, sam, bam, or coverage files [required]'
+    )
+    subpsr = addGlbArg(subpsr)
 
 #---------------------classify------------------------
     subpsr = subparsers.add_parser(
@@ -171,7 +175,7 @@ Usage: {name} <subcommand> [options] -o <outdir>
     subpsr = addGlbArg(subpsr)#,1)
     subpsr = addTaxaArg(subpsr)#,1)
     subpsr.add_argument(
-        '-m', '--coverm_method', action='store', type=str, dest='coverm_method', metavar='STR', default='mean', required=False,
+        '-m', '--coverm-method', action='store', type=str, dest='coverm_method', metavar='STR', default='mean', required=False,
         help='Abundance claculation method by CoverM, including "mean", "metabat" and so on. If preparing the input coverage file for VirCraft binning module, "metabat" should be chosen [default=mean]'
     )
 
@@ -218,10 +222,6 @@ def addGlbArg(psr):
         0 : 'Number of processes/threads to use [default=8]',
         1 : 'Number of processes/threads to use for each task in a batch [default=8]'
     }
-    psr.add_argument(
-        '-d', '--config-file', action='store', type=str, dest='config', metavar='STR', default=False, required=False,
-        help='Configure file can point to the parameters of certain tools and the database locations for VirCraft [default=False]'
-    )
     psr.add_argument(
         '-t', '--threads', action='store', type=str, dest='threads', metavar='INT', default=8,
         help=ThreadsHelpDict[0]#batch]

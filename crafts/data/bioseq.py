@@ -61,15 +61,14 @@ class Seq(VirCfg):
         )
         return cmd
     def statFA(self):
-        cmd = [self.envs]
+        cmd = ['#Statistics and plotting of FASTA files\n', self.envs]
         size_dist = f'{self.stat_dir}/fasta_size_distribution.pdf'
         len_gc_stat = f'{self.stat_dir}/fasta_size_gc_stat.tsv'
         nl50_stat = f'{self.stat_dir}/fasta_nl50_stat.tsv'
         cmd.extend(
             ['fasta_size_distribution_plot.py', self.fasta, '-o', size_dist, '-s 2000 -g 10 -t "Sequence Size Distribution"\n',
-             'fasta_size_gc.py', self.fasta, '>', len_gc_stat, '\n',
-             'variables_scatter.R', len_gc_stat, 'Length~GC', self.stat_dir, '\n',
-             'stat_NL50.pl', self.fasta, nl50_stat, '\n']
+             'fasta_size_gc.py', self.fasta, '>', len_gc_stat, '&& variables_scatter.R', len_gc_stat, 'Length~GC', self.stat_dir, '\n',
+             'stat_NL50.pl', self.fasta, nl50_stat, '\n\n']
         )
         return cmd
     def genePred(self):

@@ -6,26 +6,26 @@ class VirMAG(VirDetectTools):
         super().__init__(fasta, outdir)
         self.threads = str(threads)
     
-    def vrhyme(self, vir_ctgs_fa: str, mode: str, input_files: str): # mode: 'pe_fastq' | 'se_fastq' | 'sam' | 'bam' | 'coverage'
+    def vrhyme(self, coverage_mode: str, coverage_files: str): # mode: 'pe_fastq' | 'se_fastq' | 'sam' | 'bam' | 'coverage'
         cmd = [utils.selectENV('VC-vRhyme')]
         wkdir = f'{self.wkfile_dir}/vrhyme'
         
         tmp_cmd, gene_fa, protein_fa = self.genePred()
         cmd.extend(tmp_cmd)
-        
+        cov_file_txt = ' '.join(coverage_files)
         sub_cmd = ''
-        if mode == 'pe_fastq':
-            sub_cmd = ['-r', input_files]
-        elif se_fastqs:
-            sub_cmd = ['-u', input_files]
-        elif sams:
-            sub_cmd = ['-s', input_files]
-        elif bams:
-            sub_cmd = ['-b', input_files]
-        elif coverage_tsv:
-            sub_cmd = ['-c', input_files]
+        if coverage_mode == 'pe_fastq':
+            sub_cmd = f'-r {cov_file_txt}'
+        elif coverage_mode == 'se_fastq':
+            sub_cmd = f'-u {cov_file_txt}'
+        elif coverage_mode == 'sam':
+            sub_cmd = f'-s {cov_file_txt}'
+        elif coverage_mode == 'bam':
+            sub_cmd = f'-b {cov_file_txt}'
+        elif coverage_mode == 'cov':
+            sub_cmd = f'-c {cov_file_txt}'
         else:
-            raise ValueError('Error: mode must be "pe_fastqs", "se_fastqs", "sams", "bams" or "coverage_tsv".')
+            raise ValueError('Error: mode must be "pe_fastq", "se_fastq", "sam", "bam" or "cov".')
         
         cmd.extend(
             ['vRhyme', '-i', self.fasta, '-g', gene_fa, '-p', protein_fa, sub_cmd, '-t', self.threads, '-o', wkdir, self.confDict['vRhymeOpts'], '\n']
@@ -34,12 +34,11 @@ class VirMAG(VirDetectTools):
 
     def vMAGFilt(self):
         cmd = [utils.selectENV('VC-CAT')]
-        pass
+        return cmd
 
-    def Binning(self, mode=None, fsbc_files=None, checkv=None, unrun=False):
-        cmd, vrhyme_dir = self.vrhyme(vctg_for_binning, mode, fsbc_files)
-        cmd.extend(tmp_cmd)
-        tmp_cmd = vMAGFilt()
+    def Binning(self, coverage_mode=None, coverage_files=None, unrun=False):
+        cmd, vrhyme_dir = self.vrhyme(coverage_mode, coverage_files)
+        tmp_cmd = self.vMAGFilt()
         cmd.extend(tmp_cmd)
         shell = f'{self.shell_dir}/{self.name}_vctg_binning.sh'
         utils.printSH(shell, cmd)
