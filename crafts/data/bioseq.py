@@ -45,21 +45,25 @@ class Seq(VirCfg):
         self.outdir = os.path.abspath(outdir)
         utils.mkdir(self.outdir)
         self.shell_dir, self.wkfile_dir, self.stat_dir = utils.make_general_dir(self.outdir)
+    
+    #Make bwa index for votus.
     def mkBwaIdx(self):
-        "Make bwa index for votus."
         cmd = [utils.selectENV('VC-Quantify')]
         bwa_idx = f'{self.wkfile_dir}/{self.name}.BWAIDX'
         cmd.extend(['bwa index -a bwtsw', self.fasta, '-p', bwa_idx, '\n'])
-        shell = f'{self.shell_dir}/{self.name}_bwaidx.sh'
-        utils.printSH(shell, cmd)
         return cmd, bwa_idx
-    def lenCutoff(self, min_len=2000):
+
+    def lenCutoff(self, min_len=2000, max_len=None):
         cmd = [self.envs]
-        filt_prefix = f'{self.outdir}/{self.name}.filt'
-        cmd.extend(
-            ['SeqLenCutoff.pl', self.fasta, filt_prefix, str(min_len), '\n']
-        )
+        filt_prefix = f'{self.outdir}/{self.name}'
+        tmp_cmd = ['SeqLenCutoff.pl', self.fasta, filt_prefix, str(min_len)]
+        if max_len is not None:
+            tmp_cmd.append(str(max_len))
+
+        cmd.extend(tmp_cmd)
+        cmd.append('\n')
         return cmd
+
     def statFA(self):
         cmd = ['#Statistics and plotting of FASTA files\n', self.envs]
         size_dist = f'{self.stat_dir}/fasta_size_distribution.pdf'
@@ -71,6 +75,7 @@ class Seq(VirCfg):
              'stat_NL50.pl', self.fasta, nl50_stat, '\n\n']
         )
         return cmd
+    
     def genePred(self):
         cmd = [self.envs]
         wkdir = f'{self.wkfile_dir}/prodigal'
@@ -116,8 +121,6 @@ class CDS(Seq):
         cmd.extend(
             ['salmon index', '-p 8 -k 31', '-t', self.fasta, '-i', wkdir, '\n']
         )
-        shell = f'{self.shell_dir}/{self.name}_salmonidx.sh'
-        utils.printSH(shell, cmd)
         return cmd, idx
 
 class ORF(Seq):

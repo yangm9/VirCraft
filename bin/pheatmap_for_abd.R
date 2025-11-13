@@ -83,7 +83,7 @@ pheatmap(
     log10(df+1),
     cluster_row=TRUE,
     cluster_col=FALSE,
-    show_rownames=FALSE,
+    show_rownames=TRUE,
     #scale = "row",#参数归一化
     #clustering_method参数设定不同聚类方法，默认为"complete",可以设定为'ward','ward.D','ward.D2','single','complete','average','mcquitty','median' or 'centroid')
     clustering_method="complete",

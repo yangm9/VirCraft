@@ -142,7 +142,7 @@ class Assembly(Reads):
         # Create a FASTA sequence object and append statistics commands
         FastA = Seq(scaf, self.outdir)
         cmd.extend(FastA.statFA())
-        cmd.extend(FastA.lenCutoff())
+        cmd.extend(FastA.lenCutoff(min_len))
         
         # Optionally clear intermediate alignment files
         if clear and len(process) == 2:

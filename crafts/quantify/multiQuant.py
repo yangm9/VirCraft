@@ -14,7 +14,7 @@ class multiVirCount(VirSeq):
         self.groups, self.sampDict = self.readSampInfo(self.samp_info)
         self.threads = str(threads)
     def virCountBySamp(self, coverm_method='mean'):
-        idx_cmd,bwa_idx = self.mkBwaIdx()
+        idx_cmd, bwa_idx = self.mkBwaIdx()
         for samp in self.sampDict.keys():
             cmd = [utils.selectENV('VC-General')]
             fq1, fq2 = self.sampDict[samp][1].split(',')

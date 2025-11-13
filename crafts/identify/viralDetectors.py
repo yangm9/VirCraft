@@ -24,14 +24,14 @@ class VirDetectTools(VirSeq):
 
     def deepvirfinder(self, min_len=1500):
         min_len = str(min_len)
-        cmd = [utils.selectENV('VC-DeepVirFinder')]
-        wkdir = f'{self.wkfile_dir}/deepvirfinder'
-        utils.mkdir(wkdir)
         input_prefix = f'{self.wkfile_dir}/{self.name}'
         input_fasta = input_prefix + '.lt2100000.fa'
+        cmd = self.lenCutoff(0, 2100000)
+        cmd.extend([utils.selectENV('VC-DeepVirFinder')])
+        wkdir = f'{self.wkfile_dir}/deepvirfinder'
+        utils.mkdir(wkdir)
         cmd.extend(
-            ['SeqLenCutoff.pl', self.fasta, input_prefix, '0 2100000\n', 
-            'dvf.py', '-i', input_fasta, '-m', self.confDict['DeepVirFinderDB'], '-o', wkdir, '-c', self.threads, '-l', min_len, self.confDict['DeepVirFinderOpts'] + '\n']
+            ['dvf.py', '-i', input_fasta, '-m', self.confDict['DeepVirFinderDB'], '-o', wkdir, '-c', self.threads, '-l', min_len, self.confDict['DeepVirFinderOpts'] + '\n']
         )
         return cmd, wkdir
 

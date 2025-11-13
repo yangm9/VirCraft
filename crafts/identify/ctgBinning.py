@@ -36,6 +36,8 @@ class VirMAG(VirDetectTools):
         cmd = [utils.selectENV('VC-CAT')]
         return cmd
 
+    def vMAGQC(self):
+        return 0
     def Binning(self, coverage_mode=None, coverage_files=None, unrun=False):
         cmd, vrhyme_dir = self.vrhyme(coverage_mode, coverage_files)
         tmp_cmd = self.vMAGFilt()

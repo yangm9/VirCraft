@@ -61,7 +61,7 @@ def identify(args):
         rcode = VirCtg.Identify(unrun=args.unrun)
     else:
         VirCtg = posiViralConfirm.vIdentify(fasta=args.fasta, outdir=args.outdir, threads=args.threads)
-        rcode = VirCtg.Identify(min_len=args.min_len, mode=args.mode, unrun=args.unrun)
+        rcode = VirCtg.Identify(min_len=args.min_len, filt_mode=args.filt_mode, unrun=args.unrun)
     return rcode
 
 #----------------------binning-----------------------
@@ -117,7 +117,7 @@ def func_annot(args):
 @logger.Log(level='INFO')
 def vir_quant(args):
     VirQuant = virQuantStat.VirAbdStat(samp_info=args.samp_info, fasta=args.fasta, outdir=args.outdir, threads=args.threads)
-    rcode = VirQuant.QuantStat(taxa_anno=args.taxa, checkv_dir=args.checkv, coverm_method=args.coverm_method,unrun=args.unrun)
+    rcode = VirQuant.QuantStat(taxa_anno=args.taxa, votu_table = args.votu_table, checkv_dir=args.checkv, coverm_method=args.coverm_method, unrun=args.unrun)
     return rcode
 
 #-----------------------gene_quant---------------------

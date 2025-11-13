@@ -5,22 +5,27 @@
 import sys
 import pandas as pd
 
-#input format:
-#Contig\tSample1 Abundance\t...\tSampleN Abundance\n
-#Contig format: "contig_id_12345:Caudovirales;Myoviridae"
-#taxa:
-#taxonomic level, including Order, Family and taxa.
-taxa_loc_dict = {'Order': 0, 'Family': 1}
-def idxAbd(taxa_abd: str, taxa: str, outdir: str):
-    df = pd.read_csv(taxa_abd,sep='\t',header=0)
-    samp_num = df.columns.size
-    df = df.iloc[:,0:samp_num]
-    df['Contig'] = df['Contig'].apply(lambda x:x.split(':')[1])
+# Input format(taxa_abd):
+# taxa_abd file Columns: Contig,Sample_1,Sample_2...Sample_N,Superrealm,...,Species stored abundance information
+# Contig\tSample1 Abundance\t...\tSampleN Abundance\n
+
+def idxAbd(taxa_abd: str, taxa: str):  
+    taxa_levels = ['Superrealm', 'Realm', 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species']
+    df = pd.read_csv(taxa_abd, sep='\t', header=0)
+    df['Class'] = df['Class'].astype('str')
+    df['Order'] = df['Order'].astype('str')
+    df['Family'] = df['Family'].astype('str')
     if taxa == 'taxa':
-        df['Contig'].replace('nan;nan', 'Unassigned', inplace=True)
-    else:
-        df['Contig'] = df['Contig'].apply(lambda x:x.split(';')[taxa_loc_dict[taxa]])
-        df['Contig'].replace('nan', 'Unassigned', inplace = True)
+        df['Contig'] = 'p__' + df['Phylum'] + ';c__' + df['Class'] + ';o__' +df['Order'] + ';f__' + df['Family']
+    elif taxa == 'Class':
+        df['Contig'] = 'p__' + df['Phylum'] + ';c__' + df['Class']
+    elif taxa == 'Order':
+        df['Contig'] = 'c__' + df['Class'] + ';o__' +df['Order']
+    elif taxa == 'Family':
+        df['Contig'] = 'o__' +df['Order'] + ';f__' + df['Family']
+    
+    df['Contig'] = df['Contig'].str.replace('nan', '', regex=False)
+    df.drop(columns=taxa_levels,inplace=True)
     return df
 
 #Sum the abundance by Taxa for each sample.
@@ -30,7 +35,7 @@ def sumAbds(df: str, taxa: str, outdir: str):
     sumDF = pd.DataFrame()
     for i in range(len(TaxaList)):
         series = df.loc[TaxaList[i]]
-        if isinstance(series,pd.DataFrame):
+        if isinstance(series, pd.DataFrame):
             series = pd.Series(series.sum(), name=TaxaList[i])
         sumDF =pd.concat([sumDF, series.to_frame().T])
         #sumDF = sumDF.append(series) #append will be instead by concat
@@ -42,11 +47,13 @@ def sumAbds(df: str, taxa: str, outdir: str):
     return 0
 
 def sumAbdByTaxa(taxa_abd: str, outdir: str):
-    df = idxAbd(taxa_abd, 'taxa', outdir)
+    df = idxAbd(taxa_abd, 'taxa')
     sumAbds(df, 'taxa', outdir)
-    df = idxAbd(taxa_abd, 'Order', outdir)
+    df = idxAbd(taxa_abd, 'Class')
+    sumAbds(df, 'Class', outdir)
+    df = idxAbd(taxa_abd, 'Order')
     sumAbds(df, 'Order', outdir)
-    df = idxAbd(taxa_abd, 'Family', outdir)
+    df = idxAbd(taxa_abd, 'Family')
     sumAbds(df, 'Family', outdir)
     return 0
 

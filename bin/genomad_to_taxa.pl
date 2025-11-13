@@ -10,7 +10,7 @@ open(IN, '<', $input_file) or die "Cannot open input file $input_file: $!";
 open(OUT, '>', $output_file) or die "Cannot open output file $output_file: $!";
 
 # 打印表头
-print OUT "Sequence_ID\tSuperrealm\tRealm\tKingdom\t\tClass\tOrder\tFamily\tGenus\tSpecies\n";
+print OUT "Sequence_ID\tSuperrealm\tRealm\tKingdom\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\n";
 
 # 读取表头行
 my $header = <IN>;
@@ -40,7 +40,7 @@ while(<IN>){
     $genus ||= 'NA';
     $species ||= 'NA';
 
-    print OUT "$seq_id\t$realm\t$kingdom\t$phylum\t$class\t$order\t$family\t$genus\t$species\n";
+    print OUT "$seq_id\t$superrealm\t$realm\t$kingdom\t$phylum\t$class\t$order\t$family\t$genus\t$species\n";
 }
 
 close IN;

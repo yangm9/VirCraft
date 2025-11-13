@@ -4,7 +4,7 @@ use strict;
 
 die <<"USAGE" unless (@ARGV == 3 || @ARGV == 4);
 Usage:
-  perl $0 <fasta_file> <output_prefix> <min_len_len>
+  perl $0 <fasta_file> <output_prefix> <min_len>
   perl $0 <fasta_file> <output_prefix> <min_len> <max_len>
 
 Examples:

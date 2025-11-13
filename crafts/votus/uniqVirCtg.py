@@ -53,11 +53,14 @@ class VirRef(VirDetectTools):
              'pie_plot.R', checkv_qual, 'miuvig_quality', self.stat_dir, '\n',
              'quality_length_boxplot.R', checkv_qual, self.stat_dir, '\n']
         )
+        original_fasta = self.fasta
+        self.fasta = votus
         cmd.extend(self.statFA())
-        outdir = self.outdir
+        self.fasta = original_fasta #self.fasta need to be changed back to its original value
+        original_outdir = self.outdir
         self.outdir = self.wkfile_dir
         tmp_cmd, vbdir = self.vibrant(str(min_len))
-        self.outdir = outdir #self.outdir need to be changed back to its original value
+        self.outdir = original_outdir #self.outdir need to be changed back to its original value
         cmd.extend(tmp_cmd)
         votus_prefix = f'{self.name}_votus'
         vb_vir_info = f'{self.wkfile_dir}/VIBRANT_{votus_prefix}/VIBRANT_results_{votus_prefix}/VIBRANT_genome_quality_{votus_prefix}.tsv'

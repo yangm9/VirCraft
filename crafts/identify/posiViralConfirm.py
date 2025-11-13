@@ -11,10 +11,9 @@ class vIdentify(VirDetectTools):
         super().__init__(fasta, outdir)
         self.allthreads = threads
         self.threads = int(threads) // (self.BATCH_SIZE * 2)
-    def vFilter(self, min_len=2000, mode='permissive'):
-        mode_dict = {'permissive' : '1', 'strict' : '2'}
+    def vFilter(self, min_len=2000, filt_mode='permissive'):
         score_tsv = f'{self.wkfile_dir}/all_viral_ctgs.score.tsv'
-        score_filt_tsv = utils.insLable(score_tsv, mode)
+        score_filt_tsv = utils.insLable(score_tsv, filt_mode)
         viral_filt_ctg_list = f'{self.wkfile_dir}/viral_filt_ctg.list'
         viral_filt_ctgs_fna = f'{self.wkfile_dir}/viral_filt_ctg.fna'
         viral_posi_ctgs_fna = f'{self.wkfile_dir}/viral_positive_ctg.fna'
@@ -27,7 +26,7 @@ class vIdentify(VirDetectTools):
         tmp_cmd = ''
         #tmp_cmd, cat_dir = self.contig_annotation_tool(viral_filt_ctgs_fna)
         cmd.extend(
-            ['merge_ctg_list.py', self.name, self.wkfile_dir, f"&& awk -F '\\t' 'NR == 1 || $32 >= {mode_dict[mode]}'", score_tsv, '>', score_filt_tsv,
+            ['merge_vctg_info.py', self.name, self.wkfile_dir, filt_mode, # generate all_viral_ctgs.score.tsv file 
              '&& cut -f 1', score_filt_tsv, "|sed '1d' >", viral_filt_ctg_list, '&& extrSeqByName.pl', viral_filt_ctg_list, self.fasta, viral_filt_ctgs_fna, '\n\n',
              "awk -F '\\t' 'NR>1 && $28>=1 {print $1}'", score_tsv, '>', vs2_list, "&& awk -F '\\t' 'NR>1 && $29>=1 {print $1}'", score_tsv, '>', vb_list,
              "&& awk -F '\\t' 'NR>1 && $30>=1 {print $1}'", score_tsv, '>', dvf_list, "&& awk -F '\\t' 'NR>1 && $31>=1 {print $1}'", score_tsv, '>', gn_list,
@@ -45,18 +44,20 @@ class vIdentify(VirDetectTools):
             cmd.extend(
                 ['cp', viral_filt_ctgs_fna, viral_posi_ctgs_fna, '\n']
             )
-        outdir = self.outdir
-        self.outdir = viral_posi_ctgs_fna
+        original_fasta = self.fasta
+        self.fasta = viral_posi_ctgs_fna
         cmd.extend(self.statFA()) # Invoke the statFA() method from the Seq module
-        self.outdir = outdir
+        self.fasta = original_fasta
         complete_ctg_fna = viral_posi_ctgs_fna.replace('.fna', '_complete.fna')
         provirus_ctg_fna = viral_posi_ctgs_fna.replace('.fna', '_provirus.fna')
         vctg_for_binning_fna = viral_posi_ctgs_fna.replace('.fna', '_for_binning.fna')
         cmd.extend(
-            ['cd', self.outdir, '&& ln', score_tsv, '&& ln', viral_posi_ctgs_fna, '&& ln', complete_ctg_fna, '&& ln', provirus_ctg_fna, '&& ln', vctg_for_binning_fna, '\n']
+            ['cp', score_tsv, self.outdir, '&& cp', viral_posi_ctgs_fna, self.outdir,
+             '&& cp', complete_ctg_fna, self.outdir, '&& cp', provirus_ctg_fna, self.outdir,
+             '&& cp', vctg_for_binning_fna, self.outdir, '\n']
         )
         return cmd
-    def Identify(self, min_len=2000, mode='permissive', unrun=False):
+    def Identify(self, min_len=2000, filt_mode='permissive', unrun=False):
         try:
             if int(self.allthreads) < 8:
                 raise ValueError('The threads number must not be less than 8!!!')
@@ -91,7 +92,7 @@ class vIdentify(VirDetectTools):
         results = ''
         if not unrun: results = utils.execute(shell) 
         self.threads = str(self.allthreads) #8
-        cmd = self.vFilter(min_len, mode)
+        cmd = self.vFilter(min_len, filt_mode)
         shell = f'{self.shell_dir}/{self.name}_get_positive_virus.sh'
         utils.printSH(shell, cmd)
         if not unrun: results += utils.execute(shell)
