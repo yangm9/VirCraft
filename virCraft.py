@@ -117,7 +117,7 @@ def func_annot(args):
 @logger.Log(level='INFO')
 def vir_quant(args):
     VirQuant = virQuantStat.VirAbdStat(samp_info=args.samp_info, fasta=args.fasta, outdir=args.outdir, threads=args.threads)
-    rcode = VirQuant.QuantStat(taxa_anno=args.taxa, votu_table = args.votu_table, checkv_dir=args.checkv, coverm_method=args.coverm_method, unrun=args.unrun)
+    rcode = VirQuant.QuantStat(taxa_anno=args.taxa, abundance_table=args.abundance_table, checkv_dir=args.checkv, coverm_method=args.coverm_method, unrun=args.unrun)
     return rcode
 
 #-----------------------gene_quant---------------------

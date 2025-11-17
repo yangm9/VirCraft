@@ -77,11 +77,12 @@ class VirAbdStat(multiVirCount):
              '&& pheatmap_for_abd.R', family_sum_vir_abd_tsv, self.samp_info, self.stat_dir, '\n\n']
         )
         return cmd
-    def QuantStat(self, votu_table=None, taxa_anno=None, checkv_dir=None, coverm_method='mean', unrun=False, clear=False): # Main Function
+    def QuantStat(self, abundance_table=None, taxa_anno=None, checkv_dir=None, coverm_method='mean', unrun=False, clear=False): # Main Function
         cmd = ['# Run BWA, samtools and CoverM in batch mode to calculate the abundance\n']
-        if votu_table:
-            cmd.extend(['# Using provided votu_table, skipping abundance calculation steps\n'])
-            cmd.extend(['cp', votu_table, self.all_vctg_abd_cov, '\n'])
+        if abundance_table:
+            abundance_table = os.path.abspath(abundance_table)
+            cmd.extend(['# Using provided abundance_table, skipping abundance calculation steps\n'])
+            cmd.extend(['cp', abundance_table, self.all_vctg_abd_cov, '\n'])
         else:
             cmd.extend(self.virCountBySamp(coverm_method))
             cmd.extend([utils.selectENV('VC-General')])
@@ -95,7 +96,7 @@ class VirAbdStat(multiVirCount):
             else:
                 tmp_cmd = self.mergeAbd()
             cmd.extend(tmp_cmd)
-        if not votu_table or coverm_method != 'metabat': # The subsequent steps are executed regardless of whether there is a votu_table or not.
+        if not abundance_table or coverm_method != 'metabat': # The subsequent steps are executed regardless of whether there is a abundance_table or not.
             cmd.extend(self.sizeAbdPlot(checkv_dir))
             cmd.extend(self.diversity())
             cmd.extend(self.taxaAbdPlot(taxa_anno))

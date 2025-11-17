@@ -32,18 +32,13 @@ class vIdentify(VirDetectTools):
              "&& awk -F '\\t' 'NR>1 && $30>=1 {print $1}'", score_tsv, '>', dvf_list, "&& awk -F '\\t' 'NR>1 && $31>=1 {print $1}'", score_tsv, '>', gn_list,
              '&& venn4.R', vs2_list, vb_list, dvf_list, gn_list, venn_pdf, '\n\n']
         )
-        if min_len < 5000:
-            tmp_cmd, checkv_dir = self.checkv(viral_filt_ctgs_fna)
-            cmd.extend(tmp_cmd)
-            quality_summary_tsv = checkv_dir + '/quality_summary.tsv'
-            cmd.extend([utils.selectENV('VC-General')])
-            cmd.extend(
-                ['vir_qual_filt.py', quality_summary_tsv, viral_filt_ctgs_fna, viral_posi_ctgs_fna, '\n\n']
-            )
-        else:
-            cmd.extend(
-                ['cp', viral_filt_ctgs_fna, viral_posi_ctgs_fna, '\n']
-            )
+        tmp_cmd, checkv_dir = self.checkv(viral_filt_ctgs_fna)
+        cmd.extend(tmp_cmd)
+        quality_summary_tsv = checkv_dir + '/quality_summary.tsv'
+        cmd.extend([utils.selectENV('VC-General')])
+        cmd.extend(
+            ['vir_qual_filt.py', quality_summary_tsv, viral_filt_ctgs_fna, viral_posi_ctgs_fna, '\n\n']
+        )
         original_fasta = self.fasta
         self.fasta = viral_posi_ctgs_fna
         cmd.extend(self.statFA()) # Invoke the statFA() method from the Seq module

@@ -3,13 +3,11 @@ use strict;
 use warnings;
 
 # 输入和输出文件可通过参数传入，或使用默认值
-my $input_file  = shift || 'genomad_output.tsv';
-my $output_file = shift || 'genomad_taxa_parsed.tsv';
+my($input_file, $output_file) = @ARGV;
 
-open(IN, '<', $input_file) or die "Cannot open input file $input_file: $!";
-open(OUT, '>', $output_file) or die "Cannot open output file $output_file: $!";
+open IN, $input_file or die "Cannot open input file $input_file: $!";
+open OUT, '>', $output_file or die "Cannot open output file $output_file: $!";
 
-# 打印表头
 print OUT "Sequence_ID\tSuperrealm\tRealm\tKingdom\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\n";
 
 # 读取表头行
