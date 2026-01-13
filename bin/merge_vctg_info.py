@@ -20,7 +20,7 @@ Tools = ['virsorter2', 'vibrant', 'genomad', 'deepvirfinder']
 # The relative path to the final result table for viral identify tool, and it need to transform to the full path in this program.
 PathDict = {
     'virsorter2' : 'vs2-pass1/final-viral-score.tsv',
-    'vibrant' : 'VIBRANT_{0}/VIBRANT_results_{0}/VIBRANT_genome_quality_{0}.tsv,VIBRANT_{0}/VIBRANT_results_{0}/VIBRANT_integrated_prophage_coordinates_{0}.tsv',
+    'vibrant' : 'VIBRANT_{0}/VIBRANT_results_{0}/VIBRANT_genome_quality_{0}.tsv'#,VIBRANT_{0}/VIBRANT_results_{0}/VIBRANT_integrated_prophage_coordinates_{0}.tsv',
     'genomad' : 'genomad/{0}_summary/{0}_virus_summary.tsv',
     'deepvirfinder' : 'deepvirfinder'
 }
