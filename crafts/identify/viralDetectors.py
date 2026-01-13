@@ -6,7 +6,7 @@ class VirDetectTools(VirSeq):
     '''
     Generate command for VirSorter2, DeepVirFinder, VIBRANT, geNomad, Contig Annotation Tool (CAT).
     '''
-    vs2_subcmds = ['--keep-original-seq', '--seqname-suffix-off --viral-gene-enrich-off --provirus-off --prep-for-dramv']
+    vs2_subcmds = ['--keep-original-seq --exclude-lt2gene', '--seqname-suffix-off --viral-gene-enrich-off --provirus-off --prep-for-dramv']
     def __init__(self, fasta=None, outdir=None, threads=8):
         super().__init__(fasta, outdir)
         self.threads = str(threads)

@@ -20,7 +20,7 @@ Tools = ['virsorter2', 'vibrant', 'genomad', 'deepvirfinder']
 # The relative path to the final result table for viral identify tool, and it need to transform to the full path in this program.
 PathDict = {
     'virsorter2' : 'vs2-pass1/final-viral-score.tsv',
-    'vibrant' : 'VIBRANT_{0}/VIBRANT_results_{0}/VIBRANT_genome_quality_{0}.tsv',
+    'vibrant' : 'VIBRANT_{0}/VIBRANT_results_{0}/VIBRANT_genome_quality_{0}.tsv,VIBRANT_{0}/VIBRANT_results_{0}/VIBRANT_integrated_prophage_coordinates_{0}.tsv',
     'genomad' : 'genomad/{0}_summary/{0}_virus_summary.tsv',
     'deepvirfinder' : 'deepvirfinder'
 }
@@ -44,7 +44,7 @@ CsvDict = {
 # The column dictionary for each tool,  and this will be used to rename the column names for the file named "all_viral_ctgs.score.tsv : ".
 ColsDict = {
     'virsorter2' : {
-        'dsDNAphage' : 'vs2_dsDNAphage', 'ssDNA' : 'vs2_ssDNA', 'NCLDV' : 'vs2_NCLDV',  'RNA' : 'vs2_RNA','lavidaviridae' : 'vs2_lavidaviridae', 
+        'length' : 'length', 'dsDNAphage' : 'vs2_dsDNAphage', 'ssDNA' : 'vs2_ssDNA', 'NCLDV' : 'vs2_NCLDV',  'RNA' : 'vs2_RNA','lavidaviridae' : 'vs2_lavidaviridae', 
         'max_score' : 'vs2_max_score', 'max_score_group' : 'vs2_max_score_group', 'hallmark' : 'vs2_hallmark', 'viral' : 'vs2_viral', 'cellular' : 'vs2_cellular'
     },
     'vibrant' :  {'type' : 'vb_lifestyle'},
@@ -85,7 +85,7 @@ def vCtgMerge(name, wkdir):
         elif tool == 'vibrant':
             df = df[['scaffold', 'type']].drop_duplicates()
             df['vb_isPhage'] = 1
-            try: #In case the VIBRANT doesn't output fragment results
+            try: # In case the VIBRANT doesn't output fragment results
                 df[['scaffold', 'vb_partial']] = df['scaffold'].str.split(r'_frag', expand=True)
                 df['vb_partial'] = df['vb_partial'].str.replace('ment_', 'fragment_')
             except ValueError:
