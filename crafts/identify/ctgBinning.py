@@ -34,6 +34,8 @@ class VirMAG(VirDetectTools):
 
     def vMAGFilt(self):
         cmd = [utils.selectENV('VC-CAT')]
+        wkdir = f'{self.wkfile_dir}/cat_nr'
+
         return cmd
 
     def vMAGQC(self):

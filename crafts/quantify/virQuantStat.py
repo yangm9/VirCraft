@@ -82,7 +82,7 @@ class VirAbdStat(multiVirCount):
         if abundance_table:
             abundance_table = os.path.abspath(abundance_table)
             cmd.extend(['# Using provided abundance_table, skipping abundance calculation steps\n'])
-            cmd.extend(['cp', abundance_table, self.all_vctg_abd_cov, '\n'])
+            cmd.extend(['cp', abundance_table, self.all_vctg_abd_cov, '\n\n'])
         else:
             cmd.extend(self.virCountBySamp(coverm_method))
             cmd.extend([utils.selectENV('VC-General')])
