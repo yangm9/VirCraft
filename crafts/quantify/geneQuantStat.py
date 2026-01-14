@@ -9,7 +9,7 @@ class GeneAbdStat(multiGeneCount):
         "The FastA file should be coding sequence file (*.ffn)."
         super().__init__(samp_info, fasta, outdir, threads)
     def mergeAbd(self):
-        abd = f'{self.wkdir}/all_merged_gene.sf'
+        abd = f'{self.stat_dir}/all_merged_gene.sf'
         cmd = [utils.selectENV('VC-General')]
         cmd.extend(['paste_abundance_files.py', self.wkfile_dir, self.samp_info, abd, 'Gene\n'])
         return cmd, abd
