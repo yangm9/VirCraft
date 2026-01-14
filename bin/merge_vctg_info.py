@@ -90,7 +90,7 @@ def vCtgMerge(name, wkdir):
                 df['vb_partial'] = df['vb_partial'].str.replace('ment_', 'fragment_')
             except ValueError:
                 df['vb_partial'] = ''
-
+            # Multiple records of the same scaffold are merged into one, just for one scaffold harbors multiple provirus
             agg_dict = {
                 'type': 'first',
                 'vb_isPhage': 'max',  # Take the maximum value of vb_isPhage
@@ -106,6 +106,10 @@ def vCtgMerge(name, wkdir):
             except ValueError:
                 df['gn_partial'] = ''
             df.drop(columns = ['length'], inplace=True)
+            # Multiple records of the same scaffold are merged into one, just for one scaffold harbors multiple provirus
+            agg_dict = {
+                ''
+
         df.rename(columns = {NameDict[tool]: 'Contig'}, inplace=True)
         all_ctgs.extend(df['Contig'].tolist())
         all_ctgs = list(set(all_ctgs))
