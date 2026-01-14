@@ -21,7 +21,7 @@ class GeneAbdStat(multiGeneCount):
         )
         tmp_cmd,abd = self.mergeAbd()
         cmd.extend(tmp_cmd)
-        shell = f'{self.shelldir}/{self.name}_gene_quant.sh'
+        shell = f'{self.shell_dir}/{self.name}_gene_quant.sh'
         utils.printSH(shell, cmd)
         results = 0 if unrun else utils.execute(shell)
         return results
