@@ -20,7 +20,7 @@ Tools = ['virsorter2', 'vibrant', 'genomad', 'deepvirfinder']
 # The relative path to the final result table for viral identify tool, and it need to transform to the full path in this program.
 PathDict = {
     'virsorter2' : 'vs2-pass1/final-viral-score.tsv',
-    'vibrant' : 'VIBRANT_{0}/VIBRANT_results_{0}/VIBRANT_genome_quality_{0}.tsv'#,VIBRANT_{0}/VIBRANT_results_{0}/VIBRANT_integrated_prophage_coordinates_{0}.tsv',
+    'vibrant' : 'VIBRANT_{0}/VIBRANT_results_{0}/VIBRANT_genome_quality_{0}.tsv',#,VIBRANT_{0}/VIBRANT_results_{0}/VIBRANT_integrated_prophage_coordinates_{0}.tsv',
     'genomad' : 'genomad/{0}_summary/{0}_virus_summary.tsv',
     'deepvirfinder' : 'deepvirfinder'
 }
@@ -44,11 +44,11 @@ CsvDict = {
 # The column dictionary for each tool,  and this will be used to rename the column names for the file named "all_viral_ctgs.score.tsv : ".
 ColsDict = {
     'virsorter2' : {
-        'length' : 'length', 'dsDNAphage' : 'vs2_dsDNAphage', 'ssDNA' : 'vs2_ssDNA', 'NCLDV' : 'vs2_NCLDV',  'RNA' : 'vs2_RNA','lavidaviridae' : 'vs2_lavidaviridae', 
+        'dsDNAphage' : 'vs2_dsDNAphage', 'ssDNA' : 'vs2_ssDNA', 'NCLDV' : 'vs2_NCLDV',  'RNA' : 'vs2_RNA','lavidaviridae' : 'vs2_lavidaviridae', 
         'max_score' : 'vs2_max_score', 'max_score_group' : 'vs2_max_score_group', 'hallmark' : 'vs2_hallmark', 'viral' : 'vs2_viral', 'cellular' : 'vs2_cellular'
     },
     'vibrant' :  {'type' : 'vb_lifestyle'},
-    'deepvirfinder' : {'score' : 'dvf_v_score', 'pvalue' : 'dvf_pvalue'},
+    'deepvirfinder' : {'len' : 'length', 'score' : 'dvf_v_score', 'pvalue' : 'dvf_pvalue'},
     'genomad' :  {
         'topology' : 'gn_topology', 'coordinates' : 'gn_coordinates', 'n_genes' : 'gn_genes', 'genetic_code' : 'gn_genetic_code', 'virus_score' : 'gn_v_score',
         'fdr' : 'gn_fdr', 'n_hallmarks' : 'gn_hallmarks', 'marker_enrichment' : 'gn_marker_enrichment', 'taxonomy' : 'gn_taxonomy'
@@ -98,7 +98,7 @@ def vCtgMerge(name, wkdir):
             }
             df = df.groupby('scaffold', as_index=False).agg(agg_dict)
         elif tool == 'deepvirfinder':
-            df.drop(columns = ['len'], inplace=True)
+            pass
         elif tool == 'genomad':
             try:
                 df[['seq_name', 'gn_partial']] = df['seq_name'].str.split(r'\|pro', expand=True)
