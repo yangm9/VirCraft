@@ -13,9 +13,9 @@ def filt_checkv(qual_summ_tsv: str):
     vctg_for_binning_filt_condition = 'contig_length >= 2000 and provirus != "Yes" and checkv_quality != "Complete" and checkv_quality != "Not-determined"'
     complete_vctg_filt_condition = f'provirus == "No" and checkv_quality == "Complete" and contig_length >= 2000'
     provirus_vctg_filt_condition = 'provirus == "Yes" and contig_length >= 2000 and checkv_quality != "Not-determined"'
-    complete_vctg_list = df.query(complete_vctg_filt_condition)['contig_id'].tolist()
-    provirus_vctg_list = df.query(provirus_vctg_filt_condition)['contig_id'].tolist()
-    vctg_for_binning_list = df.query(vctg_for_binning_filt_condition)['contig_id'].tolist()
+    complete_vctg_list = df.query(complete_vctg_filt_condition)['Contig'].tolist()
+    provirus_vctg_list = df.query(provirus_vctg_filt_condition)['Contig'].tolist()
+    vctg_for_binning_list = df.query(vctg_for_binning_filt_condition)['Contig'].tolist()
     return complete_vctg_list, provirus_vctg_list, vctg_for_binning_list
 
 # extracr sequences from FASTA file according to ID list

@@ -36,10 +36,12 @@ class vIdentify(VirDetectTools):
         tmp_cmd, checkv_dir = self.checkv(viral_filt_ctgs_fna)
         cmd.extend(tmp_cmd)
         quality_summary_tsv = checkv_dir + '/quality_summary.tsv'
+        checkv_quality_summary_tsv = f'{self.wkfile_dir}/checkv_quality_summary.tsv'
         cmd.extend([utils.selectENV('VC-General')])
         cmd.extend(
-            ['linkTab.py', score_tsv, quality_summary_tsv, 'left contig_id', score_filt_qual_tsv, '\n',
-             'vir_qual_filt.py', quality_summary_tsv, viral_filt_ctgs_fna, viral_posi_ctgs_fna, '\n\n']
+            ['sed 1s/^contig_id\t/Contig\t/', quality_summary_tsv, '>', checkv_quality_summary_tsv,
+             '&& linkTab.py', score_tsv, checkv_quality_summary_tsv, 'left Contig', score_filt_qual_tsv, '\n',
+             'vir_qual_filt.py', checkv_quality_summary_tsv, viral_filt_ctgs_fna, viral_posi_ctgs_fna, '&& rm -f', checkv_quality_summary_tsv, '\n']
         )
         original_fasta = self.fasta
         self.fasta = viral_posi_ctgs_fna
