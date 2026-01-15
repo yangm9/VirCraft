@@ -14,6 +14,7 @@ class vIdentify(VirDetectTools):
     def vFilter(self, min_len=2000, filt_mode='permissive'):
         score_tsv = f'{self.wkfile_dir}/all_viral_ctgs.score.tsv'
         score_filt_tsv = utils.insLable(score_tsv, filt_mode)
+        score_filt_qual_tsv = utils.insLable(score_tsv, 'qual')
         viral_filt_ctg_list = f'{self.wkfile_dir}/viral_filt_ctg.list'
         viral_filt_ctgs_fna = f'{self.wkfile_dir}/viral_filt_ctg.fna'
         viral_posi_ctgs_fna = f'{self.wkfile_dir}/viral_positive_ctg.fna'
@@ -28,8 +29,8 @@ class vIdentify(VirDetectTools):
         cmd.extend(
             ['merge_vctg_info.py', self.name, self.wkfile_dir, filt_mode, # generate all_viral_ctgs.score.tsv file 
              '&& cut -f 1', score_filt_tsv, "|sed '1d' >", viral_filt_ctg_list, '&& extrSeqByName.pl', viral_filt_ctg_list, self.fasta, viral_filt_ctgs_fna, '\n\n',
-             "awk -F '\\t' 'NR>1 && $28>=1 {print $1}'", score_tsv, '>', vs2_list, "&& awk -F '\\t' 'NR>1 && $29>=1 {print $1}'", score_tsv, '>', vb_list,
-             "&& awk -F '\\t' 'NR>1 && $30>=1 {print $1}'", score_tsv, '>', dvf_list, "&& awk -F '\\t' 'NR>1 && $31>=1 {print $1}'", score_tsv, '>', gn_list,
+             "awk -F '\\t' 'NR>1 && $32>=1 {print $1}'", score_tsv, '>', vs2_list, "&& awk -F '\\t' 'NR>1 && $33>=1 {print $1}'", score_tsv, '>', vb_list,
+             "&& awk -F '\\t' 'NR>1 && $34>=1 {print $1}'", score_tsv, '>', dvf_list, "&& awk -F '\\t' 'NR>1 && $35>=1 {print $1}'", score_tsv, '>', gn_list,
              '&& venn4.R', vs2_list, vb_list, dvf_list, gn_list, venn_pdf, '\n\n']
         )
         tmp_cmd, checkv_dir = self.checkv(viral_filt_ctgs_fna)
@@ -37,7 +38,8 @@ class vIdentify(VirDetectTools):
         quality_summary_tsv = checkv_dir + '/quality_summary.tsv'
         cmd.extend([utils.selectENV('VC-General')])
         cmd.extend(
-            ['vir_qual_filt.py', quality_summary_tsv, viral_filt_ctgs_fna, viral_posi_ctgs_fna, '\n\n']
+            ['linkTab.py', score_tsv, quality_summary_tsv, 'left contig_id', score_filt_qual_tsv, '\n',
+             'vir_qual_filt.py', quality_summary_tsv, viral_filt_ctgs_fna, viral_posi_ctgs_fna, '\n\n']
         )
         original_fasta = self.fasta
         self.fasta = viral_posi_ctgs_fna
