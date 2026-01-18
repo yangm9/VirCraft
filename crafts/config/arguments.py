@@ -15,7 +15,7 @@ def autOpts(name: str, version: str):
 Usage: {name} <subcommand> [options]
 '''
     )
-    subparsers=parser.add_subparsers(
+    subparsers = parser.add_subparsers(
         help=''
     )
     subpsr = subparsers.add_parser(

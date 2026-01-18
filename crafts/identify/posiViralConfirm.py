@@ -14,7 +14,6 @@ class vIdentify(VirDetectTools):
     def vFilter(self, min_len=2000, filt_mode='permissive'):
         score_tsv = f'{self.wkfile_dir}/all_viral_ctgs.score.tsv'
         score_filt_tsv = utils.insLable(score_tsv, filt_mode)
-        score_filt_qual_tsv = utils.insLable(score_tsv, 'qual')
         viral_filt_ctg_list = f'{self.wkfile_dir}/viral_filt_ctg.list'
         viral_filt_ctgs_fna = f'{self.wkfile_dir}/viral_filt_ctg.fna'
         viral_posi_ctgs_fna = f'{self.wkfile_dir}/viral_positive_ctg.fna'
@@ -36,12 +35,9 @@ class vIdentify(VirDetectTools):
         tmp_cmd, checkv_dir = self.checkv(viral_filt_ctgs_fna)
         cmd.extend(tmp_cmd)
         quality_summary_tsv = checkv_dir + '/quality_summary.tsv'
-        checkv_quality_summary_tsv = f'{self.wkfile_dir}/checkv_quality_summary.tsv'
         cmd.extend([utils.selectENV('VC-General')])
         cmd.extend(
-            ["sed '1s/^contig_id\\t/Contig\\t/'", quality_summary_tsv, '>', checkv_quality_summary_tsv,
-             '&& linkTab.py', score_tsv, checkv_quality_summary_tsv, 'left Contig', score_filt_qual_tsv, '\n',
-             'vir_qual_filt.py', checkv_quality_summary_tsv, viral_filt_ctgs_fna, viral_posi_ctgs_fna, '&& rm -f', checkv_quality_summary_tsv, '\n']
+            ['vir_qual_filt.py', score_filt_tsv, checkv_dir, viral_filt_ctgs_fna, viral_posi_ctgs_fna, '\n']
         )
         original_fasta = self.fasta
         self.fasta = viral_posi_ctgs_fna

@@ -43,7 +43,7 @@ def setup_db(args):
 @logger.Log(level='INFO')
 def reads_qc(args):
     Reads = fastqc.QualCtrl(fq1=args.fq1, fq2=args.fq2, outdir=args.outdir, threads=args.threads)
-    rcode = Reads.readqc(process = args.process, unrun=args.unrun, clear=args.clear)
+    rcode = Reads.readqc(process=args.process, unrun=args.unrun, clear=args.clear)
     return rcode
 
 #----------------------assemble-----------------------
