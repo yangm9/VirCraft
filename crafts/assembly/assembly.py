@@ -88,8 +88,8 @@ class Assembly(Reads):
         unused_fq_s = f'{wkdir}/unused_reads_s.fq'
         # Create the command to index the scaffolds, map the reads, and extract unmapped reads
         cmd = ['bwa index -a bwtsw', scaf, '-p', bwa_idx, '\n',
-            'bwa mem', '-t', self.threads, bwa_idx, self.fastqs[0], self.fastqs[1], '|samtools view -bf 4 >', unused_bam, '\n',
-            'samtools fastq -N', unused_bam, '-1', unused_fq_1, '-2', unused_fq_2, '-s', unused_fq_s, '\n']
+               'bwa mem', '-t', self.threads, bwa_idx, self.fastqs[0], self.fastqs[1], '|samtools view -bf 4 >', unused_bam, '\n',
+               'samtools fastq -N', unused_bam, '-1', unused_fq_1, '-2', unused_fq_2, '-s', unused_fq_s, '\n']
         # List of unused FASTQ files (unmapped reads)
         unused_fqs = [unused_fq_1, unused_fq_2, unused_fq_s]
         return cmd, unused_fqs
@@ -106,7 +106,7 @@ class Assembly(Reads):
         tmp_cmd, tmp_scaf = self.methDict[process[0]](fastqs)
         cmd.extend(tmp_cmd)
         scafs.append(tmp_scaf)
-        final_scaf = f'{self.outdir}/final_assembly.fasta'
+        final_scaf = f'{self.wkfile_dir}/final_assembly.fasta'
         steps = len(process)
 
         # If two methods are specified, process the assembly in two steps
@@ -143,7 +143,10 @@ class Assembly(Reads):
         FastA = Seq(scaf, self.outdir)
         cmd.extend(FastA.statFA())
         cmd.extend(FastA.lenCutoff(min_len))
-        
+        filt_scaf = utils.insLable(scaf, 'gt' + str(min_len))
+        cmd.extend(
+            ['mv', scaf, filt_scaf, self.outdir, '\n']
+        )
         # Optionally clear intermediate alignment files
         if clear and len(process) == 2:
             alndir = f'{self.wkfile_dir}/alignment'

@@ -55,11 +55,10 @@ class Seq(VirCfg):
 
     def lenCutoff(self, min_len=2000, max_len=None):
         cmd = [self.envs]
-        filt_prefix = f'{self.outdir}/{self.name}'
+        filt_prefix = f'{self.wkfile_dir}/{self.name}'
         tmp_cmd = ['SeqLenCutoff.pl', self.fasta, filt_prefix, str(min_len)]
         if max_len is not None:
             tmp_cmd.append(str(max_len))
-
         cmd.extend(tmp_cmd)
         cmd.append('\n')
         return cmd
