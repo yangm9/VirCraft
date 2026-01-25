@@ -59,22 +59,26 @@ class vIdentify(VirDetectTools):
         except ValueError as e:
             print(f'ERROR: {e}')
             exit(1)
+        used_threads = 0
         self.threads = str(self.threads)
         #vibrant
         cmd, wkdir = self.vibrant(min_len)
         shell = f'{self.shell_dir}/{self.name}_vb_ctg.sh'
         utils.printSH(shell, cmd)
+        used_threads += int(self.threads) # 1
         #deepvirfinder
         cmd, wkdir = self.deepvirfinder(min_len)
         shell = f'{self.shell_dir}/{self.name}_dvf_ctg.sh'
         utils.printSH(shell, cmd)
+        used_threads += int(self.threads) # 1
         #genomad
         self.threads = str(int(self.threads) * 2)
         cmd, wkdir = self.genomad()
         shell = f'{self.shell_dir}/{self.name}_gn_ctg.sh'
         utils.printSH(shell, cmd)
+        used_threads += int(self.threads) # 2
         #VirSorter2
-        self.threads = str(int(self.allthreads) - (int(self.threads) * 4)) #5
+        self.threads = str(int(self.allthreads) - used_threads) # 8-4 = 4
         cmd, wkdir = self.virsorter(in_fa=self.fasta, n=0, min_len=min_len, min_score=0.5)
         shell = f'{self.shell_dir}/{self.name}_vs2_ctg.sh'
         utils.printSH(shell, cmd)
