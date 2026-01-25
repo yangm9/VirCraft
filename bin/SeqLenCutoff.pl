@@ -36,7 +36,6 @@ open OUT, ">$outfile" || die "Can not open $outfile\n";
 
 $/ = ">";
 <FA>;
-my $num = 1;
 while(<FA>){
     chomp;
     my($id, $seq) = split /\n/, $_, 2;
@@ -49,11 +48,9 @@ while(<FA>){
         next unless $len >= $min_len && $len <= $max_len;
     }else{
         next unless $len >= $min_len;
-        $id .= "_$num";
     }
     $seq =~ s/(.*)/\U$1/; # upper
     print OUT ">$id\n$seq\n";
-    $num++;
 }
 $/ = "\n";
 
