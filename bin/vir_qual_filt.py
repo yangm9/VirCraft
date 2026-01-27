@@ -58,7 +58,8 @@ def identify_provirus(vir_checkv_score_df: pd.DataFrame) -> pd.DataFrame:
         if s <= e: return (s, e)
         return None
     def merge_ranges_by_host_rate(ranges, contig_length, max_gap=20000, max_host_rate=0.3):
-        if len(ranges) <= 1: return ranges
+        if len(ranges) <= 1:
+            return ranges
         ranges = sorted(ranges, key=lambda x: x[0])
         merged = [ranges[0]]
         for cur in ranges[1:]:

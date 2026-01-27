@@ -29,7 +29,7 @@ par(mar=c(4.5, 4.5, 4.5, 4.5) + 0.5)
 FillCol <- c("red", "blue")
 draw.pairwise.venn(
 	area1=length_a, area2=length_b, cross.area=length_ab,
-	category=c(name_f1, name_f1),
+	category=c(name_f1, name_f2),
 	cat.cex=1.8,
     cat.pos=0,
     cat.fontface = "bold",

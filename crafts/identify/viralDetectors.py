@@ -3,9 +3,7 @@ from ..general import utils
 from ..data.bioseq import VirSeq
 
 class VirDetectTools(VirSeq):
-    '''
-    Generate command for VirSorter2, DeepVirFinder, VIBRANT, geNomad, Contig Annotation Tool (CAT).
-    '''
+    #Generate command for VirSorter2, DeepVirFinder, VIBRANT, geNomad, Contig Annotation Tool (CAT).
     vs2_subcmds = ['--keep-original-seq --exclude-lt2gene', '--seqname-suffix-off --viral-gene-enrich-off --provirus-off --prep-for-dramv']
     def __init__(self, fasta=None, outdir=None, threads=8):
         super().__init__(fasta, outdir)
@@ -22,11 +20,12 @@ class VirDetectTools(VirSeq):
         )
         return cmd, wkdir
 
-    def deepvirfinder(self, min_len=1500):
+    # Hegarty et al (10.1128/msystems.01105-23) suggested contigs < 2,100 bp is suitable for DeepVirFinder, whereas the rules they used for this tool is "checkv length < 20 kb". The largest reported viral genome to date is approximately 735 kb. Thus, the max_len parameter should be set to a certain length between 20 and 800 kbp.
+    def deepvirfinder(self, min_len=1500, max_len=2100000):  
         min_len = str(min_len)
         input_prefix = f'{self.wkfile_dir}/{self.name}'
-        input_fasta = input_prefix + '.lt2100000.fa'
-        cmd = self.lenCutoff(0, 2100000)
+        input_fasta = f'{input_prefix}.lt{max_len}.fa'
+        cmd = self.lenCutoff(0, max_len)
         cmd.extend([utils.selectENV('VC-DeepVirFinder')])
         wkdir = f'{self.wkfile_dir}/deepvirfinder'
         utils.mkdir(wkdir)

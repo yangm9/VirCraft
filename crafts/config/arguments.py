@@ -100,13 +100,13 @@ Usage: {name} <subcommand> [options] -o <outdir>
 #----------------------identify-----------------------
     subpsr = subparsers.add_parser(
         'identify',
-        help='Identify the viral contigs from an assembly fasta, using vs2-vb-dvf-gn or vir-id-sop workflow'
+        help='Identify the viral contigs from an assembly fasta via optional methods'
     )
     subpsr = addFaArg(subpsr, 'ctg')
     subpsr = addCutoffArg(subpsr)
     subpsr.add_argument(
-        '-w', '--sop', action='store', type=str, dest='sop', metavar='STR', default='vs2-vb-dvf-gn', required=False,
-        help='The sop/pipeline for viral contigs identification, including "viral-id-sop" and "vs2-vb-dvf-gn". [default=vs2-vb-dvf-gn]'
+        '-m', '--methods', action='store', type=str, dest='methods', metavar='STR', default='gn', required=False,
+        help='The tool chain for viral contigs identification, such as "vs2-vb" (VirSorter2 + VIBRANT), "vb-dvf" (VIBRANT + DeepVirFinder), "vs2-vb-dvf-gn" (VirSorter2 + VIBRANT + DeepVirFinder + geNomad) and so on. [default=gn]'
     )
     subpsr.add_argument(
         '-f', '--filter-mode', action='store', type=str, dest='filt_mode', metavar='STR', default='permissive', required=False,

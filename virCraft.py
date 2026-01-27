@@ -56,12 +56,8 @@ def assemble(args):
 #----------------------identify-----------------------
 @logger.Log(level='INFO')
 def identify(args):
-    if args.sop == 'viral-id-sop':
-        VirCtg = viridsop.VirScan(fasta=args.fasta, outdir=args.outdir, threads=args.threads)
-        rcode = VirCtg.Identify(unrun=args.unrun)
-    else:
-        VirCtg = posiViralConfirm.vIdentify(fasta=args.fasta, outdir=args.outdir, threads=args.threads)
-        rcode = VirCtg.Identify(min_len=args.min_len, filt_mode=args.filt_mode, unrun=args.unrun)
+    VirCtg = posiViralConfirm.vIdentify(fasta=args.fasta, outdir=args.outdir, threads=args.threads)
+    rcode = VirCtg.Identify(min_len=args.min_len, methods=args.methods, filt_mode=args.filt_mode, unrun=args.unrun)
     return rcode
 
 #----------------------binning-----------------------
@@ -102,13 +98,6 @@ def host_pred(args):
 #-----------------------func_annot---------------------
 @logger.Log(level='INFO')
 def func_annot(args):
-    #print('Function annotation')
-    #VirGene=geneAnnot.GeneFunc(
-    #    fasta=args.fasta,
-    #    outdir=args.outdir,
-    #    threads=args.threads
-    #)
-    #VirGene.FuncAnnot()
     AMGs = callAMG.AMGs(fasta=args.fasta, outdir=args.outdir, threads=args.threads)
     rcode = AMGs.annotAMGs(unrun=args.unrun)
     return rcode

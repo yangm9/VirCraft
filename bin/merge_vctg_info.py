@@ -7,6 +7,7 @@
 import os
 import sys
 import re
+import argparse
 import pandas as pd
 import linkTab
 
@@ -25,18 +26,18 @@ import linkTab
 
 Tools = ['virsorter2', 'vibrant', 'genomad', 'deepvirfinder']
 
+TOOL_ALIAS = {
+    'vs2': 'virsorter2',
+    'vb': 'vibrant',
+    'gn': 'genomad',
+    'dvf': 'deepvirfinder'
+}
+
 ResultDict = {
     'virsorter2': '{0}/vs2-pass1/final-viral-score.tsv,{0}/vs2-pass1/final-viral-boundary.tsv',
     'vibrant': '{0}/VIBRANT_{1}/VIBRANT_results_{1}/VIBRANT_genome_quality_{1}.tsv,{0}/VIBRANT_{1}/VIBRANT_results_{1}/VIBRANT_integrated_prophage_coordinates_{1}.tsv',
     'genomad': '{0}/genomad/{1}_summary/{1}_virus_summary.tsv',
     'deepvirfinder': '{0}/deepvirfinder'
-}
-
-NameDict = {
-    'virsorter2': 'seqname',
-    'vibrant': 'scaffold',
-    'deepvirfinder': 'name',
-    'genomad': 'seq_name'
 }
 
 CsvDict = {
@@ -84,9 +85,18 @@ ColsDict = {
     }
 }
 
+def parse_merge_tools(m_str):
+    tools = []
+    for t in m_str.split('-'):
+        if t not in TOOL_ALIAS:
+            raise ValueError(f'Unknown tool alias: {t}')
+        tools.append(TOOL_ALIAS[t])
+    return list(dict.fromkeys(tools))
+
 # --------------------------------------------------
 # Get the real path of a certain tool' result or coordinate file  
 # --------------------------------------------------
+
 
 def resultFile(name, tool, wkdir):
     wkdir = wkdir.rstrip('/')
@@ -216,9 +226,10 @@ def listToFile(list_l, list_f):
         LIST.write(f'{ctg}\n')
     return 0
 
-def vCtgMerge(name, wkdir):
+#vCtgMerge: Integrate the contig lists identified by all selected viral detection tools, and output the individual contig list for each tool in parallel.
+def vCtgMerge(name, wkdir, tools=['gn']):
     all_ctgs = []
-    for tool in Tools:
+    for tool in tools:
         result = resultFile(name, tool, wkdir)
         df = TOOL_HANDLER[tool](result)
         all_ctgs.extend(df['Contig'].tolist())
@@ -228,15 +239,24 @@ def vCtgMerge(name, wkdir):
         df.to_csv(csv_name, index=False, sep='\t')
     return all_ctgs
 
-def calcCtgScore(all_merged_ctg_tsv, filt_mode='permissive'):
+def calcCtgScore(all_merged_ctg_tsv, tools=['gn'], filt_mode='permissive'):
     df = pd.read_csv(all_merged_ctg_tsv, sep='\t')
-    df['vb_lifestyle'].fillna('Undetermined', inplace=True)
-    df['gn_taxonomy'].fillna('Unclassified', inplace=True)
-    df['vs2_score'] = df.apply(lambda x : 2 if x['vs2_max_score'] >= 0.9 else (1 if x['vs2_max_score'] >= 0.7 and x['vs2_hallmark'] >= 1 else 0), axis = 1)
-    df['vb_score'] = df['vb_isPhage'].apply(lambda x : 1 if x == 1 else 0)
-    df['dvf_score'] = df.apply(lambda x : 1 if x['dvf_v_score'] >= 0.9 and x['dvf_pvalue'] <= 0.05 else 0, axis = 1)
-    df['gn_score'] = df.apply(lambda x : 2 if x['gn_v_score'] >= 0.8 else (1 if x['gn_v_score'] >= 0.7 and x['gn_hallmarks'] >= 1 else 0), axis = 1)
-    df['score'] = df['vs2_score'] + df['vb_score'] + df['dvf_score'] + df['gn_score']
+    score = 0
+    if 'virsorter2' in tools:
+        df['vs2_score'] = df.apply(lambda x : 2 if x['vs2_max_score'] >= 0.9 else (1 if x['vs2_max_score'] >= 0.7 and x['vs2_hallmark'] >= 1 else 0), axis = 1)
+        score += df['vs2_score']
+    if 'vibrant' in tools:
+        df['vb_lifestyle'].fillna('Undetermined', inplace=True)
+        df['vb_score'] = df['vb_isPhage'].apply(lambda x : 1 if x == 1 else 0)
+        score += df['vb_score']
+    if 'deepvirfinder' in tools:
+        df['dvf_score'] = df.apply(lambda x : 1 if x['dvf_v_score'] >= 0.9 and x['dvf_pvalue'] <= 0.05 else 0, axis = 1)
+        score += df['dvf_score']
+    if 'genomad' in tools:
+        df['gn_taxonomy'].fillna('Unclassified', inplace=True)
+        df['gn_score'] = df.apply(lambda x : 2 if x['gn_v_score'] >= 0.8 else (1 if x['gn_v_score'] >= 0.7 and x['gn_hallmarks'] >= 1 else -1), axis = 1)
+        score += df['gn_score']
+    df['score'] = score
     postfix = '.score.tsv'
     all_ctg_score_tsv = all_merged_ctg_tsv.replace('.tsv', postfix)
     df.to_csv(all_ctg_score_tsv, index=False, sep='\t')
@@ -247,13 +267,13 @@ def calcCtgScore(all_merged_ctg_tsv, filt_mode='permissive'):
     df.to_csv(all_ctg_score_filt_tsv, index=False, sep='\t')
     return 0
 
-def ctgList(name, wkdir, filt_mode='permissive'):
-    all_nh_ctgs = vCtgMerge(name, wkdir)
+def ctgList(name, wkdir, tools=['gn'], filt_mode='permissive'):
+    all_nh_ctgs = vCtgMerge(name, wkdir, tools)
     all_ctgs = ['Contig'] + all_nh_ctgs
     all_ctgs_li = f'{wkdir}/all_viral_ctgs.list'
     listToFile(all_ctgs, all_ctgs_li)
     mark = all_ctgs_li
-    for tool in Tools:
+    for tool in tools:
         csv_name = CsvDict[tool].format(wkdir)
         merged_name = mark + '_' + tool
         linkTab.merge(mark, csv_name, 'left', 'Contig', merged_name)
@@ -262,13 +282,15 @@ def ctgList(name, wkdir, filt_mode='permissive'):
         mark = merged_name
     all_merged_ctg_tsv = f'{wkdir}/all_viral_ctgs.tsv'
     os.rename(mark, all_merged_ctg_tsv)
-    calcCtgScore(all_merged_ctg_tsv, filt_mode)
-    return 0
+    rcode = calcCtgScore(all_merged_ctg_tsv, tools, filt_mode)
+    return rcode
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print(f'{sys.argv[0]} <metagenomic_name> <viral_identify_wkdir> [filter_mode]')
-    elif len(sys.argv) == 2:
-        ctgList(sys.argv[1], sys.argv[2])
-    else:
-        ctgList(sys.argv[1], sys.argv[2], sys.argv[3])
+    parser = argparse.ArgumentParser()
+    parser.add_argument('name')
+    parser.add_argument('wkdir')
+    parser.add_argument('-m', '--tool-chain', default='gn')
+    parser.add_argument('-f', '--filter-mode', default='permissive', choices=['permissive', 'strict'])
+    args = parser.parse_args()
+    tools = parse_merge_tools(args.tool_chain)
+    ctgList(args.name, args.wkdir, tools, args.filter_mode)
