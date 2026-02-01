@@ -18,13 +18,13 @@ class vIdentify(VirDetectTools):
         viral_posi_ctgs_fna = f'{self.wkfile_dir}/viral_positive_ctg.fna'
         venn_pdf = f'{self.stat_dir}/viral_contigs_multitools_comparison_venn.pdf'
         cmd = [utils.selectENV('VC-General')]
-        tmp_cmd = ''
         #tmp_cmd, cat_dir = self.contig_annotation_tool(viral_filt_ctgs_fna)
+        cmd.extend(['merge_vctg_info.py', self.name, self.wkfile_dir, '-m', methods, '-f', filt_mode]) # generate all_viral_ctgs.score.tsv file 
+        if methods.count('-') > 0: # if tool number >= 2,  plot Venn for all tools
+            cmd.extend(['&& multitool_venn.py', '-i', score_tsv, '-t', methods, '-o', self.wkfile_dir])
         cmd.extend(
-            ['merge_vctg_info.py', self.name, self.wkfile_dir, '-m', methods, '-f', filt_mode, # generate all_viral_ctgs.score.tsv file 
-             '&& multitool_venn.py', '-i', score_tsv, '-t', methods, '-o', self.wkfile_dir, # plot Venn for all tools
-             '&& cut -f 1', score_filt_tsv, "|sed '1d' >", viral_filt_ctg_list, 
-             '&& extrSeqByName.pl', viral_filt_ctg_list, self.fasta, viral_filt_ctgs_fna, '\n\n']
+             ['&& cut -f 1', score_filt_tsv, "|sed '1d' >", viral_filt_ctg_list, 
+              '&& extrSeqByName.pl', viral_filt_ctg_list, self.fasta, viral_filt_ctgs_fna, '\n\n']
         )
         tmp_cmd, checkv_dir = self.checkv(viral_filt_ctgs_fna)
         cmd.extend(tmp_cmd)
@@ -114,7 +114,7 @@ class vIdentify(VirDetectTools):
         #multiple run
         cmd = [utils.selectENV('VC-General')]
         cmd.extend(
-            ['multithreads.pl', self.shell_dir, 'ctg.sh 4\n']
+            ['multithreads.pl', self.shell_dir, 'ctg.sh', str(methods.count('-') + 1),'\n']
         )
         shell = f'{self.shell_dir}/{self.name}_batch_identify_virus.sh'
         utils.printSH(shell, cmd)
