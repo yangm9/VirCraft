@@ -72,7 +72,7 @@ class Seq(VirCfg):
             ['fasta_size_gc.py', self.fasta, '>', len_gc_stat, 
              '&& variables_scatter.R', len_gc_stat, 'Length~GC', self.stat_dir,
              '&& stat_NL50.pl', self.fasta, nl50_stat,
-             '&& fasta_size_distribution_plot.R', self.fasta, fasta_size_distribution, '--bin-width 2000 --log-y FALSE\n\n']
+             '&& fasta_size_distribution_plot.pl', self.fasta, fasta_size_distribution, '--bin-width 2000 --log-y FALSE\n\n']
         )
         return cmd
     
