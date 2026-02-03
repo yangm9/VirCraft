@@ -8,7 +8,7 @@ from pathlib import Path
 
 TOOL_SCORE_COLUMN = {
     'vs2': 'vs2_score',
-    'vibrant': 'vb_score',
+    'vb': 'vb_score',
     'dvf': 'dvf_score',
     'gn': 'gn_score'
 }

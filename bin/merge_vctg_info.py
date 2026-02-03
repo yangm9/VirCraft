@@ -254,7 +254,7 @@ def calcCtgScore(all_merged_ctg_tsv, tools=['gn'], filt_mode='permissive'):
         score += df['dvf_score']
     if 'genomad' in tools:
         df['gn_taxonomy'].fillna('Unclassified', inplace=True)
-        df['gn_score'] = df.apply(lambda x : 2 if x['gn_v_score'] >= 0.8 else (1 if x['gn_v_score'] >= 0.7 and x['gn_hallmarks'] >= 1 else -1), axis = 1)
+        df['gn_score'] = df.apply(lambda x : 2 if x['gn_v_score'] >= 0.8 else (1 if x['gn_v_score'] >= 0.7 and x['gn_hallmarks'] >= 1 else 0), axis = 1)
         score += df['gn_score']
     df['score'] = score
     postfix = '.score.tsv'
