@@ -22,7 +22,7 @@ if ($help || @ARGV < 2) {
 }
 
 # 最后一个参数是输出文件，其余是输入 fasta
-my $output_png = pop @ARGV;
+my $output_pdf = pop @ARGV;
 my @fasta_files = @ARGV;
 
 # 临时中间文件
@@ -32,40 +32,36 @@ my $tmp_r    = "temp_plot_" . time() . ".R";
 # ==========================================
 # 1. Perl 提取长度 (精准解析)
 # ==========================================
-open(my $out, '>', $tmp_data) or die "Cannot write to $tmp_data: $!";
-print $out "Length,Source\n";
+open OUT, '>', $tmp_data or die "Cannot write to $tmp_data: $!";
+print OUT "Sequence_ID,Length,Source\n";
 
-foreach my $fasta (@fasta_files) {
-    if (!-e $fasta) {
+$/ = ">";
+foreach my $fasta(@fasta_files){
+    if(!-e $fasta){
         warn "File $fasta not found, skipping...\n";
         next;
     }
-    
     my $name = basename($fasta);
-    open(my $fh, '<', $fasta) or die "Cannot open $fasta: $!";
-    
+    open IN, $fasta or die "Cannot open $fasta: $!";
     my $current_len = 0;
-    while (<$fh>) {
+    <IN>;
+    while(<IN>){
         chomp;
-        if (/^>/) {
-            print $out "$current_len,$name\n" if $current_len > 0;
-            $current_len = 0;
-        } else {
-            # 这里的正则确保只计算序列字符，排除换行、空格和数字
-            s/[^a-zA-Z]//g;
-            $current_len += length($_);
-        }
+        my($id, $seq) = split /\n/, $_, 2;
+        $seq=~s/\s+//g; # 这里的正则确保只计算序列字符，排除换行、空格和数字
+        my $length = length($seq); 
+        print OUT "$id,$length,$name\n";
     }
-    print $out "$current_len,$name\n" if $current_len > 0;
-    close($fh);
+    close IN;
 }
-close($out);
+$/ = "\n";
+close OUT;
 
 # ==========================================
 # 2. 生成 R 脚本
 # ==========================================
-open(my $rfh, '>', $tmp_r) or die "Cannot write to $tmp_r: $!";
-print $rfh <<EOF;
+open RFILE, '>', $tmp_r or die "Cannot write to $tmp_r: $!";
+print RFILE <<EOF;
 library(ggplot2)
 
 df <- read.csv("$tmp_data")
@@ -93,9 +89,9 @@ if (toupper("$log_y") == "TRUE") {
     p <- p + scale_y_log10()
 }
 
-ggsave("$output_png", p, width = 10, height = 6)
+ggsave("$output_pdf", p, width = 10, height = 6)
 EOF
-close($rfh);
+close RFILE;
 
 # ==========================================
 # 3. 执行 R 并清理
@@ -105,4 +101,4 @@ system("Rscript $tmp_r");
 # 删除中间文件
 unlink($tmp_data, $tmp_r);
 
-print "Successfully plotted distribution to: $output_png\n";
+print "Successfully plotted distribution to: $output_pdf\n";

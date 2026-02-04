@@ -8,7 +8,7 @@ class vIdentify(VirDetectTools):
     self.BATCH_SIZE initialized as 4 in VirCfg class will be used to divide the input threads into 2*self.BATCH_SIZE portions, with 2 allocated to VirSorter2, and the other 2 allocated to VIBRANT and DeepVirFinder respectively.
     '''
     def __init__(self, fasta=None, outdir=None, threads=8):
-        super().__init__(fasta, outdir)
+        super().__init__(fasta, outdir, threads)
         #self.threads = int(threads) // (self.BATCH_SIZE * 2) #self.BATCH_SIZE = 4, assiged in ..config.config
     def vFilter(self, min_len=2000, methods='gn', filt_mode='permissive'):
         score_tsv = f'{self.wkfile_dir}/all_viral_ctgs.score.tsv'
@@ -85,33 +85,35 @@ class vIdentify(VirDetectTools):
             exit(1)
         all_threads = self.threads
         enabled_tools = set(methods.split('-'))
-        thread_map = self.allocate_threads(enabled_tools, int(self.threads))
+        thread_map = self.allocate_threads(enabled_tools, int(all_threads))
         #vibrant
-        if 'vb' in methods:
+        print(all_threads)
+        print(thread_map)
+        if 'vb' in enabled_tools:
             self.threads = str(thread_map['vb'])
             cmd, wkdir = self.vibrant(min_len)
             shell = f'{self.shell_dir}/{self.name}_vb_ctg.sh'
             utils.printSH(shell, cmd)
         #deepvirfinder
-        if 'dvf' in methods:
+        if 'dvf' in enabled_tools:
             self.threads = str(thread_map['dvf'])
             cmd, wkdir = self.deepvirfinder(min_len)
             shell = f'{self.shell_dir}/{self.name}_dvf_ctg.sh'
             utils.printSH(shell, cmd)
         #genomad
-        if 'gn' in methods:
+        if 'gn' in enabled_tools:
             self.threads = str(thread_map['gn'])
-            self.threads = str(int(self.threads) * 2)
             cmd, wkdir = self.genomad()
             shell = f'{self.shell_dir}/{self.name}_gn_ctg.sh'
             utils.printSH(shell, cmd)
         #VirSorter2
-        if 'vs2' in methods:
+        if 'vs2' in enabled_tools:
             self.threads = str(thread_map['vs2'])
             cmd, wkdir = self.virsorter(in_fa=self.fasta, n=0, min_len=min_len, min_score=0.5)
             shell = f'{self.shell_dir}/{self.name}_vs2_ctg.sh'
             utils.printSH(shell, cmd)
         #multiple run
+        self.threads = str(all_threads) #8
         cmd = [utils.selectENV('VC-General')]
         cmd.extend(
             ['multithreads.pl', self.shell_dir, 'ctg.sh', str(methods.count('-') + 1),'\n']
@@ -120,7 +122,6 @@ class vIdentify(VirDetectTools):
         utils.printSH(shell, cmd)
         results = ''
         if not unrun: results = utils.execute(shell) 
-        self.threads = str(all_threads) #8
         cmd = self.vFilter(min_len, methods, filt_mode)
         shell = f'{self.shell_dir}/{self.name}_get_positive_virus.sh'
         utils.printSH(shell, cmd)
