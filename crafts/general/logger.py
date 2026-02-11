@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+from functools import wraps
 import sys
 
 version = '0.0.17'
@@ -23,15 +24,15 @@ class Log:
         if self.level not in self.levelDict:
             raise ValueError(f"Invalid log level: {self.level}. Choose from {list(self.levelDict.keys())}")
         
-        # create the log recorder
-        logger = logging.getLogger()
+        # create a dedicated recorder to avoid side effects on the root logger
+        logger = logging.getLogger('VirCraft')
         logger.setLevel(self.levelDict[self.level])
-        logger.handlers = []  # Clear the existing processors
+        logger.handlers = []  # Clear the existing handlers
+        logger.propagate = False
         
         # Configure standard output processor (DEBUG & INFO)
         stdout_handler = logging.StreamHandler(sys.stdout)
         stdout_handler.setLevel(logging.DEBUG)  # Treat all levels higher than DEBUG
-        stdout_filter = logging.Filter()
         stdout_handler.addFilter(lambda record: record.levelno <= logging.INFO)  # Only treat DEBUG and INFO
         stdout_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
         
@@ -54,6 +55,7 @@ class Log:
         self.logger = logger
 
     def __call__(self, func):
+        @wraps(func)
         def wrapper(*args, **kwargs):
             start_time = curr_time()
             self.logger.info(f'VirCraft {version} -- A flexible pipeline for metaviromic data analysis')
