@@ -24,19 +24,56 @@ Usage: {name} <subcommand> [options]
     )
     subpsr = addSampArg(subpsr)
     subpsr = addFaArg(subpsr,'ctg')
+    subpsr = addCutoffArg(subpsr)
+    subpsr = addTaxaArg(subpsr)
+    subpsr = addCheckVArg(subpsr)
     subpsr.add_argument(
-        '-p', '--steps', action='store', type=str, dest='steps', metavar='STR', default='123456789', required=False,
-        help='the steps selected for viromic analysis, [default=123456789]'
+        '-m', '--host_mags', action='store', type=str, dest='hostsdir', metavar='STR', default=None,
+        help='Directory of host MAGs for host prediction in step 5. [default=None]'
     )
-    
+    subpsr.add_argument(
+        '-g', '--gtdbtk', action='store', type=str, dest='gtdbtkdir', metavar='STR', default=None,
+        help='GTDB-Tk results directory for host prediction module. [default=None]'
+    )
+    subpsr.add_argument(
+        '-p', '--steps', action='store', type=str, dest='steps', metavar='STR', default='12345678', required=False,
+        help='Selected pipeline steps, e.g. "12345678". [default=12345678]'
+    )
+    subpsr.add_argument(
+        '--process', action='store', type=str, dest='process', metavar='STR', default='fuc',
+        help='Process string for reads_qc module. [default=fuc]'
+    )
+    subpsr.add_argument(
+        '--methods', action='store', type=str, dest='methods', metavar='STR', default='gn',
+        help='Methods for identify module. [default=gn]'
+    )
+    subpsr.add_argument(
+        '--filt-mode', action='store', type=str, dest='filt_mode', metavar='STR', default='permissive',
+        help='Filter mode for identify module. [default=permissive]'
+    )
+    subpsr.add_argument(
+        '--votu-method', action='store', type=str, dest='votu_method', metavar='STR', default='blast',
+        help='vOTU clustering method: blast/cdhit. [default=blast]'
+    )
+    subpsr.add_argument(
+        '--coverm-method', action='store', type=str, dest='coverm_method', metavar='STR', default='mean',
+        help='CoverM method for vir_quant. [default=mean]'
+    )
+    subpsr = addGlbArg(subpsr)
+
     subpsr = subparsers.add_parser(
         'setup',
         help='Setup the conda environments and databases for VirCraft automatically'
     )
-    
+    subpsr = addGlbArg(subpsr)
+
     subpsr = subparsers.add_parser(
         'clear',
         help='Remove all useless files from the results to save storage space'
+    )
+    subpsr.add_argument(
+        '-o', '--outdir', action='store', type=str, dest='outdir', metavar='STR', default=False, required=True,
+        help='Output folder to clean.'
     )
     return parser
 
