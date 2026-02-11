@@ -8,13 +8,17 @@ try:
     import warnings
     from conda.base.context import context
     warnings.filterwarnings("ignore")
-except ImportError as e:
-    print(f'''ImportError: {e}
-Please activate conda base environment using `conda activate` command...''')
-    exit(1)
+except ImportError:
+    context = None
 
 def get_conda_env_dir(env_name: str):
-    envs_dir = os.path.join(context.root_prefix, 'envs')
+    if context is not None:
+        envs_dir = os.path.join(context.root_prefix, 'envs')
+    else:
+        conda_exe = isInstalled('conda')
+        if not conda_exe:
+            raise EnvironmentError('`conda` is required but was not found in PATH.')
+        envs_dir = os.path.join(os.path.dirname(os.path.dirname(conda_exe)), 'envs')
     env_dir = os.path.join(envs_dir, env_name)
     return env_dir
 
@@ -49,16 +53,17 @@ def insLable(file_name: str, label: str):
 def selectENV(env: str):
     bin_dir = os.path.abspath(sys.path[0] + '/bin')
     conda_path = isInstalled('conda')
-    conda_path_dirs = conda_path.split('/')
-    mc3_dir_idx = conda_path_dirs.index('miniconda3')
-    condash_path = '/'.join(conda_path_dirs[0:mc3_dir_idx+1])
-    condash_path += '/etc/profile.d/conda.sh'
-    envs=''
-    if os.path.exists(condash_path):
-        envs = f'source "{condash_path}" && conda activate && conda activate {env}'
+    envs = ''
+    if conda_path:
+        conda_root = os.path.dirname(os.path.dirname(conda_path))
+        condash_path = os.path.join(conda_root, 'etc', 'profile.d', 'conda.sh')
+        if os.path.exists(condash_path):
+            envs = f'source "{condash_path}" && conda activate && conda activate {env}'
+        else:
+            conda_bin = os.path.dirname(conda_path)
+            envs = f'export PATH="{conda_bin}:$PATH"'
     else:
-        conda_bin = os.path.dirname('conda_path')
-        envs = f'export PATH="{conda_bin}:$PATH"'
+        envs = f'echo "WARNING: conda not found in PATH, continuing without conda activation for {env}." >&2'
     envs += f'&& export PATH="{bin_dir}:$PATH"\n'
     return envs
 
